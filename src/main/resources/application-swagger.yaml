@@ -1,0 +1,16 @@
+spring:
+  springdoc:
+    swagger-ui:
+      tags-sorter: alpha
+      operations-sorter: method
+      path: /swagger-ui/index.html
+      disable-swagger-default-url: true
+      display-query-params-without-oauth2: true
+      doc-expansion: none
+      urls-primary-name: KLKL API DOCS
+    api-docs:
+      path: /api-docs
+    default-consumes-media-type: application/json;charset=UTF-8
+    default-produces-media-type: application/json;charset=UTF-8
+    paths-to-match:
+      - /v1/**
