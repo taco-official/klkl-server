@@ -1,0 +1,8 @@
+spring:
+  profiles:
+    include:
+      - h2
+      - swagger
+
+  application:
+    name: klkl
