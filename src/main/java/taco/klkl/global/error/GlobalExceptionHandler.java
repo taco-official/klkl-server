@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import taco.klkl.global.error.exception.CustomException;
 import taco.klkl.global.error.exception.ErrorCode;
+import taco.klkl.global.response.GlobalResponse;
 
 @Slf4j
 @RestControllerAdvice
@@ -25,11 +26,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 		MethodArgumentNotValidException ex,
 		HttpHeaders headers,
 		HttpStatusCode statusCode,
-		WebRequest request) {
+		WebRequest request
+	) {
 		log.error("MethodArgumentNotValid : {}", ex.getMessage(), ex);
 		final ErrorCode errorCode = ErrorCode.METHOD_ARGUMENT_INVALID;
-		final ErrorResponse errorResponse = ErrorResponse.of(ex.getClass().getSimpleName(), errorCode.getMessage());
-		return ResponseEntity.status(errorCode.getStatus()).body(errorResponse);
+		final ErrorResponse errorResponse = ErrorResponse.of(errorCode.getCode(), errorCode.getMessage());
+		final GlobalResponse globalResponse = GlobalResponse.error(errorCode.getCode(), errorResponse);
+		return ResponseEntity.status(errorCode.getStatus()).body(globalResponse);
 	}
 
 	@Override
@@ -37,11 +40,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 		HttpRequestMethodNotSupportedException ex,
 		HttpHeaders headers,
 		HttpStatusCode status,
-		WebRequest request) {
+		WebRequest request
+	) {
 		log.error("HttpRequestMethodNotSupported : {}", ex.getMessage(), ex);
 		final ErrorCode errorCode = ErrorCode.METHOD_NOT_ALLOWED;
-		final ErrorResponse errorResponse = ErrorResponse.of(ex.getClass().getSimpleName(), errorCode.getMessage());
-		return ResponseEntity.status(errorCode.getStatus()).body(errorResponse);
+		final ErrorResponse errorResponse = ErrorResponse.of(errorCode.getCode(), errorCode.getMessage());
+		final GlobalResponse globalResponse = GlobalResponse.error(errorCode.getCode(), errorResponse);
+		return ResponseEntity.status(errorCode.getStatus()).body(globalResponse);
 	}
 
 	@Override
@@ -50,11 +55,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 		Object body,
 		HttpHeaders headers,
 		HttpStatusCode statusCode,
-		WebRequest request) {
+		WebRequest request
+	) {
 		log.error("ExceptionInternal : {}", ex.getMessage(), ex);
 		final ErrorCode errorCode = ErrorCode.INTERNAL_SERVER_ERROR;
-		final ErrorResponse errorResponse = ErrorResponse.of(ex.getClass().getSimpleName(), errorCode.getMessage());
-		return ResponseEntity.status(errorCode.getStatus()).body(errorResponse);
+		final ErrorResponse errorResponse = ErrorResponse.of(errorCode.getCode(), errorCode.getMessage());
+		final GlobalResponse globalResponse = GlobalResponse.error(errorCode.getCode(), errorResponse);
+		return ResponseEntity.status(errorCode.getStatus()).body(globalResponse);
 	}
 
 	@ExceptionHandler(CustomException.class)
@@ -62,14 +69,16 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 		log.error("CustomException : {}", ex.getMessage(), ex);
 		final ErrorCode errorCode = ex.getErrorCode();
 		final ErrorResponse errorResponse = ErrorResponse.of(errorCode.getCode(), errorCode.getMessage());
-		return ResponseEntity.status(errorCode.getStatus()).body(errorResponse);
+		final GlobalResponse globalResponse = GlobalResponse.error(errorCode.getCode(), errorResponse);
+		return ResponseEntity.status(errorCode.getStatus()).body(globalResponse);
 	}
 
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<Object> handleException(Exception ex) {
 		log.error("InternalServerError : {}", ex.getMessage(), ex);
 		final ErrorCode errorCode = ErrorCode.INTERNAL_SERVER_ERROR;
-		final ErrorResponse errorResponse = ErrorResponse.of(ex.getClass().getSimpleName(), errorCode.getMessage());
-		return ResponseEntity.status(errorCode.getStatus()).body(errorResponse);
+		final ErrorResponse errorResponse = ErrorResponse.of(errorCode.getCode(), errorCode.getMessage());
+		final GlobalResponse globalResponse = GlobalResponse.error(errorCode.getCode(), errorResponse);
+		return ResponseEntity.status(errorCode.getStatus()).body(globalResponse);
 	}
 }
