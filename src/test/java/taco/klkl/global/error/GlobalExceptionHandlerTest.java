@@ -15,6 +15,7 @@ import org.springframework.web.context.request.WebRequest;
 
 import taco.klkl.global.error.exception.CustomException;
 import taco.klkl.global.error.exception.ErrorCode;
+import taco.klkl.global.response.GlobalResponse;
 
 class GlobalExceptionHandlerTest {
 
@@ -35,13 +36,18 @@ class GlobalExceptionHandlerTest {
 		WebRequest request = mock(WebRequest.class);
 
 		// when
-		ResponseEntity<Object> response = globalExceptionHandler.handleMethodArgumentNotValid(exception, headers,
-			status, request);
+		ResponseEntity<Object> response = globalExceptionHandler.handleMethodArgumentNotValid(
+			exception, headers, status, request);
 
 		// then
 		assertNotNull(response);
 		assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-		assertInstanceOf(ErrorResponse.class, response.getBody());
+		assertInstanceOf(GlobalResponse.class, response.getBody());
+		GlobalResponse globalResponse = (GlobalResponse)(response.getBody());
+		assertInstanceOf(ErrorResponse.class, globalResponse.data());
+		ErrorResponse errorResponse = (ErrorResponse)(globalResponse.data());
+		assertEquals("C010", errorResponse.code());
+		assertEquals("유효하지 않은 method 인자 입니다.", errorResponse.message());
 	}
 
 	@Test
@@ -60,7 +66,12 @@ class GlobalExceptionHandlerTest {
 		// then
 		assertNotNull(response);
 		assertEquals(HttpStatus.METHOD_NOT_ALLOWED, response.getStatusCode());
-		assertInstanceOf(ErrorResponse.class, response.getBody());
+		assertInstanceOf(GlobalResponse.class, response.getBody());
+		GlobalResponse globalResponse = (GlobalResponse)(response.getBody());
+		assertInstanceOf(ErrorResponse.class, globalResponse.data());
+		ErrorResponse errorResponse = (ErrorResponse)(globalResponse.data());
+		assertEquals("C011", errorResponse.code());
+		assertEquals("지원하지 않는 HTTP method 입니다.", errorResponse.message());
 	}
 
 	@Test
@@ -79,7 +90,12 @@ class GlobalExceptionHandlerTest {
 		// then
 		assertNotNull(response);
 		assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
-		assertInstanceOf(ErrorResponse.class, response.getBody());
+		assertInstanceOf(GlobalResponse.class, response.getBody());
+		GlobalResponse globalResponse = (GlobalResponse)(response.getBody());
+		assertInstanceOf(ErrorResponse.class, globalResponse.data());
+		ErrorResponse errorResponse = (ErrorResponse)(globalResponse.data());
+		assertEquals("C012", errorResponse.code());
+		assertEquals("서버에 문제가 발생했습니다. 관리자에게 문의해주세요.", errorResponse.message());
 	}
 
 	@Test
@@ -94,8 +110,11 @@ class GlobalExceptionHandlerTest {
 		// then
 		assertNotNull(response);
 		assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-		assertNotNull(response.getBody());
-		ErrorResponse errorResponse = (ErrorResponse)(response.getBody());
+		assertInstanceOf(GlobalResponse.class, response.getBody());
+		GlobalResponse globalResponse = (GlobalResponse)(response.getBody());
+		assertInstanceOf(ErrorResponse.class, globalResponse.data());
+		ErrorResponse errorResponse = (ErrorResponse)(globalResponse.data());
+		assertEquals("C000", errorResponse.code());
 		assertEquals("샘플 에러입니다.", errorResponse.message());
 	}
 
@@ -112,7 +131,9 @@ class GlobalExceptionHandlerTest {
 		assertNotNull(response);
 		assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
 		assertNotNull(response.getBody());
-		ErrorResponse errorResponse = (ErrorResponse)(response.getBody());
+		GlobalResponse globalResponse = (GlobalResponse)(response.getBody());
+		ErrorResponse errorResponse = (ErrorResponse)(globalResponse.data());
+		assertEquals("C012", errorResponse.code());
 		assertEquals("서버에 문제가 발생했습니다. 관리자에게 문의해주세요.", errorResponse.message());
 	}
 }
