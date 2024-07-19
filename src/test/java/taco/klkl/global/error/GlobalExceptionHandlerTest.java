@@ -114,7 +114,7 @@ class GlobalExceptionHandlerTest {
 		GlobalResponse globalResponse = (GlobalResponse)(response.getBody());
 		assertInstanceOf(ErrorResponse.class, globalResponse.data());
 		ErrorResponse errorResponse = (ErrorResponse)(globalResponse.data());
-		assertEquals("C000", errorResponse.code());
+		assertEquals("C999", errorResponse.code());
 		assertEquals("샘플 에러입니다.", errorResponse.message());
 	}
 

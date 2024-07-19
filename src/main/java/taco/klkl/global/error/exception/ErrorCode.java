@@ -8,9 +8,6 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum ErrorCode {
-	// Sample
-	SAMPLE_ERROR(HttpStatus.BAD_REQUEST, "C000", "샘플 에러입니다."),
-
 	// Common
 	METHOD_ARGUMENT_INVALID(HttpStatus.BAD_REQUEST, "C010", "유효하지 않은 method 인자 입니다."),
 	METHOD_NOT_ALLOWED(HttpStatus.METHOD_NOT_ALLOWED, "C011", "지원하지 않는 HTTP method 입니다."),
@@ -33,6 +30,9 @@ public enum ErrorCode {
 	// Notification
 
 	// Search
+
+	// Sample
+	SAMPLE_ERROR(HttpStatus.BAD_REQUEST, "C999", "샘플 에러입니다."),
 	;
 
 	private final HttpStatus status;
