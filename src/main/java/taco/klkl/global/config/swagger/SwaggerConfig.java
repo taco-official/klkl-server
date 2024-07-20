@@ -16,7 +16,7 @@ import lombok.RequiredArgsConstructor;
 @Configuration
 public class SwaggerConfig {
 	@Bean
-	public GroupedOpenApi KlklOpenApi() {
+	public GroupedOpenApi klklOpenApi() {
 		// "/v1/**" 경로에 매칭되는 API를 그룹화하여 문서화한다.
 		String[] paths = {"/v1/**"};
 
