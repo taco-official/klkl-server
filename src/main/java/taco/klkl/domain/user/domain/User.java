@@ -1,4 +1,4 @@
-package taco.klkl.domain;
+package taco.klkl.domain.user.domain;
 
 import java.time.LocalDateTime;
 
@@ -19,6 +19,7 @@ public class User {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "user_id")
 	private Long id;
 
 	@Column(length = 500, nullable = false)
