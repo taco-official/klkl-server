@@ -20,7 +20,7 @@ public class UserService {
 	 * Id 1번 유저를 반환합니다.
 	 */
 	public User me() {
-		return userRepository.getReferenceById(1L);
+		return userRepository.findFirstByName("testUser");
 	}
 
 	/**
