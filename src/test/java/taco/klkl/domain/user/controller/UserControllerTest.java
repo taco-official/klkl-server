@@ -39,7 +39,7 @@ class UserControllerTest {
 		Mockito.when(userService.me()).thenReturn(user);
 
 		// when & then
-		mockMvc.perform(get("/api/v1/users/me")
+		mockMvc.perform(get("/v1/users/me")
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))

@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 import taco.klkl.domain.user.dao.UserRepository;
 import taco.klkl.domain.user.domain.User;
 import taco.klkl.domain.user.service.UserService;
-import taco.klkl.global.common.enums.Gender;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -29,19 +28,13 @@ public class UserIntegrationTest {
 	@Autowired
 	UserRepository userRepository;
 
-	User user;
-
 	@Test
 	public void testUserMe() throws Exception {
-		// given
-		User user = new User(null, "testUser", Gender.MALE, 20, "테스트 유저입니다.");
-
-		// when
-		userRepository.save(user);
-		user = userService.me();
+		// given, when
+		User user = userService.me();
 
 		// then
-		mockMvc.perform(get("/api/v1/users/me"))
+		mockMvc.perform(get("/v1/users/me"))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
 			.andExpect(jsonPath("$.code", is("C000")))
@@ -50,7 +43,7 @@ public class UserIntegrationTest {
 			.andExpect(jsonPath("$.data.gender", is(user.getGender().toString())))
 			.andExpect(jsonPath("$.data.age", is(user.getAge())))
 			.andExpect(jsonPath("$.data.description", is(user.getDescription())))
-			.andExpect(jsonPath("$.data.profile", is("image/default.jpg")))
+			.andExpect(jsonPath("$.data.profile", is("image/test.jpg")))
 			.andExpect(jsonPath("$.data.createdAt", notNullValue()))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
 	}
