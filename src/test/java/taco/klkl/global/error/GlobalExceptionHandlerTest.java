@@ -76,7 +76,7 @@ class GlobalExceptionHandlerTest {
 
 	@Test
 	@DisplayName("ExceptionInternal이 발생한 경우")
-	void ExceptionInternalOccurred() {
+	void exceptionInternalOccurred() {
 		// given
 		Exception exception = new RuntimeException("Test exception");
 		HttpHeaders headers = new HttpHeaders();
