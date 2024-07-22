@@ -15,7 +15,13 @@ spring:
     database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
       ddl-auto: create
+    defer-datasource-initialization: true
     properties:
       hibernate:
         show-sql: true
         format-sql: true
+  sql:
+    init:
+      data-locations: classpath:database/data.sql  # 더미데이터 파일 연결
+      mode: always
+      platform: h2
