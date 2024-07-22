@@ -37,15 +37,16 @@ public class User {
 	@Column(length = 100)
 	private String description;
 
-	@Column(nullable = false, updatable = false)
-	private LocalDateTime created_at;
+	// TODO: created_at 이름으로 json나가야 함
+	@Column(name = "created_at", nullable = false, updatable = false)
+	private LocalDateTime createdAt;
 
 	@PrePersist
 	protected void onCreate() {
 		if (this.profile == null) {
 			this.profile = "image/default.jpg";
 		}
-		this.created_at = LocalDateTime.now();
+		this.createdAt = LocalDateTime.now();
 	}
 
 	public User(String profile, String name, Gender gender, int age, String description) {

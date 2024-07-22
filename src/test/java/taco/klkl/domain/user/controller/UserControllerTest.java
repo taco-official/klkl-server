@@ -50,7 +50,7 @@ class UserControllerTest {
 			.andExpect(jsonPath("$.data.age", is(user.getAge())))
 			.andExpect(jsonPath("$.data.description", is(user.getDescription())))
 			.andExpect(jsonPath("$.data.profile", is(nullValue())))
-			.andExpect(jsonPath("$.data.created_at", is(nullValue())))
+			.andExpect(jsonPath("$.data.createdAt", is(nullValue())))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
 	}
 }
