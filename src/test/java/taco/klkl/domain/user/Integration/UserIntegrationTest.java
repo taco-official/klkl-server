@@ -1,4 +1,4 @@
-package taco.klkl.domain.user.Integration;
+package taco.klkl.domain.user.integration;
 
 import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -51,7 +51,7 @@ public class UserIntegrationTest {
 			.andExpect(jsonPath("$.data.age", is(user.getAge())))
 			.andExpect(jsonPath("$.data.description", is(user.getDescription())))
 			.andExpect(jsonPath("$.data.profile", is("image/default.jpg")))
-			.andExpect(jsonPath("$.data.created_at", notNullValue()))
+			.andExpect(jsonPath("$.data.createdAt", notNullValue()))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
 	}
 }
