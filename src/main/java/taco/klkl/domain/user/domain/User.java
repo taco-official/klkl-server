@@ -56,5 +56,4 @@ public class User {
 		this.age = age;
 		this.description = description;
 	}
-
 }
