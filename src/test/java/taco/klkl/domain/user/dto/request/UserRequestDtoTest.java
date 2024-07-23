@@ -1,4 +1,4 @@
-package taco.klkl.domain.user.dto;
+package taco.klkl.domain.user.dto.request;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -11,12 +11,11 @@ import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import jakarta.validation.ValidatorFactory;
-import taco.klkl.domain.user.dto.request.UserCreateRequestDto;
 
-class UserDtoTest {
+class UserRequestDtoTest {
 	private final Validator validator;
 
-	public UserDtoTest() {
+	public UserRequestDtoTest() {
 		ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
 		this.validator = factory.getValidator();
 	}
