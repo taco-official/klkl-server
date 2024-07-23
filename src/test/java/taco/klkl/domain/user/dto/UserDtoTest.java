@@ -35,10 +35,10 @@ class UserDtoTest {
 	}
 
 	@Test
-	@DisplayName("이름이 없는 UserCreateRequestDto 유효성 검사")
+	@DisplayName("이름이 null인 UserCreateRequestDto 유효성 검사")
 	public void testInvalidUserCreateRequestDto_NameRequired() {
 		// given
-		UserCreateRequestDto requestDto = new UserCreateRequestDto("", "남", 20, "image/profile.png", "자기소개");
+		UserCreateRequestDto requestDto = new UserCreateRequestDto(null, "남", 20, "image/profile.png", "자기소개");
 
 		// when
 		Set<ConstraintViolation<UserCreateRequestDto>> violations = validator.validate(requestDto);

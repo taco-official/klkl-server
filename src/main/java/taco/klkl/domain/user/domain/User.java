@@ -32,7 +32,7 @@ public class User {
 	private Gender gender;
 
 	@Column(nullable = false)
-	private int age;
+	private Integer age;
 
 	@Column(length = 100)
 	private String description;
@@ -49,7 +49,7 @@ public class User {
 		this.createdAt = LocalDateTime.now();
 	}
 
-	public User(String profile, String name, Gender gender, int age, String description) {
+	public User(String profile, String name, Gender gender, Integer age, String description) {
 		this.profile = profile;
 		this.name = name;
 		this.gender = gender;
