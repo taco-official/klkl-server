@@ -5,6 +5,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import taco.klkl.domain.user.domain.User;
+import taco.klkl.domain.user.dto.response.UserDetailResponseDto;
 import taco.klkl.domain.user.service.UserService;
 import taco.klkl.global.common.enums.Gender;
 
@@ -26,17 +28,19 @@ class UserControllerTest {
 	@MockBean
 	UserService userService;
 
-	private User user;
+	private UserDetailResponseDto responseDto;
 
 	@BeforeEach
 	public void setUp() {
-		user = new User(null, "testUser", Gender.MALE, 20, "테스트 유저입니다.");
+		User user = User.of("image/default.jpg", "testUser", Gender.MALE, 20, "테스트 유저입니다.");
+		responseDto = UserDetailResponseDto.from(user);
 	}
 
 	@Test
-	public void getMe() throws Exception {
+	@DisplayName("내 정보 조회 API 테스트")
+	public void testGetMe() throws Exception {
 		// given
-		Mockito.when(userService.me()).thenReturn(user);
+		Mockito.when(userService.getMyInfo()).thenReturn(responseDto);
 
 		// when & then
 		mockMvc.perform(get("/v1/users/me")
@@ -45,12 +49,10 @@ class UserControllerTest {
 			.andExpect(jsonPath("$.isSuccess", is(true)))
 			.andExpect(jsonPath("$.code", is("C000")))
 			.andExpect(jsonPath("$.data.id", is(nullValue())))
-			.andExpect(jsonPath("$.data.name", is(user.getName())))
-			.andExpect(jsonPath("$.data.gender", is(user.getGender().toString())))
-			.andExpect(jsonPath("$.data.age", is(user.getAge())))
-			.andExpect(jsonPath("$.data.description", is(user.getDescription())))
-			.andExpect(jsonPath("$.data.profile", is(nullValue())))
-			.andExpect(jsonPath("$.data.createdAt", is(nullValue())))
+			.andExpect(jsonPath("$.data.profile", is(notNullValue())))
+			.andExpect(jsonPath("$.data.name", is(responseDto.name())))
+			.andExpect(jsonPath("$.data.description", is(responseDto.description())))
+			.andExpect(jsonPath("$.data.totalLikeCount", is(0)))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
 	}
 }

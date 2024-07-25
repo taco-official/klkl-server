@@ -32,7 +32,7 @@ public class User {
 	private Gender gender;
 
 	@Column(nullable = false)
-	private int age;
+	private Integer age;
 
 	@Column(length = 100)
 	private String description;
@@ -42,14 +42,14 @@ public class User {
 	private LocalDateTime createdAt;
 
 	@PrePersist
-	protected void onCreate() {
+	protected void prePersist() {
 		if (this.profile == null) {
 			this.profile = "image/default.jpg";
 		}
 		this.createdAt = LocalDateTime.now();
 	}
 
-	public User(String profile, String name, Gender gender, int age, String description) {
+	private User(String profile, String name, Gender gender, Integer age, String description) {
 		this.profile = profile;
 		this.name = name;
 		this.gender = gender;
@@ -57,4 +57,7 @@ public class User {
 		this.description = description;
 	}
 
+	public static User of(String profile, String name, Gender gender, Integer age, String description) {
+		return new User(profile, name, gender, age, description);
+	}
 }
