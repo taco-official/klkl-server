@@ -42,18 +42,22 @@ public class User {
 	private LocalDateTime createdAt;
 
 	@PrePersist
-	protected void onCreate() {
+	protected void prePersist() {
 		if (this.profile == null) {
 			this.profile = "image/default.jpg";
 		}
 		this.createdAt = LocalDateTime.now();
 	}
 
-	public User(String profile, String name, Gender gender, Integer age, String description) {
+	private User(String profile, String name, Gender gender, Integer age, String description) {
 		this.profile = profile;
 		this.name = name;
 		this.gender = gender;
 		this.age = age;
 		this.description = description;
+	}
+
+	public static User of(String profile, String name, Gender gender, Integer age, String description) {
+		return new User(profile, name, gender, age, description);
 	}
 }
