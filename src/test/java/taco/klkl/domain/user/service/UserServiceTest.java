@@ -1,48 +1,77 @@
 package taco.klkl.domain.user.service;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 
 import taco.klkl.domain.user.dao.UserRepository;
 import taco.klkl.domain.user.domain.User;
+import taco.klkl.domain.user.dto.request.UserCreateRequestDto;
+import taco.klkl.domain.user.dto.response.UserDetailResponseDto;
 import taco.klkl.global.common.enums.Gender;
 
-@SpringBootTest
-@Transactional
+@ExtendWith(MockitoExtension.class)
 class UserServiceTest {
 	private static final Logger log = LoggerFactory.getLogger(UserServiceTest.class);
-	@Autowired
-	UserService userService;
 
-	@Autowired
+	@Mock
 	UserRepository userRepository;
 
-	@BeforeEach
-	public void beforeEach() {
-		userRepository.deleteAll();
+	@InjectMocks
+	UserService userService;
+
+	@Test
+	@DisplayName("내 정보 조회 서비스 테스트")
+	public void testGetMyInfo() {
+		// given
+		User user = User.of("image/default.jpg", "testUser", Gender.MALE, 20, "테스트 유저입니다.");
+		when(userRepository.findFirstByName(UserService.MY_NAME)).thenReturn(user);
+
+		// when
+		UserDetailResponseDto userDto = userService.getMyInfo();
+
+		// then
+		assertThat(userDto.profile()).isEqualTo(user.getProfile());
+		assertThat(userDto.name()).isEqualTo(user.getName());
+		assertThat(userDto.description()).isEqualTo(user.getDescription());
+		assertThat(userDto.totalLikeCount()).isEqualTo(0);
 	}
 
 	@Test
-	public void testMe() {
+	@DisplayName("사용자 등록 서비스 테스트")
+	public void testRegisterUser() {
 		// given
-		User user = new User(null, "testUser", Gender.MALE, 20, "테스트 유저입니다.");
+		UserCreateRequestDto requestDto = new UserCreateRequestDto(
+			"이상화",
+			"남",
+			19,
+			"image/ideal-flower.jpg",
+			"저는 이상화입니다."
+		);
+		User user = User.of(
+			requestDto.profile(),
+			requestDto.name(),
+			Gender.getGenderByDescription(requestDto.description()),
+			requestDto.age(),
+			requestDto.description()
+		);
+		when(userRepository.save(any(User.class))).thenReturn(user);
 
 		// when
-		userService.join(user);
-		User foundUser = userService.me();
+		UserDetailResponseDto responseDto = userService.registerUser(requestDto);
 
 		// then
-		assertThat(foundUser.getId()).isNotNull();
-		assertThat(user.getName()).isEqualTo(foundUser.getName());
-		assertThat(user.getGender()).isEqualTo(foundUser.getGender());
-		assertThat(user.getAge()).isEqualTo(foundUser.getAge());
-		assertThat(user.getDescription()).isEqualTo(foundUser.getDescription());
+		assertThat(responseDto.name()).isEqualTo(requestDto.name());
+		assertThat(responseDto.profile()).isEqualTo(requestDto.profile());
+		assertThat(responseDto.description()).isEqualTo(requestDto.description());
+		assertThat(responseDto.totalLikeCount()).isEqualTo(0);
 	}
 }
