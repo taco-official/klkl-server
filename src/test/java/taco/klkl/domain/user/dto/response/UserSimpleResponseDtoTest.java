@@ -37,7 +37,7 @@ class UserSimpleResponseDtoTest {
 		String description = "자기소개";
 
 		// when
-		User user = new User(profile, name, gender, age, description);
+		User user = User.of(profile, name, gender, age, description);
 		UserSimpleResponseDto userSimple = UserSimpleResponseDto.from(user);
 
 		// then
