@@ -1,5 +1,7 @@
 package taco.klkl.global.common.enums;
 
+import java.util.Arrays;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -7,7 +9,17 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum Gender {
 	MALE("남"),
-	FEMALE("여");
+	FEMALE("여"),
+	NONE(""),
+	;
 
 	private final String description;
+
+	public static Gender getGenderByDescription(String description) {
+		return Arrays.stream(Gender.values())
+			.filter(g -> g.getDescription().equals(description))
+			.findFirst()
+			.orElse(NONE);
+	}
+
 }

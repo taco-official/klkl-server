@@ -12,7 +12,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
 import taco.klkl.domain.user.dao.UserRepository;
-import taco.klkl.domain.user.domain.User;
+import taco.klkl.domain.user.dto.response.UserDetailResponseDto;
 import taco.klkl.domain.user.service.UserService;
 
 @SpringBootTest
@@ -31,20 +31,18 @@ public class UserIntegrationTest {
 	@Test
 	public void testUserMe() throws Exception {
 		// given, when
-		User user = userService.me();
+		UserDetailResponseDto userDto = userService.getMyInfo();
 
 		// then
 		mockMvc.perform(get("/v1/users/me"))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
 			.andExpect(jsonPath("$.code", is("C000")))
-			.andExpect(jsonPath("$.data.id", is(user.getId().intValue())))
-			.andExpect(jsonPath("$.data.name", is(user.getName())))
-			.andExpect(jsonPath("$.data.gender", is(user.getGender().toString())))
-			.andExpect(jsonPath("$.data.age", is(user.getAge())))
-			.andExpect(jsonPath("$.data.description", is(user.getDescription())))
-			.andExpect(jsonPath("$.data.profile", is("image/test.jpg")))
-			.andExpect(jsonPath("$.data.createdAt", notNullValue()))
-			.andExpect(jsonPath("$.timestamp", notNullValue()));
+			.andExpect(jsonPath("$.data.id", is(userDto.id().intValue())))
+			.andExpect(jsonPath("$.data.profile", is(userDto.profile())))
+			.andExpect(jsonPath("$.data.name", is(userDto.name())))
+			.andExpect(jsonPath("$.data.description", is(userDto.description())))
+			.andExpect(jsonPath("$.timestamp", notNullValue()))
+		;
 	}
 }
