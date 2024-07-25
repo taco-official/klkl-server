@@ -16,7 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import jakarta.transaction.Transactional;
 import taco.klkl.domain.category.dao.CategoryRepository;
 import taco.klkl.domain.category.domain.Category;
-import taco.klkl.domain.category.dto.response.CategoryResponse;
+import taco.klkl.domain.category.dto.response.CategoryResponseDto;
 
 @ExtendWith(MockitoExtension.class)
 @Transactional
@@ -39,7 +39,7 @@ class CategoryServiceTest {
 		when(categoryRepository.findAll()).thenReturn(categories);
 
 		// when
-		List<CategoryResponse> result = categoryService.getCategories();
+		List<CategoryResponseDto> result = categoryService.getCategories();
 		System.out.println(categories.get(0).getName());
 
 		// then

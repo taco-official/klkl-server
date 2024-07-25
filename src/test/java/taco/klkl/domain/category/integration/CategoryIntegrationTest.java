@@ -15,7 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import jakarta.transaction.Transactional;
-import taco.klkl.domain.category.dto.response.CategoryResponse;
+import taco.klkl.domain.category.dto.response.CategoryResponseDto;
 import taco.klkl.domain.category.service.CategoryService;
 
 @SpringBootTest
@@ -33,13 +33,13 @@ class CategoryIntegrationTest {
 	@DisplayName("카테고리 목록 반환 API 통합 Test")
 	void testGetAllCategories() throws Exception {
 		// given
-		List<CategoryResponse> categoryResponses = categoryService.getCategories();
+		List<CategoryResponseDto> categoryResponsDtos = categoryService.getCategories();
 
 		//then
 		mockMvc.perform(get("/v1/categories")
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
-			.andExpect(jsonPath("$.data", hasSize(categoryResponses.size())))
+			.andExpect(jsonPath("$.data", hasSize(categoryResponsDtos.size())))
 			.andExpect(jsonPath("$.isSuccess", is(true)))
 			.andExpect(jsonPath("$.code", is("C000")));
 	}

@@ -9,7 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import taco.klkl.domain.category.dao.CategoryRepository;
 import taco.klkl.domain.category.domain.Category;
-import taco.klkl.domain.category.dto.response.CategoryResponse;
+import taco.klkl.domain.category.dto.response.CategoryResponseDto;
 
 @Slf4j
 @Service
@@ -17,10 +17,10 @@ import taco.klkl.domain.category.dto.response.CategoryResponse;
 public class CategoryService {
 	private final CategoryRepository categoryRepository;
 
-	public List<CategoryResponse> getCategories() {
+	public List<CategoryResponseDto> getCategories() {
 		List<Category> categories = categoryRepository.findAll();
 		return categories.stream()
-			.map(category -> CategoryResponse.of(category.getId(), category.getName()))
+			.map(category -> CategoryResponseDto.of(category.getId(), category.getName()))
 			.collect(Collectors.toList());
 	}
 }

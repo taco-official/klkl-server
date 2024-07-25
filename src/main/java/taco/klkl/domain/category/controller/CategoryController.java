@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import taco.klkl.domain.category.dto.response.CategoryResponse;
+import taco.klkl.domain.category.dto.response.CategoryResponseDto;
 import taco.klkl.domain.category.service.CategoryService;
 
 @Slf4j
@@ -23,8 +23,8 @@ public class CategoryController {
 	private final CategoryService categoryService;
 
 	@GetMapping
-	public ResponseEntity<List<CategoryResponse>> getCategory() {
-		List<CategoryResponse> categoryResponses = categoryService.getCategories();
-		return ResponseEntity.ok().body(categoryResponses);
+	public ResponseEntity<List<CategoryResponseDto>> getCategory() {
+		List<CategoryResponseDto> categoryResponsDtos = categoryService.getCategories();
+		return ResponseEntity.ok().body(categoryResponsDtos);
 	}
 }

@@ -16,7 +16,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import taco.klkl.domain.category.dto.response.CategoryResponse;
+import taco.klkl.domain.category.dto.response.CategoryResponseDto;
 import taco.klkl.domain.category.service.CategoryService;
 
 @WebMvcTest(CategoryController.class)
@@ -32,13 +32,13 @@ public class CategoryControllerTest {
 	@DisplayName("카테고리 컨트롤러 GlobalResponse로 Wrapping되어 나오는지 Test")
 	public void testGetCategory() throws Exception {
 		// given
-		List<CategoryResponse> categoryResponses = Arrays.asList(
-			new CategoryResponse(1L, "Category1"),
-			new CategoryResponse(2L, "Category2")
+		List<CategoryResponseDto> categoryResponsDtos = Arrays.asList(
+			new CategoryResponseDto(1L, "Category1"),
+			new CategoryResponseDto(2L, "Category2")
 		);
 
 		// when
-		when(categoryService.getCategories()).thenReturn(categoryResponses);
+		when(categoryService.getCategories()).thenReturn(categoryResponsDtos);
 
 		// then
 		mockMvc.perform(get("/v1/categories")
