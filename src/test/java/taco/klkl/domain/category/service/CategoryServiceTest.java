@@ -6,18 +6,19 @@ import static org.mockito.Mockito.*;
 import java.util.Arrays;
 import java.util.List;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import jakarta.transaction.Transactional;
 import taco.klkl.domain.category.dao.CategoryRepository;
 import taco.klkl.domain.category.domain.Category;
 import taco.klkl.domain.category.dto.response.CategoryResponse;
 
+@ExtendWith(MockitoExtension.class)
 @Transactional
 class CategoryServiceTest {
 
@@ -26,11 +27,6 @@ class CategoryServiceTest {
 
 	@InjectMocks
 	private CategoryService categoryService;
-
-	@BeforeEach
-	void setUp() {
-		MockitoAnnotations.openMocks(this);
-	}
 
 	@Test
 	@DisplayName("카테고리 Service CategoryResponse(DTO)에 담겨 나오는지 Test")
