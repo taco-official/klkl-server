@@ -40,7 +40,6 @@ class CategoryServiceTest {
 
 		// when
 		List<CategoryResponseDto> result = categoryService.getCategories();
-		System.out.println(categories.get(0).getName());
 
 		// then
 		assertNotNull(result);
