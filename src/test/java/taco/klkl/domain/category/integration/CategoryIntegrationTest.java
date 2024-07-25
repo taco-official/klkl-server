@@ -15,7 +15,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import jakarta.transaction.Transactional;
-import taco.klkl.domain.category.dao.CategoryRepository;
 import taco.klkl.domain.category.dto.response.CategoryResponse;
 import taco.klkl.domain.category.service.CategoryService;
 
@@ -29,9 +28,6 @@ class CategoryIntegrationTest {
 
 	@Autowired
 	private CategoryService categoryService;
-
-	@Autowired
-	private CategoryRepository categoryRepository;
 
 	@Test
 	@DisplayName("카테고리 목록 반환 API 통합 Test")
