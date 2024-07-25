@@ -12,14 +12,12 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import jakarta.transaction.Transactional;
 import taco.klkl.domain.category.dao.CategoryRepository;
 import taco.klkl.domain.category.domain.Category;
 import taco.klkl.domain.category.dto.response.CategoryResponse;
 
-@SpringBootTest
 @Transactional
 class CategoryServiceTest {
 
@@ -46,6 +44,7 @@ class CategoryServiceTest {
 
 		// when
 		List<CategoryResponse> result = categoryService.getCategories();
+		System.out.println(categories.get(0).getName());
 
 		// then
 		assertNotNull(result);
