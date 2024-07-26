@@ -26,7 +26,7 @@ public class Region {
 		this.name = name;
 	}
 
-	public Region of(String name) {
+	public static Region of(String name) {
 		return new Region(name);
 	}
 }
