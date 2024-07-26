@@ -43,15 +43,15 @@ public class Product {
 	private String address;
 
 	@Column(name = "like_count", nullable = false)
-	@ColumnDefault("0L")
-	private Long likeCount;
+	@ColumnDefault("0")
+	private Integer likeCount;
 
 	@Column(name = "created_at", nullable = false, updatable = false)
 	private LocalDateTime createdAt;
 
 	@Column(name = "price")
 	@ColumnDefault("0L")
-	private Long price;
+	private Integer price;
 
 	@Column(name = "city_id", nullable = false)
 	private Long cityId;
@@ -68,10 +68,10 @@ public class Product {
 			this.address = "N/A";
 		}
 		if (this.likeCount == null) {
-			this.likeCount = 0L;
+			this.likeCount = 0;
 		}
 		if (this.price == null) {
-			this.price = 0L;
+			this.price = 0;
 		}
 		this.createdAt = LocalDateTime.now();
 	}
@@ -81,7 +81,7 @@ public class Product {
 		final String name,
 		final String description,
 		final String address,
-		final Long price,
+		final Integer price,
 		final Long cityId,
 		final Long subcategoryId,
 		final Long currencyId
@@ -101,7 +101,7 @@ public class Product {
 		final String name,
 		final String description,
 		final String address,
-		final Long price,
+		final Integer price,
 		final Long cityId,
 		final Long subcategoryId,
 		final Long currencyId

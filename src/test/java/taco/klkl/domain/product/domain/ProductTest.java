@@ -10,8 +10,8 @@ import org.mockito.Mockito;
 import taco.klkl.domain.user.domain.User;
 
 class ProductTest {
-	private static final Long DEFAULT_PRICE = 0L;
-	private static final Long DEFAULT_LIKE_COUNT = 0L;
+	private static final Integer DEFAULT_PRICE = 0;
+	private static final Integer DEFAULT_LIKE_COUNT = 0;
 	private static final String DEFAULT_ADDRESS = "N/A";
 
 	private User user;
@@ -28,7 +28,7 @@ class ProductTest {
 		String name = "나성공";
 		String description = "나성공 설명";
 		String address = "나성공 주소";
-		Long price = 2147483648L;
+		Integer price = 0;
 		Long cityId = 100L;
 		Long subcategoryId = 200L;
 		Long currencyId = 300L;
@@ -56,7 +56,7 @@ class ProductTest {
 		String name = "주소없음";
 		String description = "설명";
 		String address = null;
-		Long price = 0L;
+		Integer price = 0;
 		Long cityId = 1L;
 		Long subcategoryId = 1L;
 		Long currencyId = 1L;
@@ -85,7 +85,7 @@ class ProductTest {
 		String name = "가격없음";
 		String description = "설명";
 		String address = "주소";
-		Long price = null;
+		Integer price = null;
 		Long cityId = 1L;
 		Long subcategoryId = 1L;
 		Long currencyId = 1L;
