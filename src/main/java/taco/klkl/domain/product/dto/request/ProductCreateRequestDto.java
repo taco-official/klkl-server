@@ -14,12 +14,12 @@ import jakarta.validation.constraints.NotNull;
  * @param price
  */
 public record ProductCreateRequestDto(
-	@NotNull(message = "name is required") String name,
-	@NotNull(message = "description is required") String description,
-	@NotNull(message = "name is required") Long cityId,
-	@NotNull(message = "name is required") Long subcategoryId,
-	@NotNull(message = "name is required") Long currencyId,
-	@NotNull(message = "name is required") String address,
-	@NotNull(message = "name is required") Long price
+	@NotNull(message = "상품명은 필수 항목입니다.") String name,
+	@NotNull(message = "상품 설명은 필수 항목입니다.") String description,
+	@NotNull(message = "도시 ID는 필수 항목입니다.") Long cityId,
+	@NotNull(message = "상품 소분류 ID은 필수 항목입니다.") Long subcategoryId,
+	@NotNull(message = "통화 ID는 필수 항목입니다.") Long currencyId,
+	String address,
+	Integer price
 ) {
 }
