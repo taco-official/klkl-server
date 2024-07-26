@@ -1,7 +1,9 @@
 package taco.klkl.domain.region.service;
 
+import java.util.Collections;
 import java.util.List;
 
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,9 +13,9 @@ import taco.klkl.domain.region.dao.RegionRepository;
 import taco.klkl.domain.region.domain.Region;
 import taco.klkl.domain.region.dto.response.RegionResponseDto;
 import taco.klkl.domain.region.exception.RegionNotFoundException;
-import taco.klkl.global.error.exception.ErrorCode;
 
 @Slf4j
+@Primary
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -24,25 +26,29 @@ public class RegionServiceImpl implements RegionService {
 	@Override
 	public List<RegionResponseDto> getAllRegions() {
 		List<Region> regions = regionRepository.findAllByOrderByRegionIdAsc();
+
+		if (regions == null) {
+			return Collections.emptyList();
+		}
+
 		return regions.stream()
 			.map(RegionResponseDto::from)
 			.toList();
 	}
 
 	@Override
-	public RegionResponseDto getRegionById(Long id) {
+	public RegionResponseDto getRegionById(Long id) throws RegionNotFoundException {
 		Region region = regionRepository.findById(id)
-			.orElseThrow(() -> new RegionNotFoundException(ErrorCode.REGION_NOT_FOUND));
-		
+			.orElseThrow(RegionNotFoundException::new);
 		return RegionResponseDto.from(region);
 	}
 
 	@Override
-	public RegionResponseDto getRegionByName(String name) {
+	public RegionResponseDto getRegionByName(String name) throws RegionNotFoundException {
 		Region region = regionRepository.findFirstByName(name);
 
 		if (region == null) {
-			throw new RegionNotFoundException(ErrorCode.REGION_NOT_FOUND);
+			throw new RegionNotFoundException();
 		}
 
 		return RegionResponseDto.from(region);
