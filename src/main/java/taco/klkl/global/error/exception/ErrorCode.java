@@ -22,7 +22,7 @@ public enum ErrorCode {
 	// Comment
 
 	// Region
-	REGION_NOT_FOUND(HttpStatus.NOT_FOUND, "C060", "해당 지역을 찾을 수 없습니다."),
+	REGION_NOT_FOUND(HttpStatus.NOT_FOUND, "C050", "해당 지역을 찾을 수 없습니다."),
 
 	// Category
 
