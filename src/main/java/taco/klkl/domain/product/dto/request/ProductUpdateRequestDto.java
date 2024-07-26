@@ -7,6 +7,6 @@ public record ProductUpdateRequestDto(
 	Long subcategoryId,
 	Long currencyId,
 	String address,
-	Long price
+	Integer price
 ) {
 }
