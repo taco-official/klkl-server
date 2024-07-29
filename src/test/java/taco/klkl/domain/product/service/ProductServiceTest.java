@@ -19,7 +19,7 @@ import taco.klkl.domain.product.dto.request.ProductCreateRequestDto;
 import taco.klkl.domain.product.dto.response.ProductDetailResponseDto;
 import taco.klkl.domain.product.exception.ProductNotFoundException;
 import taco.klkl.domain.user.domain.User;
-import taco.klkl.global.common.constants.DefaultConstants;
+import taco.klkl.global.common.constants.ProductConstants;
 import taco.klkl.global.util.UserUtil;
 
 class ProductServiceTest {
@@ -74,7 +74,7 @@ class ProductServiceTest {
 		assertThat(responseDto.name()).isEqualTo(name);
 		assertThat(responseDto.description()).isEqualTo(description);
 		assertThat(responseDto.address()).isEqualTo(address);
-		assertThat(responseDto.likeCount()).isEqualTo(DefaultConstants.DEFAULT_INT_VALUE);
+		assertThat(responseDto.likeCount()).isEqualTo(ProductConstants.DEFAULT_LIKE_COUNT);
 		assertThat(responseDto.price()).isEqualTo(price);
 		assertThat(responseDto.cityId()).isEqualTo(cityId);
 		assertThat(responseDto.subcategoryId()).isEqualTo(subcategoryId);
@@ -144,7 +144,7 @@ class ProductServiceTest {
 		assertThat(responseDto.name()).isEqualTo(name);
 		assertThat(responseDto.description()).isEqualTo(description);
 		assertThat(responseDto.address()).isEqualTo(address);
-		assertThat(responseDto.likeCount()).isEqualTo(DefaultConstants.DEFAULT_INT_VALUE);
+		assertThat(responseDto.likeCount()).isEqualTo(ProductConstants.DEFAULT_LIKE_COUNT);
 		assertThat(responseDto.price()).isEqualTo(price);
 		assertThat(responseDto.cityId()).isEqualTo(cityId);
 		assertThat(responseDto.subcategoryId()).isEqualTo(subcategoryId);

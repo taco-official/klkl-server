@@ -18,6 +18,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import taco.klkl.domain.user.domain.User;
 import taco.klkl.global.common.constants.DefaultConstants;
+import taco.klkl.global.common.constants.ProductConstants;
 
 @Getter
 @Entity(name = "product")
@@ -67,10 +68,10 @@ public class Product {
 	@PrePersist
 	protected void prePersist() {
 		if (this.address == null) {
-			this.address = "N/A";
+			this.address = ProductConstants.DEFAULT_ADDRESS;
 		}
 		if (this.price == null) {
-			this.price = 0;
+			this.price = ProductConstants.DEFAULT_PRICE;
 		}
 	}
 

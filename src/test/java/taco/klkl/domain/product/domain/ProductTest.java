@@ -8,11 +8,9 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import taco.klkl.domain.user.domain.User;
+import taco.klkl.global.common.constants.ProductConstants;
 
 class ProductTest {
-	private static final Integer DEFAULT_PRICE = 0;
-	private static final Integer DEFAULT_LIKE_COUNT = 0;
-	private static final String DEFAULT_ADDRESS = "N/A";
 
 	private User user;
 
@@ -46,7 +44,7 @@ class ProductTest {
 		assertThat(product.getCityId()).isEqualTo(cityId);
 		assertThat(product.getSubcategoryId()).isEqualTo(subcategoryId);
 		assertThat(product.getCurrencyId()).isEqualTo(currencyId);
-		assertThat(product.getLikeCount()).isEqualTo(DEFAULT_LIKE_COUNT);
+		assertThat(product.getLikeCount()).isEqualTo(ProductConstants.DEFAULT_LIKE_COUNT);
 	}
 
 	@Test
@@ -69,12 +67,12 @@ class ProductTest {
 		assertThat(product.getUser()).isEqualTo(user);
 		assertThat(product.getName()).isEqualTo(name);
 		assertThat(product.getDescription()).isEqualTo(description);
-		assertThat(product.getAddress()).isEqualTo(DEFAULT_ADDRESS);
+		assertThat(product.getAddress()).isEqualTo(ProductConstants.DEFAULT_ADDRESS);
 		assertThat(product.getPrice()).isEqualTo(price);
 		assertThat(product.getCityId()).isEqualTo(cityId);
 		assertThat(product.getSubcategoryId()).isEqualTo(subcategoryId);
 		assertThat(product.getCurrencyId()).isEqualTo(currencyId);
-		assertThat(product.getLikeCount()).isEqualTo(DEFAULT_LIKE_COUNT);
+		assertThat(product.getLikeCount()).isEqualTo(ProductConstants.DEFAULT_LIKE_COUNT);
 	}
 
 	@Test
@@ -99,10 +97,10 @@ class ProductTest {
 		assertThat(product.getName()).isEqualTo(name);
 		assertThat(product.getDescription()).isEqualTo(description);
 		assertThat(product.getAddress()).isEqualTo(address);
-		assertThat(product.getPrice()).isEqualTo(DEFAULT_PRICE);
+		assertThat(product.getPrice()).isEqualTo(ProductConstants.DEFAULT_PRICE);
 		assertThat(product.getCityId()).isEqualTo(cityId);
 		assertThat(product.getSubcategoryId()).isEqualTo(subcategoryId);
 		assertThat(product.getCurrencyId()).isEqualTo(currencyId);
-		assertThat(product.getLikeCount()).isEqualTo(DEFAULT_LIKE_COUNT);
+		assertThat(product.getLikeCount()).isEqualTo(ProductConstants.DEFAULT_LIKE_COUNT);
 	}
 }
