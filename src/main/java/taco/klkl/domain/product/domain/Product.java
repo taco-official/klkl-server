@@ -13,14 +13,16 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import taco.klkl.domain.user.domain.User;
+import taco.klkl.global.common.constants.DefaultConstants;
 
 @Getter
-@NoArgsConstructor
 @Entity(name = "product")
 @DynamicInsert
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Product {
 
 	@Id
@@ -39,19 +41,19 @@ public class Product {
 	private String description;
 
 	@Column(name = "address", length = 100)
-	@ColumnDefault("'N/A'")
+	@ColumnDefault(DefaultConstants.DEFAULT_STRING)
 	private String address;
 
 	@Column(name = "like_count", nullable = false)
-	@ColumnDefault("0L")
-	private Long likeCount;
+	@ColumnDefault(DefaultConstants.DEFAULT_INT_STRING)
+	private Integer likeCount;
 
 	@Column(name = "created_at", nullable = false, updatable = false)
 	private LocalDateTime createdAt;
 
 	@Column(name = "price")
-	@ColumnDefault("0L")
-	private Long price;
+	@ColumnDefault(DefaultConstants.DEFAULT_INT_STRING)
+	private Integer price;
 
 	@Column(name = "city_id", nullable = false)
 	private Long cityId;
@@ -67,13 +69,9 @@ public class Product {
 		if (this.address == null) {
 			this.address = "N/A";
 		}
-		if (this.likeCount == null) {
-			this.likeCount = 0L;
-		}
 		if (this.price == null) {
-			this.price = 0L;
+			this.price = 0;
 		}
-		this.createdAt = LocalDateTime.now();
 	}
 
 	private Product(
@@ -81,7 +79,7 @@ public class Product {
 		final String name,
 		final String description,
 		final String address,
-		final Long price,
+		final Integer price,
 		final Long cityId,
 		final Long subcategoryId,
 		final Long currencyId
@@ -94,6 +92,8 @@ public class Product {
 		this.cityId = cityId;
 		this.subcategoryId = subcategoryId;
 		this.currencyId = currencyId;
+		this.likeCount = DefaultConstants.DEFAULT_INT_VALUE;
+		this.createdAt = LocalDateTime.now();
 	}
 
 	public static Product of(
@@ -101,7 +101,7 @@ public class Product {
 		final String name,
 		final String description,
 		final String address,
-		final Long price,
+		final Integer price,
 		final Long cityId,
 		final Long subcategoryId,
 		final Long currencyId
