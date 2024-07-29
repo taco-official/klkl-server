@@ -19,6 +19,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import taco.klkl.domain.region.domain.Region;
 import taco.klkl.domain.region.dto.response.RegionResponseDto;
+import taco.klkl.domain.region.enums.RegionType;
 import taco.klkl.domain.region.service.RegionService;
 import taco.klkl.global.error.exception.ErrorCode;
 
@@ -35,13 +36,10 @@ class RegionControllerTest {
 	@DisplayName("모든 지역 조회 성공 테스트")
 	void getAllRegionsTest() throws Exception {
 		// given
-		String region1Name = "동북아시아";
-		String region2Name = "동남아시아";
-		String region3Name = "기타";
 		List<RegionResponseDto> regionResponseDtos = Arrays.asList(
-			RegionResponseDto.from(Region.of(region1Name)),
-			RegionResponseDto.from(Region.of(region2Name)),
-			RegionResponseDto.from(Region.of(region3Name))
+			RegionResponseDto.from(Region.of(RegionType.NORTHEAST_ASIA)),
+			RegionResponseDto.from(Region.of(RegionType.SOUTHEAST_ASIA)),
+			RegionResponseDto.from(Region.of(RegionType.ETC_REGION))
 		);
 
 		when(regionService.getAllRegions()).thenReturn(regionResponseDtos);
@@ -53,9 +51,9 @@ class RegionControllerTest {
 			.andExpect(jsonPath("$.isSuccess", is(true)))
 			.andExpect(jsonPath("$.code", is("C000")))
 			.andExpect(jsonPath("$.data", hasSize(3)))
-			.andExpect(jsonPath("$.data[0].name", is(region1Name)))
-			.andExpect(jsonPath("$.data[1].name", is(region2Name)))
-			.andExpect(jsonPath("$.data[2].name", is(region3Name)))
+			.andExpect(jsonPath("$.data[0].name", is(RegionType.NORTHEAST_ASIA.getName())))
+			.andExpect(jsonPath("$.data[1].name", is(RegionType.SOUTHEAST_ASIA.getName())))
+			.andExpect(jsonPath("$.data[2].name", is(RegionType.ETC_REGION.getName())))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
 
 		verify(regionService, times(1)).getAllRegions();
