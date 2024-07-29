@@ -10,6 +10,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.PrePersist;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import taco.klkl.global.common.constants.UserConstants;
 import taco.klkl.global.common.enums.Gender;
 
 @Getter
@@ -23,7 +24,7 @@ public class User {
 	private Long id;
 
 	@Column(length = 500, nullable = false)
-	private String profile = "image/default.jpg";
+	private String profile = UserConstants.DEFAULT_PROFILE;
 
 	@Column(unique = true, length = 30, nullable = false)
 	private String name;
@@ -44,7 +45,7 @@ public class User {
 	@PrePersist
 	protected void prePersist() {
 		if (this.profile == null) {
-			this.profile = "image/default.jpg";
+			this.profile = UserConstants.DEFAULT_PROFILE;
 		}
 		this.createdAt = LocalDateTime.now();
 	}

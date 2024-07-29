@@ -6,6 +6,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import taco.klkl.domain.user.domain.User;
+import taco.klkl.global.common.constants.UserConstants;
 import taco.klkl.global.common.enums.Gender;
 
 public class UserDetailResponseDtoTest {
@@ -48,6 +49,6 @@ public class UserDetailResponseDtoTest {
 		assertThat(userDetail.profile()).isEqualTo(profile);
 		assertThat(userDetail.name()).isEqualTo(name);
 		assertThat(userDetail.description()).isEqualTo(description);
-		assertThat(userDetail.totalLikeCount()).isEqualTo(0);
+		assertThat(userDetail.totalLikeCount()).isEqualTo(UserConstants.DEFAULT_TOTAL_LIKE_COUNT);
 	}
 }
