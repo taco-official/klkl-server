@@ -4,6 +4,8 @@ spring:
     console:
       enabled: true  # H2 Console을 사용할지 여부 (H2 Console은 H2 Database를 UI로 제공해주는 기능)
       path: /h2-console  # H2 Console의 Path
+      settings:
+        web-allow-others: true
   # Database Setting Info (Database를 H2로 사용하기 위해 H2연결 정보 입력)
   datasource:
     driver-class-name: org.h2.Driver
