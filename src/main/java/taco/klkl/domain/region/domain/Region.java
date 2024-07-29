@@ -8,6 +8,7 @@ import jakarta.persistence.Id;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import taco.klkl.domain.region.enums.RegionType;
 
 @Getter
 @Entity
@@ -20,13 +21,13 @@ public class Region {
 	Long regionId;
 
 	@Column(name = "name", length = 20, nullable = false)
-	String name;
+	RegionType name;
 
-	private Region(String name) {
-		this.name = name;
+	private Region(RegionType region) {
+		this.name = region;
 	}
 
-	public static Region of(String name) {
-		return new Region(name);
+	public static Region of(RegionType regionType) {
+		return new Region(regionType);
 	}
 }

@@ -8,6 +8,6 @@ public record RegionResponseDto(
 ) {
 
 	public static RegionResponseDto from(Region region) {
-		return new RegionResponseDto(region.getRegionId(), region.getName());
+		return new RegionResponseDto(region.getRegionId(), region.getName().getName());
 	}
 }

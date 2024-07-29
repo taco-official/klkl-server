@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import taco.klkl.domain.region.dao.RegionRepository;
 import taco.klkl.domain.region.domain.Region;
 import taco.klkl.domain.region.dto.response.RegionResponseDto;
+import taco.klkl.domain.region.enums.RegionType;
 import taco.klkl.domain.region.exception.RegionNotFoundException;
 
 @Slf4j
@@ -45,7 +46,7 @@ public class RegionServiceImpl implements RegionService {
 
 	@Override
 	public RegionResponseDto getRegionByName(String name) throws RegionNotFoundException {
-		Region region = regionRepository.findFirstByName(name);
+		Region region = regionRepository.findFirstByName(RegionType.getRegionByName(name));
 
 		if (region == null) {
 			throw new RegionNotFoundException();
