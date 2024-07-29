@@ -16,7 +16,7 @@ public enum ErrorCode {
 	// User
 
 	// Product
-	PRODUCT_NOT_FOUND(HttpStatus.NOT_FOUND, "C200", "존재하지 않는 상품입니다."),
+	PRODUCT_NOT_FOUND(HttpStatus.NOT_FOUND, "C020", "존재하지 않는 상품입니다."),
 
 	// Like
 
