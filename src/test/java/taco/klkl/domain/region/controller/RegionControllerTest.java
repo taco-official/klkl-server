@@ -8,6 +8,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,8 +18,12 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import taco.klkl.domain.region.dao.RegionRepository;
+import taco.klkl.domain.region.domain.Country;
 import taco.klkl.domain.region.domain.Region;
 import taco.klkl.domain.region.dto.response.RegionResponseDto;
+import taco.klkl.domain.region.dto.response.RegionSimpleResponseDto;
+import taco.klkl.domain.region.enums.CountryType;
 import taco.klkl.domain.region.enums.RegionType;
 import taco.klkl.domain.region.service.RegionService;
 import taco.klkl.global.error.exception.ErrorCode;
@@ -32,14 +37,32 @@ class RegionControllerTest {
 	@MockBean
 	RegionService regionService;
 
+	private static final Region region1 = Region.of(RegionType.NORTHEAST_ASIA);
+	private static final Region region2 = Region.of(RegionType.SOUTHEAST_ASIA);
+	private static final Region region3 = Region.of(RegionType.ETC_REGION);
+	private static final Country country1 = Country.of(
+		CountryType.JAPAN,
+		region1,
+		"image/japan",
+		"image/japan",
+		42);
+	private static final Country country2 = Country.of(
+		CountryType.TAIWAN,
+		region1,
+		"image/taiwan",
+		"image/taiwan",
+		43);
+	private static final List<Country> countryList = Arrays.asList(country1,
+		country2);
+
 	@Test
 	@DisplayName("모든 지역 조회 성공 테스트")
 	void getAllRegionsTest() throws Exception {
 		// given
-		List<RegionResponseDto> regionResponseDtos = Arrays.asList(
-			RegionResponseDto.from(Region.of(RegionType.NORTHEAST_ASIA)),
-			RegionResponseDto.from(Region.of(RegionType.SOUTHEAST_ASIA)),
-			RegionResponseDto.from(Region.of(RegionType.ETC_REGION))
+		List<RegionSimpleResponseDto> regionResponseDtos = Arrays.asList(
+			RegionSimpleResponseDto.from(region1),
+			RegionSimpleResponseDto.from(region2),
+			RegionSimpleResponseDto.from(region3)
 		);
 
 		when(regionService.getAllRegions()).thenReturn(regionResponseDtos);
@@ -51,9 +74,9 @@ class RegionControllerTest {
 			.andExpect(jsonPath("$.isSuccess", is(true)))
 			.andExpect(jsonPath("$.code", is("C000")))
 			.andExpect(jsonPath("$.data", hasSize(3)))
-			.andExpect(jsonPath("$.data[0].name", is(RegionType.NORTHEAST_ASIA.getName())))
-			.andExpect(jsonPath("$.data[1].name", is(RegionType.SOUTHEAST_ASIA.getName())))
-			.andExpect(jsonPath("$.data[2].name", is(RegionType.ETC_REGION.getName())))
+			.andExpect(jsonPath("$.data[0].name", is(region1.getName().getName())))
+			.andExpect(jsonPath("$.data[1].name", is(region2.getName().getName())))
+			.andExpect(jsonPath("$.data[2].name", is(region3.getName().getName())))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
 
 		verify(regionService, times(1)).getAllRegions();
@@ -95,4 +118,28 @@ class RegionControllerTest {
 		verify(regionService, times(1)).getAllRegions();
 	}
 
+	@Test
+	@DisplayName("특정 지역에 속한 국가 목록 조회")
+	void getRegionWithCountryTest() throws Exception {
+		// given
+		Region mockRegion = mock(Region.class);
+		RegionRepository regionRepository = mock(RegionRepository.class);
+		when(mockRegion.getName()).thenReturn(RegionType.NORTHEAST_ASIA);
+		when(regionRepository.findById(1L)).thenReturn(Optional.of(mockRegion));
+		when(mockRegion.getCountries()).thenReturn(countryList);
+		RegionResponseDto responseDto = RegionResponseDto.from(mockRegion);
+		when(regionService.getRegionsWithCountries(1L)).thenReturn(responseDto);
+
+		// when & then
+		mockMvc.perform(get("/v1/regions/1/countries")
+				.contentType(MediaType.APPLICATION_JSON))
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.isSuccess", is(true)))
+			.andExpect(jsonPath("$.code", is("C000")))
+			.andExpect(jsonPath("$.data.countries[0].name", is(countryList.get(0).getName().getName())))
+			.andExpect(jsonPath("$.data.countries[1].name", is(countryList.get(1).getName().getName())))
+			.andExpect(jsonPath("$.timestamp", notNullValue()));
+
+		verify(regionService, times(1)).getRegionsWithCountries(1L);
+	}
 }

@@ -15,7 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import jakarta.transaction.Transactional;
-import taco.klkl.domain.region.dto.response.RegionResponseDto;
+import taco.klkl.domain.region.dto.response.RegionSimpleResponseDto;
 import taco.klkl.domain.region.service.RegionService;
 
 @SpringBootTest
@@ -33,7 +33,7 @@ public class RegionIntegrationTest {
 	@DisplayName("모든 지역 조회 통합 테스트")
 	void getAllRegionsTest() throws Exception {
 		// given
-		List<RegionResponseDto> regionResponseDtos = regionService.getAllRegions();
+		List<RegionSimpleResponseDto> regionResponseDtos = regionService.getAllRegions();
 
 		// when & then
 		mockMvc.perform(get("/v1/regions")
