@@ -5,7 +5,7 @@ import taco.klkl.domain.region.domain.Region;
 
 public record CountryResponseDto(
 	Long countryId,
-	Region regionId,
+	Region region,
 	String name,
 	String flag,
 	String photo,
@@ -19,7 +19,7 @@ public record CountryResponseDto(
 	public static CountryResponseDto from(Country country) {
 		return new CountryResponseDto(
 			country.getCountryId(),
-			country.getRegionId(),
+			country.getRegion(),
 			country.getName().getName(),
 			country.getFlag(),
 			country.getPhoto(),

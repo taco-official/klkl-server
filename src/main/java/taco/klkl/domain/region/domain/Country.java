@@ -20,8 +20,8 @@ public class Country {
 	private Long countryId;
 
 	@ManyToOne
-	@JoinColumn(name = "region_id")
-	private Region regionId;
+	@JoinColumn(name = "region_id", nullable = false)
+	private Region region;
 
 	@Column(name = "name", length = 20, nullable = false)
 	private CountryType name;
@@ -38,14 +38,14 @@ public class Country {
 
 	private Country(CountryType countryType, Region region, String flag, String photo, int currencyId) {
 		this.countryId = countryType.getCountryCode();
-		this.regionId = region;
+		this.region = region;
 		this.name = countryType;
 		this.flag = flag;
 		this.photo = photo;
 		this.currencyId = currencyId;
 	}
 
-	public Country of(CountryType countryType, Region region, String flag, String photo, int currencyId) {
+	public static Country of(CountryType countryType, Region region, String flag, String photo, int currencyId) {
 		return new Country(countryType, region, flag, photo, currencyId);
 	}
 
