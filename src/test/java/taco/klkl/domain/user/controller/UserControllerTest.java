@@ -17,7 +17,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import taco.klkl.domain.user.domain.User;
 import taco.klkl.domain.user.dto.response.UserDetailResponseDto;
 import taco.klkl.domain.user.service.UserService;
-import taco.klkl.global.common.enums.Gender;
+import taco.klkl.global.common.constants.UserConstants;
 
 @WebMvcTest(UserController.class)
 class UserControllerTest {
@@ -32,7 +32,7 @@ class UserControllerTest {
 
 	@BeforeEach
 	public void setUp() {
-		User user = User.of("image/default.jpg", "testUser", Gender.MALE, 20, "테스트 유저입니다.");
+		User user = UserConstants.TEST_USER;
 		responseDto = UserDetailResponseDto.from(user);
 	}
 
@@ -52,7 +52,7 @@ class UserControllerTest {
 			.andExpect(jsonPath("$.data.profile", is(notNullValue())))
 			.andExpect(jsonPath("$.data.name", is(responseDto.name())))
 			.andExpect(jsonPath("$.data.description", is(responseDto.description())))
-			.andExpect(jsonPath("$.data.totalLikeCount", is(0)))
+			.andExpect(jsonPath("$.data.totalLikeCount", is(UserConstants.DEFAULT_TOTAL_LIKE_COUNT)))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
 	}
 }

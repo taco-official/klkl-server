@@ -16,6 +16,7 @@ public enum ErrorCode {
 	// User
 
 	// Product
+	PRODUCT_NOT_FOUND(HttpStatus.NOT_FOUND, "C020", "존재하지 않는 상품입니다."),
 
 	// Like
 
@@ -25,7 +26,7 @@ public enum ErrorCode {
 	REGION_NOT_FOUND(HttpStatus.NOT_FOUND, "C050", "해당 지역을 찾을 수 없습니다."),
 
 	// Category
-
+	CATEGORY_ID_NOT_FOUND(HttpStatus.NOT_FOUND, "C060", "존재하지 않는 카테고리 ID 입니다."),
 	// Filter
 
 	// Notification
