@@ -33,13 +33,13 @@ class CategoryIntegrationTest {
 	@DisplayName("카테고리 목록 반환 API 통합 Test")
 	void testGetAllCategories() throws Exception {
 		// given
-		List<CategoryResponseDto> categoryResponsDtos = categoryService.getCategories();
+		List<CategoryResponseDto> categoryResponseDto = categoryService.getCategories();
 
 		//then
 		mockMvc.perform(get("/v1/categories")
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
-			.andExpect(jsonPath("$.data", hasSize(categoryResponsDtos.size())))
+			.andExpect(jsonPath("$.data", hasSize(categoryResponseDto.size())))
 			.andExpect(jsonPath("$.isSuccess", is(true)))
 			.andExpect(jsonPath("$.code", is("C000")));
 	}
