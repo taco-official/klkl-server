@@ -1,7 +1,6 @@
 package taco.klkl.domain.subcategory.sevice;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -25,6 +24,6 @@ public class SubcategoryService {
 		}
 		return subcategories.stream()
 			.map(subcategory -> SubcategoryResponseDto.of(subcategory.getId(), subcategory.getName()))
-			.collect(Collectors.toList());
+			.toList();
 	}
 }
