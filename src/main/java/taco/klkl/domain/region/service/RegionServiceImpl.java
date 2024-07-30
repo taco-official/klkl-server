@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import taco.klkl.domain.region.dao.RegionRepository;
 import taco.klkl.domain.region.domain.Region;
 import taco.klkl.domain.region.dto.response.RegionResponseDto;
+import taco.klkl.domain.region.dto.response.RegionSimpleResponseDto;
 import taco.klkl.domain.region.enums.RegionType;
 import taco.klkl.domain.region.exception.RegionNotFoundException;
 
@@ -25,7 +26,7 @@ public class RegionServiceImpl implements RegionService {
 	private final RegionRepository regionRepository;
 
 	@Override
-	public List<RegionResponseDto> getAllRegions() {
+	public List<RegionSimpleResponseDto> getAllRegions() {
 		List<Region> regions = regionRepository.findAllByOrderByRegionIdAsc();
 
 		if (regions == null) {
@@ -33,25 +34,33 @@ public class RegionServiceImpl implements RegionService {
 		}
 
 		return regions.stream()
-			.map(RegionResponseDto::from)
+			.map(RegionSimpleResponseDto::from)
 			.toList();
 	}
 
 	@Override
-	public RegionResponseDto getRegionById(Long id) throws RegionNotFoundException {
+	public RegionSimpleResponseDto getRegionById(Long id) throws RegionNotFoundException {
 		Region region = regionRepository.findById(id)
 			.orElseThrow(RegionNotFoundException::new);
-		return RegionResponseDto.from(region);
+		return RegionSimpleResponseDto.from(region);
 	}
 
 	@Override
-	public RegionResponseDto getRegionByName(String name) throws RegionNotFoundException {
+	public RegionSimpleResponseDto getRegionByName(String name) throws RegionNotFoundException {
 		Region region = regionRepository.findFirstByName(RegionType.getRegionByName(name));
 
 		if (region == null) {
 			throw new RegionNotFoundException();
 		}
 
-		return RegionResponseDto.from(region);
+		return RegionSimpleResponseDto.from(region);
+	}
+
+	@Override
+	public RegionResponseDto getRegionsWithCountries(Long id) {
+		Region findRegion = regionRepository.findById(id)
+			.orElseThrow(RegionNotFoundException::new);
+
+		return RegionResponseDto.from(findRegion);
 	}
 }
