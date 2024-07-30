@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import taco.klkl.domain.product.dao.ProductRepository;
 import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.product.dto.request.ProductCreateRequestDto;
+import taco.klkl.domain.product.dto.request.ProductUpdateRequestDto;
 import taco.klkl.domain.product.dto.response.ProductDetailResponseDto;
 import taco.klkl.domain.product.exception.ProductNotFoundException;
 import taco.klkl.domain.user.domain.User;
@@ -20,8 +21,8 @@ public class ProductService {
 	private final ProductRepository productRepository;
 	private final UserUtil userUtil;
 
-	public ProductDetailResponseDto getProductInfoById(Long id) {
-		Product product = productRepository.findById(id)
+	public ProductDetailResponseDto getProductInfoById(final Long id) {
+		final Product product = productRepository.findById(id)
 			.orElseThrow(ProductNotFoundException::new);
 		return ProductDetailResponseDto.from(product);
 	}
@@ -30,6 +31,14 @@ public class ProductService {
 		final Product product = createProductEntity(productDto);
 		productRepository.save(product);
 		return ProductDetailResponseDto.from(product);
+	}
+
+	public ProductDetailResponseDto updateProduct(final Long id, final ProductUpdateRequestDto productDto) {
+		final Product product = productRepository.findById(id)
+			.orElseThrow(ProductNotFoundException::new);
+		product.update(productDto);
+		final Product updatedProduct = productRepository.save(product);
+		return ProductDetailResponseDto.from(updatedProduct);
 	}
 
 	private Product createProductEntity(final ProductCreateRequestDto productDto) {
