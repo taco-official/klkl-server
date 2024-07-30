@@ -1,5 +1,8 @@
 package taco.klkl.global.error;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +23,7 @@ import taco.klkl.global.response.GlobalResponse;
 @RestControllerAdvice
 @RequiredArgsConstructor
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
+	private static final String ERROR_MESSAGE_DELIMITER = " ";
 
 	@Override
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(
@@ -29,9 +33,20 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 		WebRequest request
 	) {
 		log.error("MethodArgumentNotValid : {}", ex.getMessage(), ex);
+
+		// 모든 오류 메시지를 수집
+		Map<String, String> errors = new HashMap<>();
+		ex.getBindingResult().getFieldErrors().forEach(fieldError -> {
+			String fieldName = fieldError.getField();
+			String errorMessage = fieldError.getDefaultMessage();
+			errors.put(fieldName, errorMessage);
+		});
+
 		final ErrorCode errorCode = ErrorCode.METHOD_ARGUMENT_INVALID;
-		final ErrorResponse errorResponse = ErrorResponse.of(errorCode.getCode(), errorCode.getMessage());
+		final String errorMessage = String.join(ERROR_MESSAGE_DELIMITER, errorCode.getMessage(), errors.toString());
+		final ErrorResponse errorResponse = ErrorResponse.of(errorCode.getCode(), errorMessage);
 		final GlobalResponse globalResponse = GlobalResponse.error(errorCode.getCode(), errorResponse);
+
 		return ResponseEntity.status(errorCode.getStatus()).body(globalResponse);
 	}
 
@@ -73,6 +88,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 		return ResponseEntity.status(errorCode.getStatus()).body(globalResponse);
 	}
 
+	// TODO: json 문법 오류 있으면 BAD_REQUEST 반환
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<Object> handleException(Exception ex) {
 		log.error("InternalServerError : {}", ex.getMessage(), ex);

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import taco.klkl.domain.product.dto.request.ProductCreateRequestDto;
 import taco.klkl.domain.product.dto.request.ProductUpdateRequestDto;
@@ -35,7 +36,9 @@ public class ProductController {
 
 	@PostMapping
 	@Operation(summary = "상품 등록", description = "상품을 등록합니다.")
-	public ResponseEntity<ProductDetailResponseDto> createProduct(@RequestBody ProductCreateRequestDto createRequest) {
+	public ResponseEntity<ProductDetailResponseDto> createProduct(
+		@Valid @RequestBody ProductCreateRequestDto createRequest
+	) {
 		ProductDetailResponseDto productDto = productService.createProduct(createRequest);
 		return ResponseEntity.status(HttpStatus.CREATED).body(productDto);
 	}

@@ -7,7 +7,7 @@ spring:
   # Database Setting Info (Database를 H2로 사용하기 위해 H2연결 정보 입력)
   datasource:
     driver-class-name: org.h2.Driver
-    url: jdbc:h2:mem:klkldb;NON_KEYWORDS=USER
+    url: jdbc:h2:mem:klkldb;NON_KEYWORDS=USER;MODE=MySQL
 
     username: sa
     password:

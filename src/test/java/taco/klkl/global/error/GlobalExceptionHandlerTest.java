@@ -3,12 +3,16 @@ package taco.klkl.global.error;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import java.util.List;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.context.request.WebRequest;
@@ -30,7 +34,21 @@ class GlobalExceptionHandlerTest {
 	@DisplayName("MethodArgumentNotValidException이 발생한 경우")
 	void methodArgumentNotValidOccurred() {
 		// given
+		BindingResult bindingResult = mock(BindingResult.class);
 		MethodArgumentNotValidException exception = mock(MethodArgumentNotValidException.class);
+
+		// Mock the field errors
+		List<FieldError> fieldErrors = List.of(
+			new FieldError("productCreateRequestDto", "name", "상품명은 필수 항목입니다."),
+			new FieldError("productCreateRequestDto", "description", "상품 설명은 필수 항목입니다."),
+			new FieldError("productCreateRequestDto", "cityId", "도시 ID는 필수 항목입니다."),
+			new FieldError("productCreateRequestDto", "subcategoryId", "상품 소분류 ID는 필수 항목입니다."),
+			new FieldError("productCreateRequestDto", "currencyId", "통화 ID는 필수 항목입니다.")
+		);
+
+		when(bindingResult.getFieldErrors()).thenReturn(fieldErrors);
+		when(exception.getBindingResult()).thenReturn(bindingResult);
+
 		HttpHeaders headers = new HttpHeaders();
 		HttpStatus status = HttpStatus.BAD_REQUEST;
 		WebRequest request = mock(WebRequest.class);
@@ -46,8 +64,8 @@ class GlobalExceptionHandlerTest {
 		GlobalResponse globalResponse = (GlobalResponse)(response.getBody());
 		assertInstanceOf(ErrorResponse.class, globalResponse.data());
 		ErrorResponse errorResponse = (ErrorResponse)(globalResponse.data());
-		assertEquals("C010", errorResponse.code());
-		assertEquals("유효하지 않은 method 인자 입니다.", errorResponse.message());
+		assertEquals(ErrorCode.METHOD_ARGUMENT_INVALID.getCode(), errorResponse.code());
+		assertTrue(errorResponse.message().contains(ErrorCode.METHOD_ARGUMENT_INVALID.getMessage()));
 	}
 
 	@Test

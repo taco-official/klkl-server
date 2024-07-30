@@ -26,6 +26,7 @@ import taco.klkl.domain.product.dto.request.ProductUpdateRequestDto;
 import taco.klkl.domain.product.dto.response.ProductDetailResponseDto;
 import taco.klkl.domain.product.service.ProductService;
 import taco.klkl.domain.user.domain.User;
+import taco.klkl.global.error.exception.ErrorCode;
 
 @WebMvcTest(ProductController.class)
 class ProductControllerTest {
@@ -63,17 +64,6 @@ class ProductControllerTest {
 
 		// ProductDetailResponseDto 생성
 		productDetailResponseDto = ProductDetailResponseDto.from(mockProduct);
-
-		// ProductCreateRequestDto 생성
-		ProductCreateRequestDto productCreateRequestDto = new ProductCreateRequestDto(
-			"name",
-			"description",
-			2L,
-			3L,
-			4L,
-			"address",
-			1000
-		);
 	}
 
 	@Test
@@ -133,6 +123,33 @@ class ProductControllerTest {
 			.andExpect(jsonPath("$.data.cityId", is(productDetailResponseDto.cityId().intValue())))
 			.andExpect(jsonPath("$.data.subcategoryId", is(productDetailResponseDto.subcategoryId().intValue())))
 			.andExpect(jsonPath("$.data.currencyId", is(productDetailResponseDto.currencyId().intValue())))
+			.andExpect(jsonPath("$.timestamp", notNullValue()));
+	}
+
+	@Test
+	@DisplayName("상품 등록 API 유효성 검사 실패 테스트")
+	public void testCreateProductValidationFailure() throws Exception {
+		// given
+		ProductCreateRequestDto invalidRequestDto = new ProductCreateRequestDto(
+			null,
+			"",
+			null,
+			null,
+			null,
+			null,
+			null
+		);
+
+		// when & then
+		ErrorCode methodArgumentInvalidError = ErrorCode.METHOD_ARGUMENT_INVALID;
+		mockMvc.perform(post("/v1/products")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(invalidRequestDto)))
+			.andExpect(status().isBadRequest())
+			.andExpect(jsonPath("$.isSuccess", is(false)))
+			.andExpect(jsonPath("$.code", is(methodArgumentInvalidError.getCode())))
+			.andExpect(jsonPath("$.data.code", is(methodArgumentInvalidError.getCode())))
+			.andExpect(jsonPath("$.data.message", containsString(methodArgumentInvalidError.getMessage())))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
 	}
 
