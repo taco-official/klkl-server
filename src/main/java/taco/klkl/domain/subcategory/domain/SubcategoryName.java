@@ -34,6 +34,8 @@ public enum SubcategoryName {
 	HAIR_CARE("헤어케어"),
 	BODY_CARE("바디케어"),
 	HYGIENE_PRODUCT("위생용품"),
+	//None
+	NONE(""),
 	;
 
 	private final String name;
@@ -42,6 +44,6 @@ public enum SubcategoryName {
 		return Arrays.stream(values())
 			.filter(subcategoryName -> subcategoryName.getName().equals(name))
 			.findFirst()
-			.orElse(null);
+			.orElse(NONE);
 	}
 }
