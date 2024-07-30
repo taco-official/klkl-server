@@ -18,14 +18,14 @@ public class Category {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
-	@Column(name = "name", nullable = false, unique = true, length = 20)
-	private String name;
+	@Column(name = "name")
+	private CategoryName name;
 
-	private Category(String name) {
+	private Category(CategoryName name) {
 		this.name = name;
 	}
 
-	public static Category of(String name) {
+	public static Category of(CategoryName name) {
 		return new Category(name);
 	}
 }
