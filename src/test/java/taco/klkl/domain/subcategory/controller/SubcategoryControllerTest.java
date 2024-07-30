@@ -19,6 +19,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import taco.klkl.domain.subcategory.dto.response.SubcategoryResponseDto;
 import taco.klkl.domain.subcategory.exception.CategoryNotFoundException;
 import taco.klkl.domain.subcategory.sevice.SubcategoryService;
+import taco.klkl.global.error.exception.ErrorCode;
 
 @WebMvcTest(SubcategoryController.class)
 public class SubcategoryControllerTest {
@@ -67,8 +68,8 @@ public class SubcategoryControllerTest {
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isNotFound())
 			.andExpect(jsonPath("$.isSuccess", is(false)))
-			.andExpect(jsonPath("$.code", is("C060")))
-			.andExpect(jsonPath("$.data.message", is("존재하지 않는 카테고리 ID 입니다.")))
+			.andExpect(jsonPath("$.code", is(ErrorCode.CATEGORY_ID_NOT_FOUND.getCode())))
+			.andExpect(jsonPath("$.data.message", is(ErrorCode.CATEGORY_ID_NOT_FOUND.getMessage())))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
 
 		verify(subcategoryService, times(1)).getSubcategories(anyLong());
