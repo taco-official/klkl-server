@@ -16,6 +16,7 @@ import taco.klkl.domain.user.dao.UserRepository;
 import taco.klkl.domain.user.domain.User;
 import taco.klkl.domain.user.dto.request.UserCreateRequestDto;
 import taco.klkl.domain.user.dto.response.UserDetailResponseDto;
+import taco.klkl.global.common.constants.UserConstants;
 import taco.klkl.global.common.enums.Gender;
 
 @ExtendWith(MockitoExtension.class)
@@ -32,8 +33,8 @@ class UserServiceTest {
 	@DisplayName("내 정보 조회 서비스 테스트")
 	public void testGetMyInfo() {
 		// given
-		User user = User.of("image/default.jpg", "testUser", Gender.MALE, 20, "테스트 유저입니다.");
-		when(userRepository.findFirstByName(UserService.MY_NAME)).thenReturn(user);
+		User user = UserConstants.TEST_USER;
+		when(userRepository.findFirstByName(UserConstants.TEST_USER_NAME)).thenReturn(user);
 
 		// when
 		UserDetailResponseDto userDto = userService.getMyInfo();
@@ -42,7 +43,7 @@ class UserServiceTest {
 		assertThat(userDto.profile()).isEqualTo(user.getProfile());
 		assertThat(userDto.name()).isEqualTo(user.getName());
 		assertThat(userDto.description()).isEqualTo(user.getDescription());
-		assertThat(userDto.totalLikeCount()).isEqualTo(0);
+		assertThat(userDto.totalLikeCount()).isEqualTo(UserConstants.DEFAULT_TOTAL_LIKE_COUNT);
 	}
 
 	@Test
@@ -72,6 +73,6 @@ class UserServiceTest {
 		assertThat(responseDto.name()).isEqualTo(requestDto.name());
 		assertThat(responseDto.profile()).isEqualTo(requestDto.profile());
 		assertThat(responseDto.description()).isEqualTo(requestDto.description());
-		assertThat(responseDto.totalLikeCount()).isEqualTo(0);
+		assertThat(responseDto.totalLikeCount()).isEqualTo(UserConstants.DEFAULT_TOTAL_LIKE_COUNT);
 	}
 }
