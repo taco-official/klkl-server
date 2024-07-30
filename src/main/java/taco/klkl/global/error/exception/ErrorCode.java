@@ -24,7 +24,7 @@ public enum ErrorCode {
 	// Region
 
 	// Category
-
+	CATEGORY_ID_NOT_FOUND(HttpStatus.NOT_FOUND, "C060", "존재하지 않는 카테고리 ID 입니다."),
 	// Filter
 
 	// Notification
