@@ -16,6 +16,7 @@ import jakarta.persistence.PrePersist;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import taco.klkl.domain.product.dto.request.ProductUpdateRequestDto;
 import taco.klkl.domain.user.domain.User;
 import taco.klkl.global.common.constants.DefaultConstants;
 import taco.klkl.global.common.constants.ProductConstants;
@@ -108,5 +109,29 @@ public class Product {
 		final Long currencyId
 	) {
 		return new Product(user, name, description, address, price, cityId, subcategoryId, currencyId);
+	}
+
+	public void update(ProductUpdateRequestDto updateDto) {
+		if (updateDto.name() != null) {
+			this.name = updateDto.name();
+		}
+		if (updateDto.description() != null) {
+			this.description = updateDto.description();
+		}
+		if (updateDto.address() != null) {
+			this.address = updateDto.address();
+		}
+		if (updateDto.price() != null) {
+			this.price = updateDto.price();
+		}
+		if (updateDto.cityId() != null) {
+			this.cityId = updateDto.cityId();
+		}
+		if (updateDto.subcategoryId() != null) {
+			this.subcategoryId = updateDto.subcategoryId();
+		}
+		if (updateDto.currencyId() != null) {
+			this.currencyId = updateDto.currencyId();
+		}
 	}
 }
