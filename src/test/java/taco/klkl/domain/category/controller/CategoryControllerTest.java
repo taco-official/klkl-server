@@ -32,13 +32,13 @@ public class CategoryControllerTest {
 	@DisplayName("카테고리 컨트롤러 GlobalResponse로 Wrapping되어 나오는지 Test")
 	public void testGetCategory() throws Exception {
 		// given
-		List<CategoryResponseDto> categoryResponsDtos = Arrays.asList(
+		List<CategoryResponseDto> categoryResponseDto = Arrays.asList(
 			new CategoryResponseDto(1L, "Category1"),
 			new CategoryResponseDto(2L, "Category2")
 		);
 
 		// when
-		when(categoryService.getCategories()).thenReturn(categoryResponsDtos);
+		when(categoryService.getCategories()).thenReturn(categoryResponseDto);
 
 		// then
 		mockMvc.perform(get("/v1/categories")

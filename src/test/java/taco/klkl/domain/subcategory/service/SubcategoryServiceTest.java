@@ -16,6 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import jakarta.transaction.Transactional;
 import taco.klkl.domain.category.domain.Category;
+import taco.klkl.domain.category.domain.CategoryName;
 import taco.klkl.domain.subcategory.dao.SubcategoryRepository;
 import taco.klkl.domain.subcategory.domain.Subcategory;
 import taco.klkl.domain.subcategory.domain.SubcategoryName;
@@ -37,7 +38,7 @@ public class SubcategoryServiceTest {
 	@DisplayName("Valid한 카테고리ID 입력시 해당하는 서브카테고리를 반환하는지 테스트")
 	void testGetSubcategoriesWithValidCategoryId() {
 		//given
-		Category category = Category.of("Category1");
+		Category category = Category.of(CategoryName.FOOD);
 		Subcategory subcategory1 = Subcategory.of(category, SubcategoryName.DRESS);
 		Subcategory subcategory2 = Subcategory.of(category, SubcategoryName.HAIR_CARE);
 		List<Subcategory> subcategories = Arrays.asList(subcategory1, subcategory2);
