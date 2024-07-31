@@ -33,7 +33,7 @@ public class CountryIntegrationTest {
 	@DisplayName("모든 국가 조회 테스트")
 	void getAllCountriesTest() throws Exception {
 		// given
-		List<CountryResponseDto> countryResponseDtos = countryService.getALlCountry();
+		List<CountryResponseDto> countryResponseDtos = countryService.getAllCountries();
 
 		// when & then
 		mockMvc.perform(get("/v1/countries")

@@ -25,7 +25,7 @@ public class CountryServiceImpl implements CountryService {
 	private final CountryRepository countryRepository;
 
 	@Override
-	public List<CountryResponseDto> getALlCountry() {
+	public List<CountryResponseDto> getAllCountries() {
 		List<Country> countries = countryRepository.findAll();
 
 		if (countries.isEmpty()) {

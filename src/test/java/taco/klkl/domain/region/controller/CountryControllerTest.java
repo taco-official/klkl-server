@@ -55,7 +55,7 @@ public class CountryControllerTest {
 			CountryResponseDto.from(country2)
 		);
 
-		when(countryService.getALlCountry()).thenReturn(countryResponseDtos);
+		when(countryService.getAllCountries()).thenReturn(countryResponseDtos);
 
 		// when & then
 		mockMvc.perform(get("/v1/countries")
@@ -68,7 +68,7 @@ public class CountryControllerTest {
 			.andExpect(jsonPath("$.data[1].name", is(country2.getName().getKoreanName())))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
 
-		verify(countryService, times(1)).getALlCountry();
+		verify(countryService, times(1)).getAllCountries();
 	}
 
 	@Test

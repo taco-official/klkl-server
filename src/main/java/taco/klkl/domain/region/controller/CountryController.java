@@ -29,7 +29,7 @@ public class CountryController {
 	@GetMapping()
 	public ResponseEntity<List<CountryResponseDto>> getAllCountries() {
 
-		List<CountryResponseDto> findCountries = countryService.getALlCountry();
+		List<CountryResponseDto> findCountries = countryService.getAllCountries();
 
 		return ResponseEntity.ok()
 			.contentType(MediaType.APPLICATION_JSON)

@@ -55,7 +55,7 @@ public class CountryServiceImplTest {
 		when(countryRepository.findAll()).thenReturn(countries);
 
 		// when
-		List<CountryResponseDto> findCountries = countryService.getALlCountry();
+		List<CountryResponseDto> findCountries = countryService.getAllCountries();
 
 		// then
 		assertThat(findCountries.size()).isEqualTo(countries.size());

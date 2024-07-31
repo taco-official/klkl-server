@@ -9,7 +9,7 @@ import taco.klkl.domain.region.enums.CountryType;
 
 @Service
 public interface CountryService {
-	List<CountryResponseDto> getALlCountry();
+	List<CountryResponseDto> getAllCountries();
 
 	CountryResponseDto getCountryById(Long countryId);
 
