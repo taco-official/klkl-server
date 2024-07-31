@@ -2,7 +2,6 @@ package taco.klkl.domain.region.controller;
 
 import java.util.List;
 
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,9 +30,7 @@ public class CountryController {
 
 		List<CountryResponseDto> findCountries = countryService.getAllCountries();
 
-		return ResponseEntity.ok()
-			.contentType(MediaType.APPLICATION_JSON)
-			.body(findCountries);
+		return ResponseEntity.ok().body(findCountries);
 	}
 
 	@Operation(summary = "국가 하나 조회", description = "countryId로 특정 국가를 조회합니다.")
@@ -42,8 +39,6 @@ public class CountryController {
 
 		CountryResponseDto findCountry = countryService.getCountryById(id);
 
-		return ResponseEntity.ok()
-			.contentType(MediaType.APPLICATION_JSON)
-			.body(findCountry);
+		return ResponseEntity.ok().body(findCountry);
 	}
 }
