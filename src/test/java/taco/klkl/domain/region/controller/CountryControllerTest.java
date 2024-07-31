@@ -64,8 +64,8 @@ public class CountryControllerTest {
 			.andExpect(jsonPath("$.isSuccess", is(true)))
 			.andExpect(jsonPath("$.code", is("C000")))
 			.andExpect(jsonPath("$.data", hasSize(2)))
-			.andExpect(jsonPath("$.data[0].name", is(country1.getName().getName())))
-			.andExpect(jsonPath("$.data[1].name", is(country2.getName().getName())))
+			.andExpect(jsonPath("$.data[0].name", is(country1.getName().getKoreanName())))
+			.andExpect(jsonPath("$.data[1].name", is(country2.getName().getKoreanName())))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
 
 		verify(countryService, times(1)).getALlCountry();
@@ -85,7 +85,7 @@ public class CountryControllerTest {
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
 			.andExpect(jsonPath("$.code", is("C000")))
-			.andExpect(jsonPath("$.data.name", is(country1.getName().getName())))
+			.andExpect(jsonPath("$.data.name", is(country1.getName().getKoreanName())))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
 
 		verify(countryService, times(1)).getCountryById(400L);

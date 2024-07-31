@@ -19,7 +19,7 @@ public record CountryWithOutRegionDto(
 	public static CountryWithOutRegionDto from(Country country) {
 		return new CountryWithOutRegionDto(
 			country.getCountryId(),
-			country.getName().getName(),
+			country.getName().getKoreanName(),
 			country.getFlag(),
 			country.getPhoto(),
 			country.getCurrencyId());

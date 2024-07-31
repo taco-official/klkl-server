@@ -39,7 +39,7 @@ class RegionControllerTest {
 
 	private final Region region1 = Region.of(RegionType.NORTHEAST_ASIA);
 	private final Region region2 = Region.of(RegionType.SOUTHEAST_ASIA);
-	private final Region region3 = Region.of(RegionType.ETC_REGION);
+	private final Region region3 = Region.of(RegionType.ETC);
 	private final Country country1 = Country.of(
 		CountryType.JAPAN,
 		region1,
@@ -74,9 +74,9 @@ class RegionControllerTest {
 			.andExpect(jsonPath("$.isSuccess", is(true)))
 			.andExpect(jsonPath("$.code", is("C000")))
 			.andExpect(jsonPath("$.data", hasSize(3)))
-			.andExpect(jsonPath("$.data[0].name", is(region1.getName().getName())))
-			.andExpect(jsonPath("$.data[1].name", is(region2.getName().getName())))
-			.andExpect(jsonPath("$.data[2].name", is(region3.getName().getName())))
+			.andExpect(jsonPath("$.data[0].name", is(region1.getName().getKoreanName())))
+			.andExpect(jsonPath("$.data[1].name", is(region2.getName().getKoreanName())))
+			.andExpect(jsonPath("$.data[2].name", is(region3.getName().getKoreanName())))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
 
 		verify(regionService, times(1)).getAllRegions();
@@ -136,8 +136,8 @@ class RegionControllerTest {
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
 			.andExpect(jsonPath("$.code", is("C000")))
-			.andExpect(jsonPath("$.data.countries[0].name", is(countryList.get(0).getName().getName())))
-			.andExpect(jsonPath("$.data.countries[1].name", is(countryList.get(1).getName().getName())))
+			.andExpect(jsonPath("$.data.countries[0].name", is(countryList.get(0).getName().getKoreanName())))
+			.andExpect(jsonPath("$.data.countries[1].name", is(countryList.get(1).getName().getKoreanName())))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
 
 		verify(regionService, times(1)).getRegionsWithCountries(1L);

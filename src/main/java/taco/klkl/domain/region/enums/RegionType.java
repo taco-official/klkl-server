@@ -15,16 +15,16 @@ public enum RegionType {
 	SOUTHEAST_ASIA("동남아시아"),
 
 	// 기타
-	ETC_REGION("기타"),
+	ETC("기타"),
 
 	// NONE
 	NONE("");
 
-	private final String name;
+	private final String koreanName;
 
 	public static RegionType getRegionByName(String regionName) {
 		return Arrays.stream(RegionType.values())
-			.filter(r -> r.getName().equals(regionName))
+			.filter(r -> r.getKoreanName().equals(regionName))
 			.findFirst()
 			.orElse(NONE);
 	}

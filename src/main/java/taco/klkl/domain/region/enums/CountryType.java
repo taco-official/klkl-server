@@ -44,11 +44,11 @@ public enum CountryType {
 	// NONE
 	NONE("");
 
-	private final String name;
+	private final String koreanName;
 
 	public static CountryType getCountryTypeByName(String name) {
 		return Arrays.stream(CountryType.values())
-			.filter(c -> c.getName().equals(name))
+			.filter(c -> c.getKoreanName().equals(name))
 			.findFirst()
 			.orElse(NONE);
 	}

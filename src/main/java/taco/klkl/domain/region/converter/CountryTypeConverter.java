@@ -14,7 +14,7 @@ public class CountryTypeConverter implements AttributeConverter<CountryType, Str
 			return null;
 		}
 
-		return countryType.getName();
+		return countryType.getKoreanName();
 	}
 
 	@Override

@@ -10,7 +10,7 @@ public record RegionSimpleResponseDto(
 ) {
 
 	public static RegionSimpleResponseDto from(Region region) {
-		return new RegionSimpleResponseDto(region.getRegionId(), region.getName().getName());
+		return new RegionSimpleResponseDto(region.getRegionId(), region.getName().getKoreanName());
 	}
 
 	@Override

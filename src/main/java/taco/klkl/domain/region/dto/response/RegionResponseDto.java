@@ -13,7 +13,7 @@ public record RegionResponseDto(
 
 	public static RegionResponseDto from(Region region) {
 		return new RegionResponseDto(region.getRegionId(),
-			region.getName().getName(),
+			region.getName().getKoreanName(),
 			region.getCountries().stream()
 				.map(CountryWithOutRegionDto::from).toList());
 	}

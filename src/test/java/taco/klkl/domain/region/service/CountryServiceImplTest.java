@@ -59,8 +59,8 @@ public class CountryServiceImplTest {
 
 		// then
 		assertThat(findCountries.size()).isEqualTo(countries.size());
-		assertThat(findCountries.get(0).name()).isEqualTo(countries.get(0).getName().getName());
-		assertThat(findCountries.get(1).name()).isEqualTo(countries.get(1).getName().getName());
+		assertThat(findCountries.get(0).name()).isEqualTo(countries.get(0).getName().getKoreanName());
+		assertThat(findCountries.get(1).name()).isEqualTo(countries.get(1).getName().getKoreanName());
 		assertThat(findCountries.get(0).region()).isEqualTo(RegionSimpleResponseDto.from(country1.getRegion()));
 	}
 

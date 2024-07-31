@@ -37,7 +37,7 @@ class RegionServiceImplTest {
 
 	private final Region region1 = Region.of(RegionType.NORTHEAST_ASIA);
 	private final Region region2 = Region.of(RegionType.SOUTHEAST_ASIA);
-	private final Region region3 = Region.of(RegionType.ETC_REGION);
+	private final Region region3 = Region.of(RegionType.ETC);
 	private final Country country1 = Country.of(
 		CountryType.JAPAN,
 		region1,
@@ -66,9 +66,9 @@ class RegionServiceImplTest {
 
 		// then
 		assertThat(regionResponseDtos.size()).isEqualTo(3);
-		assertThat(regionResponseDtos.get(0).name()).isEqualTo(region1.getName().getName());
-		assertThat(regionResponseDtos.get(1).name()).isEqualTo(region2.getName().getName());
-		assertThat(regionResponseDtos.get(2).name()).isEqualTo(region3.getName().getName());
+		assertThat(regionResponseDtos.get(0).name()).isEqualTo(region1.getName().getKoreanName());
+		assertThat(regionResponseDtos.get(1).name()).isEqualTo(region2.getName().getKoreanName());
+		assertThat(regionResponseDtos.get(2).name()).isEqualTo(region3.getName().getKoreanName());
 	}
 
 	@Test
@@ -96,8 +96,8 @@ class RegionServiceImplTest {
 		RegionSimpleResponseDto region2ResponseDto = regionService.getRegionById(2L);
 
 		// then
-		assertThat(region1ResponseDto.name()).isEqualTo(region1.getName().getName());
-		assertThat(region2ResponseDto.name()).isEqualTo(region2.getName().getName());
+		assertThat(region1ResponseDto.name()).isEqualTo(region1.getName().getKoreanName());
+		assertThat(region2ResponseDto.name()).isEqualTo(region2.getName().getKoreanName());
 	}
 
 	@Test
@@ -113,7 +113,7 @@ class RegionServiceImplTest {
 		RegionResponseDto region1ResponseDto = regionService.getRegionsWithCountries(1L);
 
 		// then
-		assertThat(region1ResponseDto.name()).isEqualTo(mockRegion.getName().getName());
+		assertThat(region1ResponseDto.name()).isEqualTo(mockRegion.getName().getKoreanName());
 		assertThat(region1ResponseDto.countries().size()).isEqualTo(2);
 		assertThat(region1ResponseDto.countries().get(0)).isEqualTo(CountryWithOutRegionDto.from(country1));
 		assertThat(region1ResponseDto.countries().get(1)).isEqualTo(CountryWithOutRegionDto.from(country2));
@@ -141,12 +141,12 @@ class RegionServiceImplTest {
 		when(regionRepository.findFirstByName(region2.getName())).thenReturn(region2);
 
 		// when
-		RegionSimpleResponseDto region1ResponseDto = regionService.getRegionByName(region1.getName().getName());
-		RegionSimpleResponseDto region2ResponseDto = regionService.getRegionByName(region2.getName().getName());
+		RegionSimpleResponseDto region1ResponseDto = regionService.getRegionByName(region1.getName().getKoreanName());
+		RegionSimpleResponseDto region2ResponseDto = regionService.getRegionByName(region2.getName().getKoreanName());
 
 		// then
-		assertThat(region1ResponseDto.name()).isEqualTo(region1.getName().getName());
-		assertThat(region2ResponseDto.name()).isEqualTo(region2.getName().getName());
+		assertThat(region1ResponseDto.name()).isEqualTo(region1.getName().getKoreanName());
+		assertThat(region2ResponseDto.name()).isEqualTo(region2.getName().getKoreanName());
 	}
 
 	@Test
@@ -157,7 +157,7 @@ class RegionServiceImplTest {
 
 		// when & then
 		Assertions.assertThrows(RegionNotFoundException.class, () -> {
-			regionService.getRegionByName(region1.getName().getName());
+			regionService.getRegionByName(region1.getName().getKoreanName());
 		});
 
 		verify(regionRepository, times(1)).findFirstByName(region1.getName());

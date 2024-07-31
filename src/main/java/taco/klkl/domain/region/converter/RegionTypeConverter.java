@@ -14,7 +14,7 @@ public class RegionTypeConverter implements AttributeConverter<RegionType, Strin
 			return null;
 		}
 
-		return regionType.getName();
+		return regionType.getKoreanName();
 	}
 
 	@Override

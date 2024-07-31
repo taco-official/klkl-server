@@ -21,7 +21,7 @@ public record CountryResponseDto(
 		return new CountryResponseDto(
 			country.getCountryId(),
 			RegionSimpleResponseDto.from(country.getRegion()),
-			country.getName().getName(),
+			country.getName().getKoreanName(),
 			country.getFlag(),
 			country.getPhoto(),
 			country.getCurrencyId());
