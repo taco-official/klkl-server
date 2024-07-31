@@ -35,22 +35,22 @@ class RegionServiceImplTest {
 	@Mock
 	RegionRepository regionRepository;
 
-	private static final Region region1 = Region.of(RegionType.NORTHEAST_ASIA);
-	private static final Region region2 = Region.of(RegionType.SOUTHEAST_ASIA);
-	private static final Region region3 = Region.of(RegionType.ETC_REGION);
-	private static final Country country1 = Country.of(
+	private final Region region1 = Region.of(RegionType.NORTHEAST_ASIA);
+	private final Region region2 = Region.of(RegionType.SOUTHEAST_ASIA);
+	private final Region region3 = Region.of(RegionType.ETC_REGION);
+	private final Country country1 = Country.of(
 		CountryType.JAPAN,
 		region1,
 		"image/japan",
 		"image/japan",
 		42);
-	private static final Country country2 = Country.of(
+	private final Country country2 = Country.of(
 		CountryType.TAIWAN,
 		region1,
 		"image/taiwan",
 		"image/taiwan",
 		43);
-	private static final List<Country> countryList = Arrays.asList(country1,
+	private final List<Country> countryList = Arrays.asList(country1,
 		country2);
 
 	@Test
