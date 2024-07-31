@@ -9,7 +9,7 @@ public class SubcategoryNameConverter implements AttributeConverter<SubcategoryN
 
 	@Override
 	public String convertToDatabaseColumn(SubcategoryName subcategoryName) {
-		return subcategoryName.getName();
+		return subcategoryName.getKoreanName();
 	}
 
 	@Override

@@ -56,8 +56,8 @@ class CategoryServiceTest {
 		assertNotNull(result);
 		assertEquals(2, result.size());
 
-		assertEquals(CategoryName.CLOTHES.getName(), result.get(0).category());
-		assertEquals(CategoryName.FOOD.getName(), result.get(1).category());
+		assertEquals(CategoryName.CLOTHES.getKoreanName(), result.get(0).category());
+		assertEquals(CategoryName.FOOD.getKoreanName(), result.get(1).category());
 
 		verify(categoryRepository, times(1)).findAll();
 	}

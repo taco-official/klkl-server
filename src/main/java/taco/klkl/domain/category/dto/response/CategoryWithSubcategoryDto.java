@@ -10,7 +10,7 @@ public record CategoryWithSubcategoryDto(
 	List<SubcategoryResponseDto> subcategories
 ) {
 	public static CategoryWithSubcategoryDto from(Category category) {
-		return new CategoryWithSubcategoryDto(category.getId(), category.getName().getName(),
+		return new CategoryWithSubcategoryDto(category.getId(), category.getName().getKoreanName(),
 			category.getSubcategories()
 				.stream()
 				.map(subcategory -> SubcategoryResponseDto.from(subcategory))

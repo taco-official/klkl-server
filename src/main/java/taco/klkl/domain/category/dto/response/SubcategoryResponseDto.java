@@ -7,6 +7,6 @@ public record SubcategoryResponseDto(
 	String subcategory
 ) {
 	public static SubcategoryResponseDto from(Subcategory subcategory) {
-		return new SubcategoryResponseDto(subcategory.getId(), subcategory.getName().getName());
+		return new SubcategoryResponseDto(subcategory.getId(), subcategory.getName().getKoreanName());
 	}
 }

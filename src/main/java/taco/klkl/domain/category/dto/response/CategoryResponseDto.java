@@ -7,6 +7,6 @@ public record CategoryResponseDto(
 	String category
 ) {
 	public static CategoryResponseDto from(Category category) {
-		return new CategoryResponseDto(category.getId(), category.getName().getName());
+		return new CategoryResponseDto(category.getId(), category.getName().getKoreanName());
 	}
 }

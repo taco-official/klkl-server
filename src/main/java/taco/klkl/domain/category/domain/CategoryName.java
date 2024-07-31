@@ -14,11 +14,11 @@ public enum CategoryName {
 	COSMETICS("화장품"),
 	NONE("");
 
-	private final String name;
+	private final String koreanName;
 
 	public static CategoryName getByName(String name) {
 		return Arrays.stream(values())
-			.filter(categoryName -> categoryName.getName().equals(name))
+			.filter(categoryName -> categoryName.getKoreanName().equals(name))
 			.findFirst()
 			.orElse(NONE);
 	}

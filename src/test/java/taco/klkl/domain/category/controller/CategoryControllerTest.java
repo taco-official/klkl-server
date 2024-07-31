@@ -94,11 +94,11 @@ public class CategoryControllerTest {
 			.andExpect(jsonPath("$.isSuccess", is(true)))
 			.andExpect(jsonPath("$.code", is("C000")))
 			.andExpect(jsonPath("$.data.categoryId", is(1)))
-			.andExpect(jsonPath("$.data.category", is(CategoryName.FOOD.getName())))
+			.andExpect(jsonPath("$.data.category", is(CategoryName.FOOD.getKoreanName())))
 			.andExpect(jsonPath("$.data.subcategories[0].subcategoryId", is(subcategory1.getId())))
-			.andExpect(jsonPath("$.data.subcategories[0].subcategory", is(SubcategoryName.DRESS.getName())))
+			.andExpect(jsonPath("$.data.subcategories[0].subcategory", is(SubcategoryName.DRESS.getKoreanName())))
 			.andExpect(jsonPath("$.data.subcategories[1].subcategoryId", is(subcategory2.getId())))
-			.andExpect(jsonPath("$.data.subcategories[1].subcategory", is(SubcategoryName.HAIR_CARE.getName())))
+			.andExpect(jsonPath("$.data.subcategories[1].subcategory", is(SubcategoryName.HAIR_CARE.getKoreanName())))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
 
 		verify(categoryService, times(1)).getSubcategories(categoryId);
