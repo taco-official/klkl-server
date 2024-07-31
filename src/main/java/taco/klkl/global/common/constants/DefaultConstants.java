@@ -1,6 +1,6 @@
 package taco.klkl.global.common.constants;
 
-public class DefaultConstants {
+public final class DefaultConstants {
 
 	public static final String DEFAULT_STRING = "'N/A'";
 	public static final String DEFAULT_INT_STRING = "0";
