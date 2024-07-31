@@ -22,11 +22,13 @@ import taco.klkl.domain.region.service.CountryService;
 @RequiredArgsConstructor
 @Tag(name = "5. 지역", description = "지역 관련 API")
 public class CountryController {
+
 	private final CountryService countryService;
 
 	@Operation(summary = "모든 국가 조회", description = "모든 국가를 조회합니다.")
 	@GetMapping()
 	public ResponseEntity<List<CountryResponseDto>> getAllCountries() {
+
 		List<CountryResponseDto> findCountries = countryService.getALlCountry();
 
 		return ResponseEntity.ok()
@@ -37,6 +39,7 @@ public class CountryController {
 	@Operation(summary = "국가 하나 조회", description = "countryId로 특정 국가를 조회합니다.")
 	@GetMapping("/{id}")
 	public ResponseEntity<CountryResponseDto> getCountryById(@PathVariable Long id) {
+
 		CountryResponseDto findCountry = countryService.getCountryById(id);
 
 		return ResponseEntity.ok()

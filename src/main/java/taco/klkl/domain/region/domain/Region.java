@@ -23,13 +23,13 @@ public class Region {
 	@Id
 	@Column(name = "region_id")
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	Long regionId;
+	private Long regionId;
 
 	@Column(name = "name", length = 20, nullable = false)
-	RegionType name;
+	private RegionType name;
 
 	@OneToMany(mappedBy = "region", fetch = FetchType.LAZY, orphanRemoval = true)
-	List<Country> countries = new ArrayList<>();
+	private List<Country> countries = new ArrayList<>();
 
 	private Region(RegionType region) {
 		this.name = region;
