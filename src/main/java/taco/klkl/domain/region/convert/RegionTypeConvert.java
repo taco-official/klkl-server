@@ -19,7 +19,6 @@ public class RegionTypeConvert implements AttributeConverter<RegionType, String>
 
 	@Override
 	public RegionType convertToEntityAttribute(String dbData) {
-		
 		RegionType regionType = RegionType.getRegionByName(dbData);
 
 		if (regionType.equals(RegionType.NONE)) {

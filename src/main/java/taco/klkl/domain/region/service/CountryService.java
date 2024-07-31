@@ -14,5 +14,4 @@ public interface CountryService {
 	CountryResponseDto getCountryById(Long countryId);
 
 	CountryResponseDto getCountryByName(CountryType name);
-	
 }

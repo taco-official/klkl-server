@@ -19,7 +19,6 @@ public class CountryTypeConvert implements AttributeConverter<CountryType, Strin
 
 	@Override
 	public CountryType convertToEntityAttribute(String dbData) {
-		
 		CountryType countryType = CountryType.getCountryTypeByName(dbData);
 
 		if (countryType.equals(CountryType.NONE)) {
