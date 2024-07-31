@@ -1,11 +1,11 @@
-package taco.klkl.domain.region.convert;
+package taco.klkl.domain.region.converter;
 
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 import taco.klkl.domain.region.enums.CountryType;
 
 @Converter(autoApply = true)
-public class CountryTypeConvert implements AttributeConverter<CountryType, String> {
+public class CountryTypeConverter implements AttributeConverter<CountryType, String> {
 
 	@Override
 	public String convertToDatabaseColumn(CountryType countryType) {
