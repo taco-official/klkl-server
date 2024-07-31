@@ -36,9 +36,12 @@ public record CountryResponseDto(
 			return false;
 		}
 		CountryResponseDto that = (CountryResponseDto)object;
-		return currencyId == that.currencyId && Objects.equals(name, that.name) && Objects.equals(flag,
-			that.flag) && Objects.equals(photo, that.photo) && Objects.equals(countryId, that.countryId)
-			&& Objects.equals(region, that.region);
+		return currencyId == that.currencyId &&
+			Objects.equals(name, that.name) &&
+			Objects.equals(flag, that.flag) &&
+			Objects.equals(photo, that.photo) &&
+			Objects.equals(countryId, that.countryId) &&
+			Objects.equals(region, that.region);
 	}
 
 	@Override

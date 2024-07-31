@@ -27,7 +27,8 @@ public record RegionResponseDto(
 			return false;
 		}
 		RegionResponseDto that = (RegionResponseDto)object;
-		return Objects.equals(name, that.name) && Objects.equals(regionId, that.regionId);
+		return Objects.equals(name, that.name) &&
+			Objects.equals(regionId, that.regionId);
 	}
 
 	@Override
