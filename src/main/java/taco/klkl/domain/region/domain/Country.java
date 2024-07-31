@@ -2,6 +2,8 @@ package taco.klkl.domain.region.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -17,6 +19,7 @@ public class Country {
 
 	@Id
 	@Column(name = "country_id")
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long countryId;
 
 	@ManyToOne
@@ -37,7 +40,6 @@ public class Country {
 	private int currencyId;
 
 	private Country(CountryType countryType, Region region, String flag, String photo, int currencyId) {
-		this.countryId = countryType.getCountryCode();
 		this.region = region;
 		this.name = countryType;
 		this.flag = flag;
