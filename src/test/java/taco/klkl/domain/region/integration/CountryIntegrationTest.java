@@ -15,32 +15,47 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import jakarta.transaction.Transactional;
-import taco.klkl.domain.region.dto.response.RegionSimpleResponseDto;
-import taco.klkl.domain.region.service.RegionService;
+import taco.klkl.domain.region.dto.response.CountryResponseDto;
+import taco.klkl.domain.region.service.CountryService;
 
 @SpringBootTest
 @AutoConfigureMockMvc
 @Transactional
-public class RegionIntegrationTest {
+public class CountryIntegrationTest {
 
 	@Autowired
 	MockMvc mockMvc;
 
 	@Autowired
-	RegionService regionService;
+	CountryService countryService;
 
 	@Test
-	@DisplayName("모든 지역 조회 통합 테스트")
-	void getAllRegionsTest() throws Exception {
+	@DisplayName("모든 국가 조회 테스트")
+	void getAllCountriesTest() throws Exception {
 		// given
-		List<RegionSimpleResponseDto> regionResponseDtos = regionService.getAllRegions();
+		List<CountryResponseDto> countryResponseDtos = countryService.getALlCountry();
 
 		// when & then
-		mockMvc.perform(get("/v1/regions")
+		mockMvc.perform(get("/v1/countries")
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.code", is("C000")))
 			.andExpect(jsonPath("$.isSuccess", is(true)))
-			.andExpect(jsonPath("$.data", hasSize(regionResponseDtos.size())));
+			.andExpect(jsonPath("$.data", hasSize(countryResponseDtos.size())));
+	}
+
+	@Test
+	@DisplayName("id로 국가 조회 테스트")
+	void getCountryByIdTest() throws Exception {
+		// given
+		CountryResponseDto countryResponseDto = countryService.getCountryById(403L);
+
+		// when & then
+		mockMvc.perform(get("/v1/countries/403")
+				.contentType(MediaType.APPLICATION_JSON))
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.code", is("C000")))
+			.andExpect(jsonPath("$.isSuccess", is(true)))
+			.andExpect(jsonPath("$.data.name", is(countryResponseDto.name())));
 	}
 }

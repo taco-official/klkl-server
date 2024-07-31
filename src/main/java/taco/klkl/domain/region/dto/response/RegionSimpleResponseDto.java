@@ -1,21 +1,16 @@
 package taco.klkl.domain.region.dto.response;
 
-import java.util.List;
 import java.util.Objects;
 
 import taco.klkl.domain.region.domain.Region;
 
-public record RegionResponseDto(
+public record RegionSimpleResponseDto(
 	Long regionId,
-	String name,
-	List<CountryWithOutRegionDto> countries
+	String name
 ) {
 
-	public static RegionResponseDto from(Region region) {
-		return new RegionResponseDto(region.getRegionId(),
-			region.getName().getName(),
-			region.getCountries().stream()
-				.map(CountryWithOutRegionDto::from).toList());
+	public static RegionSimpleResponseDto from(Region region) {
+		return new RegionSimpleResponseDto(region.getRegionId(), region.getName().getName());
 	}
 
 	@Override
@@ -26,7 +21,7 @@ public record RegionResponseDto(
 		if (object == null || getClass() != object.getClass()) {
 			return false;
 		}
-		RegionResponseDto that = (RegionResponseDto)object;
+		RegionSimpleResponseDto that = (RegionSimpleResponseDto)object;
 		return Objects.equals(name, that.name) && Objects.equals(regionId, that.regionId);
 	}
 

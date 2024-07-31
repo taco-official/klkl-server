@@ -17,6 +17,19 @@ VALUES (400, '동북아시아'),
        (401, '동남아시아'),
        (402, '기타');
 
+INSERT INTO Country(country_id, region_id, name, flag, photo, currency_id)
+VALUES (403, 400, '일본', 'image/sample', 'image/sample', 1),
+       (404, 400, '중국', 'image/sample', 'image/sample', 1),
+       (405, 400, '대만', 'image/sample', 'image/sample', 1),
+       (406, 401, '태국', 'image/sample', 'image/sample', 1),
+       (407, 401, '베트남', 'image/sample', 'image/sample', 1),
+       (408, 401, '필리핀', 'image/sample', 'image/sample', 1),
+       (409, 401, '싱가포르', 'image/sample', 'image/sample', 1),
+       (410, 401, '인도네시아', 'image/sample', 'image/sample', 1),
+       (411, 401, '말레이시아', 'image/sample', 'image/sample', 1),
+       (412, 402, '괌', 'image/sample', 'image/sample', 1),
+       (413, 402, '미국', 'image/sample', 'image/sample', 1);
+
 /* Category */
 INSERT
 INTO Category(category_id, name)
