@@ -34,11 +34,11 @@ public record CountryWithOutRegionDto(
 			return false;
 		}
 		CountryWithOutRegionDto that = (CountryWithOutRegionDto)object;
-		return currencyId == that.currencyId &&
-			Objects.equals(name, that.name) &&
-			Objects.equals(flag, that.flag) &&
-			Objects.equals(photo, that.photo) &&
-			Objects.equals(countryId, that.countryId);
+		return currencyId == that.currencyId
+			&& Objects.equals(name, that.name)
+			&& Objects.equals(flag, that.flag)
+			&& Objects.equals(photo, that.photo)
+			&& Objects.equals(countryId, that.countryId);
 	}
 
 	@Override

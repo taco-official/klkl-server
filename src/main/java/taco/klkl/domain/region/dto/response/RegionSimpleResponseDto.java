@@ -22,8 +22,8 @@ public record RegionSimpleResponseDto(
 			return false;
 		}
 		RegionSimpleResponseDto that = (RegionSimpleResponseDto)object;
-		return Objects.equals(name, that.name) &&
-			Objects.equals(regionId, that.regionId);
+		return Objects.equals(name, that.name)
+			&& Objects.equals(regionId, that.regionId);
 	}
 
 	@Override
