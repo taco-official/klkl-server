@@ -21,7 +21,7 @@ public class CategoryService {
 	public List<CategoryResponseDto> getCategories() {
 		List<Category> categories = categoryRepository.findAll();
 		return categories.stream()
-			.map(category -> CategoryResponseDto.of(category.getId(), category.getName()))
+			.map(category -> CategoryResponseDto.from(category))
 			.toList();
 	}
 
