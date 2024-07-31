@@ -47,7 +47,7 @@ public class CountryServiceImpl implements CountryService {
 
 	@Override
 	public CountryResponseDto getCountryByName(CountryType name) {
-		Country country = countryRepository.getFirstByName(name);
+		Country country = countryRepository.findFirstByName(name);
 
 		if (country == null) {
 			throw new CountryNotFoundException();
