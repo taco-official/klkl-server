@@ -6,6 +6,7 @@ import java.util.Map;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -74,6 +75,20 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 	) {
 		log.error("ExceptionInternal : {}", ex.getMessage(), ex);
 		final ErrorCode errorCode = ErrorCode.INTERNAL_SERVER_ERROR;
+		final ErrorResponse errorResponse = ErrorResponse.of(errorCode.getCode(), errorCode.getMessage());
+		final GlobalResponse globalResponse = GlobalResponse.error(errorCode.getCode(), errorResponse);
+		return ResponseEntity.status(errorCode.getStatus()).body(globalResponse);
+	}
+
+	@Override
+	protected ResponseEntity<Object> handleHttpMessageNotReadable(
+		HttpMessageNotReadableException ex,
+		HttpHeaders headers,
+		HttpStatusCode status,
+		WebRequest request
+	) {
+		log.error("HttpMessageNotReadable : {}", ex.getMessage(), ex);
+		final ErrorCode errorCode = ErrorCode.HTTP_MESSAGE_NOT_READABLE;
 		final ErrorResponse errorResponse = ErrorResponse.of(errorCode.getCode(), errorCode.getMessage());
 		final GlobalResponse globalResponse = GlobalResponse.error(errorCode.getCode(), errorResponse);
 		return ResponseEntity.status(errorCode.getStatus()).body(globalResponse);

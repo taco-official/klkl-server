@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -114,6 +115,32 @@ class GlobalExceptionHandlerTest {
 		ErrorResponse errorResponse = (ErrorResponse)(globalResponse.data());
 		assertEquals("C012", errorResponse.code());
 		assertEquals("서버에 문제가 발생했습니다. 관리자에게 문의해주세요.", errorResponse.message());
+	}
+
+	@Test
+	@DisplayName("HttpMessageNotReadableException이 발생한 경우")
+	void httpMessageNotReadableOccurred() {
+		// given
+		HttpMessageNotReadableException exception = mock(HttpMessageNotReadableException.class);
+		when(exception.getMessage()).thenReturn("Error reading HTTP message");
+
+		HttpHeaders headers = new HttpHeaders();
+		HttpStatus status = HttpStatus.BAD_REQUEST;
+		WebRequest request = mock(WebRequest.class);
+
+		// when
+		ResponseEntity<Object> response = globalExceptionHandler.handleHttpMessageNotReadable(
+			exception, headers, status, request);
+
+		// then
+		assertNotNull(response);
+		assertEquals(ErrorCode.HTTP_MESSAGE_NOT_READABLE.getStatus(), response.getStatusCode());
+		assertInstanceOf(GlobalResponse.class, response.getBody());
+		GlobalResponse globalResponse = (GlobalResponse)(response.getBody());
+		assertInstanceOf(ErrorResponse.class, globalResponse.data());
+		ErrorResponse errorResponse = (ErrorResponse)(globalResponse.data());
+		assertEquals(ErrorCode.HTTP_MESSAGE_NOT_READABLE.getCode(), errorResponse.code());
+		assertEquals(ErrorCode.HTTP_MESSAGE_NOT_READABLE.getMessage(), errorResponse.message());
 	}
 
 	@Test
