@@ -61,9 +61,9 @@ public class CategoryControllerTest {
 			.andExpect(jsonPath("$.isSuccess", is(true)))
 			.andExpect(jsonPath("$.code", is("C000")))
 			.andExpect(jsonPath("$.data", hasSize(2)))
-			.andExpect(jsonPath("$.data[0].id", is(1)))
+			.andExpect(jsonPath("$.data[0].categoryId", is(1)))
 			.andExpect(jsonPath("$.data[0].category", is("Category1")))
-			.andExpect(jsonPath("$.data[1].id", is(2)))
+			.andExpect(jsonPath("$.data[1].categoryId", is(2)))
 			.andExpect(jsonPath("$.data[1].category", is("Category2")))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
 
@@ -95,9 +95,9 @@ public class CategoryControllerTest {
 			.andExpect(jsonPath("$.code", is("C000")))
 			.andExpect(jsonPath("$.data.categoryId", is(1)))
 			.andExpect(jsonPath("$.data.category", is(CategoryName.FOOD.getName())))
-			.andExpect(jsonPath("$.data.subcategories[0].id", is(subcategory1.getId())))
+			.andExpect(jsonPath("$.data.subcategories[0].subcategoryId", is(subcategory1.getId())))
 			.andExpect(jsonPath("$.data.subcategories[0].subcategory", is(SubcategoryName.DRESS.getName())))
-			.andExpect(jsonPath("$.data.subcategories[1].id", is(subcategory2.getId())))
+			.andExpect(jsonPath("$.data.subcategories[1].subcategoryId", is(subcategory2.getId())))
 			.andExpect(jsonPath("$.data.subcategories[1].subcategory", is(SubcategoryName.HAIR_CARE.getName())))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
 
