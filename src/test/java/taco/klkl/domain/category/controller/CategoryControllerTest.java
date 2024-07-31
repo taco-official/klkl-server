@@ -48,9 +48,9 @@ public class CategoryControllerTest {
 			.andExpect(jsonPath("$.code", is("C000")))
 			.andExpect(jsonPath("$.data", hasSize(2)))
 			.andExpect(jsonPath("$.data[0].id", is(1)))
-			.andExpect(jsonPath("$.data[0].name", is("Category1")))
+			.andExpect(jsonPath("$.data[0].category", is("Category1")))
 			.andExpect(jsonPath("$.data[1].id", is(2)))
-			.andExpect(jsonPath("$.data[1].name", is("Category2")))
+			.andExpect(jsonPath("$.data[1].category", is("Category2")))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
 
 		verify(categoryService, times(1)).getCategories();
