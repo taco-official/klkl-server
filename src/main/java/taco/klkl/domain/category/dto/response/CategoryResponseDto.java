@@ -1,12 +1,12 @@
 package taco.klkl.domain.category.dto.response;
 
-import taco.klkl.domain.category.domain.CategoryName;
+import taco.klkl.domain.category.domain.Category;
 
 public record CategoryResponseDto(
-	Long id,
-	String name
+	Long categoryId,
+	String category
 ) {
-	public static CategoryResponseDto of(Long id, CategoryName categoryName) {
-		return new CategoryResponseDto(id, categoryName.getName());
+	public static CategoryResponseDto from(Category category) {
+		return new CategoryResponseDto(category.getId(), category.getName().getKoreanName());
 	}
 }
