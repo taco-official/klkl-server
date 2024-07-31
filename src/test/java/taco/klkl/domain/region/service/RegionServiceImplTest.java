@@ -110,7 +110,7 @@ class RegionServiceImplTest {
 		when(mockRegion.getCountries()).thenReturn(countryList);
 
 		// when
-		RegionResponseDto region1ResponseDto = regionService.getRegionsWithCountries(1L);
+		RegionResponseDto region1ResponseDto = regionService.getRegionWithCountries(1L);
 
 		// then
 		assertThat(region1ResponseDto.name()).isEqualTo(mockRegion.getName().getKoreanName());

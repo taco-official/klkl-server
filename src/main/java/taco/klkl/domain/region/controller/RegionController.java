@@ -46,7 +46,7 @@ public class RegionController {
 	@GetMapping("/{id}/countries")
 	public ResponseEntity<RegionResponseDto> getCountriesByRegion(@PathVariable Long id) {
 
-		RegionResponseDto findRegion = regionService.getRegionsWithCountries(id);
+		RegionResponseDto findRegion = regionService.getRegionWithCountries(id);
 
 		return ResponseEntity.ok().body(findRegion);
 	}

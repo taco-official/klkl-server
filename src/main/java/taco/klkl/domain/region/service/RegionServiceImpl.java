@@ -60,7 +60,7 @@ public class RegionServiceImpl implements RegionService {
 	}
 
 	@Override
-	public RegionResponseDto getRegionsWithCountries(Long id) {
+	public RegionResponseDto getRegionWithCountries(Long id) {
 
 		Region findRegion = regionRepository.findById(id)
 			.orElseThrow(RegionNotFoundException::new);

@@ -128,7 +128,7 @@ class RegionControllerTest {
 		when(regionRepository.findById(1L)).thenReturn(Optional.of(mockRegion));
 		when(mockRegion.getCountries()).thenReturn(countryList);
 		RegionResponseDto responseDto = RegionResponseDto.from(mockRegion);
-		when(regionService.getRegionsWithCountries(1L)).thenReturn(responseDto);
+		when(regionService.getRegionWithCountries(1L)).thenReturn(responseDto);
 
 		// when & then
 		mockMvc.perform(get("/v1/regions/1/countries")
@@ -140,6 +140,6 @@ class RegionControllerTest {
 			.andExpect(jsonPath("$.data.countries[1].name", is(countryList.get(1).getName().getKoreanName())))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
 
-		verify(regionService, times(1)).getRegionsWithCountries(1L);
+		verify(regionService, times(1)).getRegionWithCountries(1L);
 	}
 }

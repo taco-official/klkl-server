@@ -15,5 +15,5 @@ public interface RegionService {
 
 	RegionSimpleResponseDto getRegionByName(String name);
 
-	RegionResponseDto getRegionsWithCountries(Long id);
+	RegionResponseDto getRegionWithCountries(Long id);
 }
