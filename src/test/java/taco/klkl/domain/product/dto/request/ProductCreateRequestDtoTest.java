@@ -14,6 +14,7 @@ import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import jakarta.validation.ValidatorFactory;
+import taco.klkl.global.common.constants.ProductValidationMessages;
 
 class ProductCreateRequestDtoTest {
 
@@ -57,7 +58,10 @@ class ProductCreateRequestDtoTest {
 
 		Set<ConstraintViolation<ProductCreateRequestDto>> violations = validator.validate(dto);
 		assertFalse(violations.isEmpty());
-		assertEquals("상품명은 필수 항목입니다.", violations.iterator().next().getMessage());
+
+		boolean foundNotNullMessage = violations.stream()
+			.anyMatch(violation -> violation.getMessage().equals(ProductValidationMessages.NAME_NOT_NULL));
+		assertTrue(foundNotNullMessage, "Expected NAME_NOT_NULL message not found");
 	}
 
 	@Test
@@ -75,7 +79,10 @@ class ProductCreateRequestDtoTest {
 
 		Set<ConstraintViolation<ProductCreateRequestDto>> violations = validator.validate(dto);
 		assertFalse(violations.isEmpty());
-		assertEquals("상품명은 비어있을 수 없습니다.", violations.iterator().next().getMessage());
+
+		boolean foundNotBlankMessage = violations.stream()
+			.anyMatch(violation -> violation.getMessage().equals(ProductValidationMessages.NAME_NOT_BLANK));
+		assertTrue(foundNotBlankMessage, "Expected NAME_NOT_BLANK message not found");
 	}
 
 	@ParameterizedTest
@@ -95,7 +102,7 @@ class ProductCreateRequestDtoTest {
 
 		Set<ConstraintViolation<ProductCreateRequestDto>> violations = validator.validate(dto);
 		assertFalse(violations.isEmpty());
-		assertEquals("상품명은 100자 이하여야 합니다.", violations.iterator().next().getMessage());
+		assertEquals(ProductValidationMessages.NAME_SIZE, violations.iterator().next().getMessage());
 	}
 
 	@Test
@@ -113,7 +120,31 @@ class ProductCreateRequestDtoTest {
 
 		Set<ConstraintViolation<ProductCreateRequestDto>> violations = validator.validate(dto);
 		assertFalse(violations.isEmpty());
-		assertEquals("상품 설명은 필수 항목입니다.", violations.iterator().next().getMessage());
+
+		boolean foundNotNullMessage = violations.stream()
+			.anyMatch(violation -> violation.getMessage().equals(ProductValidationMessages.DESCRIPTION_NOT_NULL));
+		assertTrue(foundNotNullMessage, "Expected DESCRIPTION_NOT_NULL message not found");
+	}
+
+	@Test
+	@DisplayName("상품 설명이 빈 문자열일 때 검증 실패")
+	void emptyProductDescription() {
+		ProductCreateRequestDto dto = new ProductCreateRequestDto(
+			"Valid Product Name",
+			"",
+			"Valid address",
+			100,
+			1L,
+			2L,
+			3L
+		);
+
+		Set<ConstraintViolation<ProductCreateRequestDto>> violations = validator.validate(dto);
+		assertFalse(violations.isEmpty());
+
+		boolean foundNotBlankMessage = violations.stream()
+			.anyMatch(violation -> violation.getMessage().equals(ProductValidationMessages.DESCRIPTION_NOT_BLANK));
+		assertTrue(foundNotBlankMessage, "Expected DESCRIPTION_NOT_BLANK message not found");
 	}
 
 	@ParameterizedTest
@@ -133,7 +164,7 @@ class ProductCreateRequestDtoTest {
 
 		Set<ConstraintViolation<ProductCreateRequestDto>> violations = validator.validate(dto);
 		assertFalse(violations.isEmpty());
-		assertEquals("상품 설명은 2000자 이하여야 합니다.", violations.iterator().next().getMessage());
+		assertEquals(ProductValidationMessages.DESCRIPTION_SIZE, violations.iterator().next().getMessage());
 	}
 
 	@ParameterizedTest
@@ -153,7 +184,7 @@ class ProductCreateRequestDtoTest {
 
 		Set<ConstraintViolation<ProductCreateRequestDto>> violations = validator.validate(dto);
 		assertFalse(violations.isEmpty());
-		assertEquals("주소는 100자 이하여야 합니다.", violations.iterator().next().getMessage());
+		assertEquals(ProductValidationMessages.ADDRESS_SIZE, violations.iterator().next().getMessage());
 	}
 
 	@ParameterizedTest
@@ -172,7 +203,7 @@ class ProductCreateRequestDtoTest {
 
 		Set<ConstraintViolation<ProductCreateRequestDto>> violations = validator.validate(dto);
 		assertFalse(violations.isEmpty());
-		assertEquals("가격은 0 이상이어야 합니다.", violations.iterator().next().getMessage());
+		assertEquals(ProductValidationMessages.PRICE_POSITIVE_OR_ZERO, violations.iterator().next().getMessage());
 	}
 
 	@Test
@@ -190,7 +221,7 @@ class ProductCreateRequestDtoTest {
 
 		Set<ConstraintViolation<ProductCreateRequestDto>> violations = validator.validate(dto);
 		assertFalse(violations.isEmpty());
-		assertEquals("도시 ID는 필수 항목입니다.", violations.iterator().next().getMessage());
+		assertEquals(ProductValidationMessages.CITY_ID_NOT_NULL, violations.iterator().next().getMessage());
 	}
 
 	@Test
@@ -208,7 +239,7 @@ class ProductCreateRequestDtoTest {
 
 		Set<ConstraintViolation<ProductCreateRequestDto>> violations = validator.validate(dto);
 		assertFalse(violations.isEmpty());
-		assertEquals("상품 소분류 ID은 필수 항목입니다.", violations.iterator().next().getMessage());
+		assertEquals(ProductValidationMessages.SUBCATEGORY_ID_NOT_NULL, violations.iterator().next().getMessage());
 	}
 
 	@Test
@@ -226,6 +257,6 @@ class ProductCreateRequestDtoTest {
 
 		Set<ConstraintViolation<ProductCreateRequestDto>> violations = validator.validate(dto);
 		assertFalse(violations.isEmpty());
-		assertEquals("통화 ID는 필수 항목입니다.", violations.iterator().next().getMessage());
+		assertEquals(ProductValidationMessages.CURRENCY_ID_NOT_NULL, violations.iterator().next().getMessage());
 	}
 }

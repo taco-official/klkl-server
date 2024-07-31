@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
 import taco.klkl.global.common.constants.ProductConstants;
+import taco.klkl.global.common.constants.ProductValidationMessages;
 
 /**
  * TODO: 상품필터속성 추가 해야함 (상품필터속성 테이블 개발 후)
@@ -18,24 +19,29 @@ import taco.klkl.global.common.constants.ProductConstants;
  * @param currencyId
  */
 public record ProductCreateRequestDto(
-	@NotNull(message = "상품명은 필수 항목입니다.")
-	@NotBlank(message = "상품명은 비어있을 수 없습니다.")
-	@Size(max = ProductConstants.NAME_MAX_LENGTH, message = "상품명은 100자 이하여야 합니다.")
+	@NotNull(message = ProductValidationMessages.NAME_NOT_NULL)
+	@NotBlank(message = ProductValidationMessages.NAME_NOT_BLANK)
+	@Size(max = ProductConstants.NAME_MAX_LENGTH, message = ProductValidationMessages.NAME_SIZE)
 	String name,
 
-	@NotNull(message = "상품 설명은 필수 항목입니다.")
-	@NotBlank(message = "상품 설명은 비어있을 수 없습니다.")
-	@Size(max = ProductConstants.DESCRIPTION_MAX_LENGTH, message = "상품 설명은 2000자 이하여야 합니다.")
+	@NotNull(message = ProductValidationMessages.DESCRIPTION_NOT_NULL)
+	@NotBlank(message = ProductValidationMessages.DESCRIPTION_NOT_BLANK)
+	@Size(max = ProductConstants.DESCRIPTION_MAX_LENGTH, message = ProductValidationMessages.DESCRIPTION_SIZE)
 	String description,
 
-	@Size(max = ProductConstants.ADDRESS_MAX_LENGTH, message = "주소는 100자 이하여야 합니다.")
+	@Size(max = ProductConstants.ADDRESS_MAX_LENGTH, message = ProductValidationMessages.ADDRESS_SIZE)
 	String address,
 
-	@PositiveOrZero(message = "가격은 0 이상이어야 합니다.")
+	@PositiveOrZero(message = ProductValidationMessages.PRICE_POSITIVE_OR_ZERO)
 	Integer price,
 
-	@NotNull(message = "도시 ID는 필수 항목입니다.") Long cityId,
-	@NotNull(message = "상품 소분류 ID은 필수 항목입니다.") Long subcategoryId,
-	@NotNull(message = "통화 ID는 필수 항목입니다.") Long currencyId
+	@NotNull(message = ProductValidationMessages.CITY_ID_NOT_NULL)
+	Long cityId,
+
+	@NotNull(message = ProductValidationMessages.SUBCATEGORY_ID_NOT_NULL)
+	Long subcategoryId,
+
+	@NotNull(message = ProductValidationMessages.CURRENCY_ID_NOT_NULL)
+	Long currencyId
 ) {
 }
