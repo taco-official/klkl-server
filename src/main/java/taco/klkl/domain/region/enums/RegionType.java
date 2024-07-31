@@ -8,16 +8,12 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum RegionType {
-	// 동북아시아
 	NORTHEAST_ASIA("동북아시아"),
 
-	// 동남아시아
 	SOUTHEAST_ASIA("동남아시아"),
 
-	// 기타
 	ETC("기타"),
 
-	// NONE
 	NONE("");
 
 	private final String koreanName;
