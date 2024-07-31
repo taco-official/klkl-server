@@ -101,8 +101,8 @@ class ProductControllerTest {
 			2L,
 			3L,
 			4L,
-			"address",
-			1000
+			1000,
+			"address"
 		);
 		when(productService.createProduct(any(ProductCreateRequestDto.class))).thenReturn(productDetailResponseDto);
 

@@ -45,8 +45,8 @@ public class ProductIntegrationTest {
 			2L,
 			3L,
 			4L,
-			"address",
-			1000
+			1000,
+			"address"
 		);
 		ProductDetailResponseDto productDto = productService.createProduct(createDto);
 
@@ -78,8 +78,8 @@ public class ProductIntegrationTest {
 			2L,
 			3L,
 			4L,
-			"address",
-			1000
+			1000,
+			"address"
 		);
 
 		// when & then

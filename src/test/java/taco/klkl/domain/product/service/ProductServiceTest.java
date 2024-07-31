@@ -111,8 +111,8 @@ class ProductServiceTest {
 			2L,
 			3L,
 			4L,
-			"신사이바시 메가돈키호테",
-			100
+			100,
+			"신사이바시 메가돈키호테"
 		);
 
 		String name = productDto.name();

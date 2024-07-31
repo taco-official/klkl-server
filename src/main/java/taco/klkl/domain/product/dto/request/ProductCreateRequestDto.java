@@ -1,6 +1,7 @@
 package taco.klkl.domain.product.dto.request;
 
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
 
 /**
  * TODO: 상품필터속성 추가 해야함 (상품필터속성 테이블 개발 후)
@@ -10,8 +11,8 @@ import jakarta.validation.constraints.NotNull;
  * @param cityId
  * @param subcategoryId
  * @param currencyId
- * @param address
  * @param price
+ * @param address
  */
 public record ProductCreateRequestDto(
 	@NotNull(message = "상품명은 필수 항목입니다.") String name,
@@ -19,7 +20,7 @@ public record ProductCreateRequestDto(
 	@NotNull(message = "도시 ID는 필수 항목입니다.") Long cityId,
 	@NotNull(message = "상품 소분류 ID은 필수 항목입니다.") Long subcategoryId,
 	@NotNull(message = "통화 ID는 필수 항목입니다.") Long currencyId,
-	String address,
-	Integer price
+	@PositiveOrZero(message = "가격은 0 이상이어야 합니다.") Integer price,
+	String address
 ) {
 }

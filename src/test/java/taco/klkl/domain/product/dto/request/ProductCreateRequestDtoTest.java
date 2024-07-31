@@ -23,19 +23,61 @@ class ProductCreateRequestDtoTest {
 	}
 
 	@Test
-	@DisplayName("모든 필수 필드가 존재할 때 유효성 검사 성공")
-	void testProductCreateRequestDtoWithAllRequiredFields() {
+	@DisplayName("모든 필수 필드가 존재하고 가격이 양수일 때 유효성 검사 성공")
+	void testProductCreateRequestDtoWithAllRequiredFieldsAndPositivePrice() {
 		// given
-		String name = "맛있는 곤약젤리";
-		String description = "탱글탱글 맛있는 곤약젤리";
-		Long cityId = 1L;
-		Long subcategoryId = 2L;
-		Long currencyId = 3L;
-		String address = "신사이바시 메가돈키호테";
-		Integer price = 100;
+		ProductCreateRequestDto dto = new ProductCreateRequestDto(
+			"맛있는 곤약젤리",
+			"탱글탱글 맛있는 곤약젤리",
+			1L,
+			2L,
+			3L,
+			100,
+			"신사이바시 메가돈키호테"
+		);
 
-		ProductCreateRequestDto dto = new ProductCreateRequestDto(name, description, cityId, subcategoryId, currencyId,
-			address, price);
+		// when
+		Set<ConstraintViolation<ProductCreateRequestDto>> violations = validator.validate(dto);
+
+		// then
+		assertTrue(violations.isEmpty());
+	}
+
+	@Test
+	@DisplayName("가격이 음수일 때 유효성 검사 실패")
+	void testProductCreateRequestDtoWithNegativePrice() {
+		// given
+		ProductCreateRequestDto dto = new ProductCreateRequestDto(
+			"맛있는 곤약젤리",
+			"탱글탱글 맛있는 곤약젤리",
+			1L,
+			2L,
+			3L,
+			-100,
+			"신사이바시 메가돈키호테"
+		);
+
+		// when
+		Set<ConstraintViolation<ProductCreateRequestDto>> violations = validator.validate(dto);
+
+		// then
+		assertFalse(violations.isEmpty());
+		assertEquals("가격은 0 이상이어야 합니다.", violations.iterator().next().getMessage());
+	}
+
+	@Test
+	@DisplayName("가격이 0일 때 유효성 검사 성공")
+	void testProductCreateRequestDtoWithZeroPrice() {
+		// given
+		ProductCreateRequestDto dto = new ProductCreateRequestDto(
+			"맛있는 곤약젤리",
+			"탱글탱글 맛있는 곤약젤리",
+			1L,
+			2L,
+			3L,
+			0,
+			"신사이바시 메가돈키호테"
+		);
 
 		// when
 		Set<ConstraintViolation<ProductCreateRequestDto>> violations = validator.validate(dto);
@@ -54,8 +96,8 @@ class ProductCreateRequestDtoTest {
 			1L,
 			2L,
 			3L,
-			"신사이바시 메가돈키호테",
-			100
+			100,
+			"신사이바시 메가돈키호테"
 		);
 
 		// when
@@ -76,8 +118,8 @@ class ProductCreateRequestDtoTest {
 			1L,
 			2L,
 			3L,
-			"신사이바시 메가돈키호테",
-			100
+			100,
+			"신사이바시 메가돈키호테"
 		);
 
 		// when
@@ -98,8 +140,8 @@ class ProductCreateRequestDtoTest {
 			null,
 			2L,
 			3L,
-			"신사이바시 메가돈키호테",
-			100
+			100,
+			"신사이바시 메가돈키호테"
 		);
 
 		// when
@@ -120,8 +162,8 @@ class ProductCreateRequestDtoTest {
 			1L,
 			null,
 			3L,
-			"신사이바시 메가돈키호테",
-			100
+			100,
+			"신사이바시 메가돈키호테"
 		);
 
 		// when
@@ -142,8 +184,8 @@ class ProductCreateRequestDtoTest {
 			1L,
 			2L,
 			null,
-			"신사이바시 메가돈키호테",
-			100
+			100,
+			"신사이바시 메가돈키호테"
 		);
 
 		// when
@@ -155,8 +197,8 @@ class ProductCreateRequestDtoTest {
 	}
 
 	@Test
-	@DisplayName("여러 필수 필드가 null일 때 유효성 검사 실패")
-	void testProductCreateRequestDtoWithMultipleNullFields() {
+	@DisplayName("여러 필수 필드가 null이고 가격이 음수일 때 유효성 검사 실패")
+	void testProductCreateRequestDtoWithMultipleNullFieldsAndNegativePrice() {
 		// given
 		ProductCreateRequestDto dto = new ProductCreateRequestDto(
 			null,
@@ -164,19 +206,20 @@ class ProductCreateRequestDtoTest {
 			null,
 			null,
 			null,
-			"address",
-			100
+			-100,
+			"address"
 		);
 
 		// when
 		Set<ConstraintViolation<ProductCreateRequestDto>> violations = validator.validate(dto);
 
 		// then
-		assertEquals(5, violations.size());
+		assertEquals(6, violations.size());
 		assertTrue(violations.stream().anyMatch(v -> v.getMessage().equals("상품명은 필수 항목입니다.")));
 		assertTrue(violations.stream().anyMatch(v -> v.getMessage().equals("상품 설명은 필수 항목입니다.")));
 		assertTrue(violations.stream().anyMatch(v -> v.getMessage().equals("도시 ID는 필수 항목입니다.")));
 		assertTrue(violations.stream().anyMatch(v -> v.getMessage().equals("상품 소분류 ID은 필수 항목입니다.")));
 		assertTrue(violations.stream().anyMatch(v -> v.getMessage().equals("통화 ID는 필수 항목입니다.")));
+		assertTrue(violations.stream().anyMatch(v -> v.getMessage().equals("가격은 0 이상이어야 합니다.")));
 	}
 }
