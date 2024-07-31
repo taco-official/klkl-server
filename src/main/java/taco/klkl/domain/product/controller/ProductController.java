@@ -47,7 +47,7 @@ public class ProductController {
 	@Operation(summary = "상품 정보 수정", description = "상품 정보를 수정합니다.")
 	public ResponseEntity<ProductDetailResponseDto> updateProduct(
 		@PathVariable Long id,
-		@RequestBody ProductUpdateRequestDto updateRequest
+		@Valid @RequestBody ProductUpdateRequestDto updateRequest
 	) {
 		ProductDetailResponseDto productDto = productService.updateProduct(id, updateRequest);
 		return ResponseEntity.ok().body(productDto);

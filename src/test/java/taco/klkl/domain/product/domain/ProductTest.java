@@ -121,11 +121,11 @@ class ProductTest {
 		ProductUpdateRequestDto updateDto = new ProductUpdateRequestDto(
 			"Updated Name",
 			"Updated Description",
-			2L,
-			2L,
-			2L,
 			"Updated Address",
-			200
+			200,
+			2L,
+			2L,
+			2L
 		);
 
 		// when
@@ -159,10 +159,10 @@ class ProductTest {
 			null,
 			"Updated Description",
 			null,
+			200,
+			null,
 			2L,
-			null,
-			null,
-			200
+			null
 		);
 
 		// when

@@ -173,11 +173,11 @@ class ProductServiceTest {
 		ProductUpdateRequestDto updateDto = new ProductUpdateRequestDto(
 			"Updated Name",
 			"Updated Description",
-			2L,
-			2L,
-			2L,
 			"Updated Address",
-			200
+			200,
+			2L,
+			2L,
+			2L
 		);
 
 		when(productRepository.findById(productId)).thenReturn(Optional.of(existingProduct));
@@ -208,11 +208,11 @@ class ProductServiceTest {
 		ProductUpdateRequestDto updateDto = new ProductUpdateRequestDto(
 			"Updated Name",
 			"Updated Description",
-			2L,
-			2L,
-			2L,
 			"Updated Address",
-			200
+			200,
+			2L,
+			2L,
+			2L
 		);
 
 		when(productRepository.findById(productId)).thenReturn(Optional.empty());

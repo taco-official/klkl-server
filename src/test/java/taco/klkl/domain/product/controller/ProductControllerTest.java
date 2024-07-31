@@ -161,11 +161,11 @@ class ProductControllerTest {
 		ProductUpdateRequestDto updateRequest = new ProductUpdateRequestDto(
 			"Updated Name",
 			"Updated Description",
+			"Updated Address",
+			2000,
 			2L,
 			3L,
-			4L,
-			"Updated Address",
-			2000
+			4L
 		);
 
 		when(productService.updateProduct(eq(productId), any(ProductUpdateRequestDto.class)))
