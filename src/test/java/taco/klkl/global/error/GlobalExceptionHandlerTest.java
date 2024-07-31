@@ -89,8 +89,8 @@ class GlobalExceptionHandlerTest {
 		GlobalResponse globalResponse = (GlobalResponse)(response.getBody());
 		assertInstanceOf(ErrorResponse.class, globalResponse.data());
 		ErrorResponse errorResponse = (ErrorResponse)(globalResponse.data());
-		assertEquals("C011", errorResponse.code());
-		assertEquals("지원하지 않는 HTTP method 입니다.", errorResponse.message());
+		assertEquals(ErrorCode.METHOD_NOT_SUPPORTED.getCode(), errorResponse.code());
+		assertEquals(ErrorCode.METHOD_NOT_SUPPORTED.getMessage(), errorResponse.message());
 	}
 
 	@Test
@@ -113,8 +113,8 @@ class GlobalExceptionHandlerTest {
 		GlobalResponse globalResponse = (GlobalResponse)(response.getBody());
 		assertInstanceOf(ErrorResponse.class, globalResponse.data());
 		ErrorResponse errorResponse = (ErrorResponse)(globalResponse.data());
-		assertEquals("C012", errorResponse.code());
-		assertEquals("서버에 문제가 발생했습니다. 관리자에게 문의해주세요.", errorResponse.message());
+		assertEquals(ErrorCode.INTERNAL_SERVER_ERROR.getCode(), errorResponse.code());
+		assertEquals(ErrorCode.INTERNAL_SERVER_ERROR.getMessage(), errorResponse.message());
 	}
 
 	@Test
@@ -159,8 +159,8 @@ class GlobalExceptionHandlerTest {
 		GlobalResponse globalResponse = (GlobalResponse)(response.getBody());
 		assertInstanceOf(ErrorResponse.class, globalResponse.data());
 		ErrorResponse errorResponse = (ErrorResponse)(globalResponse.data());
-		assertEquals("C999", errorResponse.code());
-		assertEquals("샘플 에러입니다.", errorResponse.message());
+		assertEquals(ErrorCode.SAMPLE_ERROR.getCode(), errorResponse.code());
+		assertEquals(ErrorCode.SAMPLE_ERROR.getMessage(), errorResponse.message());
 	}
 
 	@Test
@@ -178,7 +178,7 @@ class GlobalExceptionHandlerTest {
 		assertNotNull(response.getBody());
 		GlobalResponse globalResponse = (GlobalResponse)(response.getBody());
 		ErrorResponse errorResponse = (ErrorResponse)(globalResponse.data());
-		assertEquals("C012", errorResponse.code());
-		assertEquals("서버에 문제가 발생했습니다. 관리자에게 문의해주세요.", errorResponse.message());
+		assertEquals(ErrorCode.INTERNAL_SERVER_ERROR.getCode(), errorResponse.code());
+		assertEquals(ErrorCode.INTERNAL_SERVER_ERROR.getMessage(), errorResponse.message());
 	}
 }

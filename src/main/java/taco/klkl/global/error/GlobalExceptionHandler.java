@@ -59,7 +59,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 		WebRequest request
 	) {
 		log.error("HttpRequestMethodNotSupported : {}", ex.getMessage(), ex);
-		final ErrorCode errorCode = ErrorCode.METHOD_NOT_ALLOWED;
+		final ErrorCode errorCode = ErrorCode.METHOD_NOT_SUPPORTED;
 		final ErrorResponse errorResponse = ErrorResponse.of(errorCode.getCode(), errorCode.getMessage());
 		final GlobalResponse globalResponse = GlobalResponse.error(errorCode.getCode(), errorResponse);
 		return ResponseEntity.status(errorCode.getStatus()).body(globalResponse);
