@@ -42,11 +42,11 @@ public class ProductIntegrationTest {
 		ProductCreateRequestDto createDto = new ProductCreateRequestDto(
 			"name",
 			"description",
+			"address",
+			1000,
 			2L,
 			3L,
-			4L,
-			1000,
-			"address"
+			4L
 		);
 		ProductDetailResponseDto productDto = productService.createProduct(createDto);
 
@@ -75,11 +75,11 @@ public class ProductIntegrationTest {
 		ProductCreateRequestDto createDto = new ProductCreateRequestDto(
 			"name",
 			"description",
+			"address",
+			1000,
 			2L,
 			3L,
-			4L,
-			1000,
-			"address"
+			4L
 		);
 
 		// when & then

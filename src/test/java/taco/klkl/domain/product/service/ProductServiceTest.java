@@ -108,11 +108,11 @@ class ProductServiceTest {
 		ProductCreateRequestDto productDto = new ProductCreateRequestDto(
 			"맛있는 곤약젤리",
 			"탱글탱글 맛있는 곤약젤리",
+			"신사이바시 메가돈키호테",
+			100,
 			2L,
 			3L,
-			4L,
-			100,
-			"신사이바시 메가돈키호테"
+			4L
 		);
 
 		String name = productDto.name();

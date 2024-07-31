@@ -98,11 +98,11 @@ class ProductControllerTest {
 		ProductCreateRequestDto productCreateRequestDto = new ProductCreateRequestDto(
 			"name",
 			"description",
+			"address",
+			1000,
 			2L,
 			3L,
-			4L,
-			1000,
-			"address"
+			4L
 		);
 		when(productService.createProduct(any(ProductCreateRequestDto.class))).thenReturn(productDetailResponseDto);
 
@@ -132,7 +132,7 @@ class ProductControllerTest {
 		// given
 		ProductCreateRequestDto invalidRequestDto = new ProductCreateRequestDto(
 			null,
-			"",
+			null,
 			null,
 			null,
 			null,

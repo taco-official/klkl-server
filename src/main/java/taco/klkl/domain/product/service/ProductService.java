@@ -11,10 +11,11 @@ import taco.klkl.domain.product.dto.request.ProductUpdateRequestDto;
 import taco.klkl.domain.product.dto.response.ProductDetailResponseDto;
 import taco.klkl.domain.product.exception.ProductNotFoundException;
 import taco.klkl.domain.user.domain.User;
+import taco.klkl.global.common.constants.ProductConstants;
 import taco.klkl.global.util.UserUtil;
 
 @Service
-@Transactional
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class ProductService {
 
@@ -27,12 +28,14 @@ public class ProductService {
 		return ProductDetailResponseDto.from(product);
 	}
 
+	@Transactional
 	public ProductDetailResponseDto createProduct(final ProductCreateRequestDto productDto) {
 		final Product product = createProductEntity(productDto);
 		productRepository.save(product);
 		return ProductDetailResponseDto.from(product);
 	}
 
+	@Transactional
 	public ProductDetailResponseDto updateProduct(final Long id, final ProductUpdateRequestDto productDto) {
 		final Product product = productRepository.findById(id)
 			.orElseThrow(ProductNotFoundException::new);
@@ -54,5 +57,4 @@ public class ProductService {
 			productDto.currencyId()
 		);
 	}
-
 }
