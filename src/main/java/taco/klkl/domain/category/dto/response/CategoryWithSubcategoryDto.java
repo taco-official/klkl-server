@@ -5,7 +5,7 @@ import java.util.List;
 import taco.klkl.domain.category.domain.Category;
 
 public record CategoryWithSubcategoryDto(
-	Long categoryID,
+	Long categoryId,
 	String category,
 	List<SubcategoryResponseDto> subcategories
 ) {
