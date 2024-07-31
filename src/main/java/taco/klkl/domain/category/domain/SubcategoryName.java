@@ -1,4 +1,4 @@
-package taco.klkl.domain.subcategory.domain;
+package taco.klkl.domain.category.domain;
 
 import java.util.Arrays;
 
