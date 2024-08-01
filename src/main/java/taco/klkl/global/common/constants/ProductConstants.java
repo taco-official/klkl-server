@@ -22,6 +22,16 @@ public final class ProductConstants {
 		2L,
 		3L
 	);
+	public static final Product TEST_PRODUCT_TWO = Product.of(
+		UserConstants.TEST_USER,
+		"testProductTwo",
+		"testDescriptionTwo",
+		"testAddressTwo",
+		2000,
+		2L,
+		4L,
+		6L
+	);
 
 	private ProductConstants() {
 	}

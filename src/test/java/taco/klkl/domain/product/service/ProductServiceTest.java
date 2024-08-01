@@ -4,6 +4,8 @@ import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -18,6 +20,7 @@ import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.product.dto.request.ProductCreateRequestDto;
 import taco.klkl.domain.product.dto.request.ProductUpdateRequestDto;
 import taco.klkl.domain.product.dto.response.ProductDetailResponseDto;
+import taco.klkl.domain.product.dto.response.ProductSimpleResponseDto;
 import taco.klkl.domain.product.exception.ProductNotFoundException;
 import taco.klkl.domain.user.domain.User;
 import taco.klkl.global.common.constants.ProductConstants;
@@ -39,6 +42,72 @@ class ProductServiceTest {
 	void setUp() {
 		MockitoAnnotations.openMocks(this);
 		user = new User();
+	}
+
+	@Test
+	@DisplayName("모든 상품 조회 테스트")
+	void testGetAllProducts() {
+		// Given
+		Product product1 = ProductConstants.TEST_PRODUCT;
+		Product product2 = ProductConstants.TEST_PRODUCT_TWO;
+		List<Product> productList = Arrays.asList(product1, product2);
+
+		when(productRepository.findAll()).thenReturn(productList);
+
+		// When
+		List<ProductSimpleResponseDto> result = productService.getAllProducts();
+
+		// Then
+		assertThat(result).hasSize(2);
+
+		assertThat(result.get(0))
+			.extracting(
+				ProductSimpleResponseDto::productId,
+				ProductSimpleResponseDto::name,
+				ProductSimpleResponseDto::likeCount,
+				ProductSimpleResponseDto::cityId,
+				ProductSimpleResponseDto::subcategoryId
+			)
+			.containsExactly(
+				product1.getProductId(),
+				product1.getName(),
+				product1.getLikeCount(),
+				product1.getCityId(),
+				product1.getSubcategoryId()
+			);
+
+		assertThat(result.get(1))
+			.extracting(
+				ProductSimpleResponseDto::productId,
+				ProductSimpleResponseDto::name,
+				ProductSimpleResponseDto::likeCount,
+				ProductSimpleResponseDto::cityId,
+				ProductSimpleResponseDto::subcategoryId
+			)
+			.containsExactly(
+				product2.getProductId(),
+				product2.getName(),
+				product2.getLikeCount(),
+				product2.getCityId(),
+				product2.getSubcategoryId()
+			);
+
+		verify(productRepository, times(1)).findAll();
+	}
+
+	@Test
+	@DisplayName("빈 상품 목록 조회 테스트")
+	void testGetAllProductsEmptyList() {
+		// Given
+		when(productRepository.findAll()).thenReturn(List.of());
+
+		// When
+		List<ProductSimpleResponseDto> result = productService.getAllProducts();
+
+		// Then
+		assertNotNull(result);
+		assertTrue(result.isEmpty());
+		verify(productRepository, times(1)).findAll();
 	}
 
 	@Test
