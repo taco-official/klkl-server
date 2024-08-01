@@ -103,7 +103,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 		return ResponseEntity.status(errorCode.getStatus()).body(globalResponse);
 	}
 
-	// TODO: json 문법 오류 있으면 BAD_REQUEST 반환
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<Object> handleException(Exception ex) {
 		log.error("InternalServerError : {}", ex.getMessage(), ex);
