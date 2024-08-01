@@ -197,7 +197,6 @@ class ProductServiceTest {
 		assertThat(responseDto.currencyId()).isEqualTo(updateDto.currencyId());
 
 		verify(productRepository).findById(productId);
-		verify(productRepository).save(any(Product.class));
 	}
 
 	@Test
