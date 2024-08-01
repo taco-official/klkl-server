@@ -11,4 +11,6 @@ public interface CurrencyService {
 	List<CurrencyResponseDto> getAllCurrencies();
 
 	CurrencyResponseDto getCurrencyById(final Long id);
+
+	boolean exitsCurrencyById(final Long id);
 }
