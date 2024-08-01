@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import taco.klkl.domain.region.dto.response.CountryResponseDto;
+import taco.klkl.domain.region.dto.response.CountryWithCitiesResponseDto;
 import taco.klkl.domain.region.service.CountryService;
 
 @Slf4j
@@ -38,6 +39,14 @@ public class CountryController {
 	public ResponseEntity<CountryResponseDto> getCountryById(@PathVariable Long id) {
 
 		CountryResponseDto findCountry = countryService.getCountryById(id);
+
+		return ResponseEntity.ok().body(findCountry);
+	}
+
+	@Operation(summary = "국가에 속한 모든 도시 조회", description = "countryId로 특정 국가에 속한 도시들을 조회합니다.")
+	@GetMapping("/{id}/cities")
+	public ResponseEntity<CountryWithCitiesResponseDto> getCountryWithCitiesById(@PathVariable Long id) {
+		CountryWithCitiesResponseDto findCountry = countryService.getCountryWithCitiesById(id);
 
 		return ResponseEntity.ok().body(findCountry);
 	}
