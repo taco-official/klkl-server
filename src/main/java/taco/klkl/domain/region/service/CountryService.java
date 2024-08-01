@@ -11,7 +11,7 @@ import taco.klkl.domain.region.dto.response.CountryWithCitiesResponseDto;
 public interface CountryService {
 	List<CountryResponseDto> getAllCountries();
 
-	CountryResponseDto getCountryById(Long countryId);
+	CountryResponseDto getCountryById(final Long countryId);
 
-	CountryWithCitiesResponseDto getCountryWithCitiesById(Long countryId);
+	CountryWithCitiesResponseDto getCountryWithCitiesById(final Long countryId);
 }

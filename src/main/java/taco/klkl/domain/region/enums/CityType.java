@@ -25,28 +25,28 @@ public enum CityType {
 	// 대만
 	TAIPEI("타이베이"),
 
-	// 동남아시아 - 태국
+	// 태국
 	BANGKOK("방콕"),
 	CHIANG_MAI("치앙마이"),
 	PHUKET("푸켓"),
 
-	// 동남아시아 - 베트남
+	// 베트남
 	DA_NANG("다낭"),
 	NHA_TRANG("나트랑"),
 	HO_CHI_MINH("호치민"),
 	HANOI("하노이"),
 
-	// 동남아시아 - 필리핀
+	// 필리핀
 	CEBU("세부"),
 	BORACAY("보라카이"),
 
-	// 동남아시아 - 싱가포르
+	// 싱가포르
 	SINGAPORE("싱가포르"),
 
-	// 동남아시아 - 인도네시아
+	// 인도네시아
 	BALI("발리"),
 
-	// 동남아시아 - 말레이시아
+	// 말레이시아
 	KOTA_KINABALU("코타키나발루"),
 	KUALA_LUMPUR("쿠알라룸푸르"),
 

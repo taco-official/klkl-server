@@ -11,9 +11,9 @@ import taco.klkl.domain.region.dto.response.RegionSimpleResponseDto;
 public interface RegionService {
 	List<RegionSimpleResponseDto> getAllRegions();
 
-	RegionSimpleResponseDto getRegionById(Long id);
+	RegionSimpleResponseDto getRegionById(final Long id);
 
-	RegionSimpleResponseDto getRegionByName(String name);
+	RegionSimpleResponseDto getRegionByName(final String name);
 
-	RegionResponseDto getRegionWithCountries(Long id);
+	RegionResponseDto getRegionWithCountries(final Long id);
 }

@@ -45,7 +45,8 @@ public class Country {
 	@OneToMany(mappedBy = "country", orphanRemoval = true)
 	private List<City> cities;
 
-	private Country(CountryType countryType, Region region, String flag, String photo, int currencyId) {
+	private Country(final CountryType countryType, final Region region, final String flag, final String photo,
+		final int currencyId) {
 		this.region = region;
 		this.name = countryType;
 		this.flag = flag;
@@ -53,7 +54,8 @@ public class Country {
 		this.currencyId = currencyId;
 	}
 
-	public static Country of(CountryType countryType, Region region, String flag, String photo, int currencyId) {
+	public static Country of(final CountryType countryType, final Region region, final String flag, final String photo,
+		final int currencyId) {
 		return new Country(countryType, region, flag, photo, currencyId);
 	}
 

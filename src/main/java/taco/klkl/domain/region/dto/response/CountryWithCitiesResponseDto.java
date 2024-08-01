@@ -17,11 +17,4 @@ public record CountryWithCitiesResponseDto(
 		);
 	}
 
-	@Override
-	public String toString() {
-		return "CountryWithCitiesResponseDto{"
-			+ "country=" + country
-			+ ", cities=" + cities
-			+ '}';
-	}
 }

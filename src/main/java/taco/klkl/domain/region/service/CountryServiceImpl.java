@@ -26,6 +26,7 @@ public class CountryServiceImpl implements CountryService {
 
 	@Override
 	public List<CountryResponseDto> getAllCountries() {
+
 		List<Country> countries = countryRepository.findAll();
 
 		if (countries.isEmpty()) {
@@ -38,16 +39,18 @@ public class CountryServiceImpl implements CountryService {
 	}
 
 	@Override
-	public CountryResponseDto getCountryById(Long countryId) {
-		Country country = countryRepository.findById(countryId)
+	public CountryResponseDto getCountryById(final Long countryId) throws CountryNotFoundException {
+
+		final Country country = countryRepository.findById(countryId)
 			.orElseThrow(CountryNotFoundException::new);
 
 		return CountryResponseDto.from(country);
 	}
 
 	@Override
-	public CountryWithCitiesResponseDto getCountryWithCitiesById(Long countryId) {
-		Country country = countryRepository.findById(countryId)
+	public CountryWithCitiesResponseDto getCountryWithCitiesById(final Long countryId) throws CountryNotFoundException {
+
+		final Country country = countryRepository.findById(countryId)
 			.orElseThrow(CountryNotFoundException::new);
 
 		return CountryWithCitiesResponseDto.from(country);

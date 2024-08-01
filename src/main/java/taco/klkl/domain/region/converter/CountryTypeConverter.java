@@ -8,7 +8,7 @@ import taco.klkl.domain.region.enums.CountryType;
 public class CountryTypeConverter implements AttributeConverter<CountryType, String> {
 
 	@Override
-	public String convertToDatabaseColumn(CountryType countryType) {
+	public String convertToDatabaseColumn(final CountryType countryType) {
 
 		if (countryType == null) {
 			return null;
@@ -18,8 +18,9 @@ public class CountryTypeConverter implements AttributeConverter<CountryType, Str
 	}
 
 	@Override
-	public CountryType convertToEntityAttribute(String dbData) {
-		CountryType countryType = CountryType.getCountryTypeByName(dbData);
+	public CountryType convertToEntityAttribute(final String dbData) {
+
+		final CountryType countryType = CountryType.getCountryTypeByName(dbData);
 
 		if (countryType.equals(CountryType.NONE)) {
 			throw new IllegalArgumentException("Unknown values: " + dbData);

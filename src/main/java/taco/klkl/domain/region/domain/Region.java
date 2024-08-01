@@ -31,11 +31,11 @@ public class Region {
 	@OneToMany(mappedBy = "region", fetch = FetchType.LAZY, orphanRemoval = true)
 	private List<Country> countries = new ArrayList<>();
 
-	private Region(RegionType region) {
+	private Region(final RegionType region) {
 		this.name = region;
 	}
 
-	public static Region of(RegionType regionType) {
+	public static Region of(final RegionType regionType) {
 		return new Region(regionType);
 	}
 }

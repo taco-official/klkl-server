@@ -9,6 +9,7 @@ public class CityTypeConverter implements AttributeConverter<CityType, String> {
 
 	@Override
 	public String convertToDatabaseColumn(CityType cityType) {
+
 		if (cityType == null) {
 			return null;
 		}
@@ -17,8 +18,9 @@ public class CityTypeConverter implements AttributeConverter<CityType, String> {
 	}
 
 	@Override
-	public CityType convertToEntityAttribute(String dbData) {
-		CityType cityType = CityType.getCityTypeByKoreanName(dbData);
+	public CityType convertToEntityAttribute(final String dbData) {
+
+		final CityType cityType = CityType.getCityTypeByKoreanName(dbData);
 
 		if (cityType.equals(CityType.NONE)) {
 			throw new IllegalArgumentException("Unknown value: " + dbData);

@@ -8,5 +8,5 @@ import taco.klkl.domain.region.enums.CountryType;
 
 @Repository
 public interface CountryRepository extends JpaRepository<Country, Long> {
-	Country findFirstByName(CountryType name);
+	Country findFirstByName(final CountryType name);
 }

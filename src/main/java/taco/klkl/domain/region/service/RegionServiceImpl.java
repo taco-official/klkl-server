@@ -40,17 +40,18 @@ public class RegionServiceImpl implements RegionService {
 	}
 
 	@Override
-	public RegionSimpleResponseDto getRegionById(Long id) throws RegionNotFoundException {
+	public RegionSimpleResponseDto getRegionById(final Long id) throws RegionNotFoundException {
 
-		Region region = regionRepository.findById(id)
+		final Region region = regionRepository.findById(id)
 			.orElseThrow(RegionNotFoundException::new);
+
 		return RegionSimpleResponseDto.from(region);
 	}
 
 	@Override
-	public RegionSimpleResponseDto getRegionByName(String name) throws RegionNotFoundException {
+	public RegionSimpleResponseDto getRegionByName(final String name) throws RegionNotFoundException {
 
-		Region region = regionRepository.findFirstByName(RegionType.getRegionByName(name));
+		final Region region = regionRepository.findFirstByName(RegionType.getRegionByName(name));
 
 		if (region == null) {
 			throw new RegionNotFoundException();
@@ -60,9 +61,9 @@ public class RegionServiceImpl implements RegionService {
 	}
 
 	@Override
-	public RegionResponseDto getRegionWithCountries(Long id) {
+	public RegionResponseDto getRegionWithCountries(final Long id) {
 
-		Region findRegion = regionRepository.findById(id)
+		final Region findRegion = regionRepository.findById(id)
 			.orElseThrow(RegionNotFoundException::new);
 
 		return RegionResponseDto.from(findRegion);

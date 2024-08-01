@@ -29,24 +29,24 @@ public class RegionController {
 	@GetMapping()
 	public ResponseEntity<List<RegionSimpleResponseDto>> getAllRegions() {
 
-		List<RegionSimpleResponseDto> findRegions = regionService.getAllRegions();
+		final List<RegionSimpleResponseDto> findRegions = regionService.getAllRegions();
 
 		return ResponseEntity.ok().body(findRegions);
 	}
 
 	@Operation(summary = "지역 하나 조회", description = "regionId로 특정 지역을 조회합니다.")
 	@GetMapping("/{id}")
-	public ResponseEntity<RegionSimpleResponseDto> getRegionById(@PathVariable Long id) {
+	public ResponseEntity<RegionSimpleResponseDto> getRegionById(@PathVariable final Long id) {
 
-		RegionSimpleResponseDto findRegion = regionService.getRegionById(id);
+		final RegionSimpleResponseDto findRegion = regionService.getRegionById(id);
 
 		return ResponseEntity.ok().body(findRegion);
 	}
 
 	@GetMapping("/{id}/countries")
-	public ResponseEntity<RegionResponseDto> getCountriesByRegion(@PathVariable Long id) {
+	public ResponseEntity<RegionResponseDto> getCountriesByRegion(@PathVariable final Long id) {
 
-		RegionResponseDto findRegion = regionService.getRegionWithCountries(id);
+		final RegionResponseDto findRegion = regionService.getRegionWithCountries(id);
 
 		return ResponseEntity.ok().body(findRegion);
 	}

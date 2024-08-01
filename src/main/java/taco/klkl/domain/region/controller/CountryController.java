@@ -29,24 +29,25 @@ public class CountryController {
 	@GetMapping()
 	public ResponseEntity<List<CountryResponseDto>> getAllCountries() {
 
-		List<CountryResponseDto> findCountries = countryService.getAllCountries();
+		final List<CountryResponseDto> findCountries = countryService.getAllCountries();
 
 		return ResponseEntity.ok().body(findCountries);
 	}
 
 	@Operation(summary = "국가 하나 조회", description = "countryId로 특정 국가를 조회합니다.")
 	@GetMapping("/{id}")
-	public ResponseEntity<CountryResponseDto> getCountryById(@PathVariable Long id) {
+	public ResponseEntity<CountryResponseDto> getCountryById(@PathVariable final Long id) {
 
-		CountryResponseDto findCountry = countryService.getCountryById(id);
+		final CountryResponseDto findCountry = countryService.getCountryById(id);
 
 		return ResponseEntity.ok().body(findCountry);
 	}
 
 	@Operation(summary = "국가에 속한 모든 도시 조회", description = "countryId로 특정 국가에 속한 도시들을 조회합니다.")
 	@GetMapping("/{id}/cities")
-	public ResponseEntity<CountryWithCitiesResponseDto> getCountryWithCitiesById(@PathVariable Long id) {
-		CountryWithCitiesResponseDto findCountry = countryService.getCountryWithCitiesById(id);
+	public ResponseEntity<CountryWithCitiesResponseDto> getCountryWithCitiesById(@PathVariable final Long id) {
+
+		final CountryWithCitiesResponseDto findCountry = countryService.getCountryWithCitiesById(id);
 
 		return ResponseEntity.ok().body(findCountry);
 	}
