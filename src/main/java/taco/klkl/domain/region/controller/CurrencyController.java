@@ -27,7 +27,7 @@ public class CurrencyController {
 	@GetMapping
 	public ResponseEntity<List<CurrencyResponseDto>> getAllCurrencies() {
 
-		List<CurrencyResponseDto> currencyResponseDtos = currencyService.getAllCurrencies();
+		final List<CurrencyResponseDto> currencyResponseDtos = currencyService.getAllCurrencies();
 
 		return ResponseEntity.ok().body(currencyResponseDtos);
 	}
