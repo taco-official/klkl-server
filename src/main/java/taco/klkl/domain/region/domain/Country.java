@@ -1,5 +1,7 @@
 package taco.klkl.domain.region.domain;
 
+import java.util.List;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -7,6 +9,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -38,6 +41,9 @@ public class Country {
 	// TODO: 통화 클래스로 변경하기
 	@Column(name = "currency_id", nullable = false)
 	private int currencyId;
+
+	@OneToMany(mappedBy = "country", orphanRemoval = true)
+	private List<City> cities;
 
 	private Country(CountryType countryType, Region region, String flag, String photo, int currencyId) {
 		this.region = region;
