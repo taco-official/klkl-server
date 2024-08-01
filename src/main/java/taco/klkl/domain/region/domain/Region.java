@@ -25,10 +25,18 @@ public class Region {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long regionId;
 
-	@Column(name = "name", length = 20, nullable = false)
+	@Column(
+		name = "name",
+		length = 20,
+		nullable = false
+	)
 	private RegionType name;
 
-	@OneToMany(mappedBy = "region", fetch = FetchType.LAZY, orphanRemoval = true)
+	@OneToMany(
+		mappedBy = "region",
+		fetch = FetchType.LAZY,
+		orphanRemoval = true
+	)
 	private List<Country> countries = new ArrayList<>();
 
 	private Region(final RegionType region) {

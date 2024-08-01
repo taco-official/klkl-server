@@ -23,10 +23,17 @@ public class City {
 	private Long cityId;
 
 	@ManyToOne
-	@JoinColumn(name = "country_id", nullable = false)
+	@JoinColumn(
+		name = "country_id",
+		nullable = false
+	)
 	private Country country;
 
-	@Column(name = "name", length = 50, nullable = false)
+	@Column(
+		name = "name",
+		length = 50,
+		nullable = false
+	)
 	private CityType name;
 
 	private City(final Country country, final CityType name) {

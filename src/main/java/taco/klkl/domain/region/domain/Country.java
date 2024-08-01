@@ -26,23 +26,44 @@ public class Country {
 	private Long countryId;
 
 	@ManyToOne
-	@JoinColumn(name = "region_id", nullable = false)
+	@JoinColumn(
+		name = "region_id",
+		nullable = false
+	)
 	private Region region;
 
-	@Column(name = "name", length = 20, nullable = false)
+	@Column(
+		name = "name",
+		length = 20,
+		nullable = false
+	)
 	private CountryType name;
 
-	@Column(name = "flag", length = 500, nullable = false)
+	@Column(
+		name = "flag",
+		length = 500,
+		nullable = false
+	)
 	private String flag;
 
-	@Column(name = "photo", length = 500, nullable = false)
+	@Column(
+		name = "photo",
+		length = 500,
+		nullable = false
+	)
 	private String photo;
 
 	// TODO: 통화 클래스로 변경하기
-	@Column(name = "currency_id", nullable = false)
+	@Column(
+		name = "currency_id",
+		nullable = false
+	)
 	private int currencyId;
 
-	@OneToMany(mappedBy = "country", orphanRemoval = true)
+	@OneToMany(
+		mappedBy = "country",
+		orphanRemoval = true
+	)
 	private List<City> cities;
 
 	private Country(final CountryType countryType, final Region region, final String flag, final String photo,
