@@ -27,7 +27,7 @@ public enum ErrorCode {
 	REGION_NOT_FOUND(HttpStatus.NOT_FOUND, "C050", "해당 지역을 찾을 수 없습니다."),
 	COUNTRY_NOT_FOUND(HttpStatus.NOT_FOUND, "C051", "해당 국가를 찾을 수 없습니다."),
 	CITY_NOT_FOUND(HttpStatus.NOT_FOUND, "C052", "해당 도시를 찾을 수 없습니다."),
-
+	CURRENCY_NOT_FOUND(HttpStatus.NOT_FOUND, "C053", "해당 통화를 찾을 수 없습니다."),
 	// Category
 	CATEGORY_ID_NOT_FOUND(HttpStatus.NOT_FOUND, "C060", "존재하지 않는 카테고리 ID 입니다."),
 	// Filter
