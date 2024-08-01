@@ -29,9 +29,11 @@ public record ProductCreateRequestDto(
 	@Size(max = ProductConstants.DESCRIPTION_MAX_LENGTH, message = ProductValidationMessages.DESCRIPTION_SIZE)
 	String description,
 
+	@NotNull(message = ProductValidationMessages.ADDRESS_NOT_NULL)
 	@Size(max = ProductConstants.ADDRESS_MAX_LENGTH, message = ProductValidationMessages.ADDRESS_SIZE)
 	String address,
 
+	@NotNull(message = ProductValidationMessages.PRICE_NOT_NULL)
 	@PositiveOrZero(message = ProductValidationMessages.PRICE_POSITIVE_OR_ZERO)
 	Integer price,
 

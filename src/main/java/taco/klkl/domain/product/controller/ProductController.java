@@ -2,6 +2,7 @@ package taco.klkl.domain.product.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,7 +30,9 @@ public class ProductController {
 
 	@GetMapping("/{id}")
 	@Operation(summary = "상품 상세 조회", description = "상품 상세 정보를 조회합니다.")
-	public ResponseEntity<ProductDetailResponseDto> getProductInfoById(@PathVariable Long id) {
+	public ResponseEntity<ProductDetailResponseDto> getProductInfoById(
+		@PathVariable Long id
+	) {
 		ProductDetailResponseDto productDto = productService.getProductInfoById(id);
 		return ResponseEntity.ok().body(productDto);
 	}
@@ -51,5 +54,14 @@ public class ProductController {
 	) {
 		ProductDetailResponseDto productDto = productService.updateProduct(id, updateRequest);
 		return ResponseEntity.ok().body(productDto);
+	}
+
+	@DeleteMapping("/{id}")
+	@Operation(summary = "상품 삭제", description = "상품을 삭제합니다.")
+	public ResponseEntity<ProductDetailResponseDto> deleteProduct(
+		@PathVariable Long id
+	) {
+		productService.deleteProduct(id);
+		return ResponseEntity.noContent().build();
 	}
 }

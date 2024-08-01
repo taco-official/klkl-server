@@ -10,8 +10,10 @@ public final class ProductValidationMessages {
 	public static final String DESCRIPTION_NOT_BLANK = "상품 설명은 비어있을 수 없습니다.";
 	public static final String DESCRIPTION_SIZE = "상품 설명은 2000자 이하여야 합니다.";
 
+	public static final String ADDRESS_NOT_NULL = "주소는 필수 항목입니다.";
 	public static final String ADDRESS_SIZE = "주소는 100자 이하여야 합니다.";
 
+	public static final String PRICE_NOT_NULL = "가격은 필수 항목입니다.";
 	public static final String PRICE_POSITIVE_OR_ZERO = "가격은 0 이상이어야 합니다.";
 
 	public static final String CITY_ID_NOT_NULL = "도시 ID는 필수 항목입니다.";
