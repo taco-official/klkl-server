@@ -24,6 +24,7 @@ import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.product.dto.request.ProductCreateRequestDto;
 import taco.klkl.domain.product.dto.request.ProductUpdateRequestDto;
 import taco.klkl.domain.product.dto.response.ProductDetailResponseDto;
+import taco.klkl.domain.product.exception.ProductNotFoundException;
 import taco.klkl.domain.product.service.ProductService;
 import taco.klkl.domain.user.domain.User;
 import taco.klkl.global.error.exception.ErrorCode;
@@ -189,5 +190,46 @@ class ProductControllerTest {
 			.andExpect(jsonPath("$.data.subcategoryId", is(productDetailResponseDto.subcategoryId().intValue())))
 			.andExpect(jsonPath("$.data.currencyId", is(productDetailResponseDto.currencyId().intValue())))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
+	}
+
+	@Test
+	@DisplayName("상품 삭제 API 테스트")
+	public void testDeleteProduct() throws Exception {
+		// given
+		Long productId = 1L;
+		doNothing().when(productService).deleteProduct(productId);
+
+		// when & then
+		mockMvc.perform(delete("/v1/products/{id}", productId)
+				.contentType(MediaType.APPLICATION_JSON))
+			.andExpect(status().isNoContent())
+			.andExpect(jsonPath("$.isSuccess", is(true)))
+			.andExpect(jsonPath("$.code", is("C000")))
+			.andExpect(jsonPath("$.data").doesNotExist())
+			.andExpect(jsonPath("$.timestamp", notNullValue()));
+
+		verify(productService, times(1)).deleteProduct(productId);
+	}
+
+	@Test
+	@DisplayName("존재하지 않는 상품 삭제 시 예외 처리 테스트")
+	public void testDeleteNonExistentProduct() throws Exception {
+		// given
+		Long nonExistentProductId = 999L;
+		doThrow(new ProductNotFoundException())
+			.when(productService).deleteProduct(nonExistentProductId);
+
+		// when & then
+		ErrorCode productNotFoundError = ErrorCode.PRODUCT_NOT_FOUND;
+		mockMvc.perform(delete("/v1/products/{id}", nonExistentProductId)
+				.contentType(MediaType.APPLICATION_JSON))
+			.andExpect(status().isNotFound())
+			.andExpect(jsonPath("$.isSuccess", is(false)))
+			.andExpect(jsonPath("$.code", is(productNotFoundError.getCode())))
+			.andExpect(jsonPath("$.data.code", is(productNotFoundError.getCode())))
+			.andExpect(jsonPath("$.data.message", is(productNotFoundError.getMessage())))
+			.andExpect(jsonPath("$.timestamp", notNullValue()));
+
+		verify(productService, times(1)).deleteProduct(nonExistentProductId);
 	}
 }
