@@ -14,6 +14,7 @@ import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import jakarta.validation.ValidatorFactory;
+import taco.klkl.global.common.constants.ProductConstants;
 import taco.klkl.global.common.constants.ProductValidationMessages;
 
 class ProductCreateRequestDtoTest {
@@ -167,6 +168,63 @@ class ProductCreateRequestDtoTest {
 		assertEquals(ProductValidationMessages.DESCRIPTION_SIZE, violations.iterator().next().getMessage());
 	}
 
+	@Test
+	@DisplayName("주소가 null일 때 검증 실패")
+	void nullAddress() {
+		ProductCreateRequestDto dto = new ProductCreateRequestDto(
+			"Valid Product Name",
+			"Valid product description",
+			null,
+			100,
+			1L,
+			2L,
+			3L
+		);
+
+		Set<ConstraintViolation<ProductCreateRequestDto>> violations = validator.validate(dto);
+		assertFalse(violations.isEmpty());
+
+		boolean foundNotNullMessage = violations.stream()
+			.anyMatch(violation -> violation.getMessage().equals(ProductValidationMessages.ADDRESS_NOT_NULL));
+		assertTrue(foundNotNullMessage, "Expected ADDRESS_NOT_NULL message not found");
+	}
+
+	@Test
+	@DisplayName("주소가 빈 문자열일 때 검증 통과")
+	void emptyAddress() {
+		ProductCreateRequestDto dto = new ProductCreateRequestDto(
+			"Valid Product Name",
+			"Valid product description",
+			"",
+			100,
+			1L,
+			2L,
+			3L
+		);
+
+		Set<ConstraintViolation<ProductCreateRequestDto>> violations = validator.validate(dto);
+		assertTrue(violations.isEmpty());
+	}
+
+	@ParameterizedTest
+	@ValueSource(ints = {0, 1, ProductConstants.ADDRESS_MAX_LENGTH})
+	@DisplayName("주소가 최대 길이 이하일 때 검증 통과")
+	void addressMaxLength(int addressLength) {
+		String address = "a".repeat(addressLength);
+		ProductCreateRequestDto dto = new ProductCreateRequestDto(
+			"Valid Product Name",
+			"Valid product description",
+			address,
+			100,
+			1L,
+			2L,
+			3L
+		);
+
+		Set<ConstraintViolation<ProductCreateRequestDto>> violations = validator.validate(dto);
+		assertTrue(violations.isEmpty());
+	}
+
 	@ParameterizedTest
 	@ValueSource(ints = {101, 200, 500})
 	@DisplayName("주소가 최대 길이를 초과할 때 검증 실패")
@@ -185,6 +243,45 @@ class ProductCreateRequestDtoTest {
 		Set<ConstraintViolation<ProductCreateRequestDto>> violations = validator.validate(dto);
 		assertFalse(violations.isEmpty());
 		assertEquals(ProductValidationMessages.ADDRESS_SIZE, violations.iterator().next().getMessage());
+	}
+
+	@Test
+	@DisplayName("가격이 null일 때 검증 실패")
+	void nullPrice() {
+		ProductCreateRequestDto dto = new ProductCreateRequestDto(
+			"Valid Product Name",
+			"Valid product description",
+			"Valid address",
+			null,
+			1L,
+			2L,
+			3L
+		);
+
+		Set<ConstraintViolation<ProductCreateRequestDto>> violations = validator.validate(dto);
+		assertFalse(violations.isEmpty());
+
+		boolean foundNotNullMessage = violations.stream()
+			.anyMatch(violation -> violation.getMessage().equals(ProductValidationMessages.PRICE_NOT_NULL));
+		assertTrue(foundNotNullMessage, "Expected PRICE_NOT_NULL message not found");
+	}
+
+	@ParameterizedTest
+	@ValueSource(ints = {0, 100, 1000})
+	@DisplayName("가격이 0 이상일 때 검증 통과")
+	void zeroPriceIsValid() {
+		ProductCreateRequestDto dto = new ProductCreateRequestDto(
+			"Valid Product Name",
+			"Valid product description",
+			"Valid address",
+			0,
+			1L,
+			2L,
+			3L
+		);
+
+		Set<ConstraintViolation<ProductCreateRequestDto>> violations = validator.validate(dto);
+		assertTrue(violations.isEmpty());
 	}
 
 	@ParameterizedTest

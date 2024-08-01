@@ -72,7 +72,10 @@ public class Product {
 	)
 	private LocalDateTime createdAt;
 
-	@Column(name = "price")
+	@Column(
+		name = "price",
+		nullable = false
+	)
 	@ColumnDefault(DefaultConstants.DEFAULT_INT_STRING)
 	private Integer price;
 
