@@ -1,5 +1,7 @@
 package taco.klkl.domain.product.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -9,6 +11,7 @@ import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.product.dto.request.ProductCreateRequestDto;
 import taco.klkl.domain.product.dto.request.ProductUpdateRequestDto;
 import taco.klkl.domain.product.dto.response.ProductDetailResponseDto;
+import taco.klkl.domain.product.dto.response.ProductSimpleResponseDto;
 import taco.klkl.domain.product.exception.ProductNotFoundException;
 import taco.klkl.domain.user.domain.User;
 import taco.klkl.global.util.UserUtil;
@@ -20,6 +23,12 @@ public class ProductService {
 
 	private final ProductRepository productRepository;
 	private final UserUtil userUtil;
+
+	public List<ProductSimpleResponseDto> getAllProducts() {
+		return productRepository.findAll().stream()
+			.map(ProductSimpleResponseDto::from)
+			.toList();
+	}
 
 	public ProductDetailResponseDto getProductById(final Long id) {
 		final Product product = productRepository.findById(id)
