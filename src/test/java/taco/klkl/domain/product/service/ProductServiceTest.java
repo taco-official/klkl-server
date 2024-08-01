@@ -43,7 +43,7 @@ class ProductServiceTest {
 
 	@Test
 	@DisplayName("ID로 상품 정보를 조회할 때, 상품이 존재하면 ProductDetailResponseDto를 반환해야 한다.")
-	void testGetProductInfoById_Success() {
+	void testGetProductById_Success() {
 		// given
 		Long productId = 1L;
 
@@ -51,7 +51,7 @@ class ProductServiceTest {
 		when(productRepository.findById(productId)).thenReturn(Optional.of(product));
 
 		// when
-		ProductDetailResponseDto responseDto = productService.getProductInfoById(productId);
+		ProductDetailResponseDto responseDto = productService.getProductById(productId);
 
 		// then
 		assertThat(responseDto).isNotNull();
@@ -70,14 +70,14 @@ class ProductServiceTest {
 
 	@Test
 	@DisplayName("ID로 상품 정보를 조회할 때, 상품이 존재하지 않으면 ProductNotFoundException을 발생시켜야 한다.")
-	void testGetProductInfoById_NotFound() {
+	void testGetProductById_NotFound() {
 		// given
 		Long productId = 1L;
 		when(productRepository.findById(productId)).thenReturn(Optional.empty());
 
 		// when & then
 		ProductNotFoundException exception = assertThrows(ProductNotFoundException.class, () -> {
-			productService.getProductInfoById(productId);
+			productService.getProductById(productId);
 		});
 
 		// 예외가 발생했는지 확인

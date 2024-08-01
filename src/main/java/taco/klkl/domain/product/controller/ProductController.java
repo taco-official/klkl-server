@@ -30,10 +30,10 @@ public class ProductController {
 
 	@GetMapping("/{id}")
 	@Operation(summary = "상품 상세 조회", description = "상품 상세 정보를 조회합니다.")
-	public ResponseEntity<ProductDetailResponseDto> getProductInfoById(
+	public ResponseEntity<ProductDetailResponseDto> getProductById(
 		@PathVariable Long id
 	) {
-		ProductDetailResponseDto productDto = productService.getProductInfoById(id);
+		ProductDetailResponseDto productDto = productService.getProductById(id);
 		return ResponseEntity.ok().body(productDto);
 	}
 

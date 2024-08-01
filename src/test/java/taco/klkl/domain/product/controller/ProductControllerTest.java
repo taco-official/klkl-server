@@ -69,9 +69,9 @@ class ProductControllerTest {
 
 	@Test
 	@DisplayName("상품 상세 조회 API 테스트")
-	public void testGetProductInfoById() throws Exception {
+	public void testGetProductById() throws Exception {
 		// given
-		when(productService.getProductInfoById(1L)).thenReturn(productDetailResponseDto);
+		when(productService.getProductById(1L)).thenReturn(productDetailResponseDto);
 
 		// when & then
 		mockMvc.perform(get("/v1/products/1")

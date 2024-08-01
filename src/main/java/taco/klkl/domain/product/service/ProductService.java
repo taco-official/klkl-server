@@ -21,7 +21,7 @@ public class ProductService {
 	private final ProductRepository productRepository;
 	private final UserUtil userUtil;
 
-	public ProductDetailResponseDto getProductInfoById(final Long id) {
+	public ProductDetailResponseDto getProductById(final Long id) {
 		final Product product = productRepository.findById(id)
 			.orElseThrow(ProductNotFoundException::new);
 		return ProductDetailResponseDto.from(product);
