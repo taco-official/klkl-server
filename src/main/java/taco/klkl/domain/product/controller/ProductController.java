@@ -1,5 +1,7 @@
 package taco.klkl.domain.product.controller;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 import taco.klkl.domain.product.dto.request.ProductCreateRequestDto;
 import taco.klkl.domain.product.dto.request.ProductUpdateRequestDto;
 import taco.klkl.domain.product.dto.response.ProductDetailResponseDto;
+import taco.klkl.domain.product.dto.response.ProductSimpleResponseDto;
 import taco.klkl.domain.product.service.ProductService;
 
 @RestController
@@ -28,13 +31,20 @@ public class ProductController {
 
 	private final ProductService productService;
 
+	@GetMapping
+	@Operation(summary = "상품 목록 조회", description = "상품 목록을 조회합니다.")
+	public ResponseEntity<List<ProductSimpleResponseDto>> getAllProducts() {
+		List<ProductSimpleResponseDto> products = productService.getAllProducts();
+		return ResponseEntity.ok(products);
+	}
+
 	@GetMapping("/{id}")
 	@Operation(summary = "상품 상세 조회", description = "상품 상세 정보를 조회합니다.")
 	public ResponseEntity<ProductDetailResponseDto> getProductById(
 		@PathVariable Long id
 	) {
 		ProductDetailResponseDto productDto = productService.getProductById(id);
-		return ResponseEntity.ok().body(productDto);
+		return ResponseEntity.ok(productDto);
 	}
 
 	@PostMapping
@@ -53,7 +63,7 @@ public class ProductController {
 		@Valid @RequestBody ProductUpdateRequestDto updateRequest
 	) {
 		ProductDetailResponseDto productDto = productService.updateProduct(id, updateRequest);
-		return ResponseEntity.ok().body(productDto);
+		return ResponseEntity.ok(productDto);
 	}
 
 	@DeleteMapping("/{id}")
