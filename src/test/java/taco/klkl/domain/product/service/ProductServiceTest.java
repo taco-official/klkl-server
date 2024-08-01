@@ -16,6 +16,7 @@ import org.mockito.MockitoAnnotations;
 import taco.klkl.domain.product.dao.ProductRepository;
 import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.product.dto.request.ProductCreateRequestDto;
+import taco.klkl.domain.product.dto.request.ProductUpdateRequestDto;
 import taco.klkl.domain.product.dto.response.ProductDetailResponseDto;
 import taco.klkl.domain.product.exception.ProductNotFoundException;
 import taco.klkl.domain.user.domain.User;
@@ -107,11 +108,11 @@ class ProductServiceTest {
 		ProductCreateRequestDto productDto = new ProductCreateRequestDto(
 			"맛있는 곤약젤리",
 			"탱글탱글 맛있는 곤약젤리",
+			"신사이바시 메가돈키호테",
+			100,
 			2L,
 			3L,
-			4L,
-			"신사이바시 메가돈키호테",
-			100
+			4L
 		);
 
 		String name = productDto.name();
@@ -151,5 +152,78 @@ class ProductServiceTest {
 		assertThat(responseDto.currencyId()).isEqualTo(currencyId);
 
 		verify(productRepository).save(any(Product.class));
+	}
+
+	@Test
+	@DisplayName("상품 업데이트 성공 테스트")
+	void testUpdateProduct_Success() {
+		// given
+		Long productId = 1L;
+		Product existingProduct = Product.of(
+			user,
+			"Original Name",
+			"Original Description",
+			"Original Address",
+			100,
+			1L,
+			1L,
+			1L
+		);
+
+		ProductUpdateRequestDto updateDto = new ProductUpdateRequestDto(
+			"Updated Name",
+			"Updated Description",
+			"Updated Address",
+			200,
+			2L,
+			2L,
+			2L
+		);
+
+		when(productRepository.findById(productId)).thenReturn(Optional.of(existingProduct));
+		when(productRepository.save(any(Product.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+		// when
+		ProductDetailResponseDto responseDto = productService.updateProduct(productId, updateDto);
+
+		// then
+		assertThat(responseDto).isNotNull();
+		assertThat(responseDto.name()).isEqualTo(updateDto.name());
+		assertThat(responseDto.description()).isEqualTo(updateDto.description());
+		assertThat(responseDto.address()).isEqualTo(updateDto.address());
+		assertThat(responseDto.price()).isEqualTo(updateDto.price());
+		assertThat(responseDto.cityId()).isEqualTo(updateDto.cityId());
+		assertThat(responseDto.subcategoryId()).isEqualTo(updateDto.subcategoryId());
+		assertThat(responseDto.currencyId()).isEqualTo(updateDto.currencyId());
+
+		verify(productRepository).findById(productId);
+	}
+
+	@Test
+	@DisplayName("상품 업데이트 실패 테스트 - 상품 없음")
+	void testUpdateProduct_NotFound() {
+		// given
+		Long productId = 1L;
+		ProductUpdateRequestDto updateDto = new ProductUpdateRequestDto(
+			"Updated Name",
+			"Updated Description",
+			"Updated Address",
+			200,
+			2L,
+			2L,
+			2L
+		);
+
+		when(productRepository.findById(productId)).thenReturn(Optional.empty());
+
+		// when & then
+		ProductNotFoundException exception = assertThrows(ProductNotFoundException.class, () -> {
+			productService.updateProduct(productId, updateDto);
+		});
+
+		// 예외가 발생했는지 확인
+		assertThat(exception).isNotNull();
+		verify(productRepository).findById(productId);
+		verify(productRepository, never()).save(any(Product.class));
 	}
 }
