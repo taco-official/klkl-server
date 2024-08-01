@@ -46,24 +46,8 @@ class ProductServiceTest {
 	void testGetProductInfoById_Success() {
 		// given
 		Long productId = 1L;
-		String name = "맛있는 곤약젤리";
-		String description = "탱글탱글 맛있는 곤약젤리";
-		String address = "신사이바시 메가돈키호테";
-		Integer price = 100;
-		Long cityId = 2L;
-		Long subcategoryId = 3L;
-		Long currencyId = 4L;
 
-		Product product = Product.of(
-			user,
-			name,
-			description,
-			address,
-			price,
-			cityId,
-			subcategoryId,
-			currencyId
-		);
+		Product product = ProductConstants.TEST_PRODUCT;
 		when(productRepository.findById(productId)).thenReturn(Optional.of(product));
 
 		// when
@@ -72,14 +56,14 @@ class ProductServiceTest {
 		// then
 		assertThat(responseDto).isNotNull();
 		assertThat(responseDto.userId()).isEqualTo(user.getId());
-		assertThat(responseDto.name()).isEqualTo(name);
-		assertThat(responseDto.description()).isEqualTo(description);
-		assertThat(responseDto.address()).isEqualTo(address);
+		assertThat(responseDto.name()).isEqualTo(product.getName());
+		assertThat(responseDto.description()).isEqualTo(product.getDescription());
+		assertThat(responseDto.address()).isEqualTo(product.getAddress());
 		assertThat(responseDto.likeCount()).isEqualTo(ProductConstants.DEFAULT_LIKE_COUNT);
-		assertThat(responseDto.price()).isEqualTo(price);
-		assertThat(responseDto.cityId()).isEqualTo(cityId);
-		assertThat(responseDto.subcategoryId()).isEqualTo(subcategoryId);
-		assertThat(responseDto.currencyId()).isEqualTo(currencyId);
+		assertThat(responseDto.price()).isEqualTo(product.getPrice());
+		assertThat(responseDto.cityId()).isEqualTo(product.getCityId());
+		assertThat(responseDto.subcategoryId()).isEqualTo(product.getSubcategoryId());
+		assertThat(responseDto.currencyId()).isEqualTo(product.getCurrencyId());
 
 		verify(productRepository).findById(productId);
 	}
@@ -105,51 +89,34 @@ class ProductServiceTest {
 	@DisplayName("상품을 생성할 때, 정상적으로 ProductDetailResponseDto를 반환해야 한다.")
 	void testCreateProduct_Success() {
 		// given
-		ProductCreateRequestDto productDto = new ProductCreateRequestDto(
-			"맛있는 곤약젤리",
-			"탱글탱글 맛있는 곤약젤리",
-			"신사이바시 메가돈키호테",
-			100,
-			2L,
-			3L,
-			4L
+		Product product = ProductConstants.TEST_PRODUCT;
+		ProductCreateRequestDto requestDto = new ProductCreateRequestDto(
+			product.getName(),
+			product.getDescription(),
+			product.getAddress(),
+			product.getPrice(),
+			product.getCityId(),
+			product.getSubcategoryId(),
+			product.getCurrencyId()
 		);
 
-		String name = productDto.name();
-		String description = productDto.description();
-		String address = productDto.address();
-		Integer price = productDto.price();
-		Long cityId = productDto.cityId();
-		Long subcategoryId = productDto.subcategoryId();
-		Long currencyId = productDto.currencyId();
-
-		Product product = Product.of(
-			user,
-			name,
-			description,
-			address,
-			price,
-			cityId,
-			subcategoryId,
-			currencyId
-		);
 		when(userUtil.findTestUser()).thenReturn(user);
 		when(productRepository.save(any(Product.class))).thenReturn(product);
 
 		// when
-		ProductDetailResponseDto responseDto = productService.createProduct(productDto);
+		ProductDetailResponseDto responseDto = productService.createProduct(requestDto);
 
 		// then
 		assertThat(responseDto).isNotNull();
 		assertThat(responseDto.userId()).isEqualTo(user.getId());
-		assertThat(responseDto.name()).isEqualTo(name);
-		assertThat(responseDto.description()).isEqualTo(description);
-		assertThat(responseDto.address()).isEqualTo(address);
+		assertThat(responseDto.name()).isEqualTo(requestDto.name());
+		assertThat(responseDto.description()).isEqualTo(requestDto.description());
+		assertThat(responseDto.address()).isEqualTo(requestDto.address());
 		assertThat(responseDto.likeCount()).isEqualTo(ProductConstants.DEFAULT_LIKE_COUNT);
-		assertThat(responseDto.price()).isEqualTo(price);
-		assertThat(responseDto.cityId()).isEqualTo(cityId);
-		assertThat(responseDto.subcategoryId()).isEqualTo(subcategoryId);
-		assertThat(responseDto.currencyId()).isEqualTo(currencyId);
+		assertThat(responseDto.price()).isEqualTo(requestDto.price());
+		assertThat(responseDto.cityId()).isEqualTo(requestDto.cityId());
+		assertThat(responseDto.subcategoryId()).isEqualTo(requestDto.subcategoryId());
+		assertThat(responseDto.currencyId()).isEqualTo(requestDto.currencyId());
 
 		verify(productRepository).save(any(Product.class));
 	}
@@ -159,16 +126,7 @@ class ProductServiceTest {
 	void testUpdateProduct_Success() {
 		// given
 		Long productId = 1L;
-		Product existingProduct = Product.of(
-			user,
-			"Original Name",
-			"Original Description",
-			"Original Address",
-			100,
-			1L,
-			1L,
-			1L
-		);
+		Product existingProduct = ProductConstants.TEST_PRODUCT;
 
 		ProductUpdateRequestDto updateDto = new ProductUpdateRequestDto(
 			"Updated Name",
@@ -225,5 +183,50 @@ class ProductServiceTest {
 		assertThat(exception).isNotNull();
 		verify(productRepository).findById(productId);
 		verify(productRepository, never()).save(any(Product.class));
+	}
+
+	@Test
+	@DisplayName("존재하는 제품 삭제 성공")
+	void deleteExistingProduct() {
+		// Given
+		Long productId = 1L;
+		Product product = ProductConstants.TEST_PRODUCT;
+		when(productRepository.findById(productId)).thenReturn(Optional.of(product));
+
+		// When
+		assertDoesNotThrow(() -> productService.deleteProduct(productId));
+
+		// Then
+		verify(productRepository).findById(productId);
+		verify(productRepository).delete(product);
+	}
+
+	@Test
+	@DisplayName("존재하지 않는 제품 삭제 시 예외 발생")
+	void deleteNonExistingProduct() {
+		// Given
+		Long nonExistingProductId = 999L;
+		when(productRepository.findById(nonExistingProductId)).thenReturn(Optional.empty());
+
+		// When & Then
+		assertThrows(ProductNotFoundException.class, () -> productService.deleteProduct(nonExistingProductId));
+		verify(productRepository).findById(nonExistingProductId);
+		verify(productRepository, never()).delete(any(Product.class));
+	}
+
+	@Test
+	@DisplayName("제품 삭제 시 repository 메소드 호출 확인")
+	void verifyRepositoryMethodsCalledOnDelete() {
+		// Given
+		Long productId = 1L;
+		Product product = ProductConstants.TEST_PRODUCT;
+		when(productRepository.findById(productId)).thenReturn(Optional.of(product));
+
+		// When
+		productService.deleteProduct(productId);
+
+		// Then
+		verify(productRepository).findById(productId);
+		verify(productRepository).delete(product);
 	}
 }

@@ -11,7 +11,6 @@ import taco.klkl.domain.product.dto.request.ProductUpdateRequestDto;
 import taco.klkl.domain.product.dto.response.ProductDetailResponseDto;
 import taco.klkl.domain.product.exception.ProductNotFoundException;
 import taco.klkl.domain.user.domain.User;
-import taco.klkl.global.common.constants.ProductConstants;
 import taco.klkl.global.util.UserUtil;
 
 @Service
@@ -41,6 +40,13 @@ public class ProductService {
 			.orElseThrow(ProductNotFoundException::new);
 		product.update(productDto);
 		return ProductDetailResponseDto.from(product);
+	}
+
+	@Transactional
+	public void deleteProduct(final Long id) {
+		final Product product = productRepository.findById(id)
+			.orElseThrow(ProductNotFoundException::new);
+		productRepository.delete(product);
 	}
 
 	private Product createProductEntity(final ProductCreateRequestDto productDto) {
