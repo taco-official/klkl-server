@@ -30,7 +30,7 @@ public class Currency {
 		this.flag = flag;
 	}
 
-	public Currency of(String code, String flag) {
+	public static Currency of(String code, String flag) {
 		return new Currency(code, flag);
 	}
 }
