@@ -1,4 +1,4 @@
-package taco.klkl.domain.subcategory.domain;
+package taco.klkl.domain.category.domain;
 
 import java.util.Arrays;
 
@@ -38,11 +38,11 @@ public enum SubcategoryName {
 	NONE(""),
 	;
 
-	private final String name;
+	private final String koreanName;
 
 	public static SubcategoryName getByName(String name) {
 		return Arrays.stream(values())
-			.filter(subcategoryName -> subcategoryName.getName().equals(name))
+			.filter(subcategoryName -> subcategoryName.name().equals(name))
 			.findFirst()
 			.orElse(NONE);
 	}

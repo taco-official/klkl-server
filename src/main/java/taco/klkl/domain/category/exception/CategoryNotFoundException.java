@@ -1,4 +1,4 @@
-package taco.klkl.domain.subcategory.exception;
+package taco.klkl.domain.category.exception;
 
 import taco.klkl.global.error.exception.CustomException;
 import taco.klkl.global.error.exception.ErrorCode;

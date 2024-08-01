@@ -16,6 +16,7 @@ import jakarta.persistence.PrePersist;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import taco.klkl.domain.product.dto.request.ProductUpdateRequestDto;
 import taco.klkl.domain.user.domain.User;
 import taco.klkl.global.common.constants.DefaultConstants;
 import taco.klkl.global.common.constants.ProductConstants;
@@ -35,34 +36,65 @@ public class Product {
 	@JoinColumn(name = "user_id")
 	private User user;
 
-	@Column(name = "name", length = 100, nullable = false)
+	@Column(
+		name = "name",
+		length = ProductConstants.NAME_MAX_LENGTH,
+		nullable = false
+	)
 	private String name;
 
-	@Column(name = "description", length = 2000, nullable = false)
+	@Column(
+		name = "description",
+		length = ProductConstants.DESCRIPTION_MAX_LENGTH,
+		nullable = false
+	)
 	private String description;
 
-	@Column(name = "address", length = 100)
+	@Column(
+		name = "address",
+		length = ProductConstants.ADDRESS_MAX_LENGTH,
+		nullable = false
+	)
 	@ColumnDefault(DefaultConstants.DEFAULT_STRING)
 	private String address;
 
-	@Column(name = "like_count", nullable = false)
+	@Column(
+		name = "like_count",
+		nullable = false
+	)
 	@ColumnDefault(DefaultConstants.DEFAULT_INT_STRING)
 	private Integer likeCount;
 
-	@Column(name = "created_at", nullable = false, updatable = false)
+	@Column(
+		name = "created_at",
+		nullable = false,
+		updatable = false
+	)
 	private LocalDateTime createdAt;
 
-	@Column(name = "price")
+	@Column(
+		name = "price",
+		nullable = false
+	)
 	@ColumnDefault(DefaultConstants.DEFAULT_INT_STRING)
 	private Integer price;
 
-	@Column(name = "city_id", nullable = false)
+	@Column(
+		name = "city_id",
+		nullable = false
+	)
 	private Long cityId;
 
-	@Column(name = "subcategory_id", nullable = false)
+	@Column(
+		name = "subcategory_id",
+		nullable = false
+	)
 	private Long subcategoryId;
 
-	@Column(name = "currency_id", nullable = false)
+	@Column(
+		name = "currency_id",
+		nullable = false
+	)
 	private Long currencyId;
 
 	@PrePersist
@@ -108,5 +140,29 @@ public class Product {
 		final Long currencyId
 	) {
 		return new Product(user, name, description, address, price, cityId, subcategoryId, currencyId);
+	}
+
+	public void update(ProductUpdateRequestDto updateDto) {
+		if (updateDto.name() != null) {
+			this.name = updateDto.name();
+		}
+		if (updateDto.description() != null) {
+			this.description = updateDto.description();
+		}
+		if (updateDto.address() != null) {
+			this.address = updateDto.address();
+		}
+		if (updateDto.price() != null) {
+			this.price = updateDto.price();
+		}
+		if (updateDto.cityId() != null) {
+			this.cityId = updateDto.cityId();
+		}
+		if (updateDto.subcategoryId() != null) {
+			this.subcategoryId = updateDto.subcategoryId();
+		}
+		if (updateDto.currencyId() != null) {
+			this.currencyId = updateDto.currencyId();
+		}
 	}
 }
