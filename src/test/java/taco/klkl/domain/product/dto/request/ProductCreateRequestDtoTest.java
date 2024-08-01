@@ -29,7 +29,7 @@ class ProductCreateRequestDtoTest {
 
 	@Test
 	@DisplayName("유효한 ProductCreateRequestDto 생성 시 검증 통과")
-	void validProductCreateRequestDto() {
+	void testValidProductCreateRequestDto() {
 		ProductCreateRequestDto dto = new ProductCreateRequestDto(
 			"Valid Product Name",
 			"Valid product description",
@@ -46,7 +46,7 @@ class ProductCreateRequestDtoTest {
 
 	@Test
 	@DisplayName("상품명이 null일 때 검증 실패")
-	void nullProductName() {
+	void testNullProductName() {
 		ProductCreateRequestDto dto = new ProductCreateRequestDto(
 			null,
 			"Valid product description",
@@ -67,7 +67,7 @@ class ProductCreateRequestDtoTest {
 
 	@Test
 	@DisplayName("상품명이 빈 문자열일 때 검증 실패")
-	void emptyProductName() {
+	void testEmptyProductName() {
 		ProductCreateRequestDto dto = new ProductCreateRequestDto(
 			"",
 			"Valid product description",
@@ -89,7 +89,7 @@ class ProductCreateRequestDtoTest {
 	@ParameterizedTest
 	@ValueSource(ints = {101, 200, 1000})
 	@DisplayName("상품명이 최대 길이를 초과할 때 검증 실패")
-	void productNameExceedsMaxLength(int nameLength) {
+	void testProductNameOverMaxLength(int nameLength) {
 		String longName = "a".repeat(nameLength);
 		ProductCreateRequestDto dto = new ProductCreateRequestDto(
 			longName,
@@ -108,7 +108,7 @@ class ProductCreateRequestDtoTest {
 
 	@Test
 	@DisplayName("상품 설명이 null일 때 검증 실패")
-	void nullProductDescription() {
+	void testNullProductDescription() {
 		ProductCreateRequestDto dto = new ProductCreateRequestDto(
 			"Valid Product Name",
 			null,
@@ -129,7 +129,7 @@ class ProductCreateRequestDtoTest {
 
 	@Test
 	@DisplayName("상품 설명이 빈 문자열일 때 검증 실패")
-	void emptyProductDescription() {
+	void testEmptyProductDescription() {
 		ProductCreateRequestDto dto = new ProductCreateRequestDto(
 			"Valid Product Name",
 			"",
@@ -151,7 +151,7 @@ class ProductCreateRequestDtoTest {
 	@ParameterizedTest
 	@ValueSource(ints = {2001, 3000, 5000})
 	@DisplayName("상품 설명이 최대 길이를 초과할 때 검증 실패")
-	void productDescriptionExceedsMaxLength(int descriptionLength) {
+	void testProductDescriptionOverMaxLength(int descriptionLength) {
 		String longDescription = "a".repeat(descriptionLength);
 		ProductCreateRequestDto dto = new ProductCreateRequestDto(
 			"Valid Product Name",
@@ -170,7 +170,7 @@ class ProductCreateRequestDtoTest {
 
 	@Test
 	@DisplayName("주소가 null일 때 검증 실패")
-	void nullAddress() {
+	void testNullAddress() {
 		ProductCreateRequestDto dto = new ProductCreateRequestDto(
 			"Valid Product Name",
 			"Valid product description",
@@ -191,7 +191,7 @@ class ProductCreateRequestDtoTest {
 
 	@Test
 	@DisplayName("주소가 빈 문자열일 때 검증 통과")
-	void emptyAddress() {
+	void testEmptyAddress() {
 		ProductCreateRequestDto dto = new ProductCreateRequestDto(
 			"Valid Product Name",
 			"Valid product description",
@@ -209,7 +209,7 @@ class ProductCreateRequestDtoTest {
 	@ParameterizedTest
 	@ValueSource(ints = {0, 1, ProductConstants.ADDRESS_MAX_LENGTH})
 	@DisplayName("주소가 최대 길이 이하일 때 검증 통과")
-	void addressMaxLength(int addressLength) {
+	void testAddressUnderMaxLength(int addressLength) {
 		String address = "a".repeat(addressLength);
 		ProductCreateRequestDto dto = new ProductCreateRequestDto(
 			"Valid Product Name",
@@ -228,7 +228,7 @@ class ProductCreateRequestDtoTest {
 	@ParameterizedTest
 	@ValueSource(ints = {101, 200, 500})
 	@DisplayName("주소가 최대 길이를 초과할 때 검증 실패")
-	void addressExceedsMaxLength(int addressLength) {
+	void testAddressOverMaxLength(int addressLength) {
 		String longAddress = "a".repeat(addressLength);
 		ProductCreateRequestDto dto = new ProductCreateRequestDto(
 			"Valid Product Name",
@@ -247,7 +247,7 @@ class ProductCreateRequestDtoTest {
 
 	@Test
 	@DisplayName("가격이 null일 때 검증 실패")
-	void nullPrice() {
+	void testNullPrice() {
 		ProductCreateRequestDto dto = new ProductCreateRequestDto(
 			"Valid Product Name",
 			"Valid product description",
@@ -269,7 +269,7 @@ class ProductCreateRequestDtoTest {
 	@ParameterizedTest
 	@ValueSource(ints = {0, 100, 1000})
 	@DisplayName("가격이 0 이상일 때 검증 통과")
-	void zeroPriceIsValid() {
+	void testZeroOrPositivePrice() {
 		ProductCreateRequestDto dto = new ProductCreateRequestDto(
 			"Valid Product Name",
 			"Valid product description",
@@ -287,7 +287,7 @@ class ProductCreateRequestDtoTest {
 	@ParameterizedTest
 	@ValueSource(ints = {-1, -100, -1000})
 	@DisplayName("가격이 음수일 때 검증 실패")
-	void negativePrice(int price) {
+	void testNegativePrice(int price) {
 		ProductCreateRequestDto dto = new ProductCreateRequestDto(
 			"Valid Product Name",
 			"Valid product description",
@@ -305,7 +305,7 @@ class ProductCreateRequestDtoTest {
 
 	@Test
 	@DisplayName("도시 ID가 null일 때 검증 실패")
-	void nullCityId() {
+	void testNullCityId() {
 		ProductCreateRequestDto dto = new ProductCreateRequestDto(
 			"Valid Product Name",
 			"Valid product description",
@@ -323,7 +323,7 @@ class ProductCreateRequestDtoTest {
 
 	@Test
 	@DisplayName("상품 소분류 ID가 null일 때 검증 실패")
-	void nullSubcategoryId() {
+	void testNullSubcategoryId() {
 		ProductCreateRequestDto dto = new ProductCreateRequestDto(
 			"Valid Product Name",
 			"Valid product description",
@@ -341,7 +341,7 @@ class ProductCreateRequestDtoTest {
 
 	@Test
 	@DisplayName("통화 ID가 null일 때 검증 실패")
-	void nullCurrencyId() {
+	void testNullCurrencyId() {
 		ProductCreateRequestDto dto = new ProductCreateRequestDto(
 			"Valid Product Name",
 			"Valid product description",
