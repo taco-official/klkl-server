@@ -1,6 +1,9 @@
 package taco.klkl.domain.region.enums;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -39,5 +42,14 @@ public enum CountryType {
 			.filter(c -> c.getKoreanName().equals(name))
 			.findFirst()
 			.orElse(NONE);
+	}
+
+	public static List<CountryType> getCountriesByPartialString(String partial) {
+		String regex = ".*" + Pattern.quote(partial) + ".*";
+		Pattern pattern = Pattern.compile(regex);
+
+		return Arrays.stream(CountryType.values())
+			.filter(c -> pattern.matcher(c.getKoreanName()).matches())
+			.collect(Collectors.toList());
 	}
 }
