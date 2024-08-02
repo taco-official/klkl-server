@@ -18,7 +18,7 @@ public class CityServiceImpl implements CityService {
 	private final CityRepository cityRepository;
 
 	@Override
-	public boolean exitsCityById(Long id) {
+	public boolean existsCityById(Long id) {
 		return cityRepository.existsById(id);
 	}
 }

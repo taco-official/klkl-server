@@ -28,7 +28,7 @@ public class CityServiceImplTest {
 		when(cityRepository.existsById(1L)).thenReturn(true);
 
 		// when
-		boolean result = cityService.exitsCityById(1L);
+		boolean result = cityService.existsCityById(1L);
 
 		// then
 		assertThat(result).isTrue();
