@@ -5,12 +5,12 @@ import java.util.List;
 import taco.klkl.domain.region.domain.Country;
 
 public record CountryWithCitiesResponseDto(
-	CountryWithOutRegionDto country,
+	CountryResponseDto country,
 	List<CityResponseDto> cities
 ) {
 	public static CountryWithCitiesResponseDto from(Country country) {
 		return new CountryWithCitiesResponseDto(
-			CountryWithOutRegionDto.from(country),
+			CountryResponseDto.from(country),
 			country.getCities().stream()
 				.map(CityResponseDto::from)
 				.toList()

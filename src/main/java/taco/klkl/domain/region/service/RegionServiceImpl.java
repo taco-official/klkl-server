@@ -10,8 +10,9 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import taco.klkl.domain.region.dao.RegionRepository;
+import taco.klkl.domain.region.domain.Country;
 import taco.klkl.domain.region.domain.Region;
-import taco.klkl.domain.region.dto.response.RegionResponseDto;
+import taco.klkl.domain.region.dto.response.CountryResponseDto;
 import taco.klkl.domain.region.dto.response.RegionSimpleResponseDto;
 import taco.klkl.domain.region.enums.RegionType;
 import taco.klkl.domain.region.exception.RegionNotFoundException;
@@ -19,7 +20,7 @@ import taco.klkl.domain.region.exception.RegionNotFoundException;
 @Slf4j
 @Primary
 @Service
-@Transactional
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class RegionServiceImpl implements RegionService {
 
@@ -61,11 +62,15 @@ public class RegionServiceImpl implements RegionService {
 	}
 
 	@Override
-	public RegionResponseDto getRegionWithCountries(final Long id) {
+	public List<CountryResponseDto> getCountriesByRegionId(final Long id) {
 
 		final Region findRegion = regionRepository.findById(id)
 			.orElseThrow(RegionNotFoundException::new);
 
-		return RegionResponseDto.from(findRegion);
+		final List<Country> countries = findRegion.getCountries();
+
+		return countries.stream()
+			.map(CountryResponseDto::from)
+			.toList();
 	}
 }

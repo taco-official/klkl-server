@@ -12,7 +12,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import taco.klkl.domain.region.dto.response.RegionResponseDto;
+import taco.klkl.domain.region.dto.response.CountryResponseDto;
 import taco.klkl.domain.region.dto.response.RegionSimpleResponseDto;
 import taco.klkl.domain.region.service.RegionService;
 
@@ -44,10 +44,10 @@ public class RegionController {
 	}
 
 	@GetMapping("/{id}/countries")
-	public ResponseEntity<RegionResponseDto> getCountriesByRegion(@PathVariable final Long id) {
+	public ResponseEntity<List<CountryResponseDto>> getCountriesByRegion(@PathVariable final Long id) {
 
-		final RegionResponseDto findRegion = regionService.getRegionWithCountries(id);
+		final List<CountryResponseDto> findCountries = regionService.getCountriesByRegionId(id);
 
-		return ResponseEntity.ok().body(findRegion);
+		return ResponseEntity.ok().body(findCountries);
 	}
 }
