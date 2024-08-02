@@ -6,6 +6,10 @@ up:
 	@make build
 	docker compose up --build -d
 
+upi:
+	@make build
+	docker compose up --build
+
 down:
 	docker compose down
 
