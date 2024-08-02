@@ -8,7 +8,7 @@ import taco.klkl.domain.region.enums.RegionType;
 public class RegionTypeConverter implements AttributeConverter<RegionType, String> {
 
 	@Override
-	public String convertToDatabaseColumn(RegionType regionType) {
+	public String convertToDatabaseColumn(final RegionType regionType) {
 
 		if (regionType == null) {
 			return null;
@@ -18,8 +18,9 @@ public class RegionTypeConverter implements AttributeConverter<RegionType, Strin
 	}
 
 	@Override
-	public RegionType convertToEntityAttribute(String dbData) {
-		RegionType regionType = RegionType.getRegionByName(dbData);
+	public RegionType convertToEntityAttribute(final String dbData) {
+
+		final RegionType regionType = RegionType.getRegionByName(dbData);
 
 		if (regionType.equals(RegionType.NONE)) {
 			throw new IllegalArgumentException("Unknown value: " + dbData);

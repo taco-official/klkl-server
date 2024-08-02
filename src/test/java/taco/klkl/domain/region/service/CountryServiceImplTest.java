@@ -14,19 +14,26 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import taco.klkl.domain.region.dao.CountryRepository;
+import taco.klkl.domain.region.domain.City;
 import taco.klkl.domain.region.domain.Country;
+import taco.klkl.domain.region.domain.Currency;
 import taco.klkl.domain.region.domain.Region;
+import taco.klkl.domain.region.dto.response.CityResponseDto;
 import taco.klkl.domain.region.dto.response.CountryResponseDto;
-import taco.klkl.domain.region.dto.response.RegionSimpleResponseDto;
+import taco.klkl.domain.region.enums.CityType;
 import taco.klkl.domain.region.enums.CountryType;
+import taco.klkl.domain.region.enums.CurrencyType;
 import taco.klkl.domain.region.enums.RegionType;
 import taco.klkl.domain.region.exception.CountryNotFoundException;
 
 @ExtendWith(MockitoExtension.class)
 public class CountryServiceImplTest {
 
+	private static final Logger log = LoggerFactory.getLogger(CountryServiceImplTest.class);
 	@InjectMocks
 	CountryServiceImpl countryService;
 
@@ -34,22 +41,26 @@ public class CountryServiceImplTest {
 	CountryRepository countryRepository;
 
 	private final Region region = Region.of(RegionType.NORTHEAST_ASIA);
+	private final Currency currency1 = Currency.of(CurrencyType.JAPANESE_YEN, "flag");
 	private final Country country1 = Country.of(
 		CountryType.JAPAN,
 		region,
 		"test",
 		"test",
-		1);
+		currency1);
 	private final Country country2 = Country.of(
 		CountryType.TAIWAN,
 		region,
 		"test",
 		"test",
-		1);
+		currency1);
+	private final City city1 = City.of(country1, CityType.OSAKA);
+	private final City city2 = City.of(country1, CityType.KYOTO);
+	private final List<City> cities = Arrays.asList(city1, city2);
 
 	@Test
 	@DisplayName("모든 국가 조회 테스트")
-	void getAllCountriesTest() {
+	void testGetAllCountries() {
 		// given
 		List<Country> countries = Arrays.asList(country1, country2);
 		when(countryRepository.findAll()).thenReturn(countries);
@@ -61,12 +72,11 @@ public class CountryServiceImplTest {
 		assertThat(findCountries.size()).isEqualTo(countries.size());
 		assertThat(findCountries.get(0).name()).isEqualTo(countries.get(0).getName().getKoreanName());
 		assertThat(findCountries.get(1).name()).isEqualTo(countries.get(1).getName().getKoreanName());
-		assertThat(findCountries.get(0).region()).isEqualTo(RegionSimpleResponseDto.from(country1.getRegion()));
 	}
 
 	@Test
 	@DisplayName("id로 국가조회 테스트")
-	void getCountryByIdTest() {
+	void testGetCountryById() {
 		// given
 		when(countryRepository.findById(400L)).thenReturn(Optional.of(country1));
 
@@ -79,7 +89,7 @@ public class CountryServiceImplTest {
 
 	@Test
 	@DisplayName("국가 조회 실패 테스트")
-	void getCountryByIdFailTest() {
+	void testGetCountryByIdFail() {
 		// given
 		when(countryRepository.findById(400L)).thenThrow(CountryNotFoundException.class);
 
@@ -88,5 +98,22 @@ public class CountryServiceImplTest {
 			countryService.getCountryById(400L));
 
 		verify(countryRepository, times(1)).findById(400L);
+	}
+
+	@Test
+	@DisplayName("국가와 도시 조회")
+	void testGetCountryWithCitiesById() {
+		// given
+		Country mockCountry = mock(Country.class);
+		when(countryRepository.findById(400L)).thenReturn(Optional.of(mockCountry));
+		when(mockCountry.getCities()).thenReturn(cities);
+
+		// when
+		List<CityResponseDto> findCountries = countryService.getCitiesByCountryId(400L);
+
+		// then
+		assertThat(findCountries.size()).isEqualTo(cities.size());
+		assertThat(findCountries.get(0).name()).isEqualTo(cities.get(0).getName().getKoreanName());
+		assertThat(findCountries.get(1).name()).isEqualTo(cities.get(1).getName().getKoreanName());
 	}
 }

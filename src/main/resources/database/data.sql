@@ -17,18 +17,56 @@ VALUES (400, '동북아시아'),
        (401, '동남아시아'),
        (402, '기타');
 
+INSERT INTO Currency (currency_id, code, flag)
+VALUES (438, 'JPY', 'japan_flag.png'),
+       (439, 'CNY', 'china_flag.png'),
+       (440, 'TWD', 'taiwan_flag.png'),
+       (441, 'THB', 'thailand_flag.png'),
+       (442, 'VND', 'vietnam_flag.png'),
+       (443, 'PHP', 'philippines_flag.png'),
+       (444, 'SGD', 'singapore_flag.png'),
+       (445, 'IDR', 'indonesia_flag.png'),
+       (446, 'MYR', 'malaysia_flag.png'),
+       (447, 'USD', 'usa_flag.png');
+
 INSERT INTO Country(country_id, region_id, name, flag, photo, currency_id)
-VALUES (403, 400, '일본', 'image/sample', 'image/sample', 1),
-       (404, 400, '중국', 'image/sample', 'image/sample', 1),
-       (405, 400, '대만', 'image/sample', 'image/sample', 1),
-       (406, 401, '태국', 'image/sample', 'image/sample', 1),
-       (407, 401, '베트남', 'image/sample', 'image/sample', 1),
-       (408, 401, '필리핀', 'image/sample', 'image/sample', 1),
-       (409, 401, '싱가포르', 'image/sample', 'image/sample', 1),
-       (410, 401, '인도네시아', 'image/sample', 'image/sample', 1),
-       (411, 401, '말레이시아', 'image/sample', 'image/sample', 1),
-       (412, 402, '괌', 'image/sample', 'image/sample', 1),
-       (413, 402, '미국', 'image/sample', 'image/sample', 1);
+VALUES (403, 400, '일본', 'image/sample', 'image/sample', 438),
+       (404, 400, '중국', 'image/sample', 'image/sample', 439),
+       (405, 400, '대만', 'image/sample', 'image/sample', 440),
+       (406, 401, '태국', 'image/sample', 'image/sample', 441),
+       (407, 401, '베트남', 'image/sample', 'image/sample', 442),
+       (408, 401, '필리핀', 'image/sample', 'image/sample', 443),
+       (409, 401, '싱가포르', 'image/sample', 'image/sample', 444),
+       (410, 401, '인도네시아', 'image/sample', 'image/sample', 445),
+       (411, 401, '말레이시아', 'image/sample', 'image/sample', 446),
+       (412, 402, '괌', 'image/sample', 'image/sample', 447),
+       (413, 402, '미국', 'image/sample', 'image/sample', 447);
+
+INSERT INTO City (city_id, country_id, name)
+VALUES (414, 403, '오사카'),
+       (415, 403, '교토'),
+       (416, 403, '도쿄'),
+       (417, 403, '후쿠오카'),
+       (418, 403, '오키나와'),
+       (419, 403, '삿포로'),
+       (420, 403, '나고야'),
+       (421, 404, '홍콩'),
+       (422, 404, '상하이'),
+       (423, 404, '베이징'),
+       (424, 405, '타이베이'),
+       (425, 406, '방콕'),
+       (426, 406, '치앙마이'),
+       (427, 406, '푸켓'),
+       (428, 407, '다낭'),
+       (429, 407, '나트랑'),
+       (430, 407, '호치민'),
+       (431, 407, '하노이'),
+       (432, 408, '세부'),
+       (433, 408, '보라카이'),
+       (434, 409, '싱가포르'),
+       (435, 410, '발리'),
+       (436, 411, '코타키나발루'),
+       (437, 411, '쿠알라룸푸르');
 
 /* Category */
 INSERT

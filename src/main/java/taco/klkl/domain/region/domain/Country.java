@@ -1,5 +1,7 @@
 package taco.klkl.domain.region.domain;
 
+import java.util.List;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -7,6 +9,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,32 +26,68 @@ public class Country {
 	private Long countryId;
 
 	@ManyToOne
-	@JoinColumn(name = "region_id", nullable = false)
+	@JoinColumn(
+		name = "region_id",
+		nullable = false
+	)
 	private Region region;
 
-	@Column(name = "name", length = 20, nullable = false)
+	@Column(
+		name = "name",
+		length = 20,
+		nullable = false
+	)
 	private CountryType name;
 
-	@Column(name = "flag", length = 500, nullable = false)
+	@Column(
+		name = "flag",
+		length = 500,
+		nullable = false
+	)
 	private String flag;
 
-	@Column(name = "photo", length = 500, nullable = false)
+	@Column(
+		name = "photo",
+		length = 500,
+		nullable = false
+	)
 	private String photo;
 
-	// TODO: 통화 클래스로 변경하기
-	@Column(name = "currency_id", nullable = false)
-	private int currencyId;
+	@ManyToOne
+	@JoinColumn(
+		name = "currency_id",
+		nullable = false
+	)
+	private Currency currency;
 
-	private Country(CountryType countryType, Region region, String flag, String photo, int currencyId) {
+	@OneToMany(
+		mappedBy = "country",
+		orphanRemoval = true
+	)
+	private List<City> cities;
+
+	private Country(
+		final CountryType countryType,
+		final Region region,
+		final String flag,
+		final String photo,
+		final Currency currencyId
+	) {
 		this.region = region;
 		this.name = countryType;
 		this.flag = flag;
 		this.photo = photo;
-		this.currencyId = currencyId;
+		this.currency = currencyId;
 	}
 
-	public static Country of(CountryType countryType, Region region, String flag, String photo, int currencyId) {
-		return new Country(countryType, region, flag, photo, currencyId);
+	public static Country of(
+		final CountryType countryType,
+		final Region region,
+		final String flag,
+		final String photo,
+		final Currency currency
+	) {
+		return new Country(countryType, region, flag, photo, currency);
 	}
 
 }
