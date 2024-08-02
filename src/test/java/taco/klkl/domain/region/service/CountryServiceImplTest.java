@@ -23,7 +23,6 @@ import taco.klkl.domain.region.domain.Country;
 import taco.klkl.domain.region.domain.Region;
 import taco.klkl.domain.region.dto.response.CountryResponseDto;
 import taco.klkl.domain.region.dto.response.CountryWithCitiesResponseDto;
-import taco.klkl.domain.region.dto.response.RegionSimpleResponseDto;
 import taco.klkl.domain.region.enums.CityType;
 import taco.klkl.domain.region.enums.CountryType;
 import taco.klkl.domain.region.enums.RegionType;
@@ -70,7 +69,6 @@ public class CountryServiceImplTest {
 		assertThat(findCountries.size()).isEqualTo(countries.size());
 		assertThat(findCountries.get(0).name()).isEqualTo(countries.get(0).getName().getKoreanName());
 		assertThat(findCountries.get(1).name()).isEqualTo(countries.get(1).getName().getKoreanName());
-		assertThat(findCountries.get(0).region()).isEqualTo(RegionSimpleResponseDto.from(country1.getRegion()));
 	}
 
 	@Test
