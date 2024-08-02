@@ -30,11 +30,11 @@ public enum CurrencyType {
 
 	NONE("");
 
-	private final String code;
+	private final String codeName;
 
 	public static CurrencyType getCurrencyTypeByCode(String code) {
 		return Arrays.stream(CurrencyType.values())
-			.filter(c -> c.getCode().equals(code))
+			.filter(c -> c.getCodeName().equals(code))
 			.findFirst()
 			.orElse(NONE);
 	}

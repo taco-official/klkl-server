@@ -13,7 +13,7 @@ public class CurrencyTypeConverter implements AttributeConverter<CurrencyType, S
 			return null;
 		}
 
-		return currencyType.getCode();
+		return currencyType.getCodeName();
 	}
 
 	@Override
