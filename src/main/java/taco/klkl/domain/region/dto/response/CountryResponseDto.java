@@ -7,7 +7,7 @@ public record CountryResponseDto(
 	String name,
 	String flag,
 	String photo,
-	int currencyId
+	CurrencyResponseDto currency
 ) {
 	/**
 	 *
@@ -20,7 +20,7 @@ public record CountryResponseDto(
 			country.getName().getKoreanName(),
 			country.getFlag(),
 			country.getPhoto(),
-			country.getCurrencyId());
+			CurrencyResponseDto.from(country.getCurrency()));
 	}
 
 }

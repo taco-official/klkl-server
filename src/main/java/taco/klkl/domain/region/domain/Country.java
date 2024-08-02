@@ -53,12 +53,12 @@ public class Country {
 	)
 	private String photo;
 
-	// TODO: 통화 클래스로 변경하기
-	@Column(
+	@ManyToOne
+	@JoinColumn(
 		name = "currency_id",
 		nullable = false
 	)
-	private int currencyId;
+	private Currency currency;
 
 	@OneToMany(
 		mappedBy = "country",
@@ -67,17 +67,17 @@ public class Country {
 	private List<City> cities;
 
 	private Country(final CountryType countryType, final Region region, final String flag, final String photo,
-		final int currencyId) {
+		final Currency currencyId) {
 		this.region = region;
 		this.name = countryType;
 		this.flag = flag;
 		this.photo = photo;
-		this.currencyId = currencyId;
+		this.currency = currencyId;
 	}
 
 	public static Country of(final CountryType countryType, final Region region, final String flag, final String photo,
-		final int currencyId) {
-		return new Country(countryType, region, flag, photo, currencyId);
+		final Currency currency) {
+		return new Country(countryType, region, flag, photo, currency);
 	}
 
 }
