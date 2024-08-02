@@ -8,6 +8,7 @@ import jakarta.persistence.Id;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import taco.klkl.domain.region.enums.CurrencyType;
 
 @Getter
 @Entity
@@ -20,17 +21,17 @@ public class Currency {
 	private Long currencyId;
 
 	@Column(name = "code", length = 3, nullable = false)
-	private String code;
+	private CurrencyType code;
 
 	@Column(name = "flag", length = 500, nullable = false)
 	private String flag;
 
-	private Currency(String code, String flag) {
+	private Currency(CurrencyType code, String flag) {
 		this.code = code;
 		this.flag = flag;
 	}
 
-	public static Currency of(String code, String flag) {
+	public static Currency of(CurrencyType code, String flag) {
 		return new Currency(code, flag);
 	}
 }

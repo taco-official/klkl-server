@@ -10,7 +10,7 @@ public record CurrencyResponseDto(
 	public static CurrencyResponseDto from(Currency currency) {
 		return new CurrencyResponseDto(
 			currency.getCurrencyId(),
-			currency.getCode(),
+			currency.getCode().getCodeName(),
 			currency.getFlag()
 		);
 	}
