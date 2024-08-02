@@ -15,7 +15,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import jakarta.transaction.Transactional;
-import taco.klkl.domain.region.dto.response.RegionSimpleResponseDto;
+import taco.klkl.domain.region.dto.response.CountryResponseDto;
+import taco.klkl.domain.region.dto.response.RegionResponseDto;
 import taco.klkl.domain.region.service.RegionService;
 
 @SpringBootTest
@@ -33,7 +34,7 @@ public class RegionIntegrationTest {
 	@DisplayName("모든 지역 조회 통합 테스트")
 	void getAllRegionsTest() throws Exception {
 		// given
-		List<RegionSimpleResponseDto> regionResponseDtos = regionService.getAllRegions();
+		List<RegionResponseDto> regionResponseDtos = regionService.getAllRegions();
 
 		// when & then
 		mockMvc.perform(get("/v1/regions")
@@ -42,5 +43,22 @@ public class RegionIntegrationTest {
 			.andExpect(jsonPath("$.code", is("C000")))
 			.andExpect(jsonPath("$.isSuccess", is(true)))
 			.andExpect(jsonPath("$.data", hasSize(regionResponseDtos.size())));
+	}
+
+	@Test
+	@DisplayName("지역에 속한 국가목록 조회 테스트")
+	void getCountriesByRegionId() throws Exception {
+		// given
+		List<CountryResponseDto> countryResponseDtos = regionService.getCountriesByRegionId(400L);
+
+		// when
+		mockMvc.perform(get("/v1/regions/400/countries")
+				.contentType(MediaType.APPLICATION_JSON))
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.code", is("C000")))
+			.andExpect(jsonPath("isSuccess", is(true)))
+			.andExpect(jsonPath("$.data", hasSize(countryResponseDtos.size())));
+
+		// then
 	}
 }

@@ -15,8 +15,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import jakarta.transaction.Transactional;
+import taco.klkl.domain.region.dto.response.CityResponseDto;
 import taco.klkl.domain.region.dto.response.CountryResponseDto;
-import taco.klkl.domain.region.dto.response.CountryWithCitiesResponseDto;
 import taco.klkl.domain.region.service.CountryService;
 
 @SpringBootTest
@@ -61,16 +61,16 @@ public class CountryIntegrationTest {
 	}
 
 	@Test
-	@DisplayName("국가와 도시 조회")
+	@DisplayName("국가에 속한 모든 도시목록 조회")
 	void getCountryWithCitiesByIdTest() throws Exception {
 		// given
-		CountryWithCitiesResponseDto responseDto = countryService.getCountryWithCitiesById(403L);
+		List<CityResponseDto> responseDto = countryService.getCitiesByCountryId(403L);
 
 		// when & then
 		mockMvc.perform(get("/v1/countries/403/cities")
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(jsonPath("$.code", is("C000")))
 			.andExpect(jsonPath("$.isSuccess", is(true)))
-			.andExpect(jsonPath("$.data.cities[0].name", is(responseDto.cities().get(0).name())));
+			.andExpect(jsonPath("$.data", hasSize(responseDto.size())));
 	}
 }

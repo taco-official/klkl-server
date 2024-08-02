@@ -11,8 +11,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import taco.klkl.domain.region.dao.CountryRepository;
 import taco.klkl.domain.region.domain.Country;
+import taco.klkl.domain.region.dto.response.CityResponseDto;
 import taco.klkl.domain.region.dto.response.CountryResponseDto;
-import taco.klkl.domain.region.dto.response.CountryWithCitiesResponseDto;
 import taco.klkl.domain.region.exception.CountryNotFoundException;
 
 @Slf4j
@@ -48,11 +48,13 @@ public class CountryServiceImpl implements CountryService {
 	}
 
 	@Override
-	public CountryWithCitiesResponseDto getCountryWithCitiesById(final Long countryId) throws CountryNotFoundException {
+	public List<CityResponseDto> getCitiesByCountryId(final Long countryId) throws CountryNotFoundException {
 
 		final Country country = countryRepository.findById(countryId)
 			.orElseThrow(CountryNotFoundException::new);
 
-		return CountryWithCitiesResponseDto.from(country);
+		return country.getCities().stream()
+			.map(CityResponseDto::from)
+			.toList();
 	}
 }
