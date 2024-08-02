@@ -66,8 +66,13 @@ public class Country {
 	)
 	private List<City> cities;
 
-	private Country(final CountryType countryType, final Region region, final String flag, final String photo,
-		final Currency currencyId) {
+	private Country(
+		final CountryType countryType,
+		final Region region,
+		final String flag,
+		final String photo,
+		final Currency currencyId
+	) {
 		this.region = region;
 		this.name = countryType;
 		this.flag = flag;
@@ -75,8 +80,13 @@ public class Country {
 		this.currency = currencyId;
 	}
 
-	public static Country of(final CountryType countryType, final Region region, final String flag, final String photo,
-		final Currency currency) {
+	public static Country of(
+		final CountryType countryType,
+		final Region region,
+		final String flag,
+		final String photo,
+		final Currency currency
+	) {
 		return new Country(countryType, region, flag, photo, currency);
 	}
 

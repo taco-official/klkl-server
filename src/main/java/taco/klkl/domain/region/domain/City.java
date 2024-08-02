@@ -36,12 +36,18 @@ public class City {
 	)
 	private CityType name;
 
-	private City(final Country country, final CityType name) {
+	private City(
+		final Country country,
+		final CityType name
+	) {
 		this.country = country;
 		this.name = name;
 	}
 
-	public static City of(final Country country, final CityType name) {
+	public static City of(
+		final Country country,
+		final CityType name
+	) {
 		return new City(country, name);
 	}
 }
