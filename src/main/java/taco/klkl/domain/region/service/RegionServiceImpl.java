@@ -13,7 +13,7 @@ import taco.klkl.domain.region.dao.RegionRepository;
 import taco.klkl.domain.region.domain.Country;
 import taco.klkl.domain.region.domain.Region;
 import taco.klkl.domain.region.dto.response.CountryResponseDto;
-import taco.klkl.domain.region.dto.response.RegionSimpleResponseDto;
+import taco.klkl.domain.region.dto.response.RegionResponseDto;
 import taco.klkl.domain.region.enums.RegionType;
 import taco.klkl.domain.region.exception.RegionNotFoundException;
 
@@ -27,7 +27,7 @@ public class RegionServiceImpl implements RegionService {
 	private final RegionRepository regionRepository;
 
 	@Override
-	public List<RegionSimpleResponseDto> getAllRegions() {
+	public List<RegionResponseDto> getAllRegions() {
 
 		List<Region> regions = regionRepository.findAllByOrderByRegionIdAsc();
 
@@ -36,21 +36,21 @@ public class RegionServiceImpl implements RegionService {
 		}
 
 		return regions.stream()
-			.map(RegionSimpleResponseDto::from)
+			.map(RegionResponseDto::from)
 			.toList();
 	}
 
 	@Override
-	public RegionSimpleResponseDto getRegionById(final Long id) throws RegionNotFoundException {
+	public RegionResponseDto getRegionById(final Long id) throws RegionNotFoundException {
 
 		final Region region = regionRepository.findById(id)
 			.orElseThrow(RegionNotFoundException::new);
 
-		return RegionSimpleResponseDto.from(region);
+		return RegionResponseDto.from(region);
 	}
 
 	@Override
-	public RegionSimpleResponseDto getRegionByName(final String name) throws RegionNotFoundException {
+	public RegionResponseDto getRegionByName(final String name) throws RegionNotFoundException {
 
 		final Region region = regionRepository.findFirstByName(RegionType.getRegionByName(name));
 
@@ -58,7 +58,7 @@ public class RegionServiceImpl implements RegionService {
 			throw new RegionNotFoundException();
 		}
 
-		return RegionSimpleResponseDto.from(region);
+		return RegionResponseDto.from(region);
 	}
 
 	@Override
