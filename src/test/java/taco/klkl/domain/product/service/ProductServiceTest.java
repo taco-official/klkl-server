@@ -14,6 +14,10 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import taco.klkl.domain.product.dao.ProductRepository;
 import taco.klkl.domain.product.domain.Product;
@@ -45,21 +49,23 @@ class ProductServiceTest {
 	}
 
 	@Test
-	@DisplayName("모든 상품 조회 테스트")
-	void testGetAllProducts() {
+	@DisplayName("페이징 처리된 모든 상품 조회 테스트")
+	void testGetAllProductsWithPagination() {
 		// Given
 		Product product1 = ProductConstants.TEST_PRODUCT;
 		Product product2 = ProductConstants.TEST_PRODUCT_TWO;
 		List<Product> productList = Arrays.asList(product1, product2);
 
-		when(productRepository.findAll()).thenReturn(productList);
+		Pageable pageable = PageRequest.of(0, 10);
+		Page<Product> productPage = new PageImpl<>(productList, pageable, productList.size());
+
+		when(productRepository.findAll(pageable)).thenReturn(productPage);
 
 		// When
-		List<ProductSimpleResponseDto> result = productService.getAllProducts();
+		List<ProductSimpleResponseDto> result = productService.getAllProducts(pageable);
 
 		// Then
 		assertThat(result).hasSize(2);
-
 		assertThat(result.get(0))
 			.extracting(
 				ProductSimpleResponseDto::productId,
@@ -75,7 +81,6 @@ class ProductServiceTest {
 				product1.getCityId(),
 				product1.getSubcategoryId()
 			);
-
 		assertThat(result.get(1))
 			.extracting(
 				ProductSimpleResponseDto::productId,
@@ -91,23 +96,24 @@ class ProductServiceTest {
 				product2.getCityId(),
 				product2.getSubcategoryId()
 			);
-
-		verify(productRepository, times(1)).findAll();
+		verify(productRepository, times(1)).findAll(pageable);
 	}
 
 	@Test
-	@DisplayName("빈 상품 목록 조회 테스트")
-	void testGetAllProductsEmptyList() {
+	@DisplayName("빈 페이지 상품 목록 조회 테스트")
+	void testGetAllProductsEmptyPage() {
 		// Given
-		when(productRepository.findAll()).thenReturn(List.of());
+		Pageable pageable = PageRequest.of(0, 10);
+		Page<Product> emptyPage = new PageImpl<>(List.of(), pageable, 0);
+		when(productRepository.findAll(pageable)).thenReturn(emptyPage);
 
 		// When
-		List<ProductSimpleResponseDto> result = productService.getAllProducts();
+		List<ProductSimpleResponseDto> result = productService.getAllProducts(pageable);
 
 		// Then
 		assertNotNull(result);
 		assertTrue(result.isEmpty());
-		verify(productRepository, times(1)).findAll();
+		verify(productRepository, times(1)).findAll(pageable);
 	}
 
 	@Test

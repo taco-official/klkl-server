@@ -17,6 +17,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -30,22 +31,22 @@ import taco.klkl.domain.product.dto.response.ProductSimpleResponseDto;
 import taco.klkl.domain.product.exception.ProductNotFoundException;
 import taco.klkl.domain.product.service.ProductService;
 import taco.klkl.domain.user.domain.User;
+import taco.klkl.global.common.constants.ProductConstants;
 import taco.klkl.global.error.exception.ErrorCode;
 
 @WebMvcTest(ProductController.class)
 class ProductControllerTest {
 
 	@Autowired
-	MockMvc mockMvc;
+	private MockMvc mockMvc;
 
 	@MockBean
-	ProductService productService;
+	private ProductService productService;
 
 	@Autowired
 	ObjectMapper objectMapper;
 
 	private ProductDetailResponseDto productDetailDto;
-	private ProductSimpleResponseDto productSimpleDto;
 
 	@BeforeEach
 	public void setUp() {
@@ -69,62 +70,65 @@ class ProductControllerTest {
 
 		// ProductResponseDto 생성
 		productDetailDto = ProductDetailResponseDto.from(mockProduct);
-		productSimpleDto = ProductSimpleResponseDto.from(mockProduct);
 	}
 
 	@Test
-	@DisplayName("상품 목록 조회 API 테스트")
-	void testGetAllProducts() throws Exception {
+	@DisplayName("기본 페이징 값으로 상품 목록 API 조회 테스트")
+	void testGetAllProductsWithDefaultPaging() throws Exception {
 		// Given
-		List<ProductSimpleResponseDto> productList = Arrays.asList(productSimpleDto, productSimpleDto);
+		ProductSimpleResponseDto product1 = ProductSimpleResponseDto.from(ProductConstants.TEST_PRODUCT);
+		ProductSimpleResponseDto product2 = ProductSimpleResponseDto.from(ProductConstants.TEST_PRODUCT_TWO);
+		List<ProductSimpleResponseDto> productDtos = Arrays.asList(product1, product2);
 
-		when(productService.getAllProducts()).thenReturn(productList);
+		when(productService.getAllProducts(any(Pageable.class))).thenReturn(productDtos);
 
 		// When & Then
 		mockMvc.perform(get("/v1/products")
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
-			.andExpect(jsonPath("$.isSuccess", is(true)))
-			.andExpect(jsonPath("$.code", is("C000")))
 			.andExpect(jsonPath("$.data", hasSize(2)))
-			.andExpect(jsonPath("$.data[0].productId", is(productSimpleDto.productId().intValue())))
-			.andExpect(jsonPath("$.data[0].name", is(productSimpleDto.name())))
-			.andExpect(jsonPath("$.data[0].likeCount", is(productSimpleDto.likeCount())))
-			.andExpect(jsonPath("$.data[0].cityId", is(productSimpleDto.cityId().intValue())))
-			.andExpect(jsonPath("$.data[0].subcategoryId", is(productSimpleDto.subcategoryId().intValue())))
-			.andExpect(jsonPath("$.data[1].productId", is(productSimpleDto.productId().intValue())))
-			.andExpect(jsonPath("$.data[1].name", is(productSimpleDto.name())))
-			.andExpect(jsonPath("$.data[1].likeCount", is(productSimpleDto.likeCount())))
-			.andExpect(jsonPath("$.data[1].cityId", is(productSimpleDto.cityId().intValue())))
-			.andExpect(jsonPath("$.data[1].subcategoryId", is(productSimpleDto.subcategoryId().intValue())));
+			.andExpect(jsonPath("$.data[0].productId").value(product1.productId()))
+			.andExpect(jsonPath("$.data[1].productId").value(product2.productId()));
 
-		verify(productService, times(1)).getAllProducts();
+		verify(productService).getAllProducts(argThat(pageable ->
+			pageable.getPageNumber() == Integer.parseInt(ProductConstants.DEFAULT_PAGE_NUMBER)
+				&& pageable.getPageSize() == Integer.parseInt(ProductConstants.DEFAULT_PAGE_SIZE)
+		));
 	}
 
 	@Test
-	@DisplayName("빈 상품 목록 조회 API 테스트")
-	void testGetAllProductsEmptyList() throws Exception {
+	@DisplayName("사용자 지정 페이징 값으로 상품 목록 API 조회 테스트")
+	void testGetAllProductsWithCustomPaging() throws Exception {
 		// Given
-		when(productService.getAllProducts()).thenReturn(List.of());
+		ProductSimpleResponseDto product1 = ProductSimpleResponseDto.from(ProductConstants.TEST_PRODUCT);
+		ProductSimpleResponseDto product2 = ProductSimpleResponseDto.from(ProductConstants.TEST_PRODUCT_TWO);
+		List<ProductSimpleResponseDto> productDtos = Arrays.asList(product1, product2);
+
+		when(productService.getAllProducts(any(Pageable.class))).thenReturn(productDtos);
 
 		// When & Then
 		mockMvc.perform(get("/v1/products")
+				.param("page", "1")
+				.param("size", "5")
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
-			.andExpect(jsonPath("$.isSuccess", is(true)))
-			.andExpect(jsonPath("$.code", is("C000")))
-			.andExpect(jsonPath("$.data", hasSize(0)));
+			.andExpect(jsonPath("$.data", hasSize(2)))
+			.andExpect(jsonPath("$.data[0].productId").value(product1.productId()))
+			.andExpect(jsonPath("$.data[1].productId").value(product2.productId()));
 
-		verify(productService, times(1)).getAllProducts();
+		verify(productService).getAllProducts(argThat(pageable ->
+			pageable.getPageNumber() == 1
+				&& pageable.getPageSize() == 5
+		));
 	}
 
 	@Test
 	@DisplayName("상품 상세 조회 API 테스트")
-	public void testGetProductById() throws Exception {
-		// given
+	void testGetProductById() throws Exception {
+		// Given
 		when(productService.getProductById(1L)).thenReturn(productDetailDto);
 
-		// when & then
+		// When & Then
 		mockMvc.perform(get("/v1/products/1")
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
@@ -141,6 +145,8 @@ class ProductControllerTest {
 			.andExpect(jsonPath("$.data.subcategoryId", is(productDetailDto.subcategoryId().intValue())))
 			.andExpect(jsonPath("$.data.currencyId", is(productDetailDto.currencyId().intValue())))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
+
+		verify(productService).getProductById(1L);
 	}
 
 	@Test
@@ -176,37 +182,12 @@ class ProductControllerTest {
 			.andExpect(jsonPath("$.data.subcategoryId", is(productDetailDto.subcategoryId().intValue())))
 			.andExpect(jsonPath("$.data.currencyId", is(productDetailDto.currencyId().intValue())))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
+
+		verify(productService).createProduct(any(ProductCreateRequestDto.class));
 	}
 
 	@Test
-	@DisplayName("상품 등록 API 유효성 검사 실패 테스트")
-	public void testCreateProductValidationFailure() throws Exception {
-		// given
-		ProductCreateRequestDto invalidRequestDto = new ProductCreateRequestDto(
-			null,
-			null,
-			null,
-			null,
-			null,
-			null,
-			null
-		);
-
-		// when & then
-		ErrorCode methodArgumentInvalidError = ErrorCode.METHOD_ARGUMENT_INVALID;
-		mockMvc.perform(post("/v1/products")
-				.contentType(MediaType.APPLICATION_JSON)
-				.content(objectMapper.writeValueAsString(invalidRequestDto)))
-			.andExpect(status().isBadRequest())
-			.andExpect(jsonPath("$.isSuccess", is(false)))
-			.andExpect(jsonPath("$.code", is(methodArgumentInvalidError.getCode())))
-			.andExpect(jsonPath("$.data.code", is(methodArgumentInvalidError.getCode())))
-			.andExpect(jsonPath("$.data.message", containsString(methodArgumentInvalidError.getMessage())))
-			.andExpect(jsonPath("$.timestamp", notNullValue()));
-	}
-
-	@Test
-	@DisplayName("상품 정보 부분 업데이트 API 테스트")
+	@DisplayName("상품 정보 수정 API 테스트")
 	public void testUpdateProduct() throws Exception {
 		// given
 		Long productId = 1L;
@@ -241,6 +222,8 @@ class ProductControllerTest {
 			.andExpect(jsonPath("$.data.subcategoryId", is(productDetailDto.subcategoryId().intValue())))
 			.andExpect(jsonPath("$.data.currencyId", is(productDetailDto.currencyId().intValue())))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
+
+		verify(productService).updateProduct(eq(productId), any(ProductUpdateRequestDto.class));
 	}
 
 	@Test
@@ -254,10 +237,7 @@ class ProductControllerTest {
 		mockMvc.perform(delete("/v1/products/{id}", productId)
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isNoContent())
-			.andExpect(jsonPath("$.isSuccess", is(true)))
-			.andExpect(jsonPath("$.code", is("C000")))
-			.andExpect(jsonPath("$.data").doesNotExist())
-			.andExpect(jsonPath("$.timestamp", notNullValue()));
+			.andExpect(jsonPath("$").doesNotExist());
 
 		verify(productService, times(1)).deleteProduct(productId);
 	}

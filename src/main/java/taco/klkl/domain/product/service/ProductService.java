@@ -2,6 +2,7 @@ package taco.klkl.domain.product.service;
 
 import java.util.List;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,8 +25,8 @@ public class ProductService {
 	private final ProductRepository productRepository;
 	private final UserUtil userUtil;
 
-	public List<ProductSimpleResponseDto> getAllProducts() {
-		return productRepository.findAll().stream()
+	public List<ProductSimpleResponseDto> getAllProducts(Pageable pageable) {
+		return productRepository.findAll(pageable).stream()
 			.map(ProductSimpleResponseDto::from)
 			.toList();
 	}
