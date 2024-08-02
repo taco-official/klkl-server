@@ -21,8 +21,8 @@ import taco.klkl.domain.region.dao.CountryRepository;
 import taco.klkl.domain.region.domain.City;
 import taco.klkl.domain.region.domain.Country;
 import taco.klkl.domain.region.domain.Region;
+import taco.klkl.domain.region.dto.response.CityResponseDto;
 import taco.klkl.domain.region.dto.response.CountryResponseDto;
-import taco.klkl.domain.region.dto.response.CountryWithCitiesResponseDto;
 import taco.klkl.domain.region.enums.CityType;
 import taco.klkl.domain.region.enums.CountryType;
 import taco.klkl.domain.region.enums.RegionType;
@@ -102,16 +102,15 @@ public class CountryServiceImplTest {
 	void getCountryWithCitiesById() {
 		// given
 		Country mockCountry = mock(Country.class);
-		when(mockCountry.getName()).thenReturn(CountryType.JAPAN);
 		when(countryRepository.findById(400L)).thenReturn(Optional.of(mockCountry));
 		when(mockCountry.getCities()).thenReturn(cities);
 
 		// when
-		CountryWithCitiesResponseDto findCountry = countryService.getCountryWithCitiesById(400L);
+		List<CityResponseDto> findCountries = countryService.getCitiesByCountryId(400L);
 
 		// then
-		assertThat(findCountry.cities().size()).isEqualTo(cities.size());
-		assertThat(findCountry.cities().get(0).name()).isEqualTo(cities.get(0).getName().getKoreanName());
-		assertThat(findCountry.cities().get(1).name()).isEqualTo(cities.get(1).getName().getKoreanName());
+		assertThat(findCountries.size()).isEqualTo(cities.size());
+		assertThat(findCountries.get(0).name()).isEqualTo(cities.get(0).getName().getKoreanName());
+		assertThat(findCountries.get(1).name()).isEqualTo(cities.get(1).getName().getKoreanName());
 	}
 }

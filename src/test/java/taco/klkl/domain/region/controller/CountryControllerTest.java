@@ -21,8 +21,8 @@ import taco.klkl.domain.region.dao.CountryRepository;
 import taco.klkl.domain.region.domain.City;
 import taco.klkl.domain.region.domain.Country;
 import taco.klkl.domain.region.domain.Region;
+import taco.klkl.domain.region.dto.response.CityResponseDto;
 import taco.klkl.domain.region.dto.response.CountryResponseDto;
-import taco.klkl.domain.region.dto.response.CountryWithCitiesResponseDto;
 import taco.klkl.domain.region.enums.CityType;
 import taco.klkl.domain.region.enums.CountryType;
 import taco.klkl.domain.region.enums.RegionType;
@@ -111,8 +111,7 @@ public class CountryControllerTest {
 		when(mockCountry.getName()).thenReturn(CountryType.JAPAN);
 		when(countryRepository.findById(400L)).thenReturn(Optional.of(mockCountry));
 		when(mockCountry.getCities()).thenReturn(cities);
-		CountryWithCitiesResponseDto responseDto = CountryWithCitiesResponseDto.from(mockCountry);
-		when(countryService.getCountryWithCitiesById(400L)).thenReturn(responseDto);
+		when(countryService.getCitiesByCountryId(400L)).thenReturn(cities.stream().map(CityResponseDto::from).toList());
 
 		// when & then
 		mockMvc.perform(get("/v1/countries/400/cities")
@@ -120,11 +119,11 @@ public class CountryControllerTest {
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
 			.andExpect(jsonPath("$.code", is("C000")))
-			.andExpect(jsonPath("$.data.cities[0].name", is(cities.get(0).getName().getKoreanName())))
-			.andExpect(jsonPath("$.data.cities[1].name", is(cities.get(1).getName().getKoreanName())))
+			.andExpect(jsonPath("$.data[0].name", is(cities.get(0).getName().getKoreanName())))
+			.andExpect(jsonPath("$.data[1].name", is(cities.get(1).getName().getKoreanName())))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
 
-		verify(countryService, times(1)).getCountryWithCitiesById(400L);
+		verify(countryService, times(1)).getCitiesByCountryId(400L);
 	}
 
 }

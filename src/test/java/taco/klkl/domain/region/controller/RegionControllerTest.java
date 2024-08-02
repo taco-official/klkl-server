@@ -22,7 +22,7 @@ import taco.klkl.domain.region.dao.RegionRepository;
 import taco.klkl.domain.region.domain.Country;
 import taco.klkl.domain.region.domain.Region;
 import taco.klkl.domain.region.dto.response.CountryResponseDto;
-import taco.klkl.domain.region.dto.response.RegionSimpleResponseDto;
+import taco.klkl.domain.region.dto.response.RegionResponseDto;
 import taco.klkl.domain.region.enums.CountryType;
 import taco.klkl.domain.region.enums.RegionType;
 import taco.klkl.domain.region.service.RegionService;
@@ -59,10 +59,10 @@ class RegionControllerTest {
 	@DisplayName("모든 지역 조회 성공 테스트")
 	void getAllRegionsTest() throws Exception {
 		// given
-		List<RegionSimpleResponseDto> regionResponseDtos = Arrays.asList(
-			RegionSimpleResponseDto.from(region1),
-			RegionSimpleResponseDto.from(region2),
-			RegionSimpleResponseDto.from(region3)
+		List<RegionResponseDto> regionResponseDtos = Arrays.asList(
+			RegionResponseDto.from(region1),
+			RegionResponseDto.from(region2),
+			RegionResponseDto.from(region3)
 		);
 
 		when(regionService.getAllRegions()).thenReturn(regionResponseDtos);
