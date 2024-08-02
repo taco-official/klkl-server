@@ -18,10 +18,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import taco.klkl.domain.region.dao.RegionRepository;
 import taco.klkl.domain.region.domain.Country;
+import taco.klkl.domain.region.domain.Currency;
 import taco.klkl.domain.region.domain.Region;
 import taco.klkl.domain.region.dto.response.CountryResponseDto;
 import taco.klkl.domain.region.dto.response.RegionResponseDto;
 import taco.klkl.domain.region.enums.CountryType;
+import taco.klkl.domain.region.enums.CurrencyType;
 import taco.klkl.domain.region.enums.RegionType;
 import taco.klkl.domain.region.exception.RegionNotFoundException;
 
@@ -37,18 +39,19 @@ class RegionServiceImplTest {
 	private final Region region1 = Region.of(RegionType.NORTHEAST_ASIA);
 	private final Region region2 = Region.of(RegionType.SOUTHEAST_ASIA);
 	private final Region region3 = Region.of(RegionType.ETC);
+	private final Currency currency1 = Currency.of(CurrencyType.YEN, "flag");
 	private final Country country1 = Country.of(
 		CountryType.JAPAN,
 		region1,
 		"image/japan",
 		"image/japan",
-		42);
+		currency1);
 	private final Country country2 = Country.of(
 		CountryType.TAIWAN,
 		region1,
 		"image/taiwan",
 		"image/taiwan",
-		43);
+		currency1);
 	private final List<Country> countryList = Arrays.asList(country1,
 		country2);
 

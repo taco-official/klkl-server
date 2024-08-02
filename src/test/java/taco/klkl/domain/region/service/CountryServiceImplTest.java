@@ -20,11 +20,13 @@ import org.slf4j.LoggerFactory;
 import taco.klkl.domain.region.dao.CountryRepository;
 import taco.klkl.domain.region.domain.City;
 import taco.klkl.domain.region.domain.Country;
+import taco.klkl.domain.region.domain.Currency;
 import taco.klkl.domain.region.domain.Region;
 import taco.klkl.domain.region.dto.response.CityResponseDto;
 import taco.klkl.domain.region.dto.response.CountryResponseDto;
 import taco.klkl.domain.region.enums.CityType;
 import taco.klkl.domain.region.enums.CountryType;
+import taco.klkl.domain.region.enums.CurrencyType;
 import taco.klkl.domain.region.enums.RegionType;
 import taco.klkl.domain.region.exception.CountryNotFoundException;
 
@@ -39,18 +41,19 @@ public class CountryServiceImplTest {
 	CountryRepository countryRepository;
 
 	private final Region region = Region.of(RegionType.NORTHEAST_ASIA);
+	private final Currency currency1 = Currency.of(CurrencyType.YEN, "flag");
 	private final Country country1 = Country.of(
 		CountryType.JAPAN,
 		region,
 		"test",
 		"test",
-		1);
+		currency1);
 	private final Country country2 = Country.of(
 		CountryType.TAIWAN,
 		region,
 		"test",
 		"test",
-		1);
+		currency1);
 	private final City city1 = City.of(country1, CityType.OSAKA);
 	private final City city2 = City.of(country1, CityType.KYOTO);
 	private final List<City> cities = Arrays.asList(city1, city2);
