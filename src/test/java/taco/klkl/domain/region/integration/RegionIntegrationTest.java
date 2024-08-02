@@ -32,7 +32,7 @@ public class RegionIntegrationTest {
 
 	@Test
 	@DisplayName("모든 지역 조회 통합 테스트")
-	void getAllRegionsTest() throws Exception {
+	void testGetAllRegions() throws Exception {
 		// given
 		List<RegionResponseDto> regionResponseDtos = regionService.getAllRegions();
 
@@ -47,7 +47,7 @@ public class RegionIntegrationTest {
 
 	@Test
 	@DisplayName("지역에 속한 국가목록 조회 테스트")
-	void getCountriesByRegionId() throws Exception {
+	void testGetCountriesByRegionId() throws Exception {
 		// given
 		List<CountryResponseDto> countryResponseDtos = regionService.getCountriesByRegionId(400L);
 

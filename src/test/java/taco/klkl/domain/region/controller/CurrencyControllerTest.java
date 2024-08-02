@@ -34,8 +34,8 @@ public class CurrencyControllerTest {
 	@MockBean
 	CurrencyRepository currencyRepository;
 
-	private final Currency currency1 = Currency.of(CurrencyType.YEN, "test1");
-	private final Currency currency2 = Currency.of(CurrencyType.BAHT, "test2");
+	private final Currency currency1 = Currency.of(CurrencyType.JAPANESE_YEN, "test1");
+	private final Currency currency2 = Currency.of(CurrencyType.THAI_BAHT, "test2");
 	private final CurrencyResponseDto currencyResponseDto1 = CurrencyResponseDto.from(currency1);
 	private final CurrencyResponseDto currencyResponseDto2 = CurrencyResponseDto.from(currency2);
 	@Autowired
@@ -43,7 +43,7 @@ public class CurrencyControllerTest {
 
 	@Test
 	@DisplayName("모든 통화 목록 조회")
-	void getAllCurrencyTest() throws Exception {
+	void testGetAllCurrency() throws Exception {
 		// given
 		List<CurrencyResponseDto> currencyResponseDtoList = Arrays.asList(currencyResponseDto1, currencyResponseDto2);
 		when(currencyService.getAllCurrencies()).thenReturn(currencyResponseDtoList);

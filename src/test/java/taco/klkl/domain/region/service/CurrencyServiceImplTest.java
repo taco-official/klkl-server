@@ -27,14 +27,14 @@ public class CurrencyServiceImplTest {
 	@Mock
 	CurrencyRepository currencyRepository;
 
-	private final Currency currency1 = Currency.of(CurrencyType.YEN, "test1");
-	private final Currency currency2 = Currency.of(CurrencyType.BAHT, "test2");
+	private final Currency currency1 = Currency.of(CurrencyType.JAPANESE_YEN, "test1");
+	private final Currency currency2 = Currency.of(CurrencyType.THAI_BAHT, "test2");
 	private final CurrencyResponseDto currencyResponseDto1 = CurrencyResponseDto.from(currency1);
 	private final CurrencyResponseDto currencyResponseDto2 = CurrencyResponseDto.from(currency2);
 
 	@Test
 	@DisplayName("모든 통화 목록 조회 테스트")
-	void getAllCurrencyTest() {
+	void testGetAllCurrency() {
 		// given
 		when(currencyRepository.findAll()).thenReturn(Arrays.asList(currency1, currency2));
 
@@ -48,7 +48,7 @@ public class CurrencyServiceImplTest {
 
 	@Test
 	@DisplayName("통화 존재 여부 테스트")
-	void exitsCurrencyTest() {
+	void testExitsCurrency() {
 		// given
 		when(currencyRepository.existsById(1L)).thenReturn(true);
 

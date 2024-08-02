@@ -41,7 +41,7 @@ public class CountryServiceImplTest {
 	CountryRepository countryRepository;
 
 	private final Region region = Region.of(RegionType.NORTHEAST_ASIA);
-	private final Currency currency1 = Currency.of(CurrencyType.YEN, "flag");
+	private final Currency currency1 = Currency.of(CurrencyType.JAPANESE_YEN, "flag");
 	private final Country country1 = Country.of(
 		CountryType.JAPAN,
 		region,
@@ -60,7 +60,7 @@ public class CountryServiceImplTest {
 
 	@Test
 	@DisplayName("모든 국가 조회 테스트")
-	void getAllCountriesTest() {
+	void testGetAllCountries() {
 		// given
 		List<Country> countries = Arrays.asList(country1, country2);
 		when(countryRepository.findAll()).thenReturn(countries);
@@ -76,7 +76,7 @@ public class CountryServiceImplTest {
 
 	@Test
 	@DisplayName("id로 국가조회 테스트")
-	void getCountryByIdTest() {
+	void testGetCountryById() {
 		// given
 		when(countryRepository.findById(400L)).thenReturn(Optional.of(country1));
 
@@ -89,7 +89,7 @@ public class CountryServiceImplTest {
 
 	@Test
 	@DisplayName("국가 조회 실패 테스트")
-	void getCountryByIdFailTest() {
+	void testGetCountryByIdFail() {
 		// given
 		when(countryRepository.findById(400L)).thenThrow(CountryNotFoundException.class);
 
@@ -102,7 +102,7 @@ public class CountryServiceImplTest {
 
 	@Test
 	@DisplayName("국가와 도시 조회")
-	void getCountryWithCitiesById() {
+	void testGetCountryWithCitiesById() {
 		// given
 		Country mockCountry = mock(Country.class);
 		when(countryRepository.findById(400L)).thenReturn(Optional.of(mockCountry));

@@ -23,7 +23,7 @@ public class CityServiceImplTest {
 
 	@Test
 	@DisplayName("id로 도시 존재 여부 확인 테스트")
-	void isExitsCity_True() {
+	void testIsExitsCity_True() {
 		// given
 		when(cityRepository.existsById(1L)).thenReturn(true);
 

@@ -42,7 +42,7 @@ class RegionControllerTest {
 	private final Region region1 = Region.of(RegionType.NORTHEAST_ASIA);
 	private final Region region2 = Region.of(RegionType.SOUTHEAST_ASIA);
 	private final Region region3 = Region.of(RegionType.ETC);
-	private final Currency currency1 = Currency.of(CurrencyType.YEN, "flag");
+	private final Currency currency1 = Currency.of(CurrencyType.JAPANESE_YEN, "flag");
 	private final Country country1 = Country.of(
 		CountryType.JAPAN,
 		region1,
@@ -60,7 +60,7 @@ class RegionControllerTest {
 
 	@Test
 	@DisplayName("모든 지역 조회 성공 테스트")
-	void getAllRegionsTest() throws Exception {
+	void testGetAllRegions() throws Exception {
 		// given
 		List<RegionResponseDto> regionResponseDtos = Arrays.asList(
 			RegionResponseDto.from(region1),
@@ -87,7 +87,7 @@ class RegionControllerTest {
 
 	@Test
 	@DisplayName("모든 지역 조회 empty 테스트")
-	void getAllRegionsEmptyTest() throws Exception {
+	void testGetAllRegionsEmpty() throws Exception {
 		// given
 		when(regionService.getAllRegions()).thenReturn(Collections.emptyList());
 
@@ -105,7 +105,7 @@ class RegionControllerTest {
 
 	@Test
 	@DisplayName("모든 지역 조회 실패 테스트")
-	void getRegionsFailTest() throws Exception {
+	void testGetRegionsFail() throws Exception {
 		// given
 		when(regionService.getAllRegions()).thenThrow(RuntimeException.class);
 
@@ -123,7 +123,7 @@ class RegionControllerTest {
 
 	@Test
 	@DisplayName("특정 지역에 속한 국가 목록 조회")
-	void getRegionWithCountryTest() throws Exception {
+	void testGetRegionWithCountry() throws Exception {
 		// given
 		Region mockRegion = mock(Region.class);
 		RegionRepository regionRepository = mock(RegionRepository.class);

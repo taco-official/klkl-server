@@ -39,7 +39,7 @@ class RegionServiceImplTest {
 	private final Region region1 = Region.of(RegionType.NORTHEAST_ASIA);
 	private final Region region2 = Region.of(RegionType.SOUTHEAST_ASIA);
 	private final Region region3 = Region.of(RegionType.ETC);
-	private final Currency currency1 = Currency.of(CurrencyType.YEN, "flag");
+	private final Currency currency1 = Currency.of(CurrencyType.JAPANESE_YEN, "flag");
 	private final Country country1 = Country.of(
 		CountryType.JAPAN,
 		region1,
@@ -57,7 +57,7 @@ class RegionServiceImplTest {
 
 	@Test
 	@DisplayName("모든 지역 조회 성공 테스트")
-	void getAllRegionTest() {
+	void testGetAllRegion() {
 		// given
 		List<Region> mockRegions = Arrays.asList(region1, region2, region3);
 
@@ -75,7 +75,7 @@ class RegionServiceImplTest {
 
 	@Test
 	@DisplayName("모든 지역 조회 실패 테스트")
-	void getAllRegionFailTest() {
+	void testGetAllRegionFail() {
 		// given
 		when(regionRepository.findAllByOrderByRegionIdAsc()).thenReturn(Collections.emptyList());
 
@@ -88,7 +88,7 @@ class RegionServiceImplTest {
 
 	@Test
 	@DisplayName("Id 지역 조회 성공 테스트")
-	void getRegionByIdTest() {
+	void testGetRegionById() {
 		// given
 		when(regionRepository.findById(1L)).thenReturn(Optional.of(region1));
 		when(regionRepository.findById(2L)).thenReturn(Optional.of(region2));
@@ -104,7 +104,7 @@ class RegionServiceImplTest {
 
 	@Test
 	@DisplayName("지역에 있는 국가목록 조회")
-	void getRegionWithCountryTest() {
+	void testGetRegionWithCountry() {
 		// given
 		Region mockRegion = mock(Region.class);
 		when(regionRepository.findById(1L)).thenReturn(Optional.of(mockRegion));
@@ -121,7 +121,7 @@ class RegionServiceImplTest {
 
 	@Test
 	@DisplayName("Id 지역 조회 실패 테스트")
-	void getRegionByIdFailTest() {
+	void testGetRegionByIdFail() {
 		// given
 		when(regionRepository.findById(1L)).thenThrow(new RegionNotFoundException());
 
@@ -135,7 +135,7 @@ class RegionServiceImplTest {
 
 	@Test
 	@DisplayName("Name 지역 조회 성공 테스트")
-	void getRegionByNameTest() {
+	void testGetRegionByName() {
 		// given
 		when(regionRepository.findFirstByName(region1.getName())).thenReturn(region1);
 		when(regionRepository.findFirstByName(region2.getName())).thenReturn(region2);
@@ -151,7 +151,7 @@ class RegionServiceImplTest {
 
 	@Test
 	@DisplayName("Name 지역 조회 실패 테스트")
-	void getRegionByNameFailTest() {
+	void testGetRegionByNameFail() {
 		// given
 		when(regionRepository.findFirstByName(region1.getName())).thenThrow(new RegionNotFoundException());
 

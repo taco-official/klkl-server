@@ -32,7 +32,7 @@ public class CountryIntegrationTest {
 
 	@Test
 	@DisplayName("모든 국가 조회 테스트")
-	void getAllCountriesTest() throws Exception {
+	void testGetAllCountries() throws Exception {
 		// given
 		List<CountryResponseDto> countryResponseDtos = countryService.getAllCountries();
 
@@ -47,7 +47,7 @@ public class CountryIntegrationTest {
 
 	@Test
 	@DisplayName("id로 국가 조회 테스트")
-	void getCountryByIdTest() throws Exception {
+	void testGetCountryById() throws Exception {
 		// given
 		CountryResponseDto countryResponseDto = countryService.getCountryById(403L);
 
@@ -62,7 +62,7 @@ public class CountryIntegrationTest {
 
 	@Test
 	@DisplayName("국가에 속한 모든 도시목록 조회")
-	void getCountryWithCitiesByIdTest() throws Exception {
+	void testGetCountryWithCitiesById() throws Exception {
 		// given
 		List<CityResponseDto> responseDto = countryService.getCitiesByCountryId(403L);
 

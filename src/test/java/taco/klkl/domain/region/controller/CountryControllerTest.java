@@ -43,7 +43,7 @@ public class CountryControllerTest {
 	private CountryRepository countryRepository;
 
 	private final Region region = Region.of(RegionType.NORTHEAST_ASIA);
-	private final Currency currency1 = Currency.of(CurrencyType.YEN, "flag");
+	private final Currency currency1 = Currency.of(CurrencyType.JAPANESE_YEN, "flag");
 	private final Country country1 = Country.of(
 		CountryType.JAPAN,
 		region,
@@ -62,7 +62,7 @@ public class CountryControllerTest {
 
 	@Test
 	@DisplayName("모든 국가 조회 테스트")
-	void getAllCountriesTest() throws Exception {
+	void testGetAllCountries() throws Exception {
 		// given
 		List<CountryResponseDto> countryResponseDtos = Arrays.asList(
 			CountryResponseDto.from(country1),
@@ -88,7 +88,7 @@ public class CountryControllerTest {
 
 	@Test
 	@DisplayName("Id로 국가 조회 테스트")
-	void getCountryByIdTest() throws Exception {
+	void testGetCountryById() throws Exception {
 		// given
 		CountryResponseDto countryResponseDto = CountryResponseDto.from(country1);
 
@@ -108,7 +108,7 @@ public class CountryControllerTest {
 
 	@Test
 	@DisplayName("국가와 도시 조회")
-	void getCountryWithCitiesTest() throws Exception {
+	void testGetCountryWithCities() throws Exception {
 		// given
 		Country mockCountry = mock(Country.class);
 		CountryRepository mockCountryRepository = mock(CountryRepository.class);

@@ -8,25 +8,25 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum CurrencyType {
-	YEN("JPY"),
+	JAPANESE_YEN("JPY"),
 
-	YUAN("CNY"),
+	CHINESE_YUAN("CNY"),
 
 	NEW_TAIWAN_DOLLAR("TWD"),
 
-	BAHT("THB"),
+	THAI_BAHT("THB"),
 
-	DONG("VND"),
+	VIETNAMESE_DONG("VND"),
 
-	PESO("PHP"),
+	PHILIPPINE_PESO("PHP"),
 
 	SINGAPORE_DOLLAR("SGD"),
 
-	RUPIAH("IDR"),
+	INDONESIAN_RUPIAH("IDR"),
 
-	RINGGIT("MYR"),
+	MALAYSIAN_RINGGIT("MYR"),
 
-	US_DOLLAR("USD"),
+	UNITED_STATES_DOLLAR("USD"),
 
 	NONE("");
 
