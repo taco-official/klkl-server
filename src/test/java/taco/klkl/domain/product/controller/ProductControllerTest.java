@@ -237,7 +237,10 @@ class ProductControllerTest {
 		mockMvc.perform(delete("/v1/products/{id}", productId)
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isNoContent())
-			.andExpect(jsonPath("$").doesNotExist());
+			.andExpect(jsonPath("$.isSuccess", is(true)))
+			.andExpect(jsonPath("$.code", is("C000")))
+			.andExpect(jsonPath("$.data").doesNotExist())
+			.andExpect(jsonPath("$.timestamp", notNullValue()));
 
 		verify(productService, times(1)).deleteProduct(productId);
 	}

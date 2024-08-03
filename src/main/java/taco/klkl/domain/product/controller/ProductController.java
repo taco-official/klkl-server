@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -47,14 +48,18 @@ public class ProductController {
 
 	@GetMapping("/{id}")
 	@Operation(summary = "상품 상세 조회", description = "상품 상세 정보를 조회합니다.")
-	public ProductDetailResponseDto getProductById(@PathVariable Long id) {
+	public ProductDetailResponseDto getProductById(
+		@PathVariable Long id
+	) {
 		return productService.getProductById(id);
 	}
 
 	@PostMapping
 	@Operation(summary = "상품 등록", description = "상품을 등록합니다.")
 	@ResponseStatus(HttpStatus.CREATED)
-	public ProductDetailResponseDto createProduct(@Valid @RequestBody ProductCreateRequestDto createRequest) {
+	public ProductDetailResponseDto createProduct(
+		@Valid @RequestBody ProductCreateRequestDto createRequest
+	) {
 		return productService.createProduct(createRequest);
 	}
 
@@ -69,8 +74,10 @@ public class ProductController {
 
 	@DeleteMapping("/{id}")
 	@Operation(summary = "상품 삭제", description = "상품을 삭제합니다.")
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void deleteProduct(@PathVariable Long id) {
+	public ResponseEntity<Void> deleteProduct(
+		@PathVariable Long id
+	) {
 		productService.deleteProduct(id);
+		return ResponseEntity.noContent().build();
 	}
 }
