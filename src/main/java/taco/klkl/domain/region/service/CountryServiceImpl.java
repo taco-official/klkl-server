@@ -11,8 +11,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import taco.klkl.domain.region.dao.CountryRepository;
 import taco.klkl.domain.region.domain.Country;
+import taco.klkl.domain.region.dto.response.CityResponseDto;
 import taco.klkl.domain.region.dto.response.CountryResponseDto;
-import taco.klkl.domain.region.enums.CountryType;
 import taco.klkl.domain.region.exception.CountryNotFoundException;
 
 @Slf4j
@@ -26,6 +26,7 @@ public class CountryServiceImpl implements CountryService {
 
 	@Override
 	public List<CountryResponseDto> getAllCountries() {
+
 		List<Country> countries = countryRepository.findAll();
 
 		if (countries.isEmpty()) {
@@ -38,21 +39,22 @@ public class CountryServiceImpl implements CountryService {
 	}
 
 	@Override
-	public CountryResponseDto getCountryById(Long countryId) {
-		Country country = countryRepository.findById(countryId)
+	public CountryResponseDto getCountryById(final Long countryId) throws CountryNotFoundException {
+
+		final Country country = countryRepository.findById(countryId)
 			.orElseThrow(CountryNotFoundException::new);
 
 		return CountryResponseDto.from(country);
 	}
 
 	@Override
-	public CountryResponseDto getCountryByName(CountryType name) {
-		Country country = countryRepository.findFirstByName(name);
+	public List<CityResponseDto> getCitiesByCountryId(final Long countryId) throws CountryNotFoundException {
 
-		if (country == null) {
-			throw new CountryNotFoundException();
-		}
+		final Country country = countryRepository.findById(countryId)
+			.orElseThrow(CountryNotFoundException::new);
 
-		return CountryResponseDto.from(country);
+		return country.getCities().stream()
+			.map(CityResponseDto::from)
+			.toList();
 	}
 }

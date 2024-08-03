@@ -12,8 +12,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import taco.klkl.domain.region.dto.response.CountryResponseDto;
 import taco.klkl.domain.region.dto.response.RegionResponseDto;
-import taco.klkl.domain.region.dto.response.RegionSimpleResponseDto;
 import taco.klkl.domain.region.service.RegionService;
 
 @Slf4j
@@ -27,27 +27,27 @@ public class RegionController {
 
 	@Operation(summary = "모든 지역 조회", description = "모든 지역을 조회합니다.")
 	@GetMapping()
-	public ResponseEntity<List<RegionSimpleResponseDto>> getAllRegions() {
+	public ResponseEntity<List<RegionResponseDto>> getAllRegions() {
 
-		List<RegionSimpleResponseDto> findRegions = regionService.getAllRegions();
+		final List<RegionResponseDto> findRegions = regionService.getAllRegions();
 
 		return ResponseEntity.ok().body(findRegions);
 	}
 
 	@Operation(summary = "지역 하나 조회", description = "regionId로 특정 지역을 조회합니다.")
 	@GetMapping("/{id}")
-	public ResponseEntity<RegionSimpleResponseDto> getRegionById(@PathVariable Long id) {
+	public ResponseEntity<RegionResponseDto> getRegionById(@PathVariable final Long id) {
 
-		RegionSimpleResponseDto findRegion = regionService.getRegionById(id);
+		final RegionResponseDto findRegion = regionService.getRegionById(id);
 
 		return ResponseEntity.ok().body(findRegion);
 	}
 
 	@GetMapping("/{id}/countries")
-	public ResponseEntity<RegionResponseDto> getCountriesByRegion(@PathVariable Long id) {
+	public ResponseEntity<List<CountryResponseDto>> getCountriesByRegion(@PathVariable final Long id) {
 
-		RegionResponseDto findRegion = regionService.getRegionWithCountries(id);
+		final List<CountryResponseDto> findCountries = regionService.getCountriesByRegionId(id);
 
-		return ResponseEntity.ok().body(findRegion);
+		return ResponseEntity.ok().body(findCountries);
 	}
 }

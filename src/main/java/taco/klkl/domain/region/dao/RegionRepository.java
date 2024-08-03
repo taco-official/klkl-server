@@ -10,7 +10,7 @@ import taco.klkl.domain.region.enums.RegionType;
 
 @Repository
 public interface RegionRepository extends JpaRepository<Region, Long> {
-	Region findFirstByName(RegionType name);
+	Region findFirstByName(final RegionType name);
 
 	List<Region> findAllByOrderByRegionIdAsc();
 }

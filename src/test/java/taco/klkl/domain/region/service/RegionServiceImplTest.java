@@ -18,11 +18,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import taco.klkl.domain.region.dao.RegionRepository;
 import taco.klkl.domain.region.domain.Country;
+import taco.klkl.domain.region.domain.Currency;
 import taco.klkl.domain.region.domain.Region;
-import taco.klkl.domain.region.dto.response.CountryWithOutRegionDto;
+import taco.klkl.domain.region.dto.response.CountryResponseDto;
 import taco.klkl.domain.region.dto.response.RegionResponseDto;
-import taco.klkl.domain.region.dto.response.RegionSimpleResponseDto;
 import taco.klkl.domain.region.enums.CountryType;
+import taco.klkl.domain.region.enums.CurrencyType;
 import taco.klkl.domain.region.enums.RegionType;
 import taco.klkl.domain.region.exception.RegionNotFoundException;
 
@@ -38,31 +39,32 @@ class RegionServiceImplTest {
 	private final Region region1 = Region.of(RegionType.NORTHEAST_ASIA);
 	private final Region region2 = Region.of(RegionType.SOUTHEAST_ASIA);
 	private final Region region3 = Region.of(RegionType.ETC);
+	private final Currency currency1 = Currency.of(CurrencyType.JAPANESE_YEN, "flag");
 	private final Country country1 = Country.of(
 		CountryType.JAPAN,
 		region1,
 		"image/japan",
 		"image/japan",
-		42);
+		currency1);
 	private final Country country2 = Country.of(
 		CountryType.TAIWAN,
 		region1,
 		"image/taiwan",
 		"image/taiwan",
-		43);
+		currency1);
 	private final List<Country> countryList = Arrays.asList(country1,
 		country2);
 
 	@Test
 	@DisplayName("모든 지역 조회 성공 테스트")
-	void getAllRegionTest() {
+	void testGetAllRegion() {
 		// given
 		List<Region> mockRegions = Arrays.asList(region1, region2, region3);
 
 		when(regionRepository.findAllByOrderByRegionIdAsc()).thenReturn(mockRegions);
 
 		// when
-		List<RegionSimpleResponseDto> regionResponseDtos = regionService.getAllRegions();
+		List<RegionResponseDto> regionResponseDtos = regionService.getAllRegions();
 
 		// then
 		assertThat(regionResponseDtos.size()).isEqualTo(3);
@@ -73,12 +75,12 @@ class RegionServiceImplTest {
 
 	@Test
 	@DisplayName("모든 지역 조회 실패 테스트")
-	void getAllRegionFailTest() {
+	void testGetAllRegionFail() {
 		// given
 		when(regionRepository.findAllByOrderByRegionIdAsc()).thenReturn(Collections.emptyList());
 
 		// when
-		List<RegionSimpleResponseDto> regionResponseDtos = regionService.getAllRegions();
+		List<RegionResponseDto> regionResponseDtos = regionService.getAllRegions();
 
 		// then
 		assertThat(regionResponseDtos.size()).isEqualTo(0);
@@ -86,14 +88,14 @@ class RegionServiceImplTest {
 
 	@Test
 	@DisplayName("Id 지역 조회 성공 테스트")
-	void getRegionByIdTest() {
+	void testGetRegionById() {
 		// given
 		when(regionRepository.findById(1L)).thenReturn(Optional.of(region1));
 		when(regionRepository.findById(2L)).thenReturn(Optional.of(region2));
 
 		// when
-		RegionSimpleResponseDto region1ResponseDto = regionService.getRegionById(1L);
-		RegionSimpleResponseDto region2ResponseDto = regionService.getRegionById(2L);
+		RegionResponseDto region1ResponseDto = regionService.getRegionById(1L);
+		RegionResponseDto region2ResponseDto = regionService.getRegionById(2L);
 
 		// then
 		assertThat(region1ResponseDto.name()).isEqualTo(region1.getName().getKoreanName());
@@ -101,27 +103,25 @@ class RegionServiceImplTest {
 	}
 
 	@Test
-	@DisplayName("지역에 있는 도시목록 조회")
-	void getRegionWithCountryTest() {
+	@DisplayName("지역에 있는 국가목록 조회")
+	void testGetRegionWithCountry() {
 		// given
 		Region mockRegion = mock(Region.class);
-		when(mockRegion.getName()).thenReturn(RegionType.NORTHEAST_ASIA);
 		when(regionRepository.findById(1L)).thenReturn(Optional.of(mockRegion));
 		when(mockRegion.getCountries()).thenReturn(countryList);
 
 		// when
-		RegionResponseDto region1ResponseDto = regionService.getRegionWithCountries(1L);
+		List<CountryResponseDto> countriesDto = regionService.getCountriesByRegionId(1L);
 
 		// then
-		assertThat(region1ResponseDto.name()).isEqualTo(mockRegion.getName().getKoreanName());
-		assertThat(region1ResponseDto.countries().size()).isEqualTo(2);
-		assertThat(region1ResponseDto.countries().get(0)).isEqualTo(CountryWithOutRegionDto.from(country1));
-		assertThat(region1ResponseDto.countries().get(1)).isEqualTo(CountryWithOutRegionDto.from(country2));
+		assertThat(countriesDto.size()).isEqualTo(2);
+		assertThat(countriesDto.get(0)).isEqualTo(CountryResponseDto.from(country1));
+		assertThat(countriesDto.get(1)).isEqualTo(CountryResponseDto.from(country2));
 	}
 
 	@Test
 	@DisplayName("Id 지역 조회 실패 테스트")
-	void getRegionByIdFailTest() {
+	void testGetRegionByIdFail() {
 		// given
 		when(regionRepository.findById(1L)).thenThrow(new RegionNotFoundException());
 
@@ -135,14 +135,14 @@ class RegionServiceImplTest {
 
 	@Test
 	@DisplayName("Name 지역 조회 성공 테스트")
-	void getRegionByNameTest() {
+	void testGetRegionByName() {
 		// given
 		when(regionRepository.findFirstByName(region1.getName())).thenReturn(region1);
 		when(regionRepository.findFirstByName(region2.getName())).thenReturn(region2);
 
 		// when
-		RegionSimpleResponseDto region1ResponseDto = regionService.getRegionByName(region1.getName().getKoreanName());
-		RegionSimpleResponseDto region2ResponseDto = regionService.getRegionByName(region2.getName().getKoreanName());
+		RegionResponseDto region1ResponseDto = regionService.getRegionByName(region1.getName().getKoreanName());
+		RegionResponseDto region2ResponseDto = regionService.getRegionByName(region2.getName().getKoreanName());
 
 		// then
 		assertThat(region1ResponseDto.name()).isEqualTo(region1.getName().getKoreanName());
@@ -151,7 +151,7 @@ class RegionServiceImplTest {
 
 	@Test
 	@DisplayName("Name 지역 조회 실패 테스트")
-	void getRegionByNameFailTest() {
+	void testGetRegionByNameFail() {
 		// given
 		when(regionRepository.findFirstByName(region1.getName())).thenThrow(new RegionNotFoundException());
 
