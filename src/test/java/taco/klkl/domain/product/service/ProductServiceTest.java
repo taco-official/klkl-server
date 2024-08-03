@@ -4,6 +4,8 @@ import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -12,12 +14,17 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import taco.klkl.domain.product.dao.ProductRepository;
 import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.product.dto.request.ProductCreateRequestDto;
 import taco.klkl.domain.product.dto.request.ProductUpdateRequestDto;
 import taco.klkl.domain.product.dto.response.ProductDetailResponseDto;
+import taco.klkl.domain.product.dto.response.ProductSimpleResponseDto;
 import taco.klkl.domain.product.exception.ProductNotFoundException;
 import taco.klkl.domain.user.domain.User;
 import taco.klkl.global.common.constants.ProductConstants;
@@ -42,8 +49,76 @@ class ProductServiceTest {
 	}
 
 	@Test
+	@DisplayName("페이징 처리된 모든 상품 조회 테스트")
+	void testGetAllProductsWithPagination() {
+		// Given
+		Product product1 = ProductConstants.TEST_PRODUCT;
+		Product product2 = ProductConstants.TEST_PRODUCT_TWO;
+		List<Product> productList = Arrays.asList(product1, product2);
+
+		Pageable pageable = PageRequest.of(0, 10);
+		Page<Product> productPage = new PageImpl<>(productList, pageable, productList.size());
+
+		when(productRepository.findAll(pageable)).thenReturn(productPage);
+
+		// When
+		List<ProductSimpleResponseDto> result = productService.getAllProducts(pageable);
+
+		// Then
+		assertThat(result).hasSize(2);
+		assertThat(result.get(0))
+			.extracting(
+				ProductSimpleResponseDto::productId,
+				ProductSimpleResponseDto::name,
+				ProductSimpleResponseDto::likeCount,
+				ProductSimpleResponseDto::cityId,
+				ProductSimpleResponseDto::subcategoryId
+			)
+			.containsExactly(
+				product1.getProductId(),
+				product1.getName(),
+				product1.getLikeCount(),
+				product1.getCityId(),
+				product1.getSubcategoryId()
+			);
+		assertThat(result.get(1))
+			.extracting(
+				ProductSimpleResponseDto::productId,
+				ProductSimpleResponseDto::name,
+				ProductSimpleResponseDto::likeCount,
+				ProductSimpleResponseDto::cityId,
+				ProductSimpleResponseDto::subcategoryId
+			)
+			.containsExactly(
+				product2.getProductId(),
+				product2.getName(),
+				product2.getLikeCount(),
+				product2.getCityId(),
+				product2.getSubcategoryId()
+			);
+		verify(productRepository, times(1)).findAll(pageable);
+	}
+
+	@Test
+	@DisplayName("빈 페이지 상품 목록 조회 테스트")
+	void testGetAllProductsEmptyPage() {
+		// Given
+		Pageable pageable = PageRequest.of(0, 10);
+		Page<Product> emptyPage = new PageImpl<>(List.of(), pageable, 0);
+		when(productRepository.findAll(pageable)).thenReturn(emptyPage);
+
+		// When
+		List<ProductSimpleResponseDto> result = productService.getAllProducts(pageable);
+
+		// Then
+		assertNotNull(result);
+		assertTrue(result.isEmpty());
+		verify(productRepository, times(1)).findAll(pageable);
+	}
+
+	@Test
 	@DisplayName("ID로 상품 정보를 조회할 때, 상품이 존재하면 ProductDetailResponseDto를 반환해야 한다.")
-	void testGetProductInfoById_Success() {
+	void testGetProductById_Success() {
 		// given
 		Long productId = 1L;
 
@@ -51,7 +126,7 @@ class ProductServiceTest {
 		when(productRepository.findById(productId)).thenReturn(Optional.of(product));
 
 		// when
-		ProductDetailResponseDto responseDto = productService.getProductInfoById(productId);
+		ProductDetailResponseDto responseDto = productService.getProductById(productId);
 
 		// then
 		assertThat(responseDto).isNotNull();
@@ -70,14 +145,14 @@ class ProductServiceTest {
 
 	@Test
 	@DisplayName("ID로 상품 정보를 조회할 때, 상품이 존재하지 않으면 ProductNotFoundException을 발생시켜야 한다.")
-	void testGetProductInfoById_NotFound() {
+	void testGetProductById_NotFound() {
 		// given
 		Long productId = 1L;
 		when(productRepository.findById(productId)).thenReturn(Optional.empty());
 
 		// when & then
 		ProductNotFoundException exception = assertThrows(ProductNotFoundException.class, () -> {
-			productService.getProductInfoById(productId);
+			productService.getProductById(productId);
 		});
 
 		// 예외가 발생했는지 확인
