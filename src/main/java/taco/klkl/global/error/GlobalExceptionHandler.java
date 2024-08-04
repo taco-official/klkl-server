@@ -103,6 +103,15 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 		return ResponseEntity.status(errorCode.getStatus()).body(globalResponse);
 	}
 
+	@ExceptionHandler(IllegalArgumentException.class)
+	public ResponseEntity<Object> handleInvalidFormatException(IllegalArgumentException ex) {
+		log.error("IllegalArgumentException : {}", ex.getMessage(), ex);
+		final ErrorCode errorCode = ErrorCode.INVALID_QUERY_FORMAT;
+		final ErrorResponse errorResponse = ErrorResponse.of(errorCode.getCode(), errorCode.getMessage());
+		final GlobalResponse globalResponse = GlobalResponse.error(errorCode.getCode(), errorResponse);
+		return ResponseEntity.status(errorCode.getStatus()).body(globalResponse);
+	}
+
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<Object> handleException(Exception ex) {
 		log.error("InternalServerError : {}", ex.getMessage(), ex);
