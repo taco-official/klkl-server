@@ -13,6 +13,7 @@ public enum ErrorCode {
 	METHOD_NOT_SUPPORTED(HttpStatus.METHOD_NOT_ALLOWED, "C011", "지원하지 않는 HTTP method 입니다."),
 	INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "C012", "서버에 문제가 발생했습니다. 관리자에게 문의해주세요."),
 	HTTP_MESSAGE_NOT_READABLE(HttpStatus.BAD_REQUEST, "C013", "잘못된 요청 메시지 형식입니다."),
+	INVALID_QUERY_FORMAT(HttpStatus.BAD_REQUEST, "C014", "유효하지 않은 query 인자 입니다."),
 
 	// User
 
@@ -30,7 +31,9 @@ public enum ErrorCode {
 	CURRENCY_NOT_FOUND(HttpStatus.NOT_FOUND, "C053", "해당 통화를 찾을 수 없습니다."),
 	// Category
 	CATEGORY_ID_NOT_FOUND(HttpStatus.NOT_FOUND, "C060", "존재하지 않는 카테고리 ID 입니다."),
+
 	// Filter
+	SUBCATEGORY_ID_NOT_FOUND(HttpStatus.NOT_FOUND, "C061", "존재하지 않는 서브카테고리 ID 입니다."),
 
 	// Notification
 
