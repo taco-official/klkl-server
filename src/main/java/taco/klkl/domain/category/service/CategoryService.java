@@ -3,6 +3,7 @@ package taco.klkl.domain.category.service;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +15,7 @@ import taco.klkl.domain.category.exception.CategoryNotFoundException;
 
 @Slf4j
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class CategoryService {
 	private final CategoryRepository categoryRepository;
@@ -26,7 +28,8 @@ public class CategoryService {
 	}
 
 	public CategoryWithSubcategoryDto getSubcategories(Long id) {
-		Category category = categoryRepository.findById(id).orElseThrow(CategoryNotFoundException::new);
+		Category category = categoryRepository.findById(id)
+			.orElseThrow(CategoryNotFoundException::new);
 		return CategoryWithSubcategoryDto.from(category);
 	}
 }
