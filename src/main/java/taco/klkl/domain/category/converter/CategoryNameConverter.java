@@ -1,4 +1,4 @@
-package taco.klkl.domain.category.convert;
+package taco.klkl.domain.category.converter;
 
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
