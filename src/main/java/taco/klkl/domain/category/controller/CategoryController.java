@@ -29,7 +29,7 @@ public class CategoryController {
 	@Operation(description = "전체 Category 반환")
 	public ResponseEntity<List<CategoryResponseDto>> getCategory() {
 		List<CategoryResponseDto> categoryResponseDto = categoryService.getCategories();
-		return ResponseEntity.ok().body(categoryResponseDto);
+		return ResponseEntity.ok(categoryResponseDto);
 	}
 
 	@GetMapping("/{id}/subcategories")
