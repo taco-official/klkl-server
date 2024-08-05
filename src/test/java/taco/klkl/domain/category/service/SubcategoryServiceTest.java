@@ -39,14 +39,13 @@ public class SubcategoryServiceTest {
 	@DisplayName("Query id가 Long type으로 입력되고 subcategory가 존재하는 경우")
 	public void testGetSubcategoryListWithExistIds() {
 		//given
-		final List<String> subcategories = Arrays.asList("1", "2", "3");
 		final List<Long> subcategoriesIds = Arrays.asList(1L, 2L, 3L);
 		final List<Subcategory> subcategoriesList = Arrays.asList(subcategory1, subcategory2, subcategory3);
 
 		when(subcategoryRepository.findAllById(subcategoriesIds)).thenReturn(subcategoriesList);
 
 		//when
-		List<Subcategory> result = subcategoryService.getSubcategoryList(subcategories);
+		List<Subcategory> result = subcategoryService.getSubcategoryList(subcategoriesIds);
 
 		//then
 		assertNotNull(result);
@@ -63,7 +62,6 @@ public class SubcategoryServiceTest {
 	@DisplayName("Query id가 Long type으로 입력되고 subcategory가 존재하지 않는 경우")
 	public void testGetSubcategoryListWithNotExistIds() {
 		//given
-		final List<String> subcategories = Arrays.asList("1", "2", "3");
 		final List<Long> subcategoriesIds = Arrays.asList(1L, 2L, 3L);
 
 		//when
@@ -71,20 +69,8 @@ public class SubcategoryServiceTest {
 
 		//then
 		assertThrows(SubcategoryNotFoundException.class, () -> {
-			subcategoryService.getSubcategoryList(subcategories);
+			subcategoryService.getSubcategoryList(subcategoriesIds);
 		});
 		verify(subcategoryRepository, times(1)).findAllById(subcategoriesIds);
-	}
-
-	@Test
-	@DisplayName("Query id 중 Long type 이외의 값이 들어오는 경우")
-	public void testGetSubcategoryListWithInvalidQueryParameters() {
-		//given
-		final List<String> subcategories = Arrays.asList("1", "2", "youngmin");
-
-		//when & then
-		assertThrows(IllegalArgumentException.class, () -> {
-			subcategoryService.getSubcategoryList(subcategories);
-		});
 	}
 }

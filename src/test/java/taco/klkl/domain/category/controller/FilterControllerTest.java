@@ -16,6 +16,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import taco.klkl.domain.category.domain.Category;
 import taco.klkl.domain.category.domain.CategoryName;
@@ -46,7 +47,7 @@ public class FilterControllerTest {
 	@DisplayName("존재하는 Subcategory Id 쿼리가 들어왔을 경우, Subcategory와 Filter가 잘 나오는지 테스트")
 	public void testGetFilterWithValidQuery() throws Exception {
 		// given
-		List<String> subcategoryIds = Arrays.asList("1", "2");
+		List<Long> subcategoryIds = Arrays.asList(1L, 2L);
 
 		Category mockCategory = Category.of(CategoryName.FOOD);
 		Subcategory mockSubcategory1 = mock(Subcategory.class);
@@ -108,7 +109,7 @@ public class FilterControllerTest {
 	@DisplayName("존재하는 Subcategory Id 쿼리가 들어왔지만 Filter가 없는 Subcategory일 경우, Subcategory와 Filter가 잘 나오는지 테스트")
 	public void testGetFilterWithValidQueryButEmptyOne() throws Exception {
 		// given
-		List<String> subcategoryIds = Arrays.asList("1", "2");
+		List<Long> subcategoryIds = Arrays.asList(1L, 2L);
 
 		Category mockCategory = Category.of(CategoryName.FOOD);
 		Subcategory mockSubcategory1 = mock(Subcategory.class);
@@ -184,7 +185,7 @@ public class FilterControllerTest {
 	@DisplayName("올바르지 않은 쿼리가 들어올 경우, INVALID_QUERY_FORMAT을 반환하는지 테스트")
 	public void testGetFilterWithInvalidQueryFormat() throws Exception {
 		//given
-		when(subcategoryService.getSubcategoryList(anyList())).thenThrow(new IllegalArgumentException());
+		when(subcategoryService.getSubcategoryList(anyList())).thenThrow(MethodArgumentTypeMismatchException.class);
 
 		//when & then
 		mockMvc.perform(get("/v1/filters")
@@ -192,8 +193,8 @@ public class FilterControllerTest {
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isBadRequest())
 			.andExpect(jsonPath("$.isSuccess", is(false)))
-			.andExpect(jsonPath("$.code", is(ErrorCode.INVALID_QUERY_FORMAT.getCode())))
-			.andExpect(jsonPath("$.data.message", is(ErrorCode.INVALID_QUERY_FORMAT.getMessage())))
+			.andExpect(jsonPath("$.code", is(ErrorCode.QUERY_TYPE_MISMATCH.getCode())))
+			.andExpect(jsonPath("$.data.message", is(ErrorCode.QUERY_TYPE_MISMATCH.getMessage())))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
 	}
 }

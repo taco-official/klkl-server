@@ -47,7 +47,11 @@ public class FilterIntegrationTest {
 		String subcategoryIdsParam = String.join(",", subcategoryIds);
 
 		//when
-		List<Subcategory> subcategoryList = subcategoryService.getSubcategoryList(subcategoryIds);
+		List<Subcategory> subcategoryList = subcategoryService.getSubcategoryList(
+			subcategoryIds.stream()
+				.map(Long::parseLong)
+				.toList()
+		);
 		List<SubcategoryWithFilterResponseDto> response = subcategoryFilterService.getFilters(subcategoryList);
 
 		//then
@@ -68,7 +72,11 @@ public class FilterIntegrationTest {
 		String subcategoryIdsParam = String.join(",", subcategoryIds);
 
 		//when
-		List<Subcategory> subcategoryList = subcategoryService.getSubcategoryList(subcategoryIds);
+		List<Subcategory> subcategoryList = subcategoryService.getSubcategoryList(
+			subcategoryIds.stream()
+				.map(Long::parseLong)
+				.toList()
+		);
 		List<SubcategoryWithFilterResponseDto> response = subcategoryFilterService.getFilters(subcategoryList);
 
 		//then
@@ -111,7 +119,7 @@ public class FilterIntegrationTest {
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isBadRequest())
 			.andExpect(jsonPath("$.isSuccess", is(false)))
-			.andExpect(jsonPath("$.code", is(ErrorCode.INVALID_QUERY_FORMAT.getCode())))
-			.andExpect(jsonPath("$.data.message", is(ErrorCode.INVALID_QUERY_FORMAT.getMessage())));
+			.andExpect(jsonPath("$.code", is(ErrorCode.QUERY_TYPE_MISMATCH.getCode())))
+			.andExpect(jsonPath("$.data.message", is(ErrorCode.QUERY_TYPE_MISMATCH.getMessage())));
 	}
 }
