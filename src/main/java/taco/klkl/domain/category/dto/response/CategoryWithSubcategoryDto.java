@@ -13,7 +13,7 @@ public record CategoryWithSubcategoryDto(
 		return new CategoryWithSubcategoryDto(category.getId(), category.getName().getKoreanName(),
 			category.getSubcategories()
 				.stream()
-				.map(subcategory -> SubcategoryResponseDto.from(subcategory))
+				.map(SubcategoryResponseDto::from)
 				.toList());
 	}
 }

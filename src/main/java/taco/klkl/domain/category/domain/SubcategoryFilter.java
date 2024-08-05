@@ -1,8 +1,5 @@
 package taco.klkl.domain.category.domain;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -11,7 +8,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,28 +15,26 @@ import lombok.NoArgsConstructor;
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Subcategory {
+public class SubcategoryFilter {
 	@Id
-	@Column(name = "subcategory_id")
+	@Column(name = "subcategory_filter_id")
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "category_id")
-	private Category category;
+	@JoinColumn(name = "subcategory_id")
+	private Subcategory subcategory;
 
-	@OneToMany(mappedBy = "subcategory")
-	List<SubcategoryFilter> subcategoryFilters = new ArrayList<>();
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "filter_id")
+	private Filter filter;
 
-	@Column(name = "name")
-	private SubcategoryName name;
-
-	private Subcategory(Category category, SubcategoryName name) {
-		this.category = category;
-		this.name = name;
+	private SubcategoryFilter(final Subcategory subcategory, final Filter filter) {
+		this.subcategory = subcategory;
+		this.filter = filter;
 	}
 
-	public static Subcategory of(Category category, SubcategoryName name) {
-		return new Subcategory(category, name);
+	public static SubcategoryFilter of(final Subcategory subcategory, final Filter filter) {
+		return new SubcategoryFilter(subcategory, filter);
 	}
 }
