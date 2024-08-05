@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import taco.klkl.domain.category.dao.CategoryRepository;
 import taco.klkl.domain.category.domain.Category;
+import taco.klkl.domain.category.domain.CategoryName;
 import taco.klkl.domain.category.dto.response.CategoryResponseDto;
 import taco.klkl.domain.category.dto.response.CategoryWithSubcategoryDto;
 import taco.klkl.domain.category.exception.CategoryNotFoundException;
@@ -28,5 +29,13 @@ public class CategoryService {
 	public CategoryWithSubcategoryDto getSubcategories(Long id) {
 		Category category = categoryRepository.findById(id).orElseThrow(CategoryNotFoundException::new);
 		return CategoryWithSubcategoryDto.from(category);
+	}
+
+	public List<CategoryResponseDto> getCategoriesByCategoryNames(List<CategoryName> categoryNames) {
+		List<Category> findCategories = categoryRepository.findAllByNameIn(categoryNames);
+
+		return findCategories.stream()
+			.map(CategoryResponseDto::from)
+			.toList();
 	}
 }
