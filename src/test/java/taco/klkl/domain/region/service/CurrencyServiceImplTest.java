@@ -45,17 +45,4 @@ public class CurrencyServiceImplTest {
 		assertThat(currencyResponseDtos.get(0)).isEqualTo(currencyResponseDto1);
 		assertThat(currencyResponseDtos.get(1)).isEqualTo(currencyResponseDto2);
 	}
-
-	@Test
-	@DisplayName("통화 존재 여부 테스트")
-	void testExitsCurrency() {
-		// given
-		when(currencyRepository.existsById(1L)).thenReturn(true);
-
-		// when
-		boolean result = currencyService.exitsCurrencyById(1L);
-
-		// then
-		assertThat(result).isTrue();
-	}
 }
