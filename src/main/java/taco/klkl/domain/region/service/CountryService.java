@@ -17,5 +17,5 @@ public interface CountryService {
 
 	List<CityResponseDto> getCitiesByCountryId(final Long countryId);
 
-	CountrySimpleResponseDto getSimpleCountryByCountryType(final CountryType countryType);
+	List<CountrySimpleResponseDto> getAllCountriesByCountryTypes(final List<CountryType> countryTypes);
 }

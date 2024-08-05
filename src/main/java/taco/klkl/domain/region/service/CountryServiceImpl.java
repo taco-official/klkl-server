@@ -61,10 +61,12 @@ public class CountryServiceImpl implements CountryService {
 	}
 
 	@Override
-	public CountrySimpleResponseDto getSimpleCountryByCountryType(CountryType countryType) {
+	public List<CountrySimpleResponseDto> getAllCountriesByCountryTypes(List<CountryType> countryTypes) {
 
-		Country findCountry = countryRepository.findFirstByName(countryType);
+		List<Country> findCountries = countryRepository.findAllByNameIn(countryTypes);
 
-		return CountrySimpleResponseDto.from(findCountry);
+		return findCountries.stream()
+			.map(CountrySimpleResponseDto::from)
+			.toList();
 	}
 }
