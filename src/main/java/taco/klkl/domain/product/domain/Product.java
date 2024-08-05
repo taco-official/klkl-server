@@ -16,7 +16,9 @@ import jakarta.persistence.PrePersist;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import taco.klkl.domain.product.dto.request.ProductUpdateRequestDto;
+import taco.klkl.domain.category.domain.Subcategory;
+import taco.klkl.domain.region.domain.City;
+import taco.klkl.domain.region.domain.Currency;
 import taco.klkl.domain.user.domain.User;
 import taco.klkl.global.common.constants.DefaultConstants;
 import taco.klkl.global.common.constants.ProductConstants;
@@ -79,23 +81,17 @@ public class Product {
 	@ColumnDefault(DefaultConstants.DEFAULT_INT_STRING)
 	private Integer price;
 
-	@Column(
-		name = "city_id",
-		nullable = false
-	)
-	private Long cityId;
+	@ManyToOne
+	@JoinColumn(name = "city_id")
+	private City city;
 
-	@Column(
-		name = "subcategory_id",
-		nullable = false
-	)
-	private Long subcategoryId;
+	@ManyToOne
+	@JoinColumn(name = "subcategory_id")
+	private Subcategory subcategory;
 
-	@Column(
-		name = "currency_id",
-		nullable = false
-	)
-	private Long currencyId;
+	@ManyToOne
+	@JoinColumn(name = "currency_id")
+	private Currency currency;
 
 	@PrePersist
 	protected void prePersist() {
@@ -113,18 +109,18 @@ public class Product {
 		final String description,
 		final String address,
 		final Integer price,
-		final Long cityId,
-		final Long subcategoryId,
-		final Long currencyId
+		final City city,
+		final Subcategory subcategory,
+		final Currency currency
 	) {
 		this.user = user;
 		this.name = name;
 		this.description = description;
 		this.address = address;
 		this.price = price;
-		this.cityId = cityId;
-		this.subcategoryId = subcategoryId;
-		this.currencyId = currencyId;
+		this.city = city;
+		this.subcategory = subcategory;
+		this.currency = currency;
 		this.likeCount = DefaultConstants.DEFAULT_INT_VALUE;
 		this.createdAt = LocalDateTime.now();
 	}
@@ -135,34 +131,42 @@ public class Product {
 		final String description,
 		final String address,
 		final Integer price,
-		final Long cityId,
-		final Long subcategoryId,
-		final Long currencyId
+		final City city,
+		final Subcategory subcategory,
+		final Currency currency
 	) {
-		return new Product(user, name, description, address, price, cityId, subcategoryId, currencyId);
+		return new Product(user, name, description, address, price, city, subcategory, currency);
 	}
 
-	public void update(ProductUpdateRequestDto updateDto) {
-		if (updateDto.name() != null) {
-			this.name = updateDto.name();
+	public void update(
+		final String name,
+		final String description,
+		final String address,
+		final Integer price,
+		final City city,
+		final Subcategory subcategory,
+		final Currency currency
+	) {
+		if (name != null) {
+			this.name = name;
 		}
-		if (updateDto.description() != null) {
-			this.description = updateDto.description();
+		if (description != null) {
+			this.description = description;
 		}
-		if (updateDto.address() != null) {
-			this.address = updateDto.address();
+		if (address != null) {
+			this.address = address;
 		}
-		if (updateDto.price() != null) {
-			this.price = updateDto.price();
+		if (price != null) {
+			this.price = price;
 		}
-		if (updateDto.cityId() != null) {
-			this.cityId = updateDto.cityId();
+		if (city != null) {
+			this.city = city;
 		}
-		if (updateDto.subcategoryId() != null) {
-			this.subcategoryId = updateDto.subcategoryId();
+		if (subcategory != null) {
+			this.subcategory = subcategory;
 		}
-		if (updateDto.currencyId() != null) {
-			this.currencyId = updateDto.currencyId();
+		if (currency != null) {
+			this.currency = currency;
 		}
 	}
 }

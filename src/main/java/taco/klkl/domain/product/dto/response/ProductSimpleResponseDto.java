@@ -24,8 +24,8 @@ public record ProductSimpleResponseDto(
 			product.getProductId(),
 			product.getName(),
 			product.getLikeCount(),
-			product.getCityId(),
-			product.getSubcategoryId()
+			product.getCity().getCityId(),
+			product.getSubcategory().getId()
 		);
 	}
 }

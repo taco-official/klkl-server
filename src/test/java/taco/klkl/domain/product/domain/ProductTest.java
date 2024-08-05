@@ -1,23 +1,31 @@
 package taco.klkl.domain.product.domain;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
-import taco.klkl.domain.product.dto.request.ProductUpdateRequestDto;
+import taco.klkl.domain.category.domain.Subcategory;
+import taco.klkl.domain.region.domain.City;
+import taco.klkl.domain.region.domain.Currency;
 import taco.klkl.domain.user.domain.User;
 import taco.klkl.global.common.constants.ProductConstants;
 
 class ProductTest {
 
-	private User user;
+	private User mockUser;
+	private City mockCity;
+	private Subcategory mockSubcategory;
+	private Currency mockCurrency;
 
 	@BeforeEach
 	public void beforeEach() {
-		user = Mockito.mock(User.class);
+		mockUser = mock(User.class);
+		mockCity = mock(City.class);
+		mockSubcategory = mock(Subcategory.class);
+		mockCurrency = mock(Currency.class);
 	}
 
 	@Test
@@ -28,23 +36,29 @@ class ProductTest {
 		String description = "나성공 설명";
 		String address = "나성공 주소";
 		Integer price = 0;
-		Long cityId = 100L;
-		Long subcategoryId = 200L;
-		Long currencyId = 300L;
 
 		// when
-		Product product = Product.of(user, name, description, address, price, cityId, subcategoryId, currencyId);
+		Product product = Product.of(
+			mockUser,
+			name,
+			description,
+			address,
+			price,
+			mockCity,
+			mockSubcategory,
+			mockCurrency
+		);
 		product.prePersist();
 
 		// then
-		assertThat(product.getUser()).isEqualTo(user);
+		assertThat(product.getUser()).isEqualTo(mockUser);
 		assertThat(product.getName()).isEqualTo(name);
 		assertThat(product.getDescription()).isEqualTo(description);
 		assertThat(product.getAddress()).isEqualTo(address);
 		assertThat(product.getPrice()).isEqualTo(price);
-		assertThat(product.getCityId()).isEqualTo(cityId);
-		assertThat(product.getSubcategoryId()).isEqualTo(subcategoryId);
-		assertThat(product.getCurrencyId()).isEqualTo(currencyId);
+		assertThat(product.getCity()).isEqualTo(mockCity);
+		assertThat(product.getSubcategory()).isEqualTo(mockSubcategory);
+		assertThat(product.getCurrency()).isEqualTo(mockCurrency);
 		assertThat(product.getLikeCount()).isEqualTo(ProductConstants.DEFAULT_LIKE_COUNT);
 	}
 
@@ -56,23 +70,29 @@ class ProductTest {
 		String description = "설명";
 		String address = null;
 		Integer price = 0;
-		Long cityId = 1L;
-		Long subcategoryId = 1L;
-		Long currencyId = 1L;
 
 		// when
-		Product product = Product.of(user, name, description, address, price, cityId, subcategoryId, currencyId);
+		Product product = Product.of(
+			mockUser,
+			name,
+			description,
+			address,
+			price,
+			mockCity,
+			mockSubcategory,
+			mockCurrency
+		);
 		product.prePersist();
 
 		// then
-		assertThat(product.getUser()).isEqualTo(user);
+		assertThat(product.getUser()).isEqualTo(mockUser);
 		assertThat(product.getName()).isEqualTo(name);
 		assertThat(product.getDescription()).isEqualTo(description);
 		assertThat(product.getAddress()).isEqualTo(ProductConstants.DEFAULT_ADDRESS);
 		assertThat(product.getPrice()).isEqualTo(price);
-		assertThat(product.getCityId()).isEqualTo(cityId);
-		assertThat(product.getSubcategoryId()).isEqualTo(subcategoryId);
-		assertThat(product.getCurrencyId()).isEqualTo(currencyId);
+		assertThat(product.getCity()).isEqualTo(mockCity);
+		assertThat(product.getSubcategory()).isEqualTo(mockSubcategory);
+		assertThat(product.getCurrency()).isEqualTo(mockCurrency);
 		assertThat(product.getLikeCount()).isEqualTo(ProductConstants.DEFAULT_LIKE_COUNT);
 	}
 
@@ -84,23 +104,29 @@ class ProductTest {
 		String description = "설명";
 		String address = "주소";
 		Integer price = null;
-		Long cityId = 1L;
-		Long subcategoryId = 1L;
-		Long currencyId = 1L;
 
 		// when
-		Product product = Product.of(user, name, description, address, price, cityId, subcategoryId, currencyId);
+		Product product = Product.of(
+			mockUser,
+			name,
+			description,
+			address,
+			price,
+			mockCity,
+			mockSubcategory,
+			mockCurrency
+		);
 		product.prePersist();
 
 		// then
-		assertThat(product.getUser()).isEqualTo(user);
+		assertThat(product.getUser()).isEqualTo(mockUser);
 		assertThat(product.getName()).isEqualTo(name);
 		assertThat(product.getDescription()).isEqualTo(description);
 		assertThat(product.getAddress()).isEqualTo(address);
 		assertThat(product.getPrice()).isEqualTo(ProductConstants.DEFAULT_PRICE);
-		assertThat(product.getCityId()).isEqualTo(cityId);
-		assertThat(product.getSubcategoryId()).isEqualTo(subcategoryId);
-		assertThat(product.getCurrencyId()).isEqualTo(currencyId);
+		assertThat(product.getCity()).isEqualTo(mockCity);
+		assertThat(product.getSubcategory()).isEqualTo(mockSubcategory);
+		assertThat(product.getCurrency()).isEqualTo(mockCurrency);
 		assertThat(product.getLikeCount()).isEqualTo(ProductConstants.DEFAULT_LIKE_COUNT);
 	}
 
@@ -108,90 +134,123 @@ class ProductTest {
 	@DisplayName("상품 정보 업데이트 테스트")
 	public void testUpdate() {
 		// given
+		String originName = "Origin Name";
+		String originDescription = "Original Description";
+		String originAddress = "Original Address";
+		Integer originPrice = 100;
+		City originCity = mockCity;
+		Subcategory originSubcategory = mockSubcategory;
+		Currency originCurrency = mockCurrency;
+
 		Product product = Product.of(
-			user,
-			"Original Name",
-			"Original Description",
-			"Original Address",
-			100,
-			1L,
-			1L,
-			1L
-		);
-		ProductUpdateRequestDto updateDto = new ProductUpdateRequestDto(
-			"Updated Name",
-			"Updated Description",
-			"Updated Address",
-			200,
-			2L,
-			2L,
-			2L
+			mockUser,
+			originName,
+			originDescription,
+			originAddress,
+			originPrice,
+			originCity,
+			originSubcategory,
+			originCurrency
 		);
 
 		// when
-		product.update(updateDto);
+		String updatedName = "Updated Name";
+		String updatedDescription = "Updated Description";
+		String updatedAddress = "Updated Address";
+		Integer updatedPrice = 200;
+		City updatedCity = mock(City.class);
+		Subcategory updatedSubcategory = mock(Subcategory.class);
+		Currency updatedCurrency = mock(Currency.class);
+
+		product.update(
+			updatedName,
+			updatedDescription,
+			updatedAddress,
+			updatedPrice,
+			updatedCity,
+			updatedSubcategory,
+			updatedCurrency
+		);
 
 		// then
-		assertThat(product.getName()).isEqualTo(updateDto.name());
-		assertThat(product.getDescription()).isEqualTo(updateDto.description());
-		assertThat(product.getAddress()).isEqualTo(updateDto.address());
-		assertThat(product.getPrice()).isEqualTo(updateDto.price());
-		assertThat(product.getCityId()).isEqualTo(updateDto.cityId());
-		assertThat(product.getSubcategoryId()).isEqualTo(updateDto.subcategoryId());
-		assertThat(product.getCurrencyId()).isEqualTo(updateDto.currencyId());
+		assertThat(product.getName()).isEqualTo(updatedName);
+		assertThat(product.getDescription()).isEqualTo(updatedDescription);
+		assertThat(product.getAddress()).isEqualTo(updatedAddress);
+		assertThat(product.getPrice()).isEqualTo(updatedPrice);
+		assertThat(product.getCity()).isEqualTo(updatedCity);
+		assertThat(product.getSubcategory()).isEqualTo(updatedSubcategory);
+		assertThat(product.getCurrency()).isEqualTo(updatedCurrency);
 	}
 
 	@Test
 	@DisplayName("상품 정보 부분 업데이트 테스트")
 	public void testPartialUpdate() {
 		// given
+		String originName = "Origin Name";
+		String originDescription = "Original Description";
+		String originAddress = "Original Address";
+		Integer originPrice = 100;
+		City originCity = mockCity;
+		Subcategory originSubcategory = mockSubcategory;
+		Currency originCurrency = mockCurrency;
+
 		Product product = Product.of(
-			user,
-			"Original Name",
-			"Original Description",
-			"Original Address",
-			100,
-			1L,
-			1L,
-			1L
+			mockUser,
+			originName,
+			originDescription,
+			originAddress,
+			originPrice,
+			originCity,
+			originSubcategory,
+			originCurrency
 		);
-		ProductUpdateRequestDto updateDto = new ProductUpdateRequestDto(
+
+		// when
+		product.update(
 			null,
 			"Updated Description",
 			null,
 			200,
 			null,
-			2L,
+			null,
 			null
 		);
 
-		// when
-		product.update(updateDto);
-
 		// then
-		assertThat(product.getName()).isEqualTo("Original Name");
-		assertThat(product.getDescription()).isEqualTo(updateDto.description());
-		assertThat(product.getAddress()).isEqualTo("Original Address");
-		assertThat(product.getPrice()).isEqualTo(updateDto.price());
-		assertThat(product.getCityId()).isEqualTo(1L);
-		assertThat(product.getSubcategoryId()).isEqualTo(updateDto.subcategoryId());
-		assertThat(product.getCurrencyId()).isEqualTo(1L);
+		assertThat(product.getName()).isEqualTo(originName);
+		assertThat(product.getDescription()).isEqualTo("Updated Description");
+		assertThat(product.getAddress()).isEqualTo(originAddress);
+		assertThat(product.getPrice()).isEqualTo(200);
+		assertThat(product.getCity()).isEqualTo(originCity);
+		assertThat(product.getSubcategory()).isEqualTo(originSubcategory);
+		assertThat(product.getCurrency()).isEqualTo(originCurrency);
 	}
 
 	@Test
 	@DisplayName("상품 정보 업데이트 시 null 값 무시 테스트")
 	public void testUpdateIgnoreNullValues() {
 		// given
+		String originName = "Origin Name";
+		String originDescription = "Original Description";
+		String originAddress = "Original Address";
+		Integer originPrice = 100;
+		City originCity = mockCity;
+		Subcategory originSubcategory = mockSubcategory;
+		Currency originCurrency = mockCurrency;
+
 		Product product = Product.of(
-			user,
-			"Original Name",
-			"Original Description",
-			"Original Address",
-			100,
-			1L,
-			1L,
-			1L);
-		ProductUpdateRequestDto updateDto = new ProductUpdateRequestDto(
+			mockUser,
+			originName,
+			originDescription,
+			originAddress,
+			originPrice,
+			originCity,
+			originSubcategory,
+			originCurrency
+		);
+
+		// when
+		product.update(
 			null,
 			null,
 			null,
@@ -201,16 +260,13 @@ class ProductTest {
 			null
 		);
 
-		// when
-		product.update(updateDto);
-
 		// then
-		assertThat(product.getName()).isEqualTo("Original Name");
-		assertThat(product.getDescription()).isEqualTo("Original Description");
-		assertThat(product.getAddress()).isEqualTo("Original Address");
-		assertThat(product.getPrice()).isEqualTo(100);
-		assertThat(product.getCityId()).isEqualTo(1L);
-		assertThat(product.getSubcategoryId()).isEqualTo(1L);
-		assertThat(product.getCurrencyId()).isEqualTo(1L);
+		assertThat(product.getName()).isEqualTo(originName);
+		assertThat(product.getDescription()).isEqualTo(originDescription);
+		assertThat(product.getAddress()).isEqualTo(originAddress);
+		assertThat(product.getPrice()).isEqualTo(originPrice);
+		assertThat(product.getCity()).isEqualTo(originCity);
+		assertThat(product.getSubcategory()).isEqualTo(originSubcategory);
+		assertThat(product.getCurrency()).isEqualTo(originCurrency);
 	}
 }
