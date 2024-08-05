@@ -23,6 +23,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import taco.klkl.domain.category.domain.Subcategory;
 import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.product.dto.request.ProductCreateRequestDto;
 import taco.klkl.domain.product.dto.request.ProductUpdateRequestDto;
@@ -57,6 +58,7 @@ class ProductControllerTest {
 		// Mock 객체 생성
 		User mockUser = mock(User.class);
 		City mockCity = mock(City.class);
+		Subcategory mockSubcategory = mock(Subcategory.class);
 
 		// Mock Product 객체 생성
 		Product mockProduct1 = mock(Product.class);
@@ -69,7 +71,7 @@ class ProductControllerTest {
 		when(mockProduct1.getCreatedAt()).thenReturn(LocalDateTime.now());
 		when(mockProduct1.getPrice()).thenReturn(1000);
 		when(mockProduct1.getCity()).thenReturn(mockCity);
-		when(mockProduct1.getSubcategoryId()).thenReturn(1L);
+		when(mockProduct1.getSubcategory()).thenReturn(mockSubcategory);
 		when(mockProduct1.getCurrencyId()).thenReturn(1L);
 
 		Product mockProduct2 = mock(Product.class);
@@ -82,7 +84,7 @@ class ProductControllerTest {
 		when(mockProduct2.getCreatedAt()).thenReturn(LocalDateTime.now());
 		when(mockProduct2.getPrice()).thenReturn(2000);
 		when(mockProduct2.getCity()).thenReturn(mockCity);
-		when(mockProduct2.getSubcategoryId()).thenReturn(2L);
+		when(mockProduct2.getSubcategory()).thenReturn(mockSubcategory);
 		when(mockProduct2.getCurrencyId()).thenReturn(2L);
 
 		// ProductResponseDto 생성

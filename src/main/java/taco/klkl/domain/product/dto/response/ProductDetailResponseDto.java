@@ -44,7 +44,7 @@ public record ProductDetailResponseDto(
 			product.getCreatedAt(),
 			product.getPrice(),
 			product.getCity().getCityId(),
-			product.getSubcategoryId(),
+			product.getSubcategory().getId(),
 			product.getCurrencyId()
 		);
 	}

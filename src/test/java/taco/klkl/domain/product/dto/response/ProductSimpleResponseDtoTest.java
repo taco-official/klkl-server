@@ -5,8 +5,8 @@ import static org.mockito.Mockito.*;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
+import taco.klkl.domain.category.domain.Subcategory;
 import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.region.domain.City;
 
@@ -18,15 +18,15 @@ class ProductSimpleResponseDtoTest {
 		Long productId = 1L;
 		String name = "맛있는 곤약젤리";
 		int likeCount = 10;
-		City mockCity = Mockito.mock(City.class);
-		Long subcategoryId = 3L;
+		City mockCity = mock(City.class);
+		Subcategory mockSubcategory = mock(Subcategory.class);
 
-		Product mockProduct = Mockito.mock(Product.class);
+		Product mockProduct = mock(Product.class);
 		when(mockProduct.getProductId()).thenReturn(productId);
 		when(mockProduct.getName()).thenReturn(name);
 		when(mockProduct.getLikeCount()).thenReturn(likeCount);
 		when(mockProduct.getCity()).thenReturn(mockCity);
-		when(mockProduct.getSubcategoryId()).thenReturn(subcategoryId);
+		when(mockProduct.getSubcategory()).thenReturn(mockSubcategory);
 
 		// when
 		ProductSimpleResponseDto dto = ProductSimpleResponseDto.from(mockProduct);
@@ -36,7 +36,7 @@ class ProductSimpleResponseDtoTest {
 		assertThat(dto.name()).isEqualTo(name);
 		assertThat(dto.likeCount()).isEqualTo(likeCount);
 		assertThat(dto.cityId()).isEqualTo(mockCity.getCityId());
-		assertThat(dto.subcategoryId()).isEqualTo(subcategoryId);
+		assertThat(dto.subcategoryId()).isEqualTo(mockSubcategory.getId());
 	}
 
 	@Test
@@ -46,8 +46,8 @@ class ProductSimpleResponseDtoTest {
 		Long productId = 1L;
 		String name = "맛있는 곤약젤리";
 		int likeCount = 10;
-		City mockCity = Mockito.mock(City.class);
-		Long subcategoryId = 3L;
+		City mockCity = mock(City.class);
+		Subcategory mockSubcategory = mock(Subcategory.class);
 
 		// when
 		ProductSimpleResponseDto dto = new ProductSimpleResponseDto(
@@ -55,7 +55,7 @@ class ProductSimpleResponseDtoTest {
 			name,
 			likeCount,
 			mockCity.getCityId(),
-			subcategoryId
+			mockSubcategory.getId()
 		);
 
 		// then
@@ -63,6 +63,6 @@ class ProductSimpleResponseDtoTest {
 		assertThat(dto.name()).isEqualTo(name);
 		assertThat(dto.likeCount()).isEqualTo(likeCount);
 		assertThat(dto.cityId()).isEqualTo(mockCity.getCityId());
-		assertThat(dto.subcategoryId()).isEqualTo(subcategoryId);
+		assertThat(dto.subcategoryId()).isEqualTo(mockSubcategory.getId());
 	}
 }

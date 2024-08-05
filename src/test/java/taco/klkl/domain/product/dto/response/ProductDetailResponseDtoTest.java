@@ -9,6 +9,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
+import taco.klkl.domain.category.domain.Subcategory;
 import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.region.domain.City;
 import taco.klkl.domain.user.domain.User;
@@ -19,15 +20,15 @@ class ProductDetailResponseDtoTest {
 	void testFromProduct() {
 		// given
 		Long productId = 1L;
-		User mockUser = Mockito.mock(User.class);
+		User mockUser = mock(User.class);
 		String name = "맛있는 곤약젤리";
 		String description = "탱글탱글 맛있는 곤약젤리";
 		String address = "신사이바시 메가돈키호테";
 		int likeCount = 10;
 		LocalDateTime createdAt = LocalDateTime.now();
 		int price = 1000;
-		City mockCity = Mockito.mock(City.class);
-		Long subcategoryId = 4L;
+		City mockCity = mock(City.class);
+		Subcategory mockSubcategory = mock(Subcategory.class);
 		Long currencyId = 5L;
 
 		Product product = Mockito.mock(Product.class);
@@ -40,7 +41,7 @@ class ProductDetailResponseDtoTest {
 		when(product.getCreatedAt()).thenReturn(createdAt);
 		when(product.getPrice()).thenReturn(price);
 		when(product.getCity()).thenReturn(mockCity);
-		when(product.getSubcategoryId()).thenReturn(subcategoryId);
+		when(product.getSubcategory()).thenReturn(mockSubcategory);
 		when(product.getCurrencyId()).thenReturn(currencyId);
 
 		// when
@@ -56,7 +57,7 @@ class ProductDetailResponseDtoTest {
 		assertThat(dto.createdAt()).isEqualTo(createdAt);
 		assertThat(dto.price()).isEqualTo(price);
 		assertThat(dto.cityId()).isEqualTo(mockCity.getCityId());
-		assertThat(dto.subcategoryId()).isEqualTo(subcategoryId);
+		assertThat(dto.subcategoryId()).isEqualTo(mockSubcategory.getId());
 		assertThat(dto.currencyId()).isEqualTo(currencyId);
 	}
 

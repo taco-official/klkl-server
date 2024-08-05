@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
+import taco.klkl.domain.category.domain.Subcategory;
+import taco.klkl.domain.category.service.SubcategoryService;
 import taco.klkl.domain.product.dao.ProductRepository;
 import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.product.dto.request.ProductCreateRequestDto;
@@ -27,6 +29,7 @@ public class ProductService {
 	private final ProductRepository productRepository;
 	private final CityServiceImpl cityServiceImpl;
 	private final UserUtil userUtil;
+	private final SubcategoryService subcategoryService;
 
 	public List<ProductSimpleResponseDto> getAllProducts(Pageable pageable) {
 		return productRepository.findAll(pageable).stream()
@@ -53,6 +56,7 @@ public class ProductService {
 			.orElseThrow(ProductNotFoundException::new);
 
 		City city = getCityEntity(productDto.cityId());
+		Subcategory subcategory = getSubcategoryEntity(productDto.subcategoryId());
 
 		product.update(
 			productDto.name(),
@@ -60,7 +64,7 @@ public class ProductService {
 			productDto.address(),
 			productDto.price(),
 			city,
-			productDto.subcategoryId(),
+			subcategory,
 			productDto.currencyId()
 		);
 
@@ -77,6 +81,7 @@ public class ProductService {
 	private Product createProductEntity(final ProductCreateRequestDto productDto) {
 		final User user = userUtil.findTestUser();
 		final City city = getCityEntity(productDto.cityId());
+		final Subcategory subcategory = getSubcategoryEntity(productDto.subcategoryId());
 
 		return Product.of(
 			user,
@@ -85,7 +90,7 @@ public class ProductService {
 			productDto.address(),
 			productDto.price(),
 			city,
-			productDto.subcategoryId(),
+			subcategory,
 			productDto.currencyId()
 		);
 	}
@@ -93,6 +98,13 @@ public class ProductService {
 	private City getCityEntity(final Long cityId) {
 		if (cityId != null) {
 			return cityServiceImpl.getCityById(cityId);
+		}
+		return null;
+	}
+
+	private Subcategory getSubcategoryEntity(final Long subcategoryId) {
+		if (subcategoryId != null) {
+			return subcategoryService.getSubcategoryById(subcategoryId);
 		}
 		return null;
 	}

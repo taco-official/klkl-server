@@ -20,6 +20,8 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
+import taco.klkl.domain.category.domain.Subcategory;
+import taco.klkl.domain.category.service.SubcategoryService;
 import taco.klkl.domain.product.dao.ProductRepository;
 import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.product.dto.request.ProductCreateRequestDto;
@@ -42,7 +44,10 @@ class ProductServiceTest {
 	private ProductRepository productRepository;
 
 	@Mock
-	private CityServiceImpl cityServiceImpl;
+	private CityServiceImpl cityService;
+
+	@Mock
+	private SubcategoryService subcategoryService;
 
 	@Mock
 	private UserUtil userUtil;
@@ -50,6 +55,7 @@ class ProductServiceTest {
 	private Product mockProduct;
 	private User mockUser;
 	private City mockCity;
+	private Subcategory mockSubcategory;
 
 	@BeforeEach
 	void setUp() {
@@ -61,6 +67,9 @@ class ProductServiceTest {
 		mockCity = mock(City.class);
 		when(mockCity.getCityId()).thenReturn(1L);
 
+		mockSubcategory = mock(Subcategory.class);
+		when(mockSubcategory.getId()).thenReturn(1L);
+
 		mockProduct = mock(Product.class);
 		when(mockProduct.getProductId()).thenReturn(1L);
 		when(mockProduct.getUser()).thenReturn(mockUser);
@@ -71,7 +80,7 @@ class ProductServiceTest {
 		when(mockProduct.getCreatedAt()).thenReturn(LocalDateTime.now());
 		when(mockProduct.getPrice()).thenReturn(1000);
 		when(mockProduct.getCity()).thenReturn(mockCity);
-		when(mockProduct.getSubcategoryId()).thenReturn(1L);
+		when(mockProduct.getSubcategory()).thenReturn(mockSubcategory);
 		when(mockProduct.getCurrencyId()).thenReturn(1L);
 	}
 
@@ -129,7 +138,7 @@ class ProductServiceTest {
 			mockProduct.getAddress(),
 			mockProduct.getPrice(),
 			mockProduct.getCity().getCityId(),
-			mockProduct.getSubcategoryId(),
+			mockProduct.getSubcategory().getId(),
 			mockProduct.getCurrencyId()
 		);
 		User mockUser = mock(User.class);
@@ -138,8 +147,12 @@ class ProductServiceTest {
 		City mockCity = mock(City.class);
 		when(mockCity.getCityId()).thenReturn(1L);
 
+		Subcategory mockSubcategory = mock(Subcategory.class);
+		when(mockSubcategory.getId()).thenReturn(1L);
+
 		when(userUtil.findTestUser()).thenReturn(mockUser);
-		when(cityServiceImpl.getCityById(1L)).thenReturn(mockCity);
+		when(cityService.getCityById(1L)).thenReturn(mockCity);
+		when(subcategoryService.getSubcategoryById(1L)).thenReturn(mockSubcategory);
 
 		// When
 		ProductDetailResponseDto result = productService.createProduct(requestDto);
@@ -151,11 +164,11 @@ class ProductServiceTest {
 		assertThat(result.address()).isEqualTo(mockProduct.getAddress());
 		assertThat(result.price()).isEqualTo(mockProduct.getPrice());
 		assertThat(result.cityId()).isEqualTo(mockProduct.getCity().getCityId());
-		assertThat(result.subcategoryId()).isEqualTo(mockProduct.getSubcategoryId());
+		assertThat(result.subcategoryId()).isEqualTo(mockProduct.getSubcategory().getId());
 		assertThat(result.currencyId()).isEqualTo(mockProduct.getCurrencyId());
 
 		verify(userUtil).findTestUser();
-		verify(cityServiceImpl).getCityById(1L);
+		verify(cityService).getCityById(1L);
 		verify(productRepository).save(any(Product.class));
 	}
 
@@ -169,11 +182,12 @@ class ProductServiceTest {
 			"Updated Address",
 			2000,
 			1L,
-			2L,
+			1L,
 			2L
 		);
 		when(productRepository.findById(1L)).thenReturn(Optional.of(mockProduct));
-		when(cityServiceImpl.getCityById(1L)).thenReturn(mockCity);
+		when(cityService.getCityById(1L)).thenReturn(mockCity);
+		when(subcategoryService.getSubcategoryById(1L)).thenReturn(mockSubcategory);
 
 		// When
 		ProductDetailResponseDto result = productService.updateProduct(1L, requestDto);
@@ -181,14 +195,14 @@ class ProductServiceTest {
 		// Then
 		assertThat(result).isNotNull();
 		verify(productRepository).findById(1L);
-		verify(cityServiceImpl).getCityById(1L);
+		verify(cityService).getCityById(1L);
 		verify(mockProduct).update(
 			requestDto.name(),
 			requestDto.description(),
 			requestDto.address(),
 			requestDto.price(),
 			mockCity,
-			requestDto.subcategoryId(),
+			mockSubcategory,
 			requestDto.currencyId()
 		);
 	}
