@@ -35,7 +35,7 @@ public record ProductDetailResponseDto(
 
 	public static ProductDetailResponseDto from(Product product) {
 		return new ProductDetailResponseDto(
-			product.getProductId(),
+			product.getId(),
 			product.getUser().getId(),
 			product.getName(),
 			product.getDescription(),

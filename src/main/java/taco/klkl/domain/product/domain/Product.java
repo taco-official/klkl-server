@@ -32,7 +32,7 @@ public class Product {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "product_id")
-	private Long productId;
+	private Long id;
 
 	@ManyToOne(optional = false)
 	@JoinColumn(

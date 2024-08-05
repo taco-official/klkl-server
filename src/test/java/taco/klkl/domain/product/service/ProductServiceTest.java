@@ -79,7 +79,7 @@ class ProductServiceTest {
 		when(mockCurrency.getCurrencyId()).thenReturn(1L);
 
 		mockProduct = mock(Product.class);
-		when(mockProduct.getProductId()).thenReturn(1L);
+		when(mockProduct.getId()).thenReturn(1L);
 		when(mockProduct.getUser()).thenReturn(mockUser);
 		when(mockProduct.getName()).thenReturn("Test Product");
 		when(mockProduct.getDescription()).thenReturn("Test Description");
@@ -106,7 +106,7 @@ class ProductServiceTest {
 
 		// Then
 		assertThat(result).hasSize(1);
-		assertThat(result.get(0).productId()).isEqualTo(mockProduct.getProductId());
+		assertThat(result.get(0).productId()).isEqualTo(mockProduct.getId());
 		verify(productRepository).findAll(pageable);
 	}
 
@@ -121,7 +121,7 @@ class ProductServiceTest {
 
 		// Then
 		assertThat(result).isNotNull();
-		assertThat(result.productId()).isEqualTo(mockProduct.getProductId());
+		assertThat(result.productId()).isEqualTo(mockProduct.getId());
 		verify(productRepository).findById(1L);
 	}
 

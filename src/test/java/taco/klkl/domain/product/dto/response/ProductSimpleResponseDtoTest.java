@@ -22,7 +22,7 @@ class ProductSimpleResponseDtoTest {
 		Subcategory mockSubcategory = mock(Subcategory.class);
 
 		Product mockProduct = mock(Product.class);
-		when(mockProduct.getProductId()).thenReturn(productId);
+		when(mockProduct.getId()).thenReturn(productId);
 		when(mockProduct.getName()).thenReturn(name);
 		when(mockProduct.getLikeCount()).thenReturn(likeCount);
 		when(mockProduct.getCity()).thenReturn(mockCity);

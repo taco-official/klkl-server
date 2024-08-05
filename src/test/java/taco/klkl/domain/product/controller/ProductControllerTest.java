@@ -63,7 +63,7 @@ class ProductControllerTest {
 
 		// Mock Product 객체 생성
 		Product mockProduct1 = mock(Product.class);
-		when(mockProduct1.getProductId()).thenReturn(1L);
+		when(mockProduct1.getId()).thenReturn(1L);
 		when(mockProduct1.getUser()).thenReturn(mockUser);
 		when(mockProduct1.getName()).thenReturn("name1");
 		when(mockProduct1.getDescription()).thenReturn("description1");
@@ -76,7 +76,7 @@ class ProductControllerTest {
 		when(mockProduct1.getCurrency()).thenReturn(mockCurrency);
 
 		Product mockProduct2 = mock(Product.class);
-		when(mockProduct2.getProductId()).thenReturn(2L);
+		when(mockProduct2.getId()).thenReturn(2L);
 		when(mockProduct2.getUser()).thenReturn(mockUser);
 		when(mockProduct2.getName()).thenReturn("name2");
 		when(mockProduct2.getDescription()).thenReturn("description2");
