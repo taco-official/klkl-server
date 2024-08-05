@@ -18,21 +18,10 @@ import taco.klkl.domain.category.exception.SubcategoryNotFoundException;
 public class SubcategoryService {
 	private final SubcategoryRepository subcategoryRepository;
 
-	public List<Subcategory> getSubcategoryList(List<String> subcategoryQuery) {
-		List<Long> subcategoryIdList = parseSubcategoryQueryDto(subcategoryQuery);
-		List<Subcategory> subcategories = subcategoryRepository.findAllById(subcategoryIdList);
-		validateSubcategories(subcategoryQuery.size(), subcategories.size());
+	public List<Subcategory> getSubcategoryList(List<Long> subcategoryIds) {
+		List<Subcategory> subcategories = subcategoryRepository.findAllById(subcategoryIds);
+		validateSubcategories(subcategoryIds.size(), subcategories.size());
 		return subcategories;
-	}
-
-	private List<Long> parseSubcategoryQueryDto(List<String> subcategoryQuery) {
-		try {
-			return subcategoryQuery.stream()
-				.map(Long::parseLong)
-				.toList();
-		} catch (NumberFormatException e) {
-			throw new IllegalArgumentException("Invalid subcategory ID format: " + e.getMessage());
-		}
 	}
 
 	private void validateSubcategories(final int request, final int result) {
