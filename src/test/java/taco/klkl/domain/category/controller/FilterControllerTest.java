@@ -25,7 +25,7 @@ import taco.klkl.domain.category.domain.FilterName;
 import taco.klkl.domain.category.domain.Subcategory;
 import taco.klkl.domain.category.domain.SubcategoryFilter;
 import taco.klkl.domain.category.domain.SubcategoryName;
-import taco.klkl.domain.category.dto.response.SubcategoryWithFilterResponseDto;
+import taco.klkl.domain.category.dto.response.FilterWithSubcategoryResponseDto;
 import taco.klkl.domain.category.exception.SubcategoryNotFoundException;
 import taco.klkl.domain.category.service.SubcategoryFilterService;
 import taco.klkl.domain.category.service.SubcategoryService;
@@ -76,8 +76,8 @@ public class FilterControllerTest {
 		when(mockFilter2.getId()).thenReturn(2L);
 		when(mockFilter2.getName()).thenReturn(FilterName.CILANTRO);
 
-		List<SubcategoryWithFilterResponseDto> mockResponse = mockSubcategoryList.stream()
-			.map(SubcategoryWithFilterResponseDto::from)
+		List<FilterWithSubcategoryResponseDto> mockResponse = mockSubcategoryList.stream()
+			.map(FilterWithSubcategoryResponseDto::from)
 			.toList();
 
 		when(subcategoryService.getSubcategoryList(subcategoryIds)).thenReturn(mockSubcategoryList);
@@ -136,8 +136,8 @@ public class FilterControllerTest {
 		when(mockFilter2.getId()).thenReturn(2L);
 		when(mockFilter2.getName()).thenReturn(FilterName.CILANTRO);
 
-		List<SubcategoryWithFilterResponseDto> mockResponse = mockSubcategoryList.stream()
-			.map(SubcategoryWithFilterResponseDto::from)
+		List<FilterWithSubcategoryResponseDto> mockResponse = mockSubcategoryList.stream()
+			.map(FilterWithSubcategoryResponseDto::from)
 			.toList();
 
 		when(subcategoryService.getSubcategoryList(subcategoryIds)).thenReturn(mockSubcategoryList);
