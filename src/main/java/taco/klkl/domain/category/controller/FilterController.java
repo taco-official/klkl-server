@@ -29,8 +29,8 @@ public class FilterController {
 	@GetMapping
 	@Operation(description = "Subcategory 포함된 Filter 반환")
 	public ResponseEntity<List<SubcategoryWithFilterResponseDto>> getFilter(
-		@RequestParam("subcategories") List<String> subcategoryQuery) {
-		List<Subcategory> subcategoryList = subcategoryService.getSubcategoryList(subcategoryQuery);
+		@RequestParam("subcategories") List<Long> subcategoryIds) {
+		List<Subcategory> subcategoryList = subcategoryService.getSubcategoryList(subcategoryIds);
 		List<SubcategoryWithFilterResponseDto> subcategoryWithFilterResponseDto = subcategoryFilterService.getFilters(
 			subcategoryList);
 		return ResponseEntity.ok(subcategoryWithFilterResponseDto);
