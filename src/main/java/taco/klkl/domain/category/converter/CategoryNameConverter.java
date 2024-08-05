@@ -9,11 +9,17 @@ public class CategoryNameConverter implements AttributeConverter<CategoryName, S
 
 	@Override
 	public String convertToDatabaseColumn(CategoryName categoryName) {
+		if (categoryName == null) {
+			return null;
+		}
 		return categoryName.getKoreanName();
 	}
 
 	@Override
 	public CategoryName convertToEntityAttribute(String name) {
+		if (name == null) {
+			return null;
+		}
 		return CategoryName.getByName(name);
 	}
 }

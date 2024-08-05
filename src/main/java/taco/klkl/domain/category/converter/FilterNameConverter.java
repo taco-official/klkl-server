@@ -9,11 +9,17 @@ public class FilterNameConverter implements AttributeConverter<FilterName, Strin
 
 	@Override
 	public String convertToDatabaseColumn(FilterName filterName) {
+		if (filterName == null) {
+			return null;
+		}
 		return filterName.getKoreanName();
 	}
 
 	@Override
 	public FilterName convertToEntityAttribute(String name) {
+		if (name == null) {
+			return null;
+		}
 		return FilterName.getByName(name);
 	}
 }

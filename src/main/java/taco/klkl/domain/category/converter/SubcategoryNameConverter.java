@@ -9,11 +9,17 @@ public class SubcategoryNameConverter implements AttributeConverter<SubcategoryN
 
 	@Override
 	public String convertToDatabaseColumn(SubcategoryName subcategoryName) {
+		if (subcategoryName == null) {
+			return null;
+		}
 		return subcategoryName.getKoreanName();
 	}
 
 	@Override
 	public SubcategoryName convertToEntityAttribute(String name) {
+		if (name == null) {
+			return null;
+		}
 		return SubcategoryName.getByName(name);
 	}
 }
