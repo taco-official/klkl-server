@@ -24,8 +24,7 @@ import taco.klkl.domain.category.domain.Subcategory;
 import taco.klkl.domain.category.service.SubcategoryService;
 import taco.klkl.domain.product.dao.ProductRepository;
 import taco.klkl.domain.product.domain.Product;
-import taco.klkl.domain.product.dto.request.ProductCreateRequestDto;
-import taco.klkl.domain.product.dto.request.ProductUpdateRequestDto;
+import taco.klkl.domain.product.dto.request.ProductCreateUpdateRequestDto;
 import taco.klkl.domain.product.dto.response.ProductDetailResponseDto;
 import taco.klkl.domain.product.dto.response.ProductSimpleResponseDto;
 import taco.klkl.domain.product.exception.ProductNotFoundException;
@@ -141,7 +140,7 @@ class ProductServiceTest {
 	@DisplayName("상품 생성 테스트")
 	void testCreateProduct() {
 		// Given
-		ProductCreateRequestDto requestDto = new ProductCreateRequestDto(
+		ProductCreateUpdateRequestDto createRequest = new ProductCreateUpdateRequestDto(
 			mockProduct.getName(),
 			mockProduct.getDescription(),
 			mockProduct.getAddress(),
@@ -156,7 +155,7 @@ class ProductServiceTest {
 		when(currencyService.getCurrencyById(1L)).thenReturn(mockCurrency);
 
 		// When
-		ProductDetailResponseDto result = productService.createProduct(requestDto);
+		ProductDetailResponseDto result = productService.createProduct(createRequest);
 
 		// Then
 		assertThat(result).isNotNull();
@@ -177,7 +176,7 @@ class ProductServiceTest {
 	@DisplayName("상품 수정 테스트")
 	void testUpdateProduct() {
 		// Given
-		ProductUpdateRequestDto requestDto = new ProductUpdateRequestDto(
+		ProductCreateUpdateRequestDto updateRequest = new ProductCreateUpdateRequestDto(
 			"Updated Product",
 			"Updated Description",
 			"Updated Address",
@@ -192,17 +191,17 @@ class ProductServiceTest {
 		when(currencyService.getCurrencyById(1L)).thenReturn(mockCurrency);
 
 		// When
-		ProductDetailResponseDto result = productService.updateProduct(1L, requestDto);
+		ProductDetailResponseDto result = productService.updateProduct(1L, updateRequest);
 
 		// Then
 		assertThat(result).isNotNull();
 		verify(productRepository).findById(1L);
 		verify(cityService).getCityById(1L);
 		verify(mockProduct).update(
-			requestDto.name(),
-			requestDto.description(),
-			requestDto.address(),
-			requestDto.price(),
+			updateRequest.name(),
+			updateRequest.description(),
+			updateRequest.address(),
+			updateRequest.price(),
 			mockCity,
 			mockSubcategory,
 			mockCurrency

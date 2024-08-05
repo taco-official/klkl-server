@@ -8,9 +8,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,8 +21,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import taco.klkl.domain.product.dto.request.ProductCreateRequestDto;
-import taco.klkl.domain.product.dto.request.ProductUpdateRequestDto;
+import taco.klkl.domain.product.dto.request.ProductCreateUpdateRequestDto;
 import taco.klkl.domain.product.dto.response.ProductDetailResponseDto;
 import taco.klkl.domain.product.dto.response.ProductSimpleResponseDto;
 import taco.klkl.domain.product.service.ProductService;
@@ -58,16 +57,16 @@ public class ProductController {
 	@Operation(summary = "상품 등록", description = "상품을 등록합니다.")
 	@ResponseStatus(HttpStatus.CREATED)
 	public ProductDetailResponseDto createProduct(
-		@Valid @RequestBody ProductCreateRequestDto createRequest
+		@Valid @RequestBody ProductCreateUpdateRequestDto createRequest
 	) {
 		return productService.createProduct(createRequest);
 	}
 
-	@PatchMapping("/{id}")
+	@PutMapping("/{id}")
 	@Operation(summary = "상품 정보 수정", description = "상품 정보를 수정합니다.")
 	public ProductDetailResponseDto updateProduct(
 		@PathVariable Long id,
-		@Valid @RequestBody ProductUpdateRequestDto updateRequest
+		@Valid @RequestBody ProductCreateUpdateRequestDto updateRequest
 	) {
 		return productService.updateProduct(id, updateRequest);
 	}

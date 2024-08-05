@@ -34,8 +34,11 @@ public class Product {
 	@Column(name = "product_id")
 	private Long productId;
 
-	@ManyToOne
-	@JoinColumn(name = "user_id")
+	@ManyToOne(optional = false)
+	@JoinColumn(
+		name = "user_id",
+		nullable = false
+	)
 	private User user;
 
 	@Column(
@@ -81,16 +84,25 @@ public class Product {
 	@ColumnDefault(DefaultConstants.DEFAULT_INT_STRING)
 	private Integer price;
 
-	@ManyToOne
-	@JoinColumn(name = "city_id")
+	@ManyToOne(optional = false)
+	@JoinColumn(
+		name = "city_id",
+		nullable = false
+	)
 	private City city;
 
-	@ManyToOne
-	@JoinColumn(name = "subcategory_id")
+	@ManyToOne(optional = false)
+	@JoinColumn(
+		name = "subcategory_id",
+		nullable = false
+	)
 	private Subcategory subcategory;
 
-	@ManyToOne
-	@JoinColumn(name = "currency_id")
+	@ManyToOne(optional = false)
+	@JoinColumn(
+		name = "currency_id",
+		nullable = false
+	)
 	private Currency currency;
 
 	@PrePersist
@@ -147,26 +159,12 @@ public class Product {
 		final Subcategory subcategory,
 		final Currency currency
 	) {
-		if (name != null) {
-			this.name = name;
-		}
-		if (description != null) {
-			this.description = description;
-		}
-		if (address != null) {
-			this.address = address;
-		}
-		if (price != null) {
-			this.price = price;
-		}
-		if (city != null) {
-			this.city = city;
-		}
-		if (subcategory != null) {
-			this.subcategory = subcategory;
-		}
-		if (currency != null) {
-			this.currency = currency;
-		}
+		this.name = name;
+		this.description = description;
+		this.address = address;
+		this.price = price;
+		this.city = city;
+		this.subcategory = subcategory;
+		this.currency = currency;
 	}
 }

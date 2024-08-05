@@ -25,8 +25,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import taco.klkl.domain.category.domain.Subcategory;
 import taco.klkl.domain.product.domain.Product;
-import taco.klkl.domain.product.dto.request.ProductCreateRequestDto;
-import taco.klkl.domain.product.dto.request.ProductUpdateRequestDto;
+import taco.klkl.domain.product.dto.request.ProductCreateUpdateRequestDto;
 import taco.klkl.domain.product.dto.response.ProductDetailResponseDto;
 import taco.klkl.domain.product.dto.response.ProductSimpleResponseDto;
 import taco.klkl.domain.product.exception.ProductNotFoundException;
@@ -172,7 +171,7 @@ class ProductControllerTest {
 	@DisplayName("상품 등록 API 테스트")
 	public void testCreateProduct() throws Exception {
 		// given
-		ProductCreateRequestDto productCreateRequestDto = new ProductCreateRequestDto(
+		ProductCreateUpdateRequestDto createRequest = new ProductCreateUpdateRequestDto(
 			"name",
 			"description",
 			"address",
@@ -181,12 +180,12 @@ class ProductControllerTest {
 			3L,
 			4L
 		);
-		when(productService.createProduct(any(ProductCreateRequestDto.class))).thenReturn(productDetailDto);
+		when(productService.createProduct(any(ProductCreateUpdateRequestDto.class))).thenReturn(productDetailDto);
 
 		// when & then
 		mockMvc.perform(post("/v1/products")
 				.contentType(MediaType.APPLICATION_JSON)
-				.content(objectMapper.writeValueAsString(productCreateRequestDto)))
+				.content(objectMapper.writeValueAsString(createRequest)))
 			.andExpect(status().isCreated())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
 			.andExpect(jsonPath("$.code", is("C000")))
@@ -202,7 +201,7 @@ class ProductControllerTest {
 			.andExpect(jsonPath("$.data.currencyId", is(productDetailDto.currencyId().intValue())))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
 
-		verify(productService).createProduct(any(ProductCreateRequestDto.class));
+		verify(productService).createProduct(any(ProductCreateUpdateRequestDto.class));
 	}
 
 	@Test
@@ -210,7 +209,7 @@ class ProductControllerTest {
 	public void testUpdateProduct() throws Exception {
 		// given
 		Long productId = 1L;
-		ProductUpdateRequestDto updateRequest = new ProductUpdateRequestDto(
+		ProductCreateUpdateRequestDto updateRequest = new ProductCreateUpdateRequestDto(
 			"Updated Name",
 			"Updated Description",
 			"Updated Address",
@@ -220,11 +219,11 @@ class ProductControllerTest {
 			4L
 		);
 
-		when(productService.updateProduct(eq(productId), any(ProductUpdateRequestDto.class)))
+		when(productService.updateProduct(eq(productId), any(ProductCreateUpdateRequestDto.class)))
 			.thenReturn(productDetailDto);
 
 		// when & then
-		mockMvc.perform(patch("/v1/products/{id}", productId)
+		mockMvc.perform(put("/v1/products/{id}", productId)
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(updateRequest)))
 			.andExpect(status().isOk())
@@ -242,7 +241,7 @@ class ProductControllerTest {
 			.andExpect(jsonPath("$.data.currencyId", is(productDetailDto.currencyId().intValue())))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
 
-		verify(productService).updateProduct(eq(productId), any(ProductUpdateRequestDto.class));
+		verify(productService).updateProduct(eq(productId), any(ProductCreateUpdateRequestDto.class));
 	}
 
 	@Test

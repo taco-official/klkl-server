@@ -8,16 +8,18 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import taco.klkl.domain.category.domain.Subcategory;
+import taco.klkl.domain.category.exception.SubcategoryNotFoundException;
 import taco.klkl.domain.category.service.SubcategoryService;
 import taco.klkl.domain.product.dao.ProductRepository;
 import taco.klkl.domain.product.domain.Product;
-import taco.klkl.domain.product.dto.request.ProductCreateRequestDto;
-import taco.klkl.domain.product.dto.request.ProductUpdateRequestDto;
+import taco.klkl.domain.product.dto.request.ProductCreateUpdateRequestDto;
 import taco.klkl.domain.product.dto.response.ProductDetailResponseDto;
 import taco.klkl.domain.product.dto.response.ProductSimpleResponseDto;
 import taco.klkl.domain.product.exception.ProductNotFoundException;
 import taco.klkl.domain.region.domain.City;
 import taco.klkl.domain.region.domain.Currency;
+import taco.klkl.domain.region.exception.CityNotFoundException;
+import taco.klkl.domain.region.exception.CurrencyNotFoundException;
 import taco.klkl.domain.region.service.CityService;
 import taco.klkl.domain.region.service.CurrencyService;
 import taco.klkl.domain.user.domain.User;
@@ -42,38 +44,25 @@ public class ProductService {
 			.toList();
 	}
 
-	public ProductDetailResponseDto getProductById(final Long id) {
+	public ProductDetailResponseDto getProductById(final Long id) throws ProductNotFoundException {
 		final Product product = productRepository.findById(id)
 			.orElseThrow(ProductNotFoundException::new);
 		return ProductDetailResponseDto.from(product);
 	}
 
 	@Transactional
-	public ProductDetailResponseDto createProduct(final ProductCreateRequestDto productDto) {
-		final Product product = createProductEntity(productDto);
+	public ProductDetailResponseDto createProduct(final ProductCreateUpdateRequestDto createRequest) {
+		final Product product = createProductEntity(createRequest);
 		productRepository.save(product);
 		return ProductDetailResponseDto.from(product);
 	}
 
 	@Transactional
-	public ProductDetailResponseDto updateProduct(final Long id, final ProductUpdateRequestDto productDto) {
+	public ProductDetailResponseDto updateProduct(final Long id, final ProductCreateUpdateRequestDto updateRequest)
+		throws ProductNotFoundException {
 		final Product product = productRepository.findById(id)
 			.orElseThrow(ProductNotFoundException::new);
-
-		City city = getCityEntity(productDto.cityId());
-		Subcategory subcategory = getSubcategoryEntity(productDto.subcategoryId());
-		Currency currency = getCurrencyEntity(productDto.currencyId());
-
-		product.update(
-			productDto.name(),
-			productDto.description(),
-			productDto.address(),
-			productDto.price(),
-			city,
-			subcategory,
-			currency
-		);
-
+		updateProductEntity(product, updateRequest);
 		return ProductDetailResponseDto.from(product);
 	}
 
@@ -84,42 +73,49 @@ public class ProductService {
 		productRepository.delete(product);
 	}
 
-	private Product createProductEntity(final ProductCreateRequestDto productDto) {
+	private Product createProductEntity(final ProductCreateUpdateRequestDto createRequest) {
 		final User user = userUtil.findTestUser();
-		final City city = getCityEntity(productDto.cityId());
-		final Subcategory subcategory = getSubcategoryEntity(productDto.subcategoryId());
-		final Currency currency = getCurrencyEntity(productDto.currencyId());
+		final City city = getCityEntity(createRequest.cityId());
+		final Subcategory subcategory = getSubcategoryEntity(createRequest.subcategoryId());
+		final Currency currency = getCurrencyEntity(createRequest.currencyId());
 
 		return Product.of(
 			user,
-			productDto.name(),
-			productDto.description(),
-			productDto.address(),
-			productDto.price(),
+			createRequest.name(),
+			createRequest.description(),
+			createRequest.address(),
+			createRequest.price(),
 			city,
 			subcategory,
 			currency
 		);
 	}
 
-	private City getCityEntity(final Long cityId) {
-		if (cityId != null) {
-			return cityService.getCityById(cityId);
-		}
-		return null;
+	private void updateProductEntity(final Product product, final ProductCreateUpdateRequestDto updateRequest) {
+		final City city = getCityEntity(updateRequest.cityId());
+		final Subcategory subcategory = getSubcategoryEntity(updateRequest.subcategoryId());
+		final Currency currency = getCurrencyEntity(updateRequest.currencyId());
+
+		product.update(
+			updateRequest.name(),
+			updateRequest.description(),
+			updateRequest.address(),
+			updateRequest.price(),
+			city,
+			subcategory,
+			currency
+		);
 	}
 
-	private Subcategory getSubcategoryEntity(final Long subcategoryId) {
-		if (subcategoryId != null) {
-			return subcategoryService.getSubcategoryById(subcategoryId);
-		}
-		return null;
+	private City getCityEntity(final Long cityId) throws CityNotFoundException {
+		return cityService.getCityById(cityId);
 	}
 
-	private Currency getCurrencyEntity(final Long currencyId) {
-		if (currencyId != null) {
-			return currencyService.getCurrencyById(currencyId);
-		}
-		return null;
+	private Subcategory getSubcategoryEntity(final Long subcategoryId) throws SubcategoryNotFoundException {
+		return subcategoryService.getSubcategoryById(subcategoryId);
+	}
+
+	private Currency getCurrencyEntity(final Long currencyId) throws CurrencyNotFoundException {
+		return currencyService.getCurrencyById(currencyId);
 	}
 }
