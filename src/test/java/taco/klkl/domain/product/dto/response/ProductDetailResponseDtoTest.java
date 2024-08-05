@@ -7,11 +7,11 @@ import java.time.LocalDateTime;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
 import taco.klkl.domain.category.domain.Subcategory;
 import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.region.domain.City;
+import taco.klkl.domain.region.domain.Currency;
 import taco.klkl.domain.user.domain.User;
 
 class ProductDetailResponseDtoTest {
@@ -29,9 +29,9 @@ class ProductDetailResponseDtoTest {
 		int price = 1000;
 		City mockCity = mock(City.class);
 		Subcategory mockSubcategory = mock(Subcategory.class);
-		Long currencyId = 5L;
+		Currency mockCurrency = mock(Currency.class);
 
-		Product product = Mockito.mock(Product.class);
+		Product product = mock(Product.class);
 		when(product.getProductId()).thenReturn(productId);
 		when(product.getUser()).thenReturn(mockUser);
 		when(product.getName()).thenReturn(name);
@@ -42,7 +42,7 @@ class ProductDetailResponseDtoTest {
 		when(product.getPrice()).thenReturn(price);
 		when(product.getCity()).thenReturn(mockCity);
 		when(product.getSubcategory()).thenReturn(mockSubcategory);
-		when(product.getCurrencyId()).thenReturn(currencyId);
+		when(product.getCurrency()).thenReturn(mockCurrency);
 
 		// when
 		ProductDetailResponseDto dto = ProductDetailResponseDto.from(product);
@@ -58,7 +58,7 @@ class ProductDetailResponseDtoTest {
 		assertThat(dto.price()).isEqualTo(price);
 		assertThat(dto.cityId()).isEqualTo(mockCity.getCityId());
 		assertThat(dto.subcategoryId()).isEqualTo(mockSubcategory.getId());
-		assertThat(dto.currencyId()).isEqualTo(currencyId);
+		assertThat(dto.currencyId()).isEqualTo(mockCurrency.getCurrencyId());
 	}
 
 	@Test
@@ -66,16 +66,16 @@ class ProductDetailResponseDtoTest {
 	void testConstructor() {
 		// given
 		Long productId = 1L;
-		User mockUser = Mockito.mock(User.class);
+		User mockUser = mock(User.class);
 		String name = "맛있는 곤약젤리";
 		String description = "탱글탱글 맛있는 곤약젤리";
 		String address = "신사이바시 메가돈키호테";
 		int likeCount = 10;
 		LocalDateTime createdAt = LocalDateTime.now();
 		int price = 1000;
-		City mockCity = Mockito.mock(City.class);
-		Long subcategoryId = 4L;
-		Long currencyId = 5L;
+		City mockCity = mock(City.class);
+		Subcategory mockSubcategory = mock(Subcategory.class);
+		Currency mockCurrency = mock(Currency.class);
 
 		// when
 		ProductDetailResponseDto dto = new ProductDetailResponseDto(
@@ -88,8 +88,8 @@ class ProductDetailResponseDtoTest {
 			createdAt,
 			price,
 			mockCity.getCityId(),
-			subcategoryId,
-			currencyId
+			mockSubcategory.getId(),
+			mockCurrency.getCurrencyId()
 		);
 
 		// then
@@ -102,7 +102,7 @@ class ProductDetailResponseDtoTest {
 		assertThat(dto.createdAt()).isEqualTo(createdAt);
 		assertThat(dto.price()).isEqualTo(price);
 		assertThat(dto.cityId()).isEqualTo(mockCity.getCityId());
-		assertThat(dto.subcategoryId()).isEqualTo(subcategoryId);
-		assertThat(dto.currencyId()).isEqualTo(currencyId);
+		assertThat(dto.subcategoryId()).isEqualTo(mockSubcategory.getId());
+		assertThat(dto.currencyId()).isEqualTo(mockCurrency.getCurrencyId());
 	}
 }

@@ -17,7 +17,9 @@ import taco.klkl.domain.product.dto.response.ProductDetailResponseDto;
 import taco.klkl.domain.product.dto.response.ProductSimpleResponseDto;
 import taco.klkl.domain.product.exception.ProductNotFoundException;
 import taco.klkl.domain.region.domain.City;
-import taco.klkl.domain.region.service.CityServiceImpl;
+import taco.klkl.domain.region.domain.Currency;
+import taco.klkl.domain.region.service.CityService;
+import taco.klkl.domain.region.service.CurrencyService;
 import taco.klkl.domain.user.domain.User;
 import taco.klkl.global.util.UserUtil;
 
@@ -27,9 +29,12 @@ import taco.klkl.global.util.UserUtil;
 public class ProductService {
 
 	private final ProductRepository productRepository;
-	private final CityServiceImpl cityServiceImpl;
-	private final UserUtil userUtil;
+
+	private final CityService cityService;
+	private final CurrencyService currencyService;
 	private final SubcategoryService subcategoryService;
+
+	private final UserUtil userUtil;
 
 	public List<ProductSimpleResponseDto> getAllProducts(Pageable pageable) {
 		return productRepository.findAll(pageable).stream()
@@ -57,6 +62,7 @@ public class ProductService {
 
 		City city = getCityEntity(productDto.cityId());
 		Subcategory subcategory = getSubcategoryEntity(productDto.subcategoryId());
+		Currency currency = getCurrencyEntity(productDto.currencyId());
 
 		product.update(
 			productDto.name(),
@@ -65,7 +71,7 @@ public class ProductService {
 			productDto.price(),
 			city,
 			subcategory,
-			productDto.currencyId()
+			currency
 		);
 
 		return ProductDetailResponseDto.from(product);
@@ -82,6 +88,7 @@ public class ProductService {
 		final User user = userUtil.findTestUser();
 		final City city = getCityEntity(productDto.cityId());
 		final Subcategory subcategory = getSubcategoryEntity(productDto.subcategoryId());
+		final Currency currency = getCurrencyEntity(productDto.currencyId());
 
 		return Product.of(
 			user,
@@ -91,13 +98,13 @@ public class ProductService {
 			productDto.price(),
 			city,
 			subcategory,
-			productDto.currencyId()
+			currency
 		);
 	}
 
 	private City getCityEntity(final Long cityId) {
 		if (cityId != null) {
-			return cityServiceImpl.getCityById(cityId);
+			return cityService.getCityById(cityId);
 		}
 		return null;
 	}
@@ -105,6 +112,13 @@ public class ProductService {
 	private Subcategory getSubcategoryEntity(final Long subcategoryId) {
 		if (subcategoryId != null) {
 			return subcategoryService.getSubcategoryById(subcategoryId);
+		}
+		return null;
+	}
+
+	private Currency getCurrencyEntity(final Long currencyId) {
+		if (currencyId != null) {
+			return currencyService.getCurrencyById(currencyId);
 		}
 		return null;
 	}

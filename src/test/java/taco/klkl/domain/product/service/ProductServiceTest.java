@@ -30,7 +30,9 @@ import taco.klkl.domain.product.dto.response.ProductDetailResponseDto;
 import taco.klkl.domain.product.dto.response.ProductSimpleResponseDto;
 import taco.klkl.domain.product.exception.ProductNotFoundException;
 import taco.klkl.domain.region.domain.City;
-import taco.klkl.domain.region.service.CityServiceImpl;
+import taco.klkl.domain.region.domain.Currency;
+import taco.klkl.domain.region.service.CityService;
+import taco.klkl.domain.region.service.CurrencyService;
 import taco.klkl.domain.user.domain.User;
 import taco.klkl.global.common.constants.ProductConstants;
 import taco.klkl.global.util.UserUtil;
@@ -44,7 +46,10 @@ class ProductServiceTest {
 	private ProductRepository productRepository;
 
 	@Mock
-	private CityServiceImpl cityService;
+	private CityService cityService;
+
+	@Mock
+	private CurrencyService currencyService;
 
 	@Mock
 	private SubcategoryService subcategoryService;
@@ -56,6 +61,7 @@ class ProductServiceTest {
 	private User mockUser;
 	private City mockCity;
 	private Subcategory mockSubcategory;
+	private Currency mockCurrency;
 
 	@BeforeEach
 	void setUp() {
@@ -70,6 +76,9 @@ class ProductServiceTest {
 		mockSubcategory = mock(Subcategory.class);
 		when(mockSubcategory.getId()).thenReturn(1L);
 
+		mockCurrency = mock(Currency.class);
+		when(mockCurrency.getCurrencyId()).thenReturn(1L);
+
 		mockProduct = mock(Product.class);
 		when(mockProduct.getProductId()).thenReturn(1L);
 		when(mockProduct.getUser()).thenReturn(mockUser);
@@ -81,7 +90,7 @@ class ProductServiceTest {
 		when(mockProduct.getPrice()).thenReturn(1000);
 		when(mockProduct.getCity()).thenReturn(mockCity);
 		when(mockProduct.getSubcategory()).thenReturn(mockSubcategory);
-		when(mockProduct.getCurrencyId()).thenReturn(1L);
+		when(mockProduct.getCurrency()).thenReturn(mockCurrency);
 	}
 
 	@Test
@@ -139,20 +148,12 @@ class ProductServiceTest {
 			mockProduct.getPrice(),
 			mockProduct.getCity().getCityId(),
 			mockProduct.getSubcategory().getId(),
-			mockProduct.getCurrencyId()
+			mockProduct.getCurrency().getCurrencyId()
 		);
-		User mockUser = mock(User.class);
-		when(mockUser.getId()).thenReturn(1L);
-
-		City mockCity = mock(City.class);
-		when(mockCity.getCityId()).thenReturn(1L);
-
-		Subcategory mockSubcategory = mock(Subcategory.class);
-		when(mockSubcategory.getId()).thenReturn(1L);
-
 		when(userUtil.findTestUser()).thenReturn(mockUser);
 		when(cityService.getCityById(1L)).thenReturn(mockCity);
 		when(subcategoryService.getSubcategoryById(1L)).thenReturn(mockSubcategory);
+		when(currencyService.getCurrencyById(1L)).thenReturn(mockCurrency);
 
 		// When
 		ProductDetailResponseDto result = productService.createProduct(requestDto);
@@ -165,7 +166,7 @@ class ProductServiceTest {
 		assertThat(result.price()).isEqualTo(mockProduct.getPrice());
 		assertThat(result.cityId()).isEqualTo(mockProduct.getCity().getCityId());
 		assertThat(result.subcategoryId()).isEqualTo(mockProduct.getSubcategory().getId());
-		assertThat(result.currencyId()).isEqualTo(mockProduct.getCurrencyId());
+		assertThat(result.currencyId()).isEqualTo(mockProduct.getCurrency().getCurrencyId());
 
 		verify(userUtil).findTestUser();
 		verify(cityService).getCityById(1L);
@@ -183,11 +184,12 @@ class ProductServiceTest {
 			2000,
 			1L,
 			1L,
-			2L
+			1L
 		);
 		when(productRepository.findById(1L)).thenReturn(Optional.of(mockProduct));
 		when(cityService.getCityById(1L)).thenReturn(mockCity);
 		when(subcategoryService.getSubcategoryById(1L)).thenReturn(mockSubcategory);
+		when(currencyService.getCurrencyById(1L)).thenReturn(mockCurrency);
 
 		// When
 		ProductDetailResponseDto result = productService.updateProduct(1L, requestDto);
@@ -203,7 +205,7 @@ class ProductServiceTest {
 			requestDto.price(),
 			mockCity,
 			mockSubcategory,
-			requestDto.currencyId()
+			mockCurrency
 		);
 	}
 

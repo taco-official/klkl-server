@@ -32,6 +32,7 @@ import taco.klkl.domain.product.dto.response.ProductSimpleResponseDto;
 import taco.klkl.domain.product.exception.ProductNotFoundException;
 import taco.klkl.domain.product.service.ProductService;
 import taco.klkl.domain.region.domain.City;
+import taco.klkl.domain.region.domain.Currency;
 import taco.klkl.domain.user.domain.User;
 import taco.klkl.global.common.constants.ProductConstants;
 import taco.klkl.global.error.exception.ErrorCode;
@@ -59,6 +60,7 @@ class ProductControllerTest {
 		User mockUser = mock(User.class);
 		City mockCity = mock(City.class);
 		Subcategory mockSubcategory = mock(Subcategory.class);
+		Currency mockCurrency = mock(Currency.class);
 
 		// Mock Product 객체 생성
 		Product mockProduct1 = mock(Product.class);
@@ -72,7 +74,7 @@ class ProductControllerTest {
 		when(mockProduct1.getPrice()).thenReturn(1000);
 		when(mockProduct1.getCity()).thenReturn(mockCity);
 		when(mockProduct1.getSubcategory()).thenReturn(mockSubcategory);
-		when(mockProduct1.getCurrencyId()).thenReturn(1L);
+		when(mockProduct1.getCurrency()).thenReturn(mockCurrency);
 
 		Product mockProduct2 = mock(Product.class);
 		when(mockProduct2.getProductId()).thenReturn(2L);
@@ -85,7 +87,7 @@ class ProductControllerTest {
 		when(mockProduct2.getPrice()).thenReturn(2000);
 		when(mockProduct2.getCity()).thenReturn(mockCity);
 		when(mockProduct2.getSubcategory()).thenReturn(mockSubcategory);
-		when(mockProduct2.getCurrencyId()).thenReturn(2L);
+		when(mockProduct2.getCurrency()).thenReturn(mockCurrency);
 
 		// ProductResponseDto 생성
 		productDetailDto = ProductDetailResponseDto.from(mockProduct1);

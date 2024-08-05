@@ -18,6 +18,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import taco.klkl.domain.category.domain.Subcategory;
 import taco.klkl.domain.region.domain.City;
+import taco.klkl.domain.region.domain.Currency;
 import taco.klkl.domain.user.domain.User;
 import taco.klkl.global.common.constants.DefaultConstants;
 import taco.klkl.global.common.constants.ProductConstants;
@@ -88,11 +89,9 @@ public class Product {
 	@JoinColumn(name = "subcategory_id")
 	private Subcategory subcategory;
 
-	@Column(
-		name = "currency_id",
-		nullable = false
-	)
-	private Long currencyId;
+	@ManyToOne
+	@JoinColumn(name = "currency_id")
+	private Currency currency;
 
 	@PrePersist
 	protected void prePersist() {
@@ -112,7 +111,7 @@ public class Product {
 		final Integer price,
 		final City city,
 		final Subcategory subcategory,
-		final Long currencyId
+		final Currency currency
 	) {
 		this.user = user;
 		this.name = name;
@@ -121,7 +120,7 @@ public class Product {
 		this.price = price;
 		this.city = city;
 		this.subcategory = subcategory;
-		this.currencyId = currencyId;
+		this.currency = currency;
 		this.likeCount = DefaultConstants.DEFAULT_INT_VALUE;
 		this.createdAt = LocalDateTime.now();
 	}
@@ -134,9 +133,9 @@ public class Product {
 		final Integer price,
 		final City city,
 		final Subcategory subcategory,
-		final Long currencyId
+		final Currency currency
 	) {
-		return new Product(user, name, description, address, price, city, subcategory, currencyId);
+		return new Product(user, name, description, address, price, city, subcategory, currency);
 	}
 
 	public void update(
@@ -146,7 +145,7 @@ public class Product {
 		final Integer price,
 		final City city,
 		final Subcategory subcategory,
-		final Long currencyId
+		final Currency currency
 	) {
 		if (name != null) {
 			this.name = name;
@@ -166,8 +165,8 @@ public class Product {
 		if (subcategory != null) {
 			this.subcategory = subcategory;
 		}
-		if (currencyId != null) {
-			this.currencyId = currencyId;
+		if (currency != null) {
+			this.currency = currency;
 		}
 	}
 }

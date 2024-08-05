@@ -47,7 +47,7 @@ public class ProductIntegrationTest {
 			1000,
 			414L,
 			310L,
-			1L
+			438L
 		);
 		ProductDetailResponseDto productDto = productService.createProduct(createDto);
 
@@ -80,7 +80,7 @@ public class ProductIntegrationTest {
 			1000,
 			414L,
 			310L,
-			1L
+			438L
 		);
 
 		// when & then
@@ -113,7 +113,7 @@ public class ProductIntegrationTest {
 			1000,
 			414L,
 			310L,
-			1L
+			438L
 		);
 		ProductCreateRequestDto createDto2 = new ProductCreateRequestDto(
 			"name2",
@@ -122,7 +122,7 @@ public class ProductIntegrationTest {
 			2000,
 			415L,
 			311L,
-			1L
+			438L
 		);
 		productService.createProduct(createDto1);
 		productService.createProduct(createDto2);
@@ -150,7 +150,7 @@ public class ProductIntegrationTest {
 			1000,
 			414L,
 			310L,
-			1L
+			438L
 		);
 		ProductDetailResponseDto productDto = productService.createProduct(createDto);
 
@@ -161,7 +161,7 @@ public class ProductIntegrationTest {
 			2000,
 			415L,
 			310L,
-			1L
+			438L
 		);
 
 		// when & then
@@ -193,7 +193,7 @@ public class ProductIntegrationTest {
 			1000,
 			414L,
 			310L,
-			1L
+			438L
 		);
 		ProductDetailResponseDto productDto = productService.createProduct(createDto);
 
