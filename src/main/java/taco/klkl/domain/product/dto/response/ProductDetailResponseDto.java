@@ -43,7 +43,7 @@ public record ProductDetailResponseDto(
 			product.getLikeCount(),
 			product.getCreatedAt(),
 			product.getPrice(),
-			product.getCityId(),
+			product.getCity().getCityId(),
 			product.getSubcategoryId(),
 			product.getCurrencyId()
 		);

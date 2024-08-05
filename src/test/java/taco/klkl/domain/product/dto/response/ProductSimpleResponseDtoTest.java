@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import taco.klkl.domain.product.domain.Product;
+import taco.klkl.domain.region.domain.City;
 
 class ProductSimpleResponseDtoTest {
 	@Test
@@ -17,14 +18,14 @@ class ProductSimpleResponseDtoTest {
 		Long productId = 1L;
 		String name = "맛있는 곤약젤리";
 		int likeCount = 10;
-		Long cityId = 2L;
+		City mockCity = Mockito.mock(City.class);
 		Long subcategoryId = 3L;
 
 		Product mockProduct = Mockito.mock(Product.class);
 		when(mockProduct.getProductId()).thenReturn(productId);
 		when(mockProduct.getName()).thenReturn(name);
 		when(mockProduct.getLikeCount()).thenReturn(likeCount);
-		when(mockProduct.getCityId()).thenReturn(cityId);
+		when(mockProduct.getCity()).thenReturn(mockCity);
 		when(mockProduct.getSubcategoryId()).thenReturn(subcategoryId);
 
 		// when
@@ -34,7 +35,7 @@ class ProductSimpleResponseDtoTest {
 		assertThat(dto.productId()).isEqualTo(productId);
 		assertThat(dto.name()).isEqualTo(name);
 		assertThat(dto.likeCount()).isEqualTo(likeCount);
-		assertThat(dto.cityId()).isEqualTo(cityId);
+		assertThat(dto.cityId()).isEqualTo(mockCity.getCityId());
 		assertThat(dto.subcategoryId()).isEqualTo(subcategoryId);
 	}
 
@@ -45,7 +46,7 @@ class ProductSimpleResponseDtoTest {
 		Long productId = 1L;
 		String name = "맛있는 곤약젤리";
 		int likeCount = 10;
-		Long cityId = 2L;
+		City mockCity = Mockito.mock(City.class);
 		Long subcategoryId = 3L;
 
 		// when
@@ -53,7 +54,7 @@ class ProductSimpleResponseDtoTest {
 			productId,
 			name,
 			likeCount,
-			cityId,
+			mockCity.getCityId(),
 			subcategoryId
 		);
 
@@ -61,7 +62,7 @@ class ProductSimpleResponseDtoTest {
 		assertThat(dto.productId()).isEqualTo(productId);
 		assertThat(dto.name()).isEqualTo(name);
 		assertThat(dto.likeCount()).isEqualTo(likeCount);
-		assertThat(dto.cityId()).isEqualTo(cityId);
+		assertThat(dto.cityId()).isEqualTo(mockCity.getCityId());
 		assertThat(dto.subcategoryId()).isEqualTo(subcategoryId);
 	}
 }

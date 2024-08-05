@@ -2,11 +2,6 @@
 INSERT INTO User(user_id, profile, name, gender, age, description, created_at)
 VALUES (1, 'image/test.jpg', 'testUser', '남', 20, '테스트입니다.', now());
 
-/* Product */
-INSERT INTO Product(product_id, user_id, name, description, address, price, city_id, subcategory_id, currency_id,
-                    created_at)
-VALUES (1, 1, '곤약젤리', '탱글탱글 맛있는 곤약젤리', '신사이바시 메가돈키호테', 1000, 2, 3, 4, now());
-
 /* Like */
 
 /* Comment */
@@ -110,3 +105,9 @@ VALUES
 /* Filter */
 
 /* Notification */
+
+/* Product */
+INSERT INTO Product(product_id, user_id, name, description, address, price,
+                    city_id, subcategory_id, currency_id, created_at)
+VALUES
+    (101, 1, '곤약젤리', '탱글탱글 맛있는 곤약젤리', '신사이바시 메가돈키호테', 1000, 414, 3, 4, now());

@@ -16,7 +16,7 @@ import jakarta.persistence.PrePersist;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import taco.klkl.domain.product.dto.request.ProductUpdateRequestDto;
+import taco.klkl.domain.region.domain.City;
 import taco.klkl.domain.user.domain.User;
 import taco.klkl.global.common.constants.DefaultConstants;
 import taco.klkl.global.common.constants.ProductConstants;
@@ -79,11 +79,9 @@ public class Product {
 	@ColumnDefault(DefaultConstants.DEFAULT_INT_STRING)
 	private Integer price;
 
-	@Column(
-		name = "city_id",
-		nullable = false
-	)
-	private Long cityId;
+	@ManyToOne
+	@JoinColumn(name = "city_id")
+	private City city;
 
 	@Column(
 		name = "subcategory_id",
@@ -113,7 +111,7 @@ public class Product {
 		final String description,
 		final String address,
 		final Integer price,
-		final Long cityId,
+		final City city,
 		final Long subcategoryId,
 		final Long currencyId
 	) {
@@ -122,7 +120,7 @@ public class Product {
 		this.description = description;
 		this.address = address;
 		this.price = price;
-		this.cityId = cityId;
+		this.city = city;
 		this.subcategoryId = subcategoryId;
 		this.currencyId = currencyId;
 		this.likeCount = DefaultConstants.DEFAULT_INT_VALUE;
@@ -135,34 +133,42 @@ public class Product {
 		final String description,
 		final String address,
 		final Integer price,
-		final Long cityId,
+		final City city,
 		final Long subcategoryId,
 		final Long currencyId
 	) {
-		return new Product(user, name, description, address, price, cityId, subcategoryId, currencyId);
+		return new Product(user, name, description, address, price, city, subcategoryId, currencyId);
 	}
 
-	public void update(ProductUpdateRequestDto updateDto) {
-		if (updateDto.name() != null) {
-			this.name = updateDto.name();
+	public void update(
+		final String name,
+		final String description,
+		final String address,
+		final Integer price,
+		final City city,
+		final Long subcategoryId,
+		final Long currencyId
+	) {
+		if (name != null) {
+			this.name = name;
 		}
-		if (updateDto.description() != null) {
-			this.description = updateDto.description();
+		if (description != null) {
+			this.description = description;
 		}
-		if (updateDto.address() != null) {
-			this.address = updateDto.address();
+		if (address != null) {
+			this.address = address;
 		}
-		if (updateDto.price() != null) {
-			this.price = updateDto.price();
+		if (price != null) {
+			this.price = price;
 		}
-		if (updateDto.cityId() != null) {
-			this.cityId = updateDto.cityId();
+		if (city != null) {
+			this.city = city;
 		}
-		if (updateDto.subcategoryId() != null) {
-			this.subcategoryId = updateDto.subcategoryId();
+		if (subcategoryId != null) {
+			this.subcategoryId = subcategoryId;
 		}
-		if (updateDto.currencyId() != null) {
-			this.currencyId = updateDto.currencyId();
+		if (currencyId != null) {
+			this.currencyId = currencyId;
 		}
 	}
 }

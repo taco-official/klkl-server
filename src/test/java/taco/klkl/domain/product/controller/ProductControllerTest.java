@@ -30,6 +30,7 @@ import taco.klkl.domain.product.dto.response.ProductDetailResponseDto;
 import taco.klkl.domain.product.dto.response.ProductSimpleResponseDto;
 import taco.klkl.domain.product.exception.ProductNotFoundException;
 import taco.klkl.domain.product.service.ProductService;
+import taco.klkl.domain.region.domain.City;
 import taco.klkl.domain.user.domain.User;
 import taco.klkl.global.common.constants.ProductConstants;
 import taco.klkl.global.error.exception.ErrorCode;
@@ -48,37 +49,53 @@ class ProductControllerTest {
 
 	private ProductDetailResponseDto productDetailDto;
 
+	private ProductSimpleResponseDto productSimpleDto1;
+	private ProductSimpleResponseDto productSimpleDto2;
+
 	@BeforeEach
 	public void setUp() {
-		// Mock User 객체 생성
+		// Mock 객체 생성
 		User mockUser = mock(User.class);
-		when(mockUser.getId()).thenReturn(1L);
+		City mockCity = mock(City.class);
 
 		// Mock Product 객체 생성
-		Product mockProduct = mock(Product.class);
-		when(mockProduct.getProductId()).thenReturn(1L);
-		when(mockProduct.getUser()).thenReturn(mockUser);
-		when(mockProduct.getName()).thenReturn("name");
-		when(mockProduct.getDescription()).thenReturn("description");
-		when(mockProduct.getAddress()).thenReturn("address");
-		when(mockProduct.getLikeCount()).thenReturn(0);
-		when(mockProduct.getCreatedAt()).thenReturn(LocalDateTime.now());
-		when(mockProduct.getPrice()).thenReturn(1000);
-		when(mockProduct.getCityId()).thenReturn(2L);
-		when(mockProduct.getSubcategoryId()).thenReturn(3L);
-		when(mockProduct.getCurrencyId()).thenReturn(4L);
+		Product mockProduct1 = mock(Product.class);
+		when(mockProduct1.getProductId()).thenReturn(1L);
+		when(mockProduct1.getUser()).thenReturn(mockUser);
+		when(mockProduct1.getName()).thenReturn("name1");
+		when(mockProduct1.getDescription()).thenReturn("description1");
+		when(mockProduct1.getAddress()).thenReturn("address1");
+		when(mockProduct1.getLikeCount()).thenReturn(0);
+		when(mockProduct1.getCreatedAt()).thenReturn(LocalDateTime.now());
+		when(mockProduct1.getPrice()).thenReturn(1000);
+		when(mockProduct1.getCity()).thenReturn(mockCity);
+		when(mockProduct1.getSubcategoryId()).thenReturn(1L);
+		when(mockProduct1.getCurrencyId()).thenReturn(1L);
+
+		Product mockProduct2 = mock(Product.class);
+		when(mockProduct2.getProductId()).thenReturn(2L);
+		when(mockProduct2.getUser()).thenReturn(mockUser);
+		when(mockProduct2.getName()).thenReturn("name2");
+		when(mockProduct2.getDescription()).thenReturn("description2");
+		when(mockProduct2.getAddress()).thenReturn("address2");
+		when(mockProduct2.getLikeCount()).thenReturn(0);
+		when(mockProduct2.getCreatedAt()).thenReturn(LocalDateTime.now());
+		when(mockProduct2.getPrice()).thenReturn(2000);
+		when(mockProduct2.getCity()).thenReturn(mockCity);
+		when(mockProduct2.getSubcategoryId()).thenReturn(2L);
+		when(mockProduct2.getCurrencyId()).thenReturn(2L);
 
 		// ProductResponseDto 생성
-		productDetailDto = ProductDetailResponseDto.from(mockProduct);
+		productDetailDto = ProductDetailResponseDto.from(mockProduct1);
+		productSimpleDto1 = ProductSimpleResponseDto.from(mockProduct1);
+		productSimpleDto2 = ProductSimpleResponseDto.from(mockProduct2);
 	}
 
 	@Test
 	@DisplayName("기본 페이징 값으로 상품 목록 API 조회 테스트")
 	void testGetAllProductsWithDefaultPaging() throws Exception {
 		// Given
-		ProductSimpleResponseDto product1 = ProductSimpleResponseDto.from(ProductConstants.TEST_PRODUCT);
-		ProductSimpleResponseDto product2 = ProductSimpleResponseDto.from(ProductConstants.TEST_PRODUCT_TWO);
-		List<ProductSimpleResponseDto> productDtos = Arrays.asList(product1, product2);
+		List<ProductSimpleResponseDto> productDtos = Arrays.asList(productSimpleDto1, productSimpleDto2);
 
 		when(productService.getAllProducts(any(Pageable.class))).thenReturn(productDtos);
 
@@ -87,8 +104,8 @@ class ProductControllerTest {
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.data", hasSize(2)))
-			.andExpect(jsonPath("$.data[0].productId").value(product1.productId()))
-			.andExpect(jsonPath("$.data[1].productId").value(product2.productId()));
+			.andExpect(jsonPath("$.data[0].productId").value(productSimpleDto1.productId()))
+			.andExpect(jsonPath("$.data[1].productId").value(productSimpleDto2.productId()));
 
 		verify(productService).getAllProducts(argThat(pageable ->
 			pageable.getPageNumber() == Integer.parseInt(ProductConstants.DEFAULT_PAGE_NUMBER)
@@ -100,9 +117,7 @@ class ProductControllerTest {
 	@DisplayName("사용자 지정 페이징 값으로 상품 목록 API 조회 테스트")
 	void testGetAllProductsWithCustomPaging() throws Exception {
 		// Given
-		ProductSimpleResponseDto product1 = ProductSimpleResponseDto.from(ProductConstants.TEST_PRODUCT);
-		ProductSimpleResponseDto product2 = ProductSimpleResponseDto.from(ProductConstants.TEST_PRODUCT_TWO);
-		List<ProductSimpleResponseDto> productDtos = Arrays.asList(product1, product2);
+		List<ProductSimpleResponseDto> productDtos = Arrays.asList(productSimpleDto2, productSimpleDto2);
 
 		when(productService.getAllProducts(any(Pageable.class))).thenReturn(productDtos);
 
@@ -113,8 +128,8 @@ class ProductControllerTest {
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.data", hasSize(2)))
-			.andExpect(jsonPath("$.data[0].productId").value(product1.productId()))
-			.andExpect(jsonPath("$.data[1].productId").value(product2.productId()));
+			.andExpect(jsonPath("$.data[0].productId").value(productSimpleDto2.productId()))
+			.andExpect(jsonPath("$.data[1].productId").value(productSimpleDto2.productId()));
 
 		verify(productService).getAllProducts(argThat(pageable ->
 			pageable.getPageNumber() == 1

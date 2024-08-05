@@ -14,6 +14,8 @@ import taco.klkl.domain.product.dto.request.ProductUpdateRequestDto;
 import taco.klkl.domain.product.dto.response.ProductDetailResponseDto;
 import taco.klkl.domain.product.dto.response.ProductSimpleResponseDto;
 import taco.klkl.domain.product.exception.ProductNotFoundException;
+import taco.klkl.domain.region.domain.City;
+import taco.klkl.domain.region.service.CityServiceImpl;
 import taco.klkl.domain.user.domain.User;
 import taco.klkl.global.util.UserUtil;
 
@@ -23,6 +25,7 @@ import taco.klkl.global.util.UserUtil;
 public class ProductService {
 
 	private final ProductRepository productRepository;
+	private final CityServiceImpl cityServiceImpl;
 	private final UserUtil userUtil;
 
 	public List<ProductSimpleResponseDto> getAllProducts(Pageable pageable) {
@@ -48,7 +51,19 @@ public class ProductService {
 	public ProductDetailResponseDto updateProduct(final Long id, final ProductUpdateRequestDto productDto) {
 		final Product product = productRepository.findById(id)
 			.orElseThrow(ProductNotFoundException::new);
-		product.update(productDto);
+
+		City city = getCityEntity(productDto.cityId());
+
+		product.update(
+			productDto.name(),
+			productDto.description(),
+			productDto.address(),
+			productDto.price(),
+			city,
+			productDto.subcategoryId(),
+			productDto.currencyId()
+		);
+
 		return ProductDetailResponseDto.from(product);
 	}
 
@@ -61,15 +76,24 @@ public class ProductService {
 
 	private Product createProductEntity(final ProductCreateRequestDto productDto) {
 		final User user = userUtil.findTestUser();
+		final City city = getCityEntity(productDto.cityId());
+
 		return Product.of(
 			user,
 			productDto.name(),
 			productDto.description(),
 			productDto.address(),
 			productDto.price(),
-			productDto.cityId(),
+			city,
 			productDto.subcategoryId(),
 			productDto.currencyId()
 		);
+	}
+
+	private City getCityEntity(final Long cityId) {
+		if (cityId != null) {
+			return cityServiceImpl.getCityById(cityId);
+		}
+		return null;
 	}
 }
