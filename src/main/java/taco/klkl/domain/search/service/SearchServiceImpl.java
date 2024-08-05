@@ -1,6 +1,5 @@
 package taco.klkl.domain.search.service;
 
-import java.util.Collections;
 import java.util.List;
 
 import org.springframework.context.annotation.Primary;
@@ -9,8 +8,15 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import taco.klkl.domain.product.service.ProductService;
+import taco.klkl.domain.category.domain.CategoryName;
+import taco.klkl.domain.category.domain.SubcategoryName;
+import taco.klkl.domain.category.dto.response.CategoryResponseDto;
+import taco.klkl.domain.category.dto.response.SubcategoryResponseDto;
+import taco.klkl.domain.category.service.CategoryService;
+import taco.klkl.domain.category.service.SubcategoryService;
+import taco.klkl.domain.region.dto.response.CityResponseDto;
 import taco.klkl.domain.region.dto.response.CountrySimpleResponseDto;
+import taco.klkl.domain.region.enums.CityType;
 import taco.klkl.domain.region.enums.CountryType;
 import taco.klkl.domain.region.service.CityService;
 import taco.klkl.domain.region.service.CountryService;
@@ -25,20 +31,42 @@ public class SearchServiceImpl implements SearchService {
 
 	private final CountryService countryService;
 	private final CityService cityService;
-	private final ProductService productService;
+	private final CategoryService categoryService;
+	private final SubcategoryService subcategoryService;
 
 	@Override
 	public SearchResponseDto getSearchResult(String queryParam) {
-		List<CountrySimpleResponseDto> findCountries = getCountriesByQueryParam(queryParam);
 
-		return SearchResponseDto.of(findCountries, Collections.emptyList(), Collections.emptyList());
+		List<CountrySimpleResponseDto> findCountries = getCountriesByQueryParam(queryParam);
+		List<CityResponseDto> findCities = getCitiesByQueryParam(queryParam);
+		List<CategoryResponseDto> findCategories = getCategoriesByQueryParam(queryParam);
+		List<SubcategoryResponseDto> findSubcategories = getSubcategoriesByQueryParam(queryParam);
+
+		return SearchResponseDto.of(findCountries, findCities, findCategories, findSubcategories);
 	}
 
 	private List<CountrySimpleResponseDto> getCountriesByQueryParam(String queryParam) {
 		List<CountryType> countryTypes = CountryType.getCountriesByPartialString(queryParam);
 
-		return countryTypes.stream()
-			.map(countryService::getSimpleCountryByCountryType)
-			.toList();
+		return countryService.getAllCountriesByCountryTypes(countryTypes);
 	}
+
+	private List<CityResponseDto> getCitiesByQueryParam(String queryParam) {
+		List<CityType> cityTypes = CityType.getCitiesTypeByPartialString(queryParam);
+
+		return cityService.getAllCitiesByCityTypes(cityTypes);
+	}
+
+	private List<CategoryResponseDto> getCategoriesByQueryParam(String queryParam) {
+		List<CategoryName> categoryNames = CategoryName.getCategoryNameByPartialString(queryParam);
+
+		return categoryService.getCategoriesByCategoryNames(categoryNames);
+	}
+
+	private List<SubcategoryResponseDto> getSubcategoriesByQueryParam(String queryParam) {
+		List<SubcategoryName> subcategoryNames = SubcategoryName.getSubcategoryNameByPartialString(queryParam);
+
+		return subcategoryService.getSubcategoriesBySubcategoryNames(subcategoryNames);
+	}
+
 }
