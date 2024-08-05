@@ -77,7 +77,6 @@ class CategoryServiceTest {
 
 		//then
 		assertNotNull(response);
-		System.out.println(response);
 		assertEquals(SubcategoryName.DRESS.getKoreanName(), response.subcategories().get(0).subcategory());
 		assertEquals(SubcategoryName.HAIR_CARE.getKoreanName(), response.subcategories().get(1).subcategory());
 

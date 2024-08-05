@@ -1,4 +1,4 @@
-package taco.klkl.domain.category.convert;
+package taco.klkl.domain.category.converter;
 
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
@@ -9,11 +9,17 @@ public class CategoryNameConverter implements AttributeConverter<CategoryName, S
 
 	@Override
 	public String convertToDatabaseColumn(CategoryName categoryName) {
+		if (categoryName == null) {
+			return null;
+		}
 		return categoryName.getKoreanName();
 	}
 
 	@Override
 	public CategoryName convertToEntityAttribute(String name) {
+		if (name == null) {
+			return null;
+		}
 		return CategoryName.getByName(name);
 	}
 }
