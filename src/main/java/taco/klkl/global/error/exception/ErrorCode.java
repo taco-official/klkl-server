@@ -14,6 +14,8 @@ public enum ErrorCode {
 	INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "C012", "서버에 문제가 발생했습니다. 관리자에게 문의해주세요."),
 	HTTP_MESSAGE_NOT_READABLE(HttpStatus.BAD_REQUEST, "C013", "잘못된 요청 메시지 형식입니다."),
 	QUERY_TYPE_MISMATCH(HttpStatus.BAD_REQUEST, "C014", "올바르지 않은 쿼리 타입 입니다."),
+	QUERY_PARAM_INVALID(HttpStatus.BAD_REQUEST, "C015", "올바르지 않은 쿼리 파라미터 값입니다."),
+	QUERY_PARAM_NOT_FOUND(HttpStatus.BAD_REQUEST, "C016", "쿼리 파라미터가 존재하지 않습니다."),
 
 	// User
 
