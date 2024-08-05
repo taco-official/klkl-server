@@ -11,7 +11,6 @@ import taco.klkl.domain.category.dao.SubcategoryRepository;
 import taco.klkl.domain.category.domain.Subcategory;
 import taco.klkl.domain.category.domain.SubcategoryName;
 import taco.klkl.domain.category.dto.response.SubcategoryResponseDto;
-import taco.klkl.domain.category.domain.Subcategory;
 import taco.klkl.domain.category.exception.SubcategoryNotFoundException;
 
 @Slf4j
