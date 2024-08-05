@@ -12,6 +12,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import lombok.RequiredArgsConstructor;
@@ -103,10 +104,10 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 		return ResponseEntity.status(errorCode.getStatus()).body(globalResponse);
 	}
 
-	@ExceptionHandler(IllegalArgumentException.class)
-	public ResponseEntity<Object> handleInvalidFormatException(IllegalArgumentException ex) {
-		log.error("IllegalArgumentException : {}", ex.getMessage(), ex);
-		final ErrorCode errorCode = ErrorCode.INVALID_QUERY_FORMAT;
+	@ExceptionHandler(MethodArgumentTypeMismatchException.class)
+	public ResponseEntity<Object> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException ex) {
+		log.error("MethodArgumentTypeMismatchException : {}", ex.getMessage(), ex);
+		final ErrorCode errorCode = ErrorCode.QUERY_TYPE_MISMATCH;
 		final ErrorResponse errorResponse = ErrorResponse.of(errorCode.getCode(), errorCode.getMessage());
 		final GlobalResponse globalResponse = GlobalResponse.error(errorCode.getCode(), errorResponse);
 		return ResponseEntity.status(errorCode.getStatus()).body(globalResponse);
