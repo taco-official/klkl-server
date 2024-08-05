@@ -32,7 +32,7 @@ class ProductDetailResponseDtoTest {
 		Currency mockCurrency = mock(Currency.class);
 
 		Product product = mock(Product.class);
-		when(product.getProductId()).thenReturn(productId);
+		when(product.getId()).thenReturn(productId);
 		when(product.getUser()).thenReturn(mockUser);
 		when(product.getName()).thenReturn(name);
 		when(product.getDescription()).thenReturn(description);

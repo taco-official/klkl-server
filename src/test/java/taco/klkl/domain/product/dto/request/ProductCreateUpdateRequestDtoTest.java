@@ -17,7 +17,7 @@ import jakarta.validation.ValidatorFactory;
 import taco.klkl.global.common.constants.ProductConstants;
 import taco.klkl.global.common.constants.ProductValidationMessages;
 
-class ProductCreateRequestDtoTest {
+class ProductCreateUpdateRequestDtoTest {
 
 	private Validator validator;
 
@@ -28,9 +28,9 @@ class ProductCreateRequestDtoTest {
 	}
 
 	@Test
-	@DisplayName("유효한 ProductCreateRequestDto 생성 시 검증 통과")
+	@DisplayName("유효한 ProductCreateUpdateRequestDto 생성 시 검증 통과")
 	void testValidProductCreateRequestDto() {
-		ProductCreateRequestDto dto = new ProductCreateRequestDto(
+		ProductCreateUpdateRequestDto requestDto = new ProductCreateUpdateRequestDto(
 			"Valid Product Name",
 			"Valid product description",
 			"Valid address",
@@ -40,14 +40,14 @@ class ProductCreateRequestDtoTest {
 			3L
 		);
 
-		Set<ConstraintViolation<ProductCreateRequestDto>> violations = validator.validate(dto);
+		Set<ConstraintViolation<ProductCreateUpdateRequestDto>> violations = validator.validate(requestDto);
 		assertTrue(violations.isEmpty());
 	}
 
 	@Test
 	@DisplayName("상품명이 null일 때 검증 실패")
 	void testNullProductName() {
-		ProductCreateRequestDto dto = new ProductCreateRequestDto(
+		ProductCreateUpdateRequestDto requestDto = new ProductCreateUpdateRequestDto(
 			null,
 			"Valid product description",
 			"Valid address",
@@ -57,7 +57,7 @@ class ProductCreateRequestDtoTest {
 			3L
 		);
 
-		Set<ConstraintViolation<ProductCreateRequestDto>> violations = validator.validate(dto);
+		Set<ConstraintViolation<ProductCreateUpdateRequestDto>> violations = validator.validate(requestDto);
 		assertFalse(violations.isEmpty());
 
 		boolean foundNotNullMessage = violations.stream()
@@ -68,7 +68,7 @@ class ProductCreateRequestDtoTest {
 	@Test
 	@DisplayName("상품명이 빈 문자열일 때 검증 실패")
 	void testEmptyProductName() {
-		ProductCreateRequestDto dto = new ProductCreateRequestDto(
+		ProductCreateUpdateRequestDto requestDto = new ProductCreateUpdateRequestDto(
 			"",
 			"Valid product description",
 			"Valid address",
@@ -78,7 +78,7 @@ class ProductCreateRequestDtoTest {
 			3L
 		);
 
-		Set<ConstraintViolation<ProductCreateRequestDto>> violations = validator.validate(dto);
+		Set<ConstraintViolation<ProductCreateUpdateRequestDto>> violations = validator.validate(requestDto);
 		assertFalse(violations.isEmpty());
 
 		boolean foundNotBlankMessage = violations.stream()
@@ -91,7 +91,7 @@ class ProductCreateRequestDtoTest {
 	@DisplayName("상품명이 최대 길이를 초과할 때 검증 실패")
 	void testProductNameOverMaxLength(int nameLength) {
 		String longName = "a".repeat(nameLength);
-		ProductCreateRequestDto dto = new ProductCreateRequestDto(
+		ProductCreateUpdateRequestDto requestDto = new ProductCreateUpdateRequestDto(
 			longName,
 			"Valid product description",
 			"Valid address",
@@ -101,7 +101,7 @@ class ProductCreateRequestDtoTest {
 			3L
 		);
 
-		Set<ConstraintViolation<ProductCreateRequestDto>> violations = validator.validate(dto);
+		Set<ConstraintViolation<ProductCreateUpdateRequestDto>> violations = validator.validate(requestDto);
 		assertFalse(violations.isEmpty());
 		assertEquals(ProductValidationMessages.NAME_SIZE, violations.iterator().next().getMessage());
 	}
@@ -109,7 +109,7 @@ class ProductCreateRequestDtoTest {
 	@Test
 	@DisplayName("상품 설명이 null일 때 검증 실패")
 	void testNullProductDescription() {
-		ProductCreateRequestDto dto = new ProductCreateRequestDto(
+		ProductCreateUpdateRequestDto requestDto = new ProductCreateUpdateRequestDto(
 			"Valid Product Name",
 			null,
 			"Valid address",
@@ -119,7 +119,7 @@ class ProductCreateRequestDtoTest {
 			3L
 		);
 
-		Set<ConstraintViolation<ProductCreateRequestDto>> violations = validator.validate(dto);
+		Set<ConstraintViolation<ProductCreateUpdateRequestDto>> violations = validator.validate(requestDto);
 		assertFalse(violations.isEmpty());
 
 		boolean foundNotNullMessage = violations.stream()
@@ -130,7 +130,7 @@ class ProductCreateRequestDtoTest {
 	@Test
 	@DisplayName("상품 설명이 빈 문자열일 때 검증 실패")
 	void testEmptyProductDescription() {
-		ProductCreateRequestDto dto = new ProductCreateRequestDto(
+		ProductCreateUpdateRequestDto requestDto = new ProductCreateUpdateRequestDto(
 			"Valid Product Name",
 			"",
 			"Valid address",
@@ -140,7 +140,7 @@ class ProductCreateRequestDtoTest {
 			3L
 		);
 
-		Set<ConstraintViolation<ProductCreateRequestDto>> violations = validator.validate(dto);
+		Set<ConstraintViolation<ProductCreateUpdateRequestDto>> violations = validator.validate(requestDto);
 		assertFalse(violations.isEmpty());
 
 		boolean foundNotBlankMessage = violations.stream()
@@ -153,7 +153,7 @@ class ProductCreateRequestDtoTest {
 	@DisplayName("상품 설명이 최대 길이를 초과할 때 검증 실패")
 	void testProductDescriptionOverMaxLength(int descriptionLength) {
 		String longDescription = "a".repeat(descriptionLength);
-		ProductCreateRequestDto dto = new ProductCreateRequestDto(
+		ProductCreateUpdateRequestDto requestDto = new ProductCreateUpdateRequestDto(
 			"Valid Product Name",
 			longDescription,
 			"Valid address",
@@ -163,7 +163,7 @@ class ProductCreateRequestDtoTest {
 			3L
 		);
 
-		Set<ConstraintViolation<ProductCreateRequestDto>> violations = validator.validate(dto);
+		Set<ConstraintViolation<ProductCreateUpdateRequestDto>> violations = validator.validate(requestDto);
 		assertFalse(violations.isEmpty());
 		assertEquals(ProductValidationMessages.DESCRIPTION_SIZE, violations.iterator().next().getMessage());
 	}
@@ -171,7 +171,7 @@ class ProductCreateRequestDtoTest {
 	@Test
 	@DisplayName("주소가 null일 때 검증 실패")
 	void testNullAddress() {
-		ProductCreateRequestDto dto = new ProductCreateRequestDto(
+		ProductCreateUpdateRequestDto requestDto = new ProductCreateUpdateRequestDto(
 			"Valid Product Name",
 			"Valid product description",
 			null,
@@ -181,7 +181,7 @@ class ProductCreateRequestDtoTest {
 			3L
 		);
 
-		Set<ConstraintViolation<ProductCreateRequestDto>> violations = validator.validate(dto);
+		Set<ConstraintViolation<ProductCreateUpdateRequestDto>> violations = validator.validate(requestDto);
 		assertFalse(violations.isEmpty());
 
 		boolean foundNotNullMessage = violations.stream()
@@ -192,7 +192,7 @@ class ProductCreateRequestDtoTest {
 	@Test
 	@DisplayName("주소가 빈 문자열일 때 검증 통과")
 	void testEmptyAddress() {
-		ProductCreateRequestDto dto = new ProductCreateRequestDto(
+		ProductCreateUpdateRequestDto requestDto = new ProductCreateUpdateRequestDto(
 			"Valid Product Name",
 			"Valid product description",
 			"",
@@ -202,7 +202,7 @@ class ProductCreateRequestDtoTest {
 			3L
 		);
 
-		Set<ConstraintViolation<ProductCreateRequestDto>> violations = validator.validate(dto);
+		Set<ConstraintViolation<ProductCreateUpdateRequestDto>> violations = validator.validate(requestDto);
 		assertTrue(violations.isEmpty());
 	}
 
@@ -211,7 +211,7 @@ class ProductCreateRequestDtoTest {
 	@DisplayName("주소가 최대 길이 이하일 때 검증 통과")
 	void testAddressUnderMaxLength(int addressLength) {
 		String address = "a".repeat(addressLength);
-		ProductCreateRequestDto dto = new ProductCreateRequestDto(
+		ProductCreateUpdateRequestDto requestDto = new ProductCreateUpdateRequestDto(
 			"Valid Product Name",
 			"Valid product description",
 			address,
@@ -221,7 +221,7 @@ class ProductCreateRequestDtoTest {
 			3L
 		);
 
-		Set<ConstraintViolation<ProductCreateRequestDto>> violations = validator.validate(dto);
+		Set<ConstraintViolation<ProductCreateUpdateRequestDto>> violations = validator.validate(requestDto);
 		assertTrue(violations.isEmpty());
 	}
 
@@ -230,7 +230,7 @@ class ProductCreateRequestDtoTest {
 	@DisplayName("주소가 최대 길이를 초과할 때 검증 실패")
 	void testAddressOverMaxLength(int addressLength) {
 		String longAddress = "a".repeat(addressLength);
-		ProductCreateRequestDto dto = new ProductCreateRequestDto(
+		ProductCreateUpdateRequestDto requestDto = new ProductCreateUpdateRequestDto(
 			"Valid Product Name",
 			"Valid product description",
 			longAddress,
@@ -240,7 +240,7 @@ class ProductCreateRequestDtoTest {
 			3L
 		);
 
-		Set<ConstraintViolation<ProductCreateRequestDto>> violations = validator.validate(dto);
+		Set<ConstraintViolation<ProductCreateUpdateRequestDto>> violations = validator.validate(requestDto);
 		assertFalse(violations.isEmpty());
 		assertEquals(ProductValidationMessages.ADDRESS_SIZE, violations.iterator().next().getMessage());
 	}
@@ -248,7 +248,7 @@ class ProductCreateRequestDtoTest {
 	@Test
 	@DisplayName("가격이 null일 때 검증 실패")
 	void testNullPrice() {
-		ProductCreateRequestDto dto = new ProductCreateRequestDto(
+		ProductCreateUpdateRequestDto requestDto = new ProductCreateUpdateRequestDto(
 			"Valid Product Name",
 			"Valid product description",
 			"Valid address",
@@ -258,7 +258,7 @@ class ProductCreateRequestDtoTest {
 			3L
 		);
 
-		Set<ConstraintViolation<ProductCreateRequestDto>> violations = validator.validate(dto);
+		Set<ConstraintViolation<ProductCreateUpdateRequestDto>> violations = validator.validate(requestDto);
 		assertFalse(violations.isEmpty());
 
 		boolean foundNotNullMessage = violations.stream()
@@ -270,7 +270,7 @@ class ProductCreateRequestDtoTest {
 	@ValueSource(ints = {0, 100, 1000})
 	@DisplayName("가격이 0 이상일 때 검증 통과")
 	void testZeroOrPositivePrice() {
-		ProductCreateRequestDto dto = new ProductCreateRequestDto(
+		ProductCreateUpdateRequestDto requestDto = new ProductCreateUpdateRequestDto(
 			"Valid Product Name",
 			"Valid product description",
 			"Valid address",
@@ -280,7 +280,7 @@ class ProductCreateRequestDtoTest {
 			3L
 		);
 
-		Set<ConstraintViolation<ProductCreateRequestDto>> violations = validator.validate(dto);
+		Set<ConstraintViolation<ProductCreateUpdateRequestDto>> violations = validator.validate(requestDto);
 		assertTrue(violations.isEmpty());
 	}
 
@@ -288,7 +288,7 @@ class ProductCreateRequestDtoTest {
 	@ValueSource(ints = {-1, -100, -1000})
 	@DisplayName("가격이 음수일 때 검증 실패")
 	void testNegativePrice(int price) {
-		ProductCreateRequestDto dto = new ProductCreateRequestDto(
+		ProductCreateUpdateRequestDto requestDto = new ProductCreateUpdateRequestDto(
 			"Valid Product Name",
 			"Valid product description",
 			"Valid address",
@@ -298,7 +298,7 @@ class ProductCreateRequestDtoTest {
 			3L
 		);
 
-		Set<ConstraintViolation<ProductCreateRequestDto>> violations = validator.validate(dto);
+		Set<ConstraintViolation<ProductCreateUpdateRequestDto>> violations = validator.validate(requestDto);
 		assertFalse(violations.isEmpty());
 		assertEquals(ProductValidationMessages.PRICE_POSITIVE_OR_ZERO, violations.iterator().next().getMessage());
 	}
@@ -306,7 +306,7 @@ class ProductCreateRequestDtoTest {
 	@Test
 	@DisplayName("도시 ID가 null일 때 검증 실패")
 	void testNullCityId() {
-		ProductCreateRequestDto dto = new ProductCreateRequestDto(
+		ProductCreateUpdateRequestDto requestDto = new ProductCreateUpdateRequestDto(
 			"Valid Product Name",
 			"Valid product description",
 			"Valid address",
@@ -316,7 +316,7 @@ class ProductCreateRequestDtoTest {
 			3L
 		);
 
-		Set<ConstraintViolation<ProductCreateRequestDto>> violations = validator.validate(dto);
+		Set<ConstraintViolation<ProductCreateUpdateRequestDto>> violations = validator.validate(requestDto);
 		assertFalse(violations.isEmpty());
 		assertEquals(ProductValidationMessages.CITY_ID_NOT_NULL, violations.iterator().next().getMessage());
 	}
@@ -324,7 +324,7 @@ class ProductCreateRequestDtoTest {
 	@Test
 	@DisplayName("상품 소분류 ID가 null일 때 검증 실패")
 	void testNullSubcategoryId() {
-		ProductCreateRequestDto dto = new ProductCreateRequestDto(
+		ProductCreateUpdateRequestDto requestDto = new ProductCreateUpdateRequestDto(
 			"Valid Product Name",
 			"Valid product description",
 			"Valid address",
@@ -334,7 +334,7 @@ class ProductCreateRequestDtoTest {
 			3L
 		);
 
-		Set<ConstraintViolation<ProductCreateRequestDto>> violations = validator.validate(dto);
+		Set<ConstraintViolation<ProductCreateUpdateRequestDto>> violations = validator.validate(requestDto);
 		assertFalse(violations.isEmpty());
 		assertEquals(ProductValidationMessages.SUBCATEGORY_ID_NOT_NULL, violations.iterator().next().getMessage());
 	}
@@ -342,7 +342,7 @@ class ProductCreateRequestDtoTest {
 	@Test
 	@DisplayName("통화 ID가 null일 때 검증 실패")
 	void testNullCurrencyId() {
-		ProductCreateRequestDto dto = new ProductCreateRequestDto(
+		ProductCreateUpdateRequestDto requestDto = new ProductCreateUpdateRequestDto(
 			"Valid Product Name",
 			"Valid product description",
 			"Valid address",
@@ -352,7 +352,7 @@ class ProductCreateRequestDtoTest {
 			null
 		);
 
-		Set<ConstraintViolation<ProductCreateRequestDto>> violations = validator.validate(dto);
+		Set<ConstraintViolation<ProductCreateUpdateRequestDto>> violations = validator.validate(requestDto);
 		assertFalse(violations.isEmpty());
 		assertEquals(ProductValidationMessages.CURRENCY_ID_NOT_NULL, violations.iterator().next().getMessage());
 	}

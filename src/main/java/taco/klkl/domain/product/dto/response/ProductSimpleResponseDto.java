@@ -21,7 +21,7 @@ public record ProductSimpleResponseDto(
 
 	public static ProductSimpleResponseDto from(Product product) {
 		return new ProductSimpleResponseDto(
-			product.getProductId(),
+			product.getId(),
 			product.getName(),
 			product.getLikeCount(),
 			product.getCity().getCityId(),

@@ -16,8 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import taco.klkl.domain.product.dao.ProductRepository;
-import taco.klkl.domain.product.dto.request.ProductCreateRequestDto;
-import taco.klkl.domain.product.dto.request.ProductUpdateRequestDto;
+import taco.klkl.domain.product.dto.request.ProductCreateUpdateRequestDto;
 import taco.klkl.domain.product.dto.response.ProductDetailResponseDto;
 import taco.klkl.domain.product.service.ProductService;
 
@@ -40,7 +39,7 @@ public class ProductIntegrationTest {
 	@DisplayName("상품 상세 조회 API 테스트")
 	public void testGetProductById() throws Exception {
 		// given
-		ProductCreateRequestDto createDto = new ProductCreateRequestDto(
+		ProductCreateUpdateRequestDto createRequest = new ProductCreateUpdateRequestDto(
 			"name",
 			"description",
 			"address",
@@ -49,7 +48,7 @@ public class ProductIntegrationTest {
 			310L,
 			438L
 		);
-		ProductDetailResponseDto productDto = productService.createProduct(createDto);
+		ProductDetailResponseDto productDto = productService.createProduct(createRequest);
 
 		// when & then
 		mockMvc.perform(get("/v1/products/" + productDto.productId())
@@ -73,7 +72,7 @@ public class ProductIntegrationTest {
 	@DisplayName("상품 등록 API 테스트")
 	public void testCreateProduct() throws Exception {
 		// given
-		ProductCreateRequestDto createDto = new ProductCreateRequestDto(
+		ProductCreateUpdateRequestDto createRequest = new ProductCreateUpdateRequestDto(
 			"name",
 			"description",
 			"address",
@@ -86,19 +85,19 @@ public class ProductIntegrationTest {
 		// when & then
 		mockMvc.perform(post("/v1/products")
 				.contentType(MediaType.APPLICATION_JSON)
-				.content(new ObjectMapper().writeValueAsString(createDto)))
+				.content(new ObjectMapper().writeValueAsString(createRequest)))
 			.andExpect(status().isCreated())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
 			.andExpect(jsonPath("$.code", is("C000")))
 			.andExpect(jsonPath("$.data.productId", notNullValue()))
 			.andExpect(jsonPath("$.data.userId", notNullValue()))
-			.andExpect(jsonPath("$.data.name", is(createDto.name())))
-			.andExpect(jsonPath("$.data.description", is(createDto.description())))
-			.andExpect(jsonPath("$.data.address", is(createDto.address())))
-			.andExpect(jsonPath("$.data.price", is(createDto.price())))
-			.andExpect(jsonPath("$.data.cityId", is(createDto.cityId().intValue())))
-			.andExpect(jsonPath("$.data.subcategoryId", is(createDto.subcategoryId().intValue())))
-			.andExpect(jsonPath("$.data.currencyId", is(createDto.currencyId().intValue())))
+			.andExpect(jsonPath("$.data.name", is(createRequest.name())))
+			.andExpect(jsonPath("$.data.description", is(createRequest.description())))
+			.andExpect(jsonPath("$.data.address", is(createRequest.address())))
+			.andExpect(jsonPath("$.data.price", is(createRequest.price())))
+			.andExpect(jsonPath("$.data.cityId", is(createRequest.cityId().intValue())))
+			.andExpect(jsonPath("$.data.subcategoryId", is(createRequest.subcategoryId().intValue())))
+			.andExpect(jsonPath("$.data.currencyId", is(createRequest.currencyId().intValue())))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
 	}
 
@@ -106,7 +105,7 @@ public class ProductIntegrationTest {
 	@DisplayName("모든 상품 조회 API 테스트")
 	public void testGetAllProducts() throws Exception {
 		// given
-		ProductCreateRequestDto createDto1 = new ProductCreateRequestDto(
+		ProductCreateUpdateRequestDto createRequest1 = new ProductCreateUpdateRequestDto(
 			"name1",
 			"description1",
 			"address1",
@@ -115,7 +114,7 @@ public class ProductIntegrationTest {
 			310L,
 			438L
 		);
-		ProductCreateRequestDto createDto2 = new ProductCreateRequestDto(
+		ProductCreateUpdateRequestDto createRequest2 = new ProductCreateUpdateRequestDto(
 			"name2",
 			"description2",
 			"address2",
@@ -124,8 +123,8 @@ public class ProductIntegrationTest {
 			311L,
 			438L
 		);
-		productService.createProduct(createDto1);
-		productService.createProduct(createDto2);
+		productService.createProduct(createRequest1);
+		productService.createProduct(createRequest2);
 
 		// when & then
 		mockMvc.perform(get("/v1/products")
@@ -134,8 +133,8 @@ public class ProductIntegrationTest {
 			.andExpect(jsonPath("$.isSuccess", is(true)))
 			.andExpect(jsonPath("$.code", is("C000")))
 			.andExpect(jsonPath("$.data", hasSize(3)))
-			.andExpect(jsonPath("$.data[0].name", is(createDto1.name())))
-			.andExpect(jsonPath("$.data[1].name", is(createDto2.name())))
+			.andExpect(jsonPath("$.data[0].name", is(createRequest1.name())))
+			.andExpect(jsonPath("$.data[1].name", is(createRequest2.name())))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
 	}
 
@@ -143,7 +142,7 @@ public class ProductIntegrationTest {
 	@DisplayName("상품 수정 API 테스트")
 	public void testUpdateProduct() throws Exception {
 		// given
-		ProductCreateRequestDto createDto = new ProductCreateRequestDto(
+		ProductCreateUpdateRequestDto updateRequest = new ProductCreateUpdateRequestDto(
 			"name",
 			"description",
 			"address",
@@ -152,9 +151,9 @@ public class ProductIntegrationTest {
 			310L,
 			438L
 		);
-		ProductDetailResponseDto productDto = productService.createProduct(createDto);
+		ProductDetailResponseDto productDto = productService.createProduct(updateRequest);
 
-		ProductUpdateRequestDto updateDto = new ProductUpdateRequestDto(
+		ProductCreateUpdateRequestDto updateDto = new ProductCreateUpdateRequestDto(
 			"Updated Name",
 			"Updated Description",
 			"Updated Address",
@@ -165,7 +164,7 @@ public class ProductIntegrationTest {
 		);
 
 		// when & then
-		mockMvc.perform(patch("/v1/products/" + productDto.productId())
+		mockMvc.perform(put("/v1/products/" + productDto.productId())
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(new ObjectMapper().writeValueAsString(updateDto)))
 			.andExpect(status().isOk())
@@ -186,7 +185,7 @@ public class ProductIntegrationTest {
 	@DisplayName("상품 삭제 API 테스트")
 	public void testDeleteProduct() throws Exception {
 		// given
-		ProductCreateRequestDto createDto = new ProductCreateRequestDto(
+		ProductCreateUpdateRequestDto createRequest = new ProductCreateUpdateRequestDto(
 			"name",
 			"description",
 			"address",
@@ -195,7 +194,7 @@ public class ProductIntegrationTest {
 			310L,
 			438L
 		);
-		ProductDetailResponseDto productDto = productService.createProduct(createDto);
+		ProductDetailResponseDto productDto = productService.createProduct(createRequest);
 
 		// when & then
 		mockMvc.perform(delete("/v1/products/" + productDto.productId())
