@@ -42,7 +42,7 @@ public enum SubcategoryName {
 
 	public static SubcategoryName getByName(String name) {
 		return Arrays.stream(values())
-			.filter(subcategoryName -> subcategoryName.name().equals(name))
+			.filter(subcategoryName -> subcategoryName.koreanName.equals(name))
 			.findFirst()
 			.orElse(NONE);
 	}
