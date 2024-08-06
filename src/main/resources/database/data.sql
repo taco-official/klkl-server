@@ -10,9 +10,15 @@ VALUES (1, 1, '곤약젤리', '탱글탱글 맛있는 곤약젤리', '신사이�
 /* Like */
 
 /* Comment */
+INSERT INTO Comment(comment_id, product_id, user_id, content, created_at)
+VALUES (500, 1, 1, '이거 정말 맛있는데 표현할 방법이 읎네.', now()),
+       (501, 1, 1, '이거 정말 맛없는데 표현할 방법이 읎네.', now()),
+       (502, 1, 1, '이거 정말 좋은데 표현할 방법이 읎네.', now());
+
 
 /* Region */
-INSERT INTO Region(region_id, name)
+INSERT
+INTO Region(region_id, name)
 VALUES (400, '동북아시아'),
        (401, '동남아시아'),
        (402, '기타');
