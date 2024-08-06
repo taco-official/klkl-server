@@ -11,7 +11,6 @@ import jakarta.persistence.PrePersist;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import taco.klkl.global.common.constants.UserConstants;
-import taco.klkl.global.common.enums.Gender;
 
 @Getter
 @NoArgsConstructor

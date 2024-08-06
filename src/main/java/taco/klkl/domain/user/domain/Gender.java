@@ -1,4 +1,4 @@
-package taco.klkl.global.common.enums;
+package taco.klkl.domain.user.domain;
 
 import java.util.Arrays;
 

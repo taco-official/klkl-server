@@ -1,7 +1,7 @@
 package taco.klkl.global.common.constants;
 
+import taco.klkl.domain.user.domain.Gender;
 import taco.klkl.domain.user.domain.User;
-import taco.klkl.global.common.enums.Gender;
 
 public final class UserConstants {
 
