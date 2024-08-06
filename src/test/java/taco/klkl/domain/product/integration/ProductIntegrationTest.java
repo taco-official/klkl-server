@@ -19,6 +19,7 @@ import taco.klkl.domain.product.dao.ProductRepository;
 import taco.klkl.domain.product.dto.request.ProductCreateUpdateRequestDto;
 import taco.klkl.domain.product.dto.response.ProductDetailResponseDto;
 import taco.klkl.domain.product.service.ProductService;
+import taco.klkl.global.common.constants.ProductConstants;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -56,15 +57,17 @@ public class ProductIntegrationTest {
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
 			.andExpect(jsonPath("$.code", is("C000")))
-			.andExpect(jsonPath("$.data.productId", is(productDto.productId().intValue())))
-			.andExpect(jsonPath("$.data.userId", is(productDto.userId().intValue())))
-			.andExpect(jsonPath("$.data.name", is(productDto.name())))
-			.andExpect(jsonPath("$.data.description", is(productDto.description())))
-			.andExpect(jsonPath("$.data.address", is(productDto.address())))
-			.andExpect(jsonPath("$.data.price", is(productDto.price())))
-			.andExpect(jsonPath("$.data.cityId", is(productDto.cityId().intValue())))
-			.andExpect(jsonPath("$.data.subcategoryId", is(productDto.subcategoryId().intValue())))
-			.andExpect(jsonPath("$.data.currencyId", is(productDto.currencyId().intValue())))
+			.andExpect(jsonPath("$.data.productId", notNullValue()))
+			.andExpect(jsonPath("$.data.name", is(createRequest.name())))
+			.andExpect(jsonPath("$.data.description", is(createRequest.description())))
+			.andExpect(jsonPath("$.data.address", is(createRequest.address())))
+			.andExpect(jsonPath("$.data.price", is(createRequest.price())))
+			.andExpect(jsonPath("$.data.likeCount", is(ProductConstants.DEFAULT_LIKE_COUNT)))
+			.andExpect(jsonPath("$.data.user.id", notNullValue()))
+			.andExpect(jsonPath("$.data.city.cityId", is(createRequest.cityId().intValue())))
+			.andExpect(jsonPath("$.data.subcategory.subcategoryId", is(createRequest.subcategoryId().intValue())))
+			.andExpect(jsonPath("$.data.currency.currencyId", is(createRequest.currencyId().intValue())))
+			.andExpect(jsonPath("$.data.createdAt", notNullValue()))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
 	}
 
@@ -90,14 +93,16 @@ public class ProductIntegrationTest {
 			.andExpect(jsonPath("$.isSuccess", is(true)))
 			.andExpect(jsonPath("$.code", is("C000")))
 			.andExpect(jsonPath("$.data.productId", notNullValue()))
-			.andExpect(jsonPath("$.data.userId", notNullValue()))
 			.andExpect(jsonPath("$.data.name", is(createRequest.name())))
 			.andExpect(jsonPath("$.data.description", is(createRequest.description())))
 			.andExpect(jsonPath("$.data.address", is(createRequest.address())))
 			.andExpect(jsonPath("$.data.price", is(createRequest.price())))
-			.andExpect(jsonPath("$.data.cityId", is(createRequest.cityId().intValue())))
-			.andExpect(jsonPath("$.data.subcategoryId", is(createRequest.subcategoryId().intValue())))
-			.andExpect(jsonPath("$.data.currencyId", is(createRequest.currencyId().intValue())))
+			.andExpect(jsonPath("$.data.likeCount", is(ProductConstants.DEFAULT_LIKE_COUNT)))
+			.andExpect(jsonPath("$.data.user.id", notNullValue()))
+			.andExpect(jsonPath("$.data.city.cityId", is(createRequest.cityId().intValue())))
+			.andExpect(jsonPath("$.data.subcategory.subcategoryId", is(createRequest.subcategoryId().intValue())))
+			.andExpect(jsonPath("$.data.currency.currencyId", is(createRequest.currencyId().intValue())))
+			.andExpect(jsonPath("$.data.createdAt", notNullValue()))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
 	}
 
@@ -142,7 +147,7 @@ public class ProductIntegrationTest {
 	@DisplayName("상품 수정 API 테스트")
 	public void testUpdateProduct() throws Exception {
 		// given
-		ProductCreateUpdateRequestDto updateRequest = new ProductCreateUpdateRequestDto(
+		ProductCreateUpdateRequestDto createRequest = new ProductCreateUpdateRequestDto(
 			"name",
 			"description",
 			"address",
@@ -151,9 +156,9 @@ public class ProductIntegrationTest {
 			310L,
 			438L
 		);
-		ProductDetailResponseDto productDto = productService.createProduct(updateRequest);
+		ProductDetailResponseDto productDto = productService.createProduct(createRequest);
 
-		ProductCreateUpdateRequestDto updateDto = new ProductCreateUpdateRequestDto(
+		ProductCreateUpdateRequestDto updateRequest = new ProductCreateUpdateRequestDto(
 			"Updated Name",
 			"Updated Description",
 			"Updated Address",
@@ -166,18 +171,22 @@ public class ProductIntegrationTest {
 		// when & then
 		mockMvc.perform(put("/v1/products/" + productDto.productId())
 				.contentType(MediaType.APPLICATION_JSON)
-				.content(new ObjectMapper().writeValueAsString(updateDto)))
+				.content(new ObjectMapper().writeValueAsString(updateRequest)))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
 			.andExpect(jsonPath("$.code", is("C000")))
 			.andExpect(jsonPath("$.data.productId", is(productDto.productId().intValue())))
-			.andExpect(jsonPath("$.data.name", is(updateDto.name())))
-			.andExpect(jsonPath("$.data.description", is(updateDto.description())))
-			.andExpect(jsonPath("$.data.address", is(updateDto.address())))
-			.andExpect(jsonPath("$.data.price", is(updateDto.price())))
-			.andExpect(jsonPath("$.data.cityId", is(updateDto.cityId().intValue())))
-			.andExpect(jsonPath("$.data.subcategoryId", is(updateDto.subcategoryId().intValue())))
-			.andExpect(jsonPath("$.data.currencyId", is(updateDto.currencyId().intValue())))
+			.andExpect(jsonPath("$.data.name", is(updateRequest.name())))
+			.andExpect(jsonPath("$.data.description", is(updateRequest.description())))
+			.andExpect(jsonPath("$.data.address", is(updateRequest.address())))
+			.andExpect(jsonPath("$.data.price", is(updateRequest.price())))
+			.andExpect(jsonPath("$.data.likeCount", is(ProductConstants.DEFAULT_LIKE_COUNT)))
+			.andExpect(jsonPath("$.data.user.id", is(productDto.user().id().intValue())))
+			.andExpect(jsonPath("$.data.city.cityId", is(updateRequest.cityId().intValue())))
+			.andExpect(jsonPath("$.data.subcategory.subcategoryId",
+				is(updateRequest.subcategoryId().intValue())))
+			.andExpect(jsonPath("$.data.currency.currencyId", is(updateRequest.currencyId().intValue())))
+			.andExpect(jsonPath("$.data.createdAt", notNullValue()))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
 	}
 
@@ -202,7 +211,7 @@ public class ProductIntegrationTest {
 			.andExpect(status().isNoContent())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
 			.andExpect(jsonPath("$.code", is("C000")))
-			.andExpect(jsonPath("$.data").doesNotExist())
+			.andExpect(jsonPath("$.data", nullValue()))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
 	}
 }

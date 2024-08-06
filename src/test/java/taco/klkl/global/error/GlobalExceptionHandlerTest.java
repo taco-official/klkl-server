@@ -18,9 +18,9 @@ import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.context.request.WebRequest;
 
+import taco.klkl.global.common.response.GlobalResponse;
 import taco.klkl.global.error.exception.CustomException;
 import taco.klkl.global.error.exception.ErrorCode;
-import taco.klkl.global.response.GlobalResponse;
 
 class GlobalExceptionHandlerTest {
 

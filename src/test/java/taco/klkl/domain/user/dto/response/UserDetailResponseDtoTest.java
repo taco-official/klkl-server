@@ -5,9 +5,9 @@ import static org.assertj.core.api.Assertions.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import taco.klkl.domain.user.domain.Gender;
 import taco.klkl.domain.user.domain.User;
 import taco.klkl.global.common.constants.UserConstants;
-import taco.klkl.global.common.enums.Gender;
 
 public class UserDetailResponseDtoTest {
 	@Test

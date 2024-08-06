@@ -80,11 +80,11 @@ public class ProductService {
 		final Currency currency = getCurrencyEntity(createRequest.currencyId());
 
 		return Product.of(
-			user,
 			createRequest.name(),
 			createRequest.description(),
 			createRequest.address(),
 			createRequest.price(),
+			user,
 			city,
 			subcategory,
 			currency

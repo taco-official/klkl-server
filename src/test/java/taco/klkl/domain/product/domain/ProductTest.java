@@ -39,11 +39,11 @@ class ProductTest {
 
 		// when
 		Product product = Product.of(
-			mockUser,
 			name,
 			description,
 			address,
 			price,
+			mockUser,
 			mockCity,
 			mockSubcategory,
 			mockCurrency
@@ -51,15 +51,15 @@ class ProductTest {
 		product.prePersist();
 
 		// then
-		assertThat(product.getUser()).isEqualTo(mockUser);
 		assertThat(product.getName()).isEqualTo(name);
 		assertThat(product.getDescription()).isEqualTo(description);
 		assertThat(product.getAddress()).isEqualTo(address);
 		assertThat(product.getPrice()).isEqualTo(price);
+		assertThat(product.getLikeCount()).isEqualTo(ProductConstants.DEFAULT_LIKE_COUNT);
+		assertThat(product.getUser()).isEqualTo(mockUser);
 		assertThat(product.getCity()).isEqualTo(mockCity);
 		assertThat(product.getSubcategory()).isEqualTo(mockSubcategory);
 		assertThat(product.getCurrency()).isEqualTo(mockCurrency);
-		assertThat(product.getLikeCount()).isEqualTo(ProductConstants.DEFAULT_LIKE_COUNT);
 	}
 
 	@Test
@@ -73,11 +73,11 @@ class ProductTest {
 
 		// when
 		Product product = Product.of(
-			mockUser,
 			name,
 			description,
 			address,
 			price,
+			mockUser,
 			mockCity,
 			mockSubcategory,
 			mockCurrency
@@ -85,15 +85,15 @@ class ProductTest {
 		product.prePersist();
 
 		// then
-		assertThat(product.getUser()).isEqualTo(mockUser);
 		assertThat(product.getName()).isEqualTo(name);
 		assertThat(product.getDescription()).isEqualTo(description);
 		assertThat(product.getAddress()).isEqualTo(ProductConstants.DEFAULT_ADDRESS);
 		assertThat(product.getPrice()).isEqualTo(price);
+		assertThat(product.getLikeCount()).isEqualTo(ProductConstants.DEFAULT_LIKE_COUNT);
+		assertThat(product.getUser()).isEqualTo(mockUser);
 		assertThat(product.getCity()).isEqualTo(mockCity);
 		assertThat(product.getSubcategory()).isEqualTo(mockSubcategory);
 		assertThat(product.getCurrency()).isEqualTo(mockCurrency);
-		assertThat(product.getLikeCount()).isEqualTo(ProductConstants.DEFAULT_LIKE_COUNT);
 	}
 
 	@Test
@@ -107,11 +107,11 @@ class ProductTest {
 
 		// when
 		Product product = Product.of(
-			mockUser,
 			name,
 			description,
 			address,
 			price,
+			mockUser,
 			mockCity,
 			mockSubcategory,
 			mockCurrency
@@ -119,15 +119,15 @@ class ProductTest {
 		product.prePersist();
 
 		// then
-		assertThat(product.getUser()).isEqualTo(mockUser);
 		assertThat(product.getName()).isEqualTo(name);
 		assertThat(product.getDescription()).isEqualTo(description);
 		assertThat(product.getAddress()).isEqualTo(address);
 		assertThat(product.getPrice()).isEqualTo(ProductConstants.DEFAULT_PRICE);
+		assertThat(product.getLikeCount()).isEqualTo(ProductConstants.DEFAULT_LIKE_COUNT);
+		assertThat(product.getUser()).isEqualTo(mockUser);
 		assertThat(product.getCity()).isEqualTo(mockCity);
 		assertThat(product.getSubcategory()).isEqualTo(mockSubcategory);
 		assertThat(product.getCurrency()).isEqualTo(mockCurrency);
-		assertThat(product.getLikeCount()).isEqualTo(ProductConstants.DEFAULT_LIKE_COUNT);
 	}
 
 	@Test
@@ -143,11 +143,11 @@ class ProductTest {
 		Currency originCurrency = mockCurrency;
 
 		Product product = Product.of(
-			mockUser,
 			originName,
 			originDescription,
 			originAddress,
 			originPrice,
+			mockUser,
 			originCity,
 			originSubcategory,
 			originCurrency

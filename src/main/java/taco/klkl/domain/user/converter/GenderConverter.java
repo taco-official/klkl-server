@@ -1,11 +1,11 @@
-package taco.klkl.global.common.convert;
+package taco.klkl.domain.user.converter;
 
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
-import taco.klkl.global.common.enums.Gender;
+import taco.klkl.domain.user.domain.Gender;
 
 @Converter(autoApply = true)
-public class GenderConvert implements AttributeConverter<Gender, String> {
+public class GenderConverter implements AttributeConverter<Gender, String> {
 
 	@Override
 	public String convertToDatabaseColumn(Gender gender) {
