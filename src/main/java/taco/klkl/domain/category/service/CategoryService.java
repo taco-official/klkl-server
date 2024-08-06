@@ -35,6 +35,11 @@ public class CategoryService {
 	}
 
 	public List<CategoryResponseDto> getCategoriesByCategoryNames(List<CategoryName> categoryNames) {
+
+		if (categoryNames == null || categoryNames.isEmpty()) {
+			return List.of();
+		}
+
 		List<Category> findCategories = categoryRepository.findAllByNameIn(categoryNames);
 
 		return findCategories.stream()

@@ -63,6 +63,10 @@ public class CountryServiceImpl implements CountryService {
 	@Override
 	public List<CountrySimpleResponseDto> getAllCountriesByCountryTypes(final List<CountryType> countryTypes) {
 
+		if (countryTypes == null || countryTypes.isEmpty()) {
+			return List.of();
+		}
+
 		final List<Country> findCountries = countryRepository.findAllByNameIn(countryTypes);
 
 		return findCountries.stream()

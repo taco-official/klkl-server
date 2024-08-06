@@ -75,6 +75,11 @@ public enum CityType {
 	 * @return 부분문자열을 포함하는 CityType의 리스트
 	 */
 	public static List<CityType> getCitiesTypeByPartialString(String partial) {
+
+		if (partial == null || partial.isEmpty()) {
+			return List.of();
+		}
+
 		String regex = ".*" + Pattern.quote(partial) + ".*";
 		Pattern pattern = Pattern.compile(regex);
 

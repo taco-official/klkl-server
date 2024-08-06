@@ -27,6 +27,11 @@ public enum CategoryName {
 	}
 
 	public static List<CategoryName> getCategoryNameByPartialString(String partial) {
+
+		if (partial == null || partial.isEmpty()) {
+			return List.of();
+		}
+
 		String regex = ".*" + Pattern.quote(partial) + ".*";
 		Pattern pattern = Pattern.compile(regex);
 

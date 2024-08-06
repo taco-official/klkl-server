@@ -55,6 +55,11 @@ public enum CountryType {
 	 * @return 부분문자열을 포함하는 CountryType의 리스트
 	 */
 	public static List<CountryType> getCountriesByPartialString(String partial) {
+
+		if (partial == null || partial.isEmpty()) {
+			return List.of();
+		}
+
 		String regex = ".*" + Pattern.quote(partial) + ".*";
 		Pattern pattern = Pattern.compile(regex);
 

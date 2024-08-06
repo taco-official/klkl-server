@@ -21,6 +21,11 @@ public class SubcategoryService {
 	private final SubcategoryRepository subcategoryRepository;
 
 	public List<SubcategoryResponseDto> getSubcategoriesBySubcategoryNames(List<SubcategoryName> subcategoryNames) {
+
+		if (subcategoryNames == null || subcategoryNames.isEmpty()) {
+			return List.of();
+		}
+
 		List<Subcategory> findCategories = subcategoryRepository.findAllByNameIn(subcategoryNames);
 
 		return findCategories.stream()

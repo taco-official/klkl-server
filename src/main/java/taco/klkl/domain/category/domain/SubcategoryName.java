@@ -51,6 +51,11 @@ public enum SubcategoryName {
 	}
 
 	public static List<SubcategoryName> getSubcategoryNameByPartialString(String partial) {
+
+		if (partial == null || partial.isEmpty()) {
+			return List.of();
+		}
+
 		String regex = ".*" + Pattern.quote(partial) + ".*";
 		Pattern pattern = Pattern.compile(regex);
 

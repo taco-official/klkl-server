@@ -30,6 +30,10 @@ public class CityServiceImpl implements CityService {
 	@Override
 	public List<CityResponseDto> getAllCitiesByCityTypes(final List<CityType> cityTypes) {
 
+		if (cityTypes == null || cityTypes.isEmpty()) {
+			return List.of();
+		}
+
 		final List<City> findCities = cityRepository.findAllByNameIn(cityTypes);
 
 		return findCities.stream()
