@@ -28,9 +28,9 @@ public class CityServiceImpl implements CityService {
 	}
 
 	@Override
-	public List<CityResponseDto> getAllCitiesByCityTypes(List<CityType> cityTypes) {
+	public List<CityResponseDto> getAllCitiesByCityTypes(final List<CityType> cityTypes) {
 
-		List<City> findCities = cityRepository.findAllByNameIn(cityTypes);
+		final List<City> findCities = cityRepository.findAllByNameIn(cityTypes);
 
 		return findCities.stream()
 			.map(CityResponseDto::from)

@@ -57,6 +57,11 @@ public enum CityType {
 
 	private final String koreanName;
 
+	/**
+	 *
+	 * @param koreanName City 이름
+	 * @return CityType
+	 */
 	public static CityType getCityTypeByKoreanName(String koreanName) {
 		return Arrays.stream(CityType.values())
 			.filter(c -> c.getKoreanName().equals(koreanName))
@@ -64,6 +69,11 @@ public enum CityType {
 			.orElse(NONE);
 	}
 
+	/**
+	 * 부분문자열을 포함하는 CityType을 찾는 함수
+	 * @param partial 부분 문자열
+	 * @return 부분문자열을 포함하는 CityType의 리스트
+	 */
 	public static List<CityType> getCitiesTypeByPartialString(String partial) {
 		String regex = ".*" + Pattern.quote(partial) + ".*";
 		Pattern pattern = Pattern.compile(regex);

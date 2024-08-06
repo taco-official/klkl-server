@@ -32,9 +32,14 @@ public enum CurrencyType {
 
 	private final String codeName;
 
-	public static CurrencyType getCurrencyTypeByCode(String code) {
+	/**
+	 *
+	 * @param codeName CurrencyType code
+	 * @return CurrencyType
+	 */
+	public static CurrencyType getCurrencyTypeByCode(String codeName) {
 		return Arrays.stream(CurrencyType.values())
-			.filter(c -> c.getCodeName().equals(code))
+			.filter(c -> c.getCodeName().equals(codeName))
 			.findFirst()
 			.orElse(NONE);
 	}

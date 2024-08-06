@@ -35,36 +35,36 @@ public class SearchServiceImpl implements SearchService {
 	private final SubcategoryService subcategoryService;
 
 	@Override
-	public SearchResponseDto getSearchResult(String queryParam) {
+	public SearchResponseDto getSearchResult(final String queryParam) {
 
-		List<CountrySimpleResponseDto> findCountries = getCountriesByQueryParam(queryParam);
-		List<CityResponseDto> findCities = getCitiesByQueryParam(queryParam);
-		List<CategoryResponseDto> findCategories = getCategoriesByQueryParam(queryParam);
-		List<SubcategoryResponseDto> findSubcategories = getSubcategoriesByQueryParam(queryParam);
+		final List<CountrySimpleResponseDto> findCountries = getCountriesByQueryParam(queryParam);
+		final List<CityResponseDto> findCities = getCitiesByQueryParam(queryParam);
+		final List<CategoryResponseDto> findCategories = getCategoriesByQueryParam(queryParam);
+		final List<SubcategoryResponseDto> findSubcategories = getSubcategoriesByQueryParam(queryParam);
 
 		return SearchResponseDto.of(findCountries, findCities, findCategories, findSubcategories);
 	}
 
-	private List<CountrySimpleResponseDto> getCountriesByQueryParam(String queryParam) {
-		List<CountryType> countryTypes = CountryType.getCountriesByPartialString(queryParam);
+	private List<CountrySimpleResponseDto> getCountriesByQueryParam(final String queryParam) {
+		final List<CountryType> countryTypes = CountryType.getCountriesByPartialString(queryParam);
 
 		return countryService.getAllCountriesByCountryTypes(countryTypes);
 	}
 
-	private List<CityResponseDto> getCitiesByQueryParam(String queryParam) {
-		List<CityType> cityTypes = CityType.getCitiesTypeByPartialString(queryParam);
+	private List<CityResponseDto> getCitiesByQueryParam(final String queryParam) {
+		final List<CityType> cityTypes = CityType.getCitiesTypeByPartialString(queryParam);
 
 		return cityService.getAllCitiesByCityTypes(cityTypes);
 	}
 
-	private List<CategoryResponseDto> getCategoriesByQueryParam(String queryParam) {
-		List<CategoryName> categoryNames = CategoryName.getCategoryNameByPartialString(queryParam);
+	private List<CategoryResponseDto> getCategoriesByQueryParam(final String queryParam) {
+		final List<CategoryName> categoryNames = CategoryName.getCategoryNameByPartialString(queryParam);
 
 		return categoryService.getCategoriesByCategoryNames(categoryNames);
 	}
 
-	private List<SubcategoryResponseDto> getSubcategoriesByQueryParam(String queryParam) {
-		List<SubcategoryName> subcategoryNames = SubcategoryName.getSubcategoryNameByPartialString(queryParam);
+	private List<SubcategoryResponseDto> getSubcategoriesByQueryParam(final String queryParam) {
+		final List<SubcategoryName> subcategoryNames = SubcategoryName.getSubcategoryNameByPartialString(queryParam);
 
 		return subcategoryService.getSubcategoriesBySubcategoryNames(subcategoryNames);
 	}

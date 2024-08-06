@@ -37,13 +37,23 @@ public enum CountryType {
 
 	private final String koreanName;
 
-	public static CountryType getCountryTypeByName(String name) {
+	/**
+	 *
+	 * @param koreanName CountryType 이름
+	 * @return CountryType
+	 */
+	public static CountryType getCountryTypeByName(String koreanName) {
 		return Arrays.stream(CountryType.values())
-			.filter(c -> c.getKoreanName().equals(name))
+			.filter(c -> c.getKoreanName().equals(koreanName))
 			.findFirst()
 			.orElse(NONE);
 	}
 
+	/**
+	 * 부분문자열을 포함하는 CountryType을 찾는 함수
+	 * @param partial 부분 문자열
+	 * @return 부분문자열을 포함하는 CountryType의 리스트
+	 */
 	public static List<CountryType> getCountriesByPartialString(String partial) {
 		String regex = ".*" + Pattern.quote(partial) + ".*";
 		Pattern pattern = Pattern.compile(regex);

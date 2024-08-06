@@ -29,7 +29,7 @@ public class CountryServiceImpl implements CountryService {
 	@Override
 	public List<CountryResponseDto> getAllCountries() {
 
-		List<Country> countries = countryRepository.findAll();
+		final List<Country> countries = countryRepository.findAll();
 
 		if (countries.isEmpty()) {
 			return Collections.emptyList();
@@ -61,9 +61,9 @@ public class CountryServiceImpl implements CountryService {
 	}
 
 	@Override
-	public List<CountrySimpleResponseDto> getAllCountriesByCountryTypes(List<CountryType> countryTypes) {
+	public List<CountrySimpleResponseDto> getAllCountriesByCountryTypes(final List<CountryType> countryTypes) {
 
-		List<Country> findCountries = countryRepository.findAllByNameIn(countryTypes);
+		final List<Country> findCountries = countryRepository.findAllByNameIn(countryTypes);
 
 		return findCountries.stream()
 			.map(CountrySimpleResponseDto::from)

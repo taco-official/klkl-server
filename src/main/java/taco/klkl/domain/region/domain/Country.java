@@ -26,7 +26,10 @@ public class Country {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long countryId;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(
+		fetch = FetchType.LAZY,
+		optional = false
+	)
 	@JoinColumn(
 		name = "region_id",
 		nullable = false
@@ -54,7 +57,10 @@ public class Country {
 	)
 	private String photo;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(
+		fetch = FetchType.LAZY,
+		optional = false
+	)
 	@JoinColumn(
 		name = "currency_id",
 		nullable = false
