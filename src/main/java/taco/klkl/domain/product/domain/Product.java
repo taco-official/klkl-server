@@ -34,13 +34,6 @@ public class Product {
 	@Column(name = "product_id")
 	private Long id;
 
-	@ManyToOne(optional = false)
-	@JoinColumn(
-		name = "user_id",
-		nullable = false
-	)
-	private User user;
-
 	@Column(
 		name = "name",
 		length = ProductConstants.NAME_MAX_LENGTH,
@@ -64,25 +57,25 @@ public class Product {
 	private String address;
 
 	@Column(
+		name = "price",
+		nullable = false
+	)
+	@ColumnDefault(DefaultConstants.DEFAULT_INT_STRING)
+	private Integer price;
+
+	@Column(
 		name = "like_count",
 		nullable = false
 	)
 	@ColumnDefault(DefaultConstants.DEFAULT_INT_STRING)
 	private Integer likeCount;
 
-	@Column(
-		name = "created_at",
-		nullable = false,
-		updatable = false
-	)
-	private LocalDateTime createdAt;
-
-	@Column(
-		name = "price",
+	@ManyToOne(optional = false)
+	@JoinColumn(
+		name = "user_id",
 		nullable = false
 	)
-	@ColumnDefault(DefaultConstants.DEFAULT_INT_STRING)
-	private Integer price;
+	private User user;
 
 	@ManyToOne(optional = false)
 	@JoinColumn(
@@ -105,6 +98,13 @@ public class Product {
 	)
 	private Currency currency;
 
+	@Column(
+		name = "created_at",
+		nullable = false,
+		updatable = false
+	)
+	private LocalDateTime createdAt;
+
 	@PrePersist
 	protected void prePersist() {
 		if (this.address == null) {
@@ -116,20 +116,20 @@ public class Product {
 	}
 
 	private Product(
-		final User user,
 		final String name,
 		final String description,
 		final String address,
 		final Integer price,
+		final User user,
 		final City city,
 		final Subcategory subcategory,
 		final Currency currency
 	) {
-		this.user = user;
 		this.name = name;
 		this.description = description;
 		this.address = address;
 		this.price = price;
+		this.user = user;
 		this.city = city;
 		this.subcategory = subcategory;
 		this.currency = currency;
@@ -138,16 +138,16 @@ public class Product {
 	}
 
 	public static Product of(
-		final User user,
 		final String name,
 		final String description,
 		final String address,
 		final Integer price,
+		final User user,
 		final City city,
 		final Subcategory subcategory,
 		final Currency currency
 	) {
-		return new Product(user, name, description, address, price, city, subcategory, currency);
+		return new Product(name, description, address, price, user, city, subcategory, currency);
 	}
 
 	public void update(
