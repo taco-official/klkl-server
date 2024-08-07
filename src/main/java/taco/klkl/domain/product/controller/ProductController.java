@@ -1,9 +1,7 @@
 package taco.klkl.domain.product.controller;
 
-import java.util.List;
-
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -13,7 +11,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,6 +19,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import taco.klkl.domain.product.dto.request.ProductCreateUpdateRequestDto;
+import taco.klkl.domain.product.dto.response.PagedResponseDto;
 import taco.klkl.domain.product.dto.response.ProductDetailResponseDto;
 import taco.klkl.domain.product.dto.response.ProductSimpleResponseDto;
 import taco.klkl.domain.product.service.ProductService;
@@ -37,12 +35,10 @@ public class ProductController {
 
 	@GetMapping
 	@Operation(summary = "상품 목록 조회", description = "상품 목록을 조회합니다.")
-	public List<ProductSimpleResponseDto> getAllProducts(
-		@RequestParam(defaultValue = ProductConstants.DEFAULT_PAGE_NUMBER) int page,
-		@RequestParam(defaultValue = ProductConstants.DEFAULT_PAGE_SIZE) int size
+	public PagedResponseDto<ProductSimpleResponseDto> getProducts(
+		@PageableDefault(size = ProductConstants.DEFAULT_PAGE_SIZE) Pageable pageable
 	) {
-		Pageable pageable = PageRequest.of(page, size);
-		return productService.getAllProducts(pageable);
+		return productService.getProducts(pageable);
 	}
 
 	@GetMapping("/{id}")

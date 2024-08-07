@@ -1,7 +1,6 @@
 package taco.klkl.domain.product.service;
 
-import java.util.List;
-
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,6 +12,7 @@ import taco.klkl.domain.category.service.SubcategoryService;
 import taco.klkl.domain.product.dao.ProductRepository;
 import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.product.dto.request.ProductCreateUpdateRequestDto;
+import taco.klkl.domain.product.dto.response.PagedResponseDto;
 import taco.klkl.domain.product.dto.response.ProductDetailResponseDto;
 import taco.klkl.domain.product.dto.response.ProductSimpleResponseDto;
 import taco.klkl.domain.product.exception.ProductNotFoundException;
@@ -38,10 +38,9 @@ public class ProductService {
 
 	private final UserUtil userUtil;
 
-	public List<ProductSimpleResponseDto> getAllProducts(Pageable pageable) {
-		return productRepository.findAll(pageable).stream()
-			.map(ProductSimpleResponseDto::from)
-			.toList();
+	public PagedResponseDto<ProductSimpleResponseDto> getProducts(Pageable pageable) {
+		Page<Product> productPage = productRepository.findAll(pageable);
+		return PagedResponseDto.of(productPage, ProductSimpleResponseDto::from);
 	}
 
 	public ProductDetailResponseDto getProductById(final Long id) throws ProductNotFoundException {

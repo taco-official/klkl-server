@@ -133,13 +133,20 @@ public class ProductIntegrationTest {
 
 		// when & then
 		mockMvc.perform(get("/v1/products")
+				.param("page", "0")
+				.param("size", "10")
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
 			.andExpect(jsonPath("$.code", is("C000")))
-			.andExpect(jsonPath("$.data", hasSize(3)))
-			.andExpect(jsonPath("$.data[0].name", is(createRequest1.name())))
-			.andExpect(jsonPath("$.data[1].name", is(createRequest2.name())))
+			.andExpect(jsonPath("$.data.content", hasSize(3)))
+			.andExpect(jsonPath("$.data.content[0].name", is(createRequest1.name())))
+			.andExpect(jsonPath("$.data.content[1].name", is(createRequest2.name())))
+			.andExpect(jsonPath("$.data.pageNumber", is(0)))
+			.andExpect(jsonPath("$.data.pageSize", is(10)))
+			.andExpect(jsonPath("$.data.totalElements", is(3)))
+			.andExpect(jsonPath("$.data.totalPages", is(1)))
+			.andExpect(jsonPath("$.data.last", is(true)))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
 	}
 

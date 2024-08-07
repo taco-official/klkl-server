@@ -26,6 +26,7 @@ import taco.klkl.domain.category.service.SubcategoryService;
 import taco.klkl.domain.product.dao.ProductRepository;
 import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.product.dto.request.ProductCreateUpdateRequestDto;
+import taco.klkl.domain.product.dto.response.PagedResponseDto;
 import taco.klkl.domain.product.dto.response.ProductDetailResponseDto;
 import taco.klkl.domain.product.dto.response.ProductSimpleResponseDto;
 import taco.klkl.domain.product.exception.ProductNotFoundException;
@@ -111,18 +112,24 @@ class ProductServiceTest {
 
 	@Test
 	@DisplayName("상품 목록 조회 - 성공")
-	void testGetAllProducts() {
+	void testGetProducts() {
 		// Given
 		Pageable pageable = PageRequest.of(0, 10);
-		Page<Product> productPage = new PageImpl<>(Arrays.asList(mockProduct));
+		List<Product> productList = Arrays.asList(mockProduct);
+		Page<Product> productPage = new PageImpl<>(productList, pageable, productList.size());
 		when(productRepository.findAll(pageable)).thenReturn(productPage);
 
 		// When
-		List<ProductSimpleResponseDto> result = productService.getAllProducts(pageable);
+		PagedResponseDto<ProductSimpleResponseDto> result = productService.getProducts(pageable);
 
 		// Then
-		assertThat(result).hasSize(1);
-		assertThat(result.get(0).productId()).isEqualTo(mockProduct.getId());
+		assertThat(result.content()).hasSize(1);
+		assertThat(result.content().get(0).productId()).isEqualTo(mockProduct.getId());
+		assertThat(result.totalElements()).isEqualTo(1);
+		assertThat(result.totalPages()).isEqualTo(1);
+		assertThat(result.pageNumber()).isEqualTo(0);
+		assertThat(result.pageSize()).isEqualTo(10);
+		assertThat(result.last()).isTrue();
 		verify(productRepository).findAll(pageable);
 	}
 
