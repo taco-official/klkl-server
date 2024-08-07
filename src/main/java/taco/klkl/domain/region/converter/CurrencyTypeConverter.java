@@ -19,12 +19,12 @@ public class CurrencyTypeConverter implements AttributeConverter<CurrencyType, S
 	@Override
 	public CurrencyType convertToEntityAttribute(String dbData) {
 
-		final CurrencyType findCurrency = CurrencyType.getCurrencyTypeByCodeName(dbData);
+		final CurrencyType currencyType = CurrencyType.getCurrencyTypeByCodeName(dbData);
 
-		if (findCurrency.equals(CurrencyType.NONE)) {
+		if (currencyType.equals(CurrencyType.NONE)) {
 			throw new IllegalArgumentException("Unknown value: " + dbData);
 		}
 
-		return findCurrency;
+		return currencyType;
 	}
 }
