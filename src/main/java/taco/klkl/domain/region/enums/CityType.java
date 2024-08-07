@@ -3,7 +3,6 @@ package taco.klkl.domain.region.enums;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -85,6 +84,6 @@ public enum CityType {
 
 		return Arrays.stream(CityType.values())
 			.filter(c -> pattern.matcher(c.getKoreanName()).matches())
-			.collect(Collectors.toList());
+			.toList();
 	}
 }

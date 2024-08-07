@@ -3,7 +3,6 @@ package taco.klkl.domain.category.domain;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -37,6 +36,6 @@ public enum CategoryName {
 
 		return Arrays.stream(CategoryName.values())
 			.filter(c -> pattern.matcher(c.getKoreanName()).matches())
-			.collect(Collectors.toList());
+			.toList();
 	}
 }
