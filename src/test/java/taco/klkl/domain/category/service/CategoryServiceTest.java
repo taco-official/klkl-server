@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -35,6 +36,7 @@ class CategoryServiceTest {
 	private CategoryService categoryService;
 
 	private final Category category = Category.of(CategoryName.FOOD);
+	private final Category category2 = Category.of(CategoryName.CLOTHES);
 	private final Subcategory subcategory1 = Subcategory.of(category, SubcategoryName.DRESS);
 	private final Subcategory subcategory2 = Subcategory.of(category, SubcategoryName.HAIR_CARE);
 	private final List<Subcategory> subcategories = Arrays.asList(subcategory1, subcategory2);
@@ -98,5 +100,24 @@ class CategoryServiceTest {
 		});
 
 		verify(categoryRepository, times(1)).findById(categoryId);
+	}
+
+	@Test
+	@DisplayName("CategoryName리스트로 Category 조회")
+	void testGetCategoriesByCategoryNames() {
+		// given
+		List<CategoryName> categoryNames = Arrays.asList(CategoryName.CLOTHES, CategoryName.FOOD);
+		List<Category> categories = Arrays.asList(category, category2);
+		CategoryResponseDto category1ResponseDto = CategoryResponseDto.from(category);
+		CategoryResponseDto category2ResponseDto = CategoryResponseDto.from(category2);
+
+		when(categoryRepository.findAllByNameIn(categoryNames)).thenReturn(categories);
+
+		// when
+		List<CategoryResponseDto> categoryResponseDtos = categoryService.getCategoriesByCategoryNames(categoryNames);
+
+		// then
+		Assertions.assertThat(categoryResponseDtos.size()).isEqualTo(categoryNames.size());
+		Assertions.assertThat(categoryResponseDtos).containsExactly(category1ResponseDto, category2ResponseDto);
 	}
 }

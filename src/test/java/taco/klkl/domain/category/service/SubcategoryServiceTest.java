@@ -6,6 +6,7 @@ import static org.mockito.Mockito.*;
 import java.util.Arrays;
 import java.util.List;
 
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,6 +20,7 @@ import taco.klkl.domain.category.domain.Category;
 import taco.klkl.domain.category.domain.CategoryName;
 import taco.klkl.domain.category.domain.Subcategory;
 import taco.klkl.domain.category.domain.SubcategoryName;
+import taco.klkl.domain.category.dto.response.SubcategoryResponseDto;
 import taco.klkl.domain.category.exception.SubcategoryNotFoundException;
 
 @ExtendWith(MockitoExtension.class)
@@ -72,5 +74,28 @@ public class SubcategoryServiceTest {
 			subcategoryService.getSubcategoryList(subcategoriesIds);
 		});
 		verify(subcategoryRepository, times(1)).findAllById(subcategoriesIds);
+	}
+
+	@Test
+	@DisplayName("SubcategoryName리스트로 Subcategory 조회")
+	void testGetSubcategoriesBySubcategoryNames() {
+		// given
+		List<SubcategoryName> subcategoryNames = Arrays.asList(subcategory1.getName(), subcategory2.getName(),
+			subcategory3.getName());
+		List<Subcategory> subcategories = Arrays.asList(subcategory1, subcategory2, subcategory3);
+		SubcategoryResponseDto subcategory1ResponseDto = SubcategoryResponseDto.from(subcategory1);
+		SubcategoryResponseDto subcategory2ResponseDto = SubcategoryResponseDto.from(subcategory2);
+		SubcategoryResponseDto subcategory3ResponseDto = SubcategoryResponseDto.from(subcategory3);
+
+		when(subcategoryRepository.findAllByNameIn(subcategoryNames)).thenReturn(subcategories);
+
+		// when
+		List<SubcategoryResponseDto> subcategoryResponseDtoList = subcategoryService
+			.getSubcategoriesBySubcategoryNames(subcategoryNames);
+
+		// then
+		Assertions.assertThat(subcategoryResponseDtoList.size()).isEqualTo(subcategoryNames.size());
+		Assertions.assertThat(subcategoryResponseDtoList)
+			.containsExactly(subcategory1ResponseDto, subcategory2ResponseDto, subcategory3ResponseDto);
 	}
 }
