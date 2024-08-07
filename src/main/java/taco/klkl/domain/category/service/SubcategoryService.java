@@ -26,9 +26,9 @@ public class SubcategoryService {
 			return List.of();
 		}
 
-		List<Subcategory> findCategories = subcategoryRepository.findAllByNameIn(subcategoryNames);
+		List<Subcategory> subcategories = subcategoryRepository.findAllByNameIn(subcategoryNames);
 
-		return findCategories.stream()
+		return subcategories.stream()
 			.map(SubcategoryResponseDto::from)
 			.toList();
 	}

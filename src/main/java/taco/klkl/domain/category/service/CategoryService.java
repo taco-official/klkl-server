@@ -40,9 +40,9 @@ public class CategoryService {
 			return List.of();
 		}
 
-		List<Category> findCategories = categoryRepository.findAllByNameIn(categoryNames);
+		List<Category> categories = categoryRepository.findAllByNameIn(categoryNames);
 
-		return findCategories.stream()
+		return categories.stream()
 			.map(CategoryResponseDto::from)
 			.toList();
 	}
