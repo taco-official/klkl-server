@@ -25,13 +25,13 @@ public enum CategoryName {
 			.orElse(NONE);
 	}
 
-	public static List<CategoryName> getCategoryNamesByPartialString(String partial) {
+	public static List<CategoryName> getCategoryNamesByPartialString(String partialString) {
 
-		if (partial == null || partial.isEmpty()) {
+		if (partialString == null || partialString.isEmpty()) {
 			return List.of();
 		}
 
-		String regex = ".*" + Pattern.quote(partial) + ".*";
+		String regex = ".*" + Pattern.quote(partialString) + ".*";
 		Pattern pattern = Pattern.compile(regex);
 
 		return Arrays.stream(CategoryName.values())

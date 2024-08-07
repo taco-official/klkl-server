@@ -49,13 +49,13 @@ public enum SubcategoryName {
 			.orElse(NONE);
 	}
 
-	public static List<SubcategoryName> getSubcategoryNamesByPartialString(String partial) {
+	public static List<SubcategoryName> getSubcategoryNamesByPartialString(String partialString) {
 
-		if (partial == null || partial.isEmpty()) {
+		if (partialString == null || partialString.isEmpty()) {
 			return List.of();
 		}
 
-		String regex = ".*" + Pattern.quote(partial) + ".*";
+		String regex = ".*" + Pattern.quote(partialString) + ".*";
 		Pattern pattern = Pattern.compile(regex);
 
 		return Arrays.stream(SubcategoryName.values())
