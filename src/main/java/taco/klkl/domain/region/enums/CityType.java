@@ -70,16 +70,16 @@ public enum CityType {
 
 	/**
 	 * 부분문자열을 포함하는 CityType을 찾는 함수
-	 * @param partial 부분 문자열
+	 * @param partialString 부분 문자열
 	 * @return 부분문자열을 포함하는 CityType의 리스트
 	 */
-	public static List<CityType> getCityTypesByPartialString(String partial) {
+	public static List<CityType> getCityTypesByPartialString(String partialString) {
 
-		if (partial == null || partial.isEmpty()) {
+		if (partialString == null || partialString.isEmpty()) {
 			return List.of();
 		}
 
-		String regex = ".*" + Pattern.quote(partial) + ".*";
+		String regex = ".*" + Pattern.quote(partialString) + ".*";
 		Pattern pattern = Pattern.compile(regex);
 
 		return Arrays.stream(CityType.values())

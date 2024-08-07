@@ -23,7 +23,7 @@ public enum RegionType {
 	 * @param koreanName RegionType koreanName
 	 * @return RegionType
 	 */
-	public static RegionType getRegionByName(String koreanName) {
+	public static RegionType getRegionTypeByKoreanName(String koreanName) {
 		return Arrays.stream(RegionType.values())
 			.filter(r -> r.getKoreanName().equals(koreanName))
 			.findFirst()

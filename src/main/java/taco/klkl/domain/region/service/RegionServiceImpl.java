@@ -52,7 +52,7 @@ public class RegionServiceImpl implements RegionService {
 	@Override
 	public RegionResponseDto getRegionByName(final String name) throws RegionNotFoundException {
 
-		final Region region = regionRepository.findFirstByName(RegionType.getRegionByName(name));
+		final Region region = regionRepository.findFirstByName(RegionType.getRegionTypeByKoreanName(name));
 
 		if (region == null) {
 			throw new RegionNotFoundException();
