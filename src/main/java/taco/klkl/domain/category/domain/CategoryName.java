@@ -25,7 +25,7 @@ public enum CategoryName {
 			.orElse(NONE);
 	}
 
-	public static List<CategoryName> getCategoryNameByPartialString(String partial) {
+	public static List<CategoryName> getCategoryNamesByPartialString(String partial) {
 
 		if (partial == null || partial.isEmpty()) {
 			return List.of();

@@ -73,7 +73,7 @@ public enum CityType {
 	 * @param partial 부분 문자열
 	 * @return 부분문자열을 포함하는 CityType의 리스트
 	 */
-	public static List<CityType> getCitiesTypeByPartialString(String partial) {
+	public static List<CityType> getCityTypesByPartialString(String partial) {
 
 		if (partial == null || partial.isEmpty()) {
 			return List.of();

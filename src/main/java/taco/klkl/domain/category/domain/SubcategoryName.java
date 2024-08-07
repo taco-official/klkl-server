@@ -49,7 +49,7 @@ public enum SubcategoryName {
 			.orElse(NONE);
 	}
 
-	public static List<SubcategoryName> getSubcategoryNameByPartialString(String partial) {
+	public static List<SubcategoryName> getSubcategoryNamesByPartialString(String partial) {
 
 		if (partial == null || partial.isEmpty()) {
 			return List.of();

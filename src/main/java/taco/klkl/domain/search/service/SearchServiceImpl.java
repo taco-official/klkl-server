@@ -46,25 +46,25 @@ public class SearchServiceImpl implements SearchService {
 	}
 
 	private List<CountrySimpleResponseDto> getCountriesByQueryParam(final String queryParam) {
-		final List<CountryType> countryTypes = CountryType.getCountriesByPartialString(queryParam);
+		final List<CountryType> countryTypes = CountryType.getCountryTypesByPartialString(queryParam);
 
 		return countryService.getAllCountriesByCountryTypes(countryTypes);
 	}
 
 	private List<CityResponseDto> getCitiesByQueryParam(final String queryParam) {
-		final List<CityType> cityTypes = CityType.getCitiesTypeByPartialString(queryParam);
+		final List<CityType> cityTypes = CityType.getCityTypesByPartialString(queryParam);
 
 		return cityService.getAllCitiesByCityTypes(cityTypes);
 	}
 
 	private List<CategoryResponseDto> getCategoriesByQueryParam(final String queryParam) {
-		final List<CategoryName> categoryNames = CategoryName.getCategoryNameByPartialString(queryParam);
+		final List<CategoryName> categoryNames = CategoryName.getCategoryNamesByPartialString(queryParam);
 
 		return categoryService.getCategoriesByCategoryNames(categoryNames);
 	}
 
 	private List<SubcategoryResponseDto> getSubcategoriesByQueryParam(final String queryParam) {
-		final List<SubcategoryName> subcategoryNames = SubcategoryName.getSubcategoryNameByPartialString(queryParam);
+		final List<SubcategoryName> subcategoryNames = SubcategoryName.getSubcategoryNamesByPartialString(queryParam);
 
 		return subcategoryService.getSubcategoriesBySubcategoryNames(subcategoryNames);
 	}

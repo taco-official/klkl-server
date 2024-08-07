@@ -53,7 +53,7 @@ public enum CountryType {
 	 * @param partial 부분 문자열
 	 * @return 부분문자열을 포함하는 CountryType의 리스트
 	 */
-	public static List<CountryType> getCountriesByPartialString(String partial) {
+	public static List<CountryType> getCountryTypesByPartialString(String partial) {
 
 		if (partial == null || partial.isEmpty()) {
 			return List.of();
