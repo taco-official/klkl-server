@@ -55,12 +55,12 @@ public class ProductService {
 	}
 
 	@Transactional
-	public void addLikeCount(Product product) {
+	public void increaseLikeCount(Product product) {
 		product.increaseLikeCount();
 	}
 
 	@Transactional
-	public void subtractLikeCount(Product product) {
+	public void decreaseLikeCount(Product product) {
 		product.decreaseLikeCount();
 	}
 
