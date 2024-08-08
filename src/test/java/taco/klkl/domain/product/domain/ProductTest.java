@@ -1,12 +1,16 @@
 package taco.klkl.domain.product.domain;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
+import taco.klkl.domain.like.exception.LikeCountMaximumException;
+import taco.klkl.domain.like.exception.LikeCountMinimumException;
 import taco.klkl.domain.product.dto.request.ProductUpdateRequestDto;
 import taco.klkl.domain.user.domain.User;
 import taco.klkl.global.common.constants.ProductConstants;
@@ -15,9 +19,12 @@ class ProductTest {
 
 	private User user;
 
+	private Product mockProduct;
+
 	@BeforeEach
 	public void beforeEach() {
 		user = Mockito.mock(User.class);
+		mockProduct = Mockito.mock(Product.class);
 	}
 
 	@Test
@@ -237,6 +244,16 @@ class ProductTest {
 	}
 
 	@Test
+	@DisplayName("상품 좋아요수 최대값 에러 테스트")
+	public void testIncreaseLikeCountMaximum() {
+		// given
+		when(mockProduct.increaseLikeCount()).thenThrow(LikeCountMaximumException.class);
+
+		// when & then
+		Assertions.assertThrows(LikeCountMaximumException.class, mockProduct::increaseLikeCount);
+	}
+
+	@Test
 	@DisplayName("상품 좋아요수 감소 테스트")
 	public void testDecreaseLikeCount() {
 		// given
@@ -257,5 +274,15 @@ class ProductTest {
 
 		// then
 		assertThat(product.getLikeCount()).isEqualTo(beforeLikeCount - 1);
+	}
+
+	@Test
+	@DisplayName("상품 좋아요수 최소값 에러 테스트")
+	public void testDecreaseLikeCountMinimum() {
+		// given
+		when(mockProduct.increaseLikeCount()).thenThrow(LikeCountMinimumException.class);
+
+		// when & then
+		Assertions.assertThrows(LikeCountMinimumException.class, mockProduct::increaseLikeCount);
 	}
 }

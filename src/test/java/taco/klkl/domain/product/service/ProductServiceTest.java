@@ -6,14 +6,16 @@ import static org.mockito.Mockito.*;
 
 import java.util.Optional;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
+import taco.klkl.domain.like.exception.LikeCountMaximumException;
+import taco.klkl.domain.like.exception.LikeCountMinimumException;
 import taco.klkl.domain.product.dao.ProductRepository;
 import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.product.dto.request.ProductCreateRequestDto;
@@ -36,10 +38,13 @@ class ProductServiceTest {
 
 	private User user;
 
+	private Product mockProduct;
+
 	@BeforeEach
 	void setUp() {
 		MockitoAnnotations.openMocks(this);
 		user = new User();
+		mockProduct = Mockito.mock(Product.class);
 	}
 
 	@Test
@@ -235,14 +240,26 @@ class ProductServiceTest {
 	@DisplayName("상품 좋아요수 추가 테스트")
 	void testAddLikeCount() {
 		// given
-		Product product = ProductConstants.TEST_PRODUCT;
-		int beforeLikeCount = product.getLikeCount();
+		when(mockProduct.increaseLikeCount()).thenReturn(1);
+		when(mockProduct.getLikeCount()).thenReturn(1);
 
 		// when
-		productService.increaseLikeCount(product);
+		int likeCount = productService.increaseLikeCount(mockProduct);
 
 		// then
-		Assertions.assertThat(product.getLikeCount()).isEqualTo(beforeLikeCount + 1);
+		assertThat(mockProduct.getLikeCount()).isEqualTo(likeCount);
+	}
+
+	@Test
+	@DisplayName("상품 좋아요수 최대값 에러 테스트")
+	void testIncreaseLikeCountMaximum() {
+		// given
+		when(mockProduct.increaseLikeCount()).thenThrow(LikeCountMaximumException.class);
+
+		// when & then
+		org.junit.jupiter.api.Assertions.assertThrows(LikeCountMaximumException.class, () -> {
+			productService.increaseLikeCount(mockProduct);
+		});
 	}
 
 	@Test
@@ -257,7 +274,19 @@ class ProductServiceTest {
 		productService.decreaseLikeCount(product);
 
 		// then
-		Assertions.assertThat(product.getLikeCount()).isEqualTo(beforeLikeCount - 1);
+		assertThat(product.getLikeCount()).isEqualTo(beforeLikeCount - 1);
+	}
+
+	@Test
+	@DisplayName("상품 좋아요수 최소값 에러 테스트")
+	void testIncreaseLikeCountMinimum() {
+		// given
+		when(mockProduct.decreaseLikeCount()).thenThrow(LikeCountMinimumException.class);
+
+		// when & then
+		org.junit.jupiter.api.Assertions.assertThrows(LikeCountMinimumException.class, () -> {
+			productService.decreaseLikeCount(mockProduct);
+		});
 	}
 
 }
