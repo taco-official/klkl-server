@@ -57,8 +57,7 @@ public class Comment {
 		this.date = LocalDate.now();
 	}
 
-	public void update(User user, CommentRequestDto commentUpdateRequestDto) {
-		this.user = user;
+	public void update(CommentRequestDto commentUpdateRequestDto) {
 		this.content = commentUpdateRequestDto.content();
 	}
 
