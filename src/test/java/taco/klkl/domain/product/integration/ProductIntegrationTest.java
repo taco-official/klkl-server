@@ -107,8 +107,8 @@ public class ProductIntegrationTest {
 	}
 
 	@Test
-	@DisplayName("모든 상품 조회 API 테스트")
-	public void testGetAllProducts() throws Exception {
+	@DisplayName("페이지네이션으로 상품 목록 조회 API 테스트")
+	public void testGetProductsByPagination() throws Exception {
 		// given
 		ProductCreateUpdateRequestDto createRequest1 = new ProductCreateUpdateRequestDto(
 			"name1",
@@ -142,6 +142,126 @@ public class ProductIntegrationTest {
 			.andExpect(jsonPath("$.data.content", hasSize(3)))
 			.andExpect(jsonPath("$.data.content[0].name", is(createRequest1.name())))
 			.andExpect(jsonPath("$.data.content[1].name", is(createRequest2.name())))
+			.andExpect(jsonPath("$.data.pageNumber", is(0)))
+			.andExpect(jsonPath("$.data.pageSize", is(10)))
+			.andExpect(jsonPath("$.data.totalElements", is(3)))
+			.andExpect(jsonPath("$.data.totalPages", is(1)))
+			.andExpect(jsonPath("$.data.last", is(true)))
+			.andExpect(jsonPath("$.timestamp", notNullValue()));
+	}
+
+	@Test
+	@DisplayName("단일 국가ID로 필터링된 상품 목록 조회 API 테스트")
+	public void testGetProductsBySingleCountryId() throws Exception {
+		// given
+		ProductCreateUpdateRequestDto createJapanRequest1 = new ProductCreateUpdateRequestDto(
+			"name1",
+			"description1",
+			"address1",
+			1000,
+			414L,
+			310L,
+			438L
+		);
+		ProductCreateUpdateRequestDto createJapanRequest2 = new ProductCreateUpdateRequestDto(
+			"name2",
+			"description2",
+			"address2",
+			2000,
+			415L,
+			311L,
+			438L
+		);
+		ProductCreateUpdateRequestDto createThailandRequest = new ProductCreateUpdateRequestDto(
+			"name3",
+			"description3",
+			"address3",
+			3000,
+			427L,
+			314L,
+			441L
+		);
+		productService.createProduct(createJapanRequest1);
+		productService.createProduct(createJapanRequest2);
+		productService.createProduct(createThailandRequest);
+
+		// when & then
+		mockMvc.perform(get("/v1/products")
+				.param("page", "0")
+				.param("size", "10")
+				.param("country_id", "406")
+				.contentType(MediaType.APPLICATION_JSON))
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.isSuccess", is(true)))
+			.andExpect(jsonPath("$.code", is("C000")))
+			.andExpect(jsonPath("$.data.content", hasSize(1)))
+			.andExpect(jsonPath("$.data.content[0].name", is(createThailandRequest.name())))
+			.andExpect(jsonPath("$.data.pageNumber", is(0)))
+			.andExpect(jsonPath("$.data.pageSize", is(10)))
+			.andExpect(jsonPath("$.data.totalElements", is(1)))
+			.andExpect(jsonPath("$.data.totalPages", is(1)))
+			.andExpect(jsonPath("$.data.last", is(true)))
+			.andExpect(jsonPath("$.timestamp", notNullValue()));
+	}
+
+	@Test
+	@DisplayName("여러 국가ID로 필터링된 상품 목록 조회 API 테스트")
+	public void testGetProductsByMultipleCountryIds() throws Exception {
+		// given
+		ProductCreateUpdateRequestDto createJapanRequest = new ProductCreateUpdateRequestDto(
+			"name1",
+			"description1",
+			"address1",
+			1000,
+			414L,
+			310L,
+			438L
+		);
+		ProductCreateUpdateRequestDto createVietnamRequest1 = new ProductCreateUpdateRequestDto(
+			"name2",
+			"description2",
+			"address2",
+			2000,
+			428L,
+			311L,
+			442L
+		);
+		ProductCreateUpdateRequestDto createThailandRequest = new ProductCreateUpdateRequestDto(
+			"name3",
+			"description3",
+			"address3",
+			3000,
+			427L,
+			314L,
+			441L
+		);
+		ProductCreateUpdateRequestDto createVietnamRequest2 = new ProductCreateUpdateRequestDto(
+			"name4",
+			"description4",
+			"address4",
+			4000,
+			431L,
+			315L,
+			442L
+		);
+		productService.createProduct(createJapanRequest);
+		productService.createProduct(createVietnamRequest1);
+		productService.createProduct(createThailandRequest);
+		productService.createProduct(createVietnamRequest2);
+
+		// when & then
+		mockMvc.perform(get("/v1/products")
+				.param("page", "0")
+				.param("size", "10")
+				.param("country_id", "406", "407")  // 태국, 베트남
+				.contentType(MediaType.APPLICATION_JSON))
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.isSuccess", is(true)))
+			.andExpect(jsonPath("$.code", is("C000")))
+			.andExpect(jsonPath("$.data.content", hasSize(3)))
+			.andExpect(jsonPath("$.data.content[0].name", is(createThailandRequest.name())))
+			.andExpect(jsonPath("$.data.content[1].name", is(createVietnamRequest1.name())))
+			.andExpect(jsonPath("$.data.content[2].name", is(createVietnamRequest2.name())))
 			.andExpect(jsonPath("$.data.pageNumber", is(0)))
 			.andExpect(jsonPath("$.data.pageSize", is(10)))
 			.andExpect(jsonPath("$.data.totalElements", is(3)))

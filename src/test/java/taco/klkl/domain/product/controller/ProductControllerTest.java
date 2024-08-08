@@ -26,6 +26,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import taco.klkl.domain.category.domain.CategoryName;
 import taco.klkl.domain.category.dto.response.SubcategoryResponseDto;
 import taco.klkl.domain.product.dto.request.ProductCreateUpdateRequestDto;
+import taco.klkl.domain.product.dto.request.ProductFilterOptionsDto;
 import taco.klkl.domain.product.dto.response.PagedResponseDto;
 import taco.klkl.domain.product.dto.response.ProductDetailResponseDto;
 import taco.klkl.domain.product.dto.response.ProductSimpleResponseDto;
@@ -113,12 +114,14 @@ public class ProductControllerTest {
 		PagedResponseDto<ProductSimpleResponseDto> pagedResponse = new PagedResponseDto<>(
 			products, 0, 10, 1, 1, true
 		);
-		when(productService.getProducts(any(Pageable.class))).thenReturn(pagedResponse);
+		when(productService.getProductsByFilterOptions(any(ProductFilterOptionsDto.class), any(Pageable.class)))
+			.thenReturn(pagedResponse);
 
 		// When & Then
 		mockMvc.perform(get("/v1/products")
 				.param("page", "0")
-				.param("size", "10"))
+				.param("size", "10")
+				.param("countryIds", "1", "2", "3")) // Add countryIds as query parameters
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
 			.andExpect(jsonPath("$.code", is("C000")))
