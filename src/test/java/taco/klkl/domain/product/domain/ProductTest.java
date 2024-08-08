@@ -213,4 +213,49 @@ class ProductTest {
 		assertThat(product.getSubcategoryId()).isEqualTo(1L);
 		assertThat(product.getCurrencyId()).isEqualTo(1L);
 	}
+
+	@Test
+	@DisplayName("상품 좋아요수 증가 테스트")
+	public void testIncreaseLikeCount() {
+		// given
+		Product product = Product.of(
+			user,
+			"Original Name",
+			"Original Description",
+			"Original Address",
+			100,
+			1L,
+			1L,
+			1L);
+		int beforeLikeCount = product.getLikeCount();
+
+		// when
+		product.increaseLikeCount();
+
+		// then
+		assertThat(product.getLikeCount()).isEqualTo(beforeLikeCount + 1);
+	}
+
+	@Test
+	@DisplayName("상품 좋아요수 감소 테스트")
+	public void testDecreaseLikeCount() {
+		// given
+		Product product = Product.of(
+			user,
+			"Original Name",
+			"Original Description",
+			"Original Address",
+			100,
+			1L,
+			1L,
+			1L);
+		product.increaseLikeCount();
+		int beforeLikeCount = product.getLikeCount();
+
+		// when
+		product.decreaseLikeCount();
+
+		// then
+		assertThat(product.getLikeCount()).isEqualTo(beforeLikeCount - 1);
+	}
 }

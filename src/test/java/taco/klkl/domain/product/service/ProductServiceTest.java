@@ -6,6 +6,7 @@ import static org.mockito.Mockito.*;
 
 import java.util.Optional;
 
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -229,4 +230,34 @@ class ProductServiceTest {
 		verify(productRepository).findById(productId);
 		verify(productRepository).delete(product);
 	}
+
+	@Test
+	@DisplayName("상품 좋아요수 추가 테스트")
+	void testAddLikeCount() {
+		// given
+		Product product = ProductConstants.TEST_PRODUCT;
+		int beforeLikeCount = product.getLikeCount();
+
+		// when
+		productService.addLikeCount(product);
+
+		// then
+		Assertions.assertThat(product.getLikeCount()).isEqualTo(beforeLikeCount + 1);
+	}
+
+	@Test
+	@DisplayName("상품 좋아요수 빼기 테스트")
+	void testSubtractLikeCount() {
+		// given
+		Product product = ProductConstants.TEST_PRODUCT;
+		product.increaseLikeCount();
+		int beforeLikeCount = product.getLikeCount();
+
+		// when
+		productService.subtractLikeCount(product);
+
+		// then
+		Assertions.assertThat(product.getLikeCount()).isEqualTo(beforeLikeCount - 1);
+	}
+
 }
