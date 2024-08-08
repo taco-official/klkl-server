@@ -7,6 +7,7 @@ import org.hibernate.annotations.DynamicInsert;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -32,7 +33,7 @@ public class Product {
 	@Column(name = "product_id")
 	private Long productId;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")
 	private User user;
 
@@ -164,5 +165,23 @@ public class Product {
 		if (updateDto.currencyId() != null) {
 			this.currencyId = updateDto.currencyId();
 		}
+	}
+
+	public void increaseLikeCount() {
+
+		if (this.likeCount == Integer.MAX_VALUE) {
+			return;
+		}
+
+		this.likeCount += 1;
+	}
+
+	public void decreaseLikeCount() {
+
+		if (this.likeCount == 0) {
+			return;
+		}
+
+		this.likeCount -= 1;
 	}
 }
