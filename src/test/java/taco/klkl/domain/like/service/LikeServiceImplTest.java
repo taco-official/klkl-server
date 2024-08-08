@@ -57,7 +57,7 @@ class LikeServiceImplTest {
 
 		// then
 		verify(likeRepository).save(any(Like.class));
-		verify(productService).addLikeCount(product);
+		verify(productService).increaseLikeCount(product);
 	}
 
 	@Test
@@ -75,7 +75,7 @@ class LikeServiceImplTest {
 
 		// then
 		verify(likeRepository, never()).save(any(Like.class));
-		verify(productService, never()).addLikeCount(product);
+		verify(productService, never()).increaseLikeCount(product);
 	}
 
 	@Test
@@ -93,7 +93,7 @@ class LikeServiceImplTest {
 
 		// then
 		verify(likeRepository).deleteByProductAndUser(product, user);
-		verify(productService).subtractLikeCount(product);
+		verify(productService).decreaseLikeCount(product);
 	}
 
 	@Test
@@ -111,6 +111,6 @@ class LikeServiceImplTest {
 
 		// then
 		verify(likeRepository, never()).deleteByProductAndUser(product, user);
-		verify(productService, never()).subtractLikeCount(product);
+		verify(productService, never()).decreaseLikeCount(product);
 	}
 }

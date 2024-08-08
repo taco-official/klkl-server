@@ -1,11 +1,11 @@
 package taco.klkl.domain.like.integration;
 
+import static org.assertj.core.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import java.util.List;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -23,7 +23,6 @@ import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.product.dto.request.ProductCreateRequestDto;
 import taco.klkl.domain.product.dto.response.ProductDetailResponseDto;
 import taco.klkl.domain.product.service.ProductService;
-import taco.klkl.domain.user.domain.User;
 import taco.klkl.global.util.UserUtil;
 
 @SpringBootTest
@@ -47,7 +46,6 @@ public class LikeIntegrationTest {
 	private UserUtil userUtil;
 
 	Product product;
-	User user;
 
 	@BeforeEach
 	void setUp() {
@@ -62,7 +60,6 @@ public class LikeIntegrationTest {
 		);
 		ProductDetailResponseDto productResponseDto = productService.createProduct(createDto);
 		product = productService.getProductById(productResponseDto.productId());
-		user = userUtil.findTestUser();
 	}
 
 	@AfterEach
@@ -79,7 +76,7 @@ public class LikeIntegrationTest {
 		mockMvc.perform(post("/v1/products/{id}/likes", product.getProductId()))
 			.andExpect(status().isCreated());
 		List<Like> all = likeRepository.findAll();
-		Assertions.assertThat(all).hasSize(1);
+		assertThat(all).hasSize(1);
 	}
 
 	@Test
@@ -91,6 +88,6 @@ public class LikeIntegrationTest {
 		mockMvc.perform(delete("/v1/products/{id}/likes", product.getProductId()))
 			.andExpect(status().isNoContent());
 		List<Like> all = likeRepository.findAll();
-		Assertions.assertThat(all).hasSize(0);
+		assertThat(all).hasSize(0);
 	}
 }

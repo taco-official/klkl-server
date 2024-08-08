@@ -239,7 +239,7 @@ class ProductServiceTest {
 		int beforeLikeCount = product.getLikeCount();
 
 		// when
-		productService.addLikeCount(product);
+		productService.increaseLikeCount(product);
 
 		// then
 		Assertions.assertThat(product.getLikeCount()).isEqualTo(beforeLikeCount + 1);
@@ -254,7 +254,7 @@ class ProductServiceTest {
 		int beforeLikeCount = product.getLikeCount();
 
 		// when
-		productService.subtractLikeCount(product);
+		productService.decreaseLikeCount(product);
 
 		// then
 		Assertions.assertThat(product.getLikeCount()).isEqualTo(beforeLikeCount - 1);
