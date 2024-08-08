@@ -21,7 +21,8 @@ public enum ErrorCode {
 	PRODUCT_NOT_FOUND(HttpStatus.NOT_FOUND, "C020", "존재하지 않는 상품입니다."),
 
 	// Like
-
+	LIKE_COUNT_MAXIMUM(HttpStatus.BAD_REQUEST, "C030", "상품의 좋아요수가 최대값입니다. 2147483647"),
+	LIKE_COUNT_MINIMUM(HttpStatus.BAD_REQUEST, "C031", "상품의 좋아요수가 최소값입니다. 0"),
 	// Comment
 
 	// Region
