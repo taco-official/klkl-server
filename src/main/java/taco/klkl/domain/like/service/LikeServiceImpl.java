@@ -30,13 +30,13 @@ public class LikeServiceImpl implements LikeService {
 		Product product = getProductById(productId);
 		User user = getCurrentUser();
 
-		if (isLikeAlreadyExists(product, user)) {
+		if (isLikePresent(product, user)) {
 			return;
 		}
 
 		Like like = Like.of(product, user);
 		likeRepository.save(like);
-		productService.addLikeCount(product);
+		productService.increaseLikeCount(product);
 	}
 
 	@Override
@@ -44,9 +44,9 @@ public class LikeServiceImpl implements LikeService {
 		Product product = getProductById(productId);
 		User user = getCurrentUser();
 
-		if (isLikeAlreadyExists(product, user)) {
+		if (isLikePresent(product, user)) {
 			likeRepository.deleteByProductAndUser(product, user);
-			productService.subtractLikeCount(product);
+			productService.decreaseLikeCount(product);
 		}
 	}
 
@@ -58,7 +58,8 @@ public class LikeServiceImpl implements LikeService {
 		return userUtil.getCurrentUser();
 	}
 
-	private boolean isLikeAlreadyExists(Product product, User user) {
+	@Override
+	public boolean isLikePresent(Product product, User user) {
 		return likeRepository.existsByProductAndUser(product, user);
 	}
 }

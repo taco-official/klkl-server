@@ -2,6 +2,9 @@ package taco.klkl.domain.like.service;
 
 import org.springframework.stereotype.Service;
 
+import taco.klkl.domain.product.domain.Product;
+import taco.klkl.domain.user.domain.User;
+
 @Service
 public interface LikeService {
 
@@ -17,4 +20,11 @@ public interface LikeService {
 	 */
 	void deleteLike(Long productId);
 
+	/**
+	 * 상품에 이미 사용자가 좋아요를 했는지 확인
+	 * @param product
+	 * @param user
+	 * @return
+	 */
+	boolean isLikePresent(Product product, User user);
 }
