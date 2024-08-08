@@ -32,14 +32,20 @@ public class Like {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(
+		fetch = FetchType.LAZY,
+		optional = false
+	)
 	@JoinColumn(
 		name = "product_id",
 		nullable = false
 	)
 	private Product product;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(
+		fetch = FetchType.LAZY,
+		optional = false
+	)
 	@JoinColumn(
 		name = "user_id",
 		nullable = false
