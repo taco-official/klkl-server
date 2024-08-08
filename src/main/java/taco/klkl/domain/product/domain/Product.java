@@ -169,17 +169,21 @@ public class Product {
 		}
 	}
 
-	public void increaseLikeCount() throws LikeCountMaximumException {
+	public int increaseLikeCount() throws LikeCountMaximumException {
 		if (this.likeCount == Integer.MAX_VALUE) {
 			throw new LikeCountMaximumException();
 		}
 		this.likeCount += 1;
+
+		return this.likeCount;
 	}
 
-	public void decreaseLikeCount() throws LikeCountMinimumException {
+	public int decreaseLikeCount() throws LikeCountMinimumException {
 		if (this.likeCount == 0) {
 			throw new LikeCountMinimumException();
 		}
 		this.likeCount -= 1;
+
+		return this.likeCount;
 	}
 }

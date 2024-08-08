@@ -37,9 +37,9 @@ public class LikeServiceImpl implements LikeService {
 
 		Like like = Like.of(product, user);
 		likeRepository.save(like);
-		productService.increaseLikeCount(product);
+		int likeCount = productService.increaseLikeCount(product);
 
-		return LikeResponseDto.of(true, product.getLikeCount());
+		return LikeResponseDto.of(true, likeCount);
 	}
 
 	@Override
@@ -49,8 +49,8 @@ public class LikeServiceImpl implements LikeService {
 
 		if (isLikePresent(product, user)) {
 			likeRepository.deleteByProductAndUser(product, user);
-			productService.decreaseLikeCount(product);
-			return LikeResponseDto.of(false, product.getLikeCount());
+			int likeCount = productService.decreaseLikeCount(product);
+			return LikeResponseDto.of(false, likeCount);
 		}
 
 		return LikeResponseDto.of(false, product.getLikeCount());

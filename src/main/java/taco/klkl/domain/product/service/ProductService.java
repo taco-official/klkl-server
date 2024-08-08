@@ -55,13 +55,13 @@ public class ProductService {
 	}
 
 	@Transactional
-	public void increaseLikeCount(Product product) {
-		product.increaseLikeCount();
+	public int increaseLikeCount(Product product) {
+		return product.increaseLikeCount();
 	}
 
 	@Transactional
-	public void decreaseLikeCount(Product product) {
-		product.decreaseLikeCount();
+	public int decreaseLikeCount(Product product) {
+		return product.decreaseLikeCount();
 	}
 
 	private Product createProductEntity(final ProductCreateRequestDto productDto) {
