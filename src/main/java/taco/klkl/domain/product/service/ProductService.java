@@ -2,9 +2,14 @@ package taco.klkl.domain.product.service;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.RequiredArgsConstructor;
 import taco.klkl.domain.category.domain.Subcategory;
@@ -12,7 +17,10 @@ import taco.klkl.domain.category.exception.SubcategoryNotFoundException;
 import taco.klkl.domain.category.service.SubcategoryService;
 import taco.klkl.domain.product.dao.ProductRepository;
 import taco.klkl.domain.product.domain.Product;
+import taco.klkl.domain.product.domain.QProduct;
 import taco.klkl.domain.product.dto.request.ProductCreateUpdateRequestDto;
+import taco.klkl.domain.product.dto.request.ProductFilterOptionsDto;
+import taco.klkl.domain.product.dto.response.PagedResponseDto;
 import taco.klkl.domain.product.dto.response.ProductDetailResponseDto;
 import taco.klkl.domain.product.dto.response.ProductSimpleResponseDto;
 import taco.klkl.domain.product.exception.ProductNotFoundException;
@@ -30,6 +38,7 @@ import taco.klkl.global.util.UserUtil;
 @RequiredArgsConstructor
 public class ProductService {
 
+	private final JPAQueryFactory queryFactory;
 	private final ProductRepository productRepository;
 
 	private final CityService cityService;
@@ -38,10 +47,26 @@ public class ProductService {
 
 	private final UserUtil userUtil;
 
-	public List<ProductSimpleResponseDto> getAllProducts(Pageable pageable) {
-		return productRepository.findAll(pageable).stream()
-			.map(ProductSimpleResponseDto::from)
-			.toList();
+	public PagedResponseDto<ProductSimpleResponseDto> getProductsByFilterOptions(
+		Pageable pageable,
+		ProductFilterOptionsDto filterOptions
+	) {
+		QProduct product = QProduct.product;
+		BooleanBuilder builder = buildFilterOptions(filterOptions, product);
+
+		List<Product> products = queryFactory.selectFrom(product)
+			.where(builder)
+			.offset(pageable.getOffset())
+			.limit(pageable.getPageSize())
+			.fetch();
+
+		long total = queryFactory.select(product.count())
+			.from(product)
+			.where(builder)
+			.fetchOne();
+
+		Page<Product> productPage = new PageImpl<>(products, pageable, total);
+		return PagedResponseDto.of(productPage, ProductSimpleResponseDto::from);
 	}
 
 	public ProductDetailResponseDto getProductById(final Long id) throws ProductNotFoundException {
@@ -71,6 +96,16 @@ public class ProductService {
 		final Product product = productRepository.findById(id)
 			.orElseThrow(ProductNotFoundException::new);
 		productRepository.delete(product);
+	}
+
+	private BooleanBuilder buildFilterOptions(ProductFilterOptionsDto options, QProduct product) {
+		BooleanBuilder builder = new BooleanBuilder();
+
+		if (options.countryIds() != null && !options.countryIds().isEmpty()) {
+			builder.and(product.city.country.countryId.in(options.countryIds()));
+		}
+
+		return builder;
 	}
 
 	private Product createProductEntity(final ProductCreateUpdateRequestDto createRequest) {

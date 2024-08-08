@@ -2,8 +2,7 @@ package taco.klkl.global.common.constants;
 
 public final class ProductConstants {
 
-	public static final String DEFAULT_PAGE_NUMBER = "0";
-	public static final String DEFAULT_PAGE_SIZE = "9";
+	public static final int DEFAULT_PAGE_SIZE = 9;
 
 	public static final int DEFAULT_PRICE = 0;
 	public static final int DEFAULT_LIKE_COUNT = 0;

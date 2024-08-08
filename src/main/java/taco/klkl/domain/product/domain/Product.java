@@ -7,6 +7,7 @@ import org.hibernate.annotations.DynamicInsert;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -70,28 +71,40 @@ public class Product {
 	@ColumnDefault(DefaultConstants.DEFAULT_INT_STRING)
 	private Integer likeCount;
 
-	@ManyToOne(optional = false)
+	@ManyToOne(
+		fetch = FetchType.LAZY,
+		optional = false
+	)
 	@JoinColumn(
 		name = "user_id",
 		nullable = false
 	)
 	private User user;
 
-	@ManyToOne(optional = false)
+	@ManyToOne(
+		fetch = FetchType.LAZY,
+		optional = false
+	)
 	@JoinColumn(
 		name = "city_id",
 		nullable = false
 	)
 	private City city;
 
-	@ManyToOne(optional = false)
+	@ManyToOne(
+		fetch = FetchType.LAZY,
+		optional = false
+	)
 	@JoinColumn(
 		name = "subcategory_id",
 		nullable = false
 	)
 	private Subcategory subcategory;
 
-	@ManyToOne(optional = false)
+	@ManyToOne(
+		fetch = FetchType.LAZY,
+		optional = false
+	)
 	@JoinColumn(
 		name = "currency_id",
 		nullable = false

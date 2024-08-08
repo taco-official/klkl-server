@@ -17,19 +17,23 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import taco.klkl.domain.category.domain.CategoryName;
 import taco.klkl.domain.category.dto.response.SubcategoryResponseDto;
 import taco.klkl.domain.product.dto.request.ProductCreateUpdateRequestDto;
+import taco.klkl.domain.product.dto.request.ProductFilterOptionsDto;
+import taco.klkl.domain.product.dto.response.PagedResponseDto;
 import taco.klkl.domain.product.dto.response.ProductDetailResponseDto;
 import taco.klkl.domain.product.dto.response.ProductSimpleResponseDto;
 import taco.klkl.domain.product.service.ProductService;
 import taco.klkl.domain.region.dto.response.CityResponseDto;
 import taco.klkl.domain.region.dto.response.CurrencyResponseDto;
+import taco.klkl.domain.region.enums.CountryType;
 import taco.klkl.domain.user.dto.response.UserDetailResponseDto;
 
 @WebMvcTest(ProductController.class)
@@ -75,8 +79,8 @@ public class ProductControllerTest {
 			1L,
 			"productName",
 			10,
-			1L,
-			1L
+			CountryType.THAILAND.getKoreanName(),
+			CategoryName.FOOD.getKoreanName()
 		);
 		productDetailResponseDto = new ProductDetailResponseDto(
 			1L,
@@ -104,25 +108,36 @@ public class ProductControllerTest {
 
 	@Test
 	@DisplayName("상품 목록 조회 - 성공")
-	void testGetAllProducts_ShouldReturnListOfProducts() throws Exception {
+	void testGetProducts_ShouldReturnPagedProducts() throws Exception {
 		// Given
 		List<ProductSimpleResponseDto> products = Arrays.asList(productSimpleResponseDto);
-		when(productService.getAllProducts(any(PageRequest.class))).thenReturn(products);
+		PagedResponseDto<ProductSimpleResponseDto> pagedResponse = new PagedResponseDto<>(
+			products, 0, 10, 1, 1, true
+		);
+		when(productService.getProductsByFilterOptions(any(Pageable.class), any(ProductFilterOptionsDto.class)))
+			.thenReturn(pagedResponse);
 
 		// When & Then
 		mockMvc.perform(get("/v1/products")
 				.param("page", "0")
-				.param("size", "10"))
+				.param("size", "10")
+				.param("countryIds", "1", "2", "3")) // Add countryIds as query parameters
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
 			.andExpect(jsonPath("$.code", is("C000")))
-			.andExpect(jsonPath("$.data", hasSize(1)))
-			.andExpect(jsonPath("$.data[0].productId", is(productSimpleResponseDto.productId().intValue())))
-			.andExpect(jsonPath("$.data[0].name", is(productSimpleResponseDto.name())))
-			.andExpect(jsonPath("$.data[0].likeCount", is(productSimpleResponseDto.likeCount())))
-			.andExpect(jsonPath("$.data[0].cityId", is(productSimpleResponseDto.cityId().intValue())))
-			.andExpect(jsonPath("$.data[0].subcategoryId",
-				is(productSimpleResponseDto.subcategoryId().intValue())))
+			.andExpect(jsonPath("$.data.content", hasSize(1)))
+			.andExpect(jsonPath("$.data.content[0].productId",
+				is(productSimpleResponseDto.productId().intValue())))
+			.andExpect(jsonPath("$.data.content[0].name", is(productSimpleResponseDto.name())))
+			.andExpect(jsonPath("$.data.content[0].likeCount", is(productSimpleResponseDto.likeCount())))
+			.andExpect(jsonPath("$.data.content[0].countryName", is(productSimpleResponseDto.countryName())))
+			.andExpect(jsonPath("$.data.content[0].categoryName",
+				is(productSimpleResponseDto.categoryName())))
+			.andExpect(jsonPath("$.data.pageNumber", is(0)))
+			.andExpect(jsonPath("$.data.pageSize", is(10)))
+			.andExpect(jsonPath("$.data.totalElements", is(1)))
+			.andExpect(jsonPath("$.data.totalPages", is(1)))
+			.andExpect(jsonPath("$.data.last", is(true)))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
 	}
 
