@@ -17,6 +17,8 @@ import jakarta.persistence.PrePersist;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import taco.klkl.domain.like.exception.LikeCountMaximumException;
+import taco.klkl.domain.like.exception.LikeCountMinimumException;
 import taco.klkl.domain.product.dto.request.ProductUpdateRequestDto;
 import taco.klkl.domain.user.domain.User;
 import taco.klkl.global.common.constants.DefaultConstants;
@@ -167,16 +169,16 @@ public class Product {
 		}
 	}
 
-	public void increaseLikeCount() {
+	public void increaseLikeCount() throws LikeCountMaximumException {
 		if (this.likeCount == Integer.MAX_VALUE) {
-			return;
+			throw new LikeCountMaximumException();
 		}
 		this.likeCount += 1;
 	}
 
-	public void decreaseLikeCount() {
+	public void decreaseLikeCount() throws LikeCountMinimumException {
 		if (this.likeCount == 0) {
-			return;
+			throw new LikeCountMinimumException();
 		}
 		this.likeCount -= 1;
 	}
