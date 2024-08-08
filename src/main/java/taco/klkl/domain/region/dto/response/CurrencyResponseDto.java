@@ -2,6 +2,12 @@ package taco.klkl.domain.region.dto.response;
 
 import taco.klkl.domain.region.domain.Currency;
 
+/**
+ *
+ * @param currencyId
+ * @param code
+ * @param flag
+ */
 public record CurrencyResponseDto(
 	Long currencyId,
 	String code,

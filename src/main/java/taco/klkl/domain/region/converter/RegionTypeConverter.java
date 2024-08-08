@@ -20,7 +20,7 @@ public class RegionTypeConverter implements AttributeConverter<RegionType, Strin
 	@Override
 	public RegionType convertToEntityAttribute(final String dbData) {
 
-		final RegionType regionType = RegionType.getRegionByName(dbData);
+		final RegionType regionType = RegionType.getRegionTypeByKoreanName(dbData);
 
 		if (regionType.equals(RegionType.NONE)) {
 			throw new IllegalArgumentException("Unknown value: " + dbData);
