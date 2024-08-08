@@ -136,8 +136,10 @@ class ProductServiceTest {
 	void testGetProductsByFilterOptions() {
 		// Given
 		List<Long> countryIds = List.of(1L, 2L, 3L);
+		List<Long> cityIds = List.of(4L, 5L);
 		ProductFilterOptionsDto filterOptions = new ProductFilterOptionsDto(
-			countryIds
+			countryIds,
+			cityIds
 		);
 		Pageable pageable = PageRequest.of(0, 10);
 

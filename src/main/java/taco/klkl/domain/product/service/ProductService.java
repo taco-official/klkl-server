@@ -104,6 +104,9 @@ public class ProductService {
 		if (options.countryIds() != null && !options.countryIds().isEmpty()) {
 			builder.and(product.city.country.countryId.in(options.countryIds()));
 		}
+		if (options.cityIds() != null && !options.cityIds().isEmpty()) {
+			builder.and(product.city.cityId.in(options.cityIds()));
+		}
 
 		return builder;
 	}

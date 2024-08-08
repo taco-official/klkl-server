@@ -41,9 +41,13 @@ public class ProductController {
 	@Operation(summary = "상품 목록 조회", description = "상품 목록을 조회합니다.")
 	public PagedResponseDto<ProductSimpleResponseDto> getProducts(
 		@PageableDefault(size = ProductConstants.DEFAULT_PAGE_SIZE) Pageable pageable,
-		@RequestParam(name = "country_id", required = false) List<Long> countryIds
+		@RequestParam(name = "country_id", required = false) List<Long> countryIds,
+		@RequestParam(name = "city_id", required = false) List<Long> cityIds
 	) {
-		ProductFilterOptionsDto filterOptions = new ProductFilterOptionsDto(countryIds);
+		ProductFilterOptionsDto filterOptions = new ProductFilterOptionsDto(
+			countryIds,
+			cityIds
+		);
 		return productService.getProductsByFilterOptions(pageable, filterOptions);
 	}
 
