@@ -23,6 +23,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import taco.klkl.domain.category.domain.CategoryName;
 import taco.klkl.domain.category.dto.response.SubcategoryResponseDto;
 import taco.klkl.domain.product.dto.request.ProductCreateUpdateRequestDto;
 import taco.klkl.domain.product.dto.response.PagedResponseDto;
@@ -31,6 +32,7 @@ import taco.klkl.domain.product.dto.response.ProductSimpleResponseDto;
 import taco.klkl.domain.product.service.ProductService;
 import taco.klkl.domain.region.dto.response.CityResponseDto;
 import taco.klkl.domain.region.dto.response.CurrencyResponseDto;
+import taco.klkl.domain.region.enums.CountryType;
 import taco.klkl.domain.user.dto.response.UserDetailResponseDto;
 
 @WebMvcTest(ProductController.class)
@@ -76,8 +78,8 @@ public class ProductControllerTest {
 			1L,
 			"productName",
 			10,
-			1L,
-			1L
+			CountryType.THAILAND.getKoreanName(),
+			CategoryName.FOOD.getKoreanName()
 		);
 		productDetailResponseDto = new ProductDetailResponseDto(
 			1L,
@@ -125,10 +127,9 @@ public class ProductControllerTest {
 				is(productSimpleResponseDto.productId().intValue())))
 			.andExpect(jsonPath("$.data.content[0].name", is(productSimpleResponseDto.name())))
 			.andExpect(jsonPath("$.data.content[0].likeCount", is(productSimpleResponseDto.likeCount())))
-			.andExpect(jsonPath("$.data.content[0].cityId",
-				is(productSimpleResponseDto.cityId().intValue())))
-			.andExpect(jsonPath("$.data.content[0].subcategoryId",
-				is(productSimpleResponseDto.subcategoryId().intValue())))
+			.andExpect(jsonPath("$.data.content[0].countryName", is(productSimpleResponseDto.countryName())))
+			.andExpect(jsonPath("$.data.content[0].categoryName",
+				is(productSimpleResponseDto.categoryName())))
 			.andExpect(jsonPath("$.data.pageNumber", is(0)))
 			.andExpect(jsonPath("$.data.pageSize", is(10)))
 			.andExpect(jsonPath("$.data.totalElements", is(1)))
