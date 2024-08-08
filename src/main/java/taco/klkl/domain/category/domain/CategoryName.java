@@ -1,6 +1,8 @@
 package taco.klkl.domain.category.domain;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.regex.Pattern;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,5 +23,19 @@ public enum CategoryName {
 			.filter(categoryName -> categoryName.getKoreanName().equals(name))
 			.findFirst()
 			.orElse(NONE);
+	}
+
+	public static List<CategoryName> getCategoryNamesByPartialString(String partialString) {
+
+		if (partialString == null || partialString.isEmpty()) {
+			return List.of();
+		}
+
+		String regex = ".*" + Pattern.quote(partialString) + ".*";
+		Pattern pattern = Pattern.compile(regex);
+
+		return Arrays.stream(CategoryName.values())
+			.filter(c -> pattern.matcher(c.getKoreanName()).matches())
+			.toList();
 	}
 }

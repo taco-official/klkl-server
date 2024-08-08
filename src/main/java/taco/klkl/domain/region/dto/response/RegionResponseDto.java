@@ -2,6 +2,11 @@ package taco.klkl.domain.region.dto.response;
 
 import taco.klkl.domain.region.domain.Region;
 
+/**
+ *
+ * @param regionId
+ * @param name
+ */
 public record RegionResponseDto(
 	Long regionId,
 	String name
