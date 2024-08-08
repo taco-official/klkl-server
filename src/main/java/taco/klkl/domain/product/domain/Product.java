@@ -168,20 +168,16 @@ public class Product {
 	}
 
 	public void increaseLikeCount() {
-
 		if (this.likeCount == Integer.MAX_VALUE) {
 			return;
 		}
-
 		this.likeCount += 1;
 	}
 
 	public void decreaseLikeCount() {
-
 		if (this.likeCount == 0) {
 			return;
 		}
-
 		this.likeCount -= 1;
 	}
 }
