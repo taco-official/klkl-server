@@ -49,10 +49,10 @@ public class ProductService {
 
 	public PagedResponseDto<ProductSimpleResponseDto> getProductsByFilterOptions(
 		Pageable pageable,
-		ProductFilterOptionsDto fiilterOptions
+		ProductFilterOptionsDto filterOptions
 	) {
 		QProduct product = QProduct.product;
-		BooleanBuilder builder = buildFilterOptions(fiilterOptions, product);
+		BooleanBuilder builder = buildFilterOptions(filterOptions, product);
 
 		List<Product> products = queryFactory.selectFrom(product)
 			.where(builder)
