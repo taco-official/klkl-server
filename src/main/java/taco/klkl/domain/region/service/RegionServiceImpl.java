@@ -29,7 +29,7 @@ public class RegionServiceImpl implements RegionService {
 	@Override
 	public List<RegionResponseDto> getAllRegions() {
 
-		List<Region> regions = regionRepository.findAllByOrderByRegionIdAsc();
+		final List<Region> regions = regionRepository.findAllByOrderByRegionIdAsc();
 
 		if (regions == null) {
 			return Collections.emptyList();
@@ -52,7 +52,7 @@ public class RegionServiceImpl implements RegionService {
 	@Override
 	public RegionResponseDto getRegionByName(final String name) throws RegionNotFoundException {
 
-		final Region region = regionRepository.findFirstByName(RegionType.getRegionByName(name));
+		final Region region = regionRepository.findFirstByName(RegionType.getRegionTypeByKoreanName(name));
 
 		if (region == null) {
 			throw new RegionNotFoundException();

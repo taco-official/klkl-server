@@ -2,6 +2,14 @@ package taco.klkl.domain.region.dto.response;
 
 import taco.klkl.domain.region.domain.Country;
 
+/**
+ *
+ * @param countryId
+ * @param name
+ * @param flag
+ * @param photo
+ * @param currency
+ */
 public record CountryResponseDto(
 	Long countryId,
 	String name,
