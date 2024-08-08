@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import taco.klkl.domain.like.dto.response.LikeResponseDto;
 import taco.klkl.domain.like.service.LikeService;
 
 @Slf4j
@@ -24,13 +25,13 @@ public class LikeController {
 
 	@PostMapping
 	@ResponseStatus(value = HttpStatus.CREATED)
-	public void addLike(@PathVariable(value = "id") final Long productId) {
-		likeService.createLike(productId);
+	public LikeResponseDto addLike(@PathVariable(value = "id") final Long productId) {
+		return likeService.createLike(productId);
 	}
 
 	@DeleteMapping
-	@ResponseStatus(value = HttpStatus.NO_CONTENT)
-	public void removeLike(@PathVariable(value = "id") final Long productId) {
-		likeService.deleteLike(productId);
+	@ResponseStatus(value = HttpStatus.OK)
+	public LikeResponseDto removeLike(@PathVariable(value = "id") final Long productId) {
+		return likeService.deleteLike(productId);
 	}
 }

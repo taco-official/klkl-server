@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import taco.klkl.domain.like.dao.LikeRepository;
 import taco.klkl.domain.like.domain.Like;
+import taco.klkl.domain.like.dto.response.LikeResponseDto;
 import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.product.service.ProductService;
 import taco.klkl.domain.user.domain.User;
@@ -26,28 +27,33 @@ public class LikeServiceImpl implements LikeService {
 	private final UserUtil userUtil;
 
 	@Override
-	public void createLike(Long productId) {
+	public LikeResponseDto createLike(Long productId) {
 		Product product = getProductById(productId);
 		User user = getCurrentUser();
 
 		if (isLikePresent(product, user)) {
-			return;
+			return LikeResponseDto.of(true, product.getLikeCount());
 		}
 
 		Like like = Like.of(product, user);
 		likeRepository.save(like);
 		productService.increaseLikeCount(product);
+
+		return LikeResponseDto.of(true, product.getLikeCount());
 	}
 
 	@Override
-	public void deleteLike(Long productId) {
+	public LikeResponseDto deleteLike(Long productId) {
 		Product product = getProductById(productId);
 		User user = getCurrentUser();
 
 		if (isLikePresent(product, user)) {
 			likeRepository.deleteByProductAndUser(product, user);
 			productService.decreaseLikeCount(product);
+			return LikeResponseDto.of(false, product.getLikeCount());
 		}
+
+		return LikeResponseDto.of(false, product.getLikeCount());
 	}
 
 	private Product getProductById(Long productId) {
