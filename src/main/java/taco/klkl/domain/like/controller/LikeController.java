@@ -24,13 +24,13 @@ public class LikeController {
 
 	@PostMapping
 	@ResponseStatus(value = HttpStatus.CREATED)
-	void addLike(@PathVariable(value = "id") final Long productId) {
+	public void addLike(@PathVariable(value = "id") final Long productId) {
 		likeService.createLike(productId);
 	}
 
 	@DeleteMapping
 	@ResponseStatus(value = HttpStatus.NO_CONTENT)
-	void removeLike(@PathVariable(value = "id") final Long productId) {
+	public void removeLike(@PathVariable(value = "id") final Long productId) {
 		likeService.deleteLike(productId);
 	}
 }
