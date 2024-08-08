@@ -135,10 +135,10 @@ class ProductServiceTest {
 	@DisplayName("상품 목록 조회 - 성공")
 	void testGetProductsByFilterOptions() {
 		// Given
-		List<Long> countryIds = List.of(1L, 2L, 3L);
+		Long countryId = 1L;
 		List<Long> cityIds = List.of(4L, 5L);
 		ProductFilterOptionsDto filterOptions = new ProductFilterOptionsDto(
-			countryIds,
+			countryId,
 			cityIds
 		);
 		Pageable pageable = PageRequest.of(0, 10);

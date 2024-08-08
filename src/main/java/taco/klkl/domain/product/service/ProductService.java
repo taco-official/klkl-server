@@ -101,8 +101,8 @@ public class ProductService {
 	private BooleanBuilder buildFilterOptions(ProductFilterOptionsDto options, QProduct product) {
 		BooleanBuilder builder = new BooleanBuilder();
 
-		if (options.countryIds() != null && !options.countryIds().isEmpty()) {
-			builder.and(product.city.country.countryId.in(options.countryIds()));
+		if (options.countryId() != null) {
+			builder.and(product.city.country.countryId.eq(options.countryId()));
 		}
 		if (options.cityIds() != null && !options.cityIds().isEmpty()) {
 			builder.and(product.city.cityId.in(options.cityIds()));
