@@ -114,7 +114,7 @@ public class ProductControllerTest {
 		PagedResponseDto<ProductSimpleResponseDto> pagedResponse = new PagedResponseDto<>(
 			products, 0, 10, 1, 1, true
 		);
-		when(productService.getProductsByFilterOptions(any(ProductFilterOptionsDto.class), any(Pageable.class)))
+		when(productService.getProductsByFilterOptions(any(Pageable.class), any(ProductFilterOptionsDto.class)))
 			.thenReturn(pagedResponse);
 
 		// When & Then

@@ -44,7 +44,7 @@ public class ProductController {
 		@RequestParam(name = "country_id", required = false) List<Long> countryIds
 	) {
 		ProductFilterOptionsDto filterOptions = new ProductFilterOptionsDto(countryIds);
-		return productService.getProductsByFilterOptions(filterOptions, pageable);
+		return productService.getProductsByFilterOptions(pageable, filterOptions);
 	}
 
 	@GetMapping("/{id}")

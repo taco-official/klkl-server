@@ -48,8 +48,8 @@ public class ProductService {
 	private final UserUtil userUtil;
 
 	public PagedResponseDto<ProductSimpleResponseDto> getProductsByFilterOptions(
-		ProductFilterOptionsDto fiilterOptions,
-		Pageable pageable
+		Pageable pageable,
+		ProductFilterOptionsDto fiilterOptions
 	) {
 		QProduct product = QProduct.product;
 		BooleanBuilder builder = buildFilterOptions(fiilterOptions, product);

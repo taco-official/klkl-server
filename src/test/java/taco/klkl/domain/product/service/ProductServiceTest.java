@@ -162,7 +162,7 @@ class ProductServiceTest {
 
 		// When
 		PagedResponseDto<ProductSimpleResponseDto> result = productService
-			.getProductsByFilterOptions(filterOptions, pageable);
+			.getProductsByFilterOptions(pageable, filterOptions);
 
 		// Then
 		assertThat(result.content()).hasSize(1);
