@@ -24,7 +24,6 @@ public enum ErrorCode {
 
 	// Comment
 	COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "C040", "존재하지 않는 댓글입니다."),
-	PRODUCT_NOT_MATCH(HttpStatus.BAD_REQUEST, "C041", "올바르지 않는 상품 아이디 입니다."),
 
 	// Region
 	REGION_NOT_FOUND(HttpStatus.NOT_FOUND, "C050", "해당 지역을 찾을 수 없습니다."),
