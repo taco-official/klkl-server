@@ -16,4 +16,13 @@ public class UserUtil {
 	public User findTestUser() {
 		return userRepository.findFirstByName(UserConstants.TEST_USER_NAME);
 	}
+
+	/**
+	 * TODO: 인증정보를 확인해 유저 엔티티를 리턴한다.
+	 * 현재 유저 조회
+	 * @return
+	 */
+	public User getCurrentUser() {
+		return userRepository.findFirstByName(UserConstants.TEST_USER_NAME);
+	}
 }
