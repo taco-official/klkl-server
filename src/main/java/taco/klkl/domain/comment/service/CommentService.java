@@ -12,7 +12,7 @@ import taco.klkl.domain.comment.domain.Comment;
 import taco.klkl.domain.comment.dto.request.CommentRequestDto;
 import taco.klkl.domain.comment.dto.response.CommentResponseDto;
 import taco.klkl.domain.comment.exception.CommentNotFoundException;
-import taco.klkl.domain.comment.exception.ProductNotMatchException;
+import taco.klkl.domain.product.exception.ProductNotFoundException;
 import taco.klkl.domain.user.domain.User;
 import taco.klkl.global.util.UserUtil;
 
@@ -41,10 +41,10 @@ public class CommentService {
 	public CommentResponseDto updateComment(Long productId, Long commentId, CommentRequestDto commentUpdateRequestDto) {
 		Comment comment = commentRepository.findById(commentId)
 			.orElseThrow(CommentNotFoundException::new);
-		comment.update(comment.getUser(), commentUpdateRequestDto);
 		Optional.of(comment.getProductId())
 			.filter(id -> id.equals(productId))
-			.orElseThrow(ProductNotMatchException::new);
+			.orElseThrow(ProductNotFoundException::new);
+		comment.update(commentUpdateRequestDto);
 		return CommentResponseDto.from(comment);
 	}
 
@@ -54,7 +54,7 @@ public class CommentService {
 			.orElseThrow(CommentNotFoundException::new);
 		Optional.of(comment.getProductId())
 			.filter(id -> id.equals(productId))
-			.orElseThrow(ProductNotMatchException::new);
+			.orElseThrow(ProductNotFoundException::new);
 		commentRepository.delete(comment);
 	}
 
