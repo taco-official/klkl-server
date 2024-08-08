@@ -3,6 +3,7 @@ package taco.klkl.domain.comment.controller;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -41,7 +42,7 @@ public class CommentController {
 	@PostMapping
 	@Operation(description = "작성한 댓글을 저장합니다.")
 	@ResponseStatus(HttpStatus.CREATED)
-	public CommentResponseDto createComments(
+	public CommentResponseDto addComments(
 		@PathVariable Long productId,
 		@RequestBody @Valid CommentRequestDto commentCreateRequestDto
 	) {
@@ -68,7 +69,8 @@ public class CommentController {
 	@DeleteMapping("/{commentId}")
 	@Operation(description = "작성한 댓글을 삭제합니다.")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void deleteComments(@PathVariable Long productId, @PathVariable Long commentId) {
+	public ResponseEntity<Void> deleteComments(@PathVariable Long productId, @PathVariable Long commentId) {
 		commentService.deleteComment(productId, commentId);
+		return ResponseEntity.noContent().build();
 	}
 }
