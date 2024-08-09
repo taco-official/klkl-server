@@ -1,9 +1,10 @@
 package taco.klkl.domain.comment.domain;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -12,7 +13,7 @@ import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import taco.klkl.domain.comment.dto.request.CommentRequestDto;
+import taco.klkl.domain.comment.dto.request.CommentCreateUpdateRequestDto;
 import taco.klkl.domain.user.domain.User;
 
 @Getter
@@ -24,44 +25,49 @@ public class Comment {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
-	// @ManyToOne
-	// @JoinColumn(name = "product", nullable = false)
-	// private Product product;
-
 	@Column(
 		name = "product_id",
 		nullable = false
 	)
 	private Long productId;
 
-	@ManyToOne(optional = false)
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "user_id", nullable = false)
 	private User user;
 
 	@Column(
 		name = "content",
 		nullable = false,
-		length = 400)
+		length = 400
+	)
 	private String content;
 
 	@Column(
 		name = "created_at",
 		nullable = false
 	)
-	private LocalDate date;
+	private LocalDateTime createdAt;
 
-	private Comment(Long productId, User user, String content) {
+	private Comment(
+		final Long productId,
+		final User user,
+		final String content
+	) {
 		this.productId = productId;
 		this.user = user;
 		this.content = content;
-		this.date = LocalDate.now();
+		this.createdAt = LocalDateTime.now();
 	}
 
-	public void update(CommentRequestDto commentUpdateRequestDto) {
+	public void update(final CommentCreateUpdateRequestDto commentUpdateRequestDto) {
 		this.content = commentUpdateRequestDto.content();
 	}
 
-	public static Comment of(Long productId, User user, String content) {
+	public static Comment of(
+		final Long productId,
+		final User user,
+		final String content
+	) {
 		return new Comment(productId, user, content);
 	}
 }
