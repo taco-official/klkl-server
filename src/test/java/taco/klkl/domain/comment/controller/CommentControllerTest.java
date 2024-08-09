@@ -23,7 +23,9 @@ import taco.klkl.domain.comment.domain.Comment;
 import taco.klkl.domain.comment.dto.request.CommentCreateUpdateRequestDto;
 import taco.klkl.domain.comment.dto.response.CommentResponseDto;
 import taco.klkl.domain.comment.exception.CommentNotFoundException;
+import taco.klkl.domain.comment.exception.CommentProductNotMatch;
 import taco.klkl.domain.comment.service.CommentService;
+import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.product.exception.ProductNotFoundException;
 import taco.klkl.domain.product.service.ProductService;
 import taco.klkl.domain.user.domain.User;
@@ -65,8 +67,19 @@ public class CommentControllerTest {
 		requestDto.description()
 	);
 
-	private final Comment comment1 = Comment.of(1L, user, "개추 ^^");
-	private final Comment comment2 = Comment.of(1L, user, "안녕하세요");
+	private final Product product = Product.of(
+		user,
+		"name",
+		"description",
+		"address",
+		1000,
+		1L,
+		1L,
+		1L
+	);
+
+	private final Comment comment1 = Comment.of(product, user, "개추 ^^");
+	private final Comment comment2 = Comment.of(product, user, "안녕하세요");
 
 	private final CommentCreateUpdateRequestDto commentCreateRequestDto = new CommentCreateUpdateRequestDto(
 		"개추 ^^"
