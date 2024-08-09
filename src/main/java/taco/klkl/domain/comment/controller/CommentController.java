@@ -34,7 +34,6 @@ public class CommentController {
 	@GetMapping
 	@Operation(summary = "댓글 목록 조회", description = "상품 목록에 대한 댓글 목록을 반환합니다.")
 	public List<CommentResponseDto> getComments(@PathVariable final Long productId) {
-		productService.validateProductId(productId);
 		final List<CommentResponseDto> commentList = commentService.getComments(productId);
 		return commentList;
 	}
@@ -46,7 +45,6 @@ public class CommentController {
 		@PathVariable final Long productId,
 		@RequestBody @Valid final CommentCreateUpdateRequestDto commentCreateRequestDto
 	) {
-		productService.validateProductId(productId);
 		final CommentResponseDto commentResponseDto = commentService.createComment(
 			productId,
 			commentCreateRequestDto
