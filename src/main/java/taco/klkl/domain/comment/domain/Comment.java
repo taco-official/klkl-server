@@ -13,7 +13,7 @@ import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import taco.klkl.domain.comment.dto.request.CommentCreateUpdateRequestDto;
+import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.user.domain.User;
 
 @Getter
@@ -25,11 +25,9 @@ public class Comment {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
-	@Column(
-		name = "product_id",
-		nullable = false
-	)
-	private Long productId;
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "product_id", nullable = false)
+	private Product product;
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "user_id", nullable = false)
@@ -49,25 +47,25 @@ public class Comment {
 	private LocalDateTime createdAt;
 
 	private Comment(
-		final Long productId,
+		final Product product,
 		final User user,
 		final String content
 	) {
-		this.productId = productId;
+		this.product = product;
 		this.user = user;
 		this.content = content;
 		this.createdAt = LocalDateTime.now();
 	}
 
-	public void update(final CommentCreateUpdateRequestDto commentUpdateRequestDto) {
-		this.content = commentUpdateRequestDto.content();
+	public void update(final String content) {
+		this.content = content;
 	}
 
 	public static Comment of(
-		final Long productId,
+		final Product product,
 		final User user,
 		final String content
 	) {
-		return new Comment(productId, user, content);
+		return new Comment(product, user, content);
 	}
 }
