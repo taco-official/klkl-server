@@ -7,6 +7,7 @@ import org.hibernate.annotations.DynamicInsert;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -16,6 +17,8 @@ import jakarta.persistence.PrePersist;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import taco.klkl.domain.like.exception.LikeCountMaximumException;
+import taco.klkl.domain.like.exception.LikeCountMinimumException;
 import taco.klkl.domain.product.dto.request.ProductUpdateRequestDto;
 import taco.klkl.domain.user.domain.User;
 import taco.klkl.global.common.constants.DefaultConstants;
@@ -32,7 +35,7 @@ public class Product {
 	@Column(name = "product_id")
 	private Long productId;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")
 	private User user;
 
@@ -164,5 +167,23 @@ public class Product {
 		if (updateDto.currencyId() != null) {
 			this.currencyId = updateDto.currencyId();
 		}
+	}
+
+	public int increaseLikeCount() throws LikeCountMaximumException {
+		if (this.likeCount == Integer.MAX_VALUE) {
+			throw new LikeCountMaximumException();
+		}
+		this.likeCount += 1;
+
+		return this.likeCount;
+	}
+
+	public int decreaseLikeCount() throws LikeCountMinimumException {
+		if (this.likeCount == 0) {
+			throw new LikeCountMinimumException();
+		}
+		this.likeCount -= 1;
+
+		return this.likeCount;
 	}
 }

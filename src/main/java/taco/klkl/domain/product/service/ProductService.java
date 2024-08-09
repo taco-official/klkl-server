@@ -49,6 +49,21 @@ public class ProductService {
 		productRepository.delete(product);
 	}
 
+	public Product getProductById(final Long id) {
+		return productRepository.findById(id)
+			.orElseThrow(ProductNotFoundException::new);
+	}
+
+	@Transactional
+	public int increaseLikeCount(Product product) {
+		return product.increaseLikeCount();
+	}
+
+	@Transactional
+	public int decreaseLikeCount(Product product) {
+		return product.decreaseLikeCount();
+	}
+
 	private Product createProductEntity(final ProductCreateRequestDto productDto) {
 		final User user = userUtil.findTestUser();
 		return Product.of(
