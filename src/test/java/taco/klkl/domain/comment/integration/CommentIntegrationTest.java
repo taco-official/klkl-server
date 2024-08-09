@@ -39,12 +39,10 @@ public class CommentIntegrationTest {
 	private final Long commentId = 500L;
 
 	private final CommentCreateUpdateRequestDto commentCreateRequestDto = new CommentCreateUpdateRequestDto(
-		1L,
 		"개추 ^^"
 	);
 
 	private final CommentCreateUpdateRequestDto commentUpdateRequestDto = new CommentCreateUpdateRequestDto(
-		1L,
 		"윤상정은 바보다, 반박시 님 말이 틀림."
 	);
 
@@ -76,7 +74,6 @@ public class CommentIntegrationTest {
 			.andExpect(jsonPath("$.isSuccess", is(true)))
 			.andExpect(jsonPath("$.code", is("C000")))
 			.andExpect(jsonPath("$.data.commentId", is(1)))
-			.andExpect(jsonPath("$.data.userId", is(commentCreateRequestDto.userId().intValue())))
 			.andExpect(jsonPath("$.data.content", is(commentCreateRequestDto.content())));
 	}
 
@@ -109,7 +106,6 @@ public class CommentIntegrationTest {
 			.andExpect(jsonPath("$.isSuccess", is(true)))
 			.andExpect(jsonPath("$.code", is("C000")))
 			.andExpect(jsonPath("$.data.commentId", is(commentId.intValue())))
-			.andExpect(jsonPath("$.data.userId", is(commentUpdateRequestDto.userId().intValue())))
 			.andExpect(jsonPath("$.data.content", is(commentUpdateRequestDto.content())));
 	}
 
@@ -143,6 +139,22 @@ public class CommentIntegrationTest {
 			.andExpect(jsonPath("$.isSuccess", is(false)))
 			.andExpect(jsonPath("$.code", is(ErrorCode.PRODUCT_NOT_FOUND.getCode())))
 			.andExpect(jsonPath("$.data.message", is(ErrorCode.PRODUCT_NOT_FOUND.getMessage())));
+	}
+
+	@Test
+	@DisplayName("댓글 수정시 존재하는 상품이지만 댓글에 저장된 상품 Id와 달라 실패하는 경우 테스트")
+	public void testUpdateCommentWhenExistProductButNotMatchWithComment() throws Exception {
+		//given
+		Long differentProductId = 390L;
+
+		//when & given
+		mockMvc.perform(put("/v1/products/{wrongProductId}/comments/{commentId}", differentProductId, commentId)
+				.content(objectMapper.writeValueAsString(commentUpdateRequestDto))
+				.contentType(MediaType.APPLICATION_JSON))
+			.andExpect(status().isBadRequest())
+			.andExpect(jsonPath("$.isSuccess", is(false)))
+			.andExpect(jsonPath("$.code", is(ErrorCode.COMMENT_PRODUCT_NOT_MATCH.getCode())))
+			.andExpect(jsonPath("$.data.message", is(ErrorCode.COMMENT_PRODUCT_NOT_MATCH.getMessage())));
 	}
 
 	@Test
@@ -187,5 +199,20 @@ public class CommentIntegrationTest {
 			.andExpect(jsonPath("$.isSuccess", is(false)))
 			.andExpect(jsonPath("$.code", is(ErrorCode.PRODUCT_NOT_FOUND.getCode())))
 			.andExpect(jsonPath("$.data.message", is(ErrorCode.PRODUCT_NOT_FOUND.getMessage())));
+	}
+
+	@Test
+	@DisplayName("댓글 삭제시 존재하는 상품이지만 댓글에 저장된 상품 Id와 달라 실패하는 경우 테스트")
+	public void testDeleteCommentWhenExistProductButNotMatchWithComment() throws Exception {
+		//given
+		Long differentProductId = 390L;
+
+		//when & given
+		mockMvc.perform(delete("/v1/products/{wrongProductId}/comments/{commentId}", differentProductId, commentId)
+				.contentType(MediaType.APPLICATION_JSON))
+			.andExpect(status().isBadRequest())
+			.andExpect(jsonPath("$.isSuccess", is(false)))
+			.andExpect(jsonPath("$.code", is(ErrorCode.COMMENT_PRODUCT_NOT_MATCH.getCode())))
+			.andExpect(jsonPath("$.data.message", is(ErrorCode.COMMENT_PRODUCT_NOT_MATCH.getMessage())));
 	}
 }
