@@ -1,7 +1,6 @@
 package taco.klkl.domain.comment.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,7 +11,10 @@ import taco.klkl.domain.comment.domain.Comment;
 import taco.klkl.domain.comment.dto.request.CommentCreateUpdateRequestDto;
 import taco.klkl.domain.comment.dto.response.CommentResponseDto;
 import taco.klkl.domain.comment.exception.CommentNotFoundException;
+import taco.klkl.domain.comment.exception.CommentProductNotMatch;
+import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.product.exception.ProductNotFoundException;
+import taco.klkl.domain.product.service.ProductService;
 import taco.klkl.domain.user.domain.User;
 import taco.klkl.global.util.UserUtil;
 
@@ -21,10 +23,12 @@ import taco.klkl.global.util.UserUtil;
 @Transactional(readOnly = true)
 public class CommentService {
 	private final CommentRepository commentRepository;
+	private final ProductService productService;
 	private final UserUtil userUtil;
 
 	public List<CommentResponseDto> getComments(final Long productId) {
-		final List<Comment> comments = commentRepository.findAllByProductId(productId);
+		validateProductId(productId);
+		final List<Comment> comments = commentRepository.findAllByProduct_ProductId(productId);
 		return comments.stream()
 			.map(CommentResponseDto::from)
 			.toList();
@@ -46,12 +50,12 @@ public class CommentService {
 		final Long commentId,
 		final CommentCreateUpdateRequestDto commentUpdateRequestDto
 	) {
+		validateProductId(productId);
 		final Comment comment = commentRepository.findById(commentId)
 			.orElseThrow(CommentNotFoundException::new);
-		Optional.of(comment.getProductId())
-			.filter(id -> id.equals(productId))
-			.orElseThrow(ProductNotFoundException::new);
-		comment.update(commentUpdateRequestDto);
+		validateSameProductId(comment, productId);
+		updateCommentEntity(comment, commentUpdateRequestDto);
+
 		return CommentResponseDto.from(comment);
 	}
 
@@ -60,11 +64,10 @@ public class CommentService {
 		final Long productId,
 		final Long commentId
 	) {
+		validateProductId(productId);
 		final Comment comment = commentRepository.findById(commentId)
 			.orElseThrow(CommentNotFoundException::new);
-		Optional.of(comment.getProductId())
-			.filter(id -> id.equals(productId))
-			.orElseThrow(ProductNotFoundException::new);
+		validateSameProductId(comment, productId);
 		commentRepository.delete(comment);
 	}
 
@@ -72,12 +75,34 @@ public class CommentService {
 		final Long productId,
 		final CommentCreateUpdateRequestDto commentCreateUpdateRequestDto
 	) {
-		//ToDo: getCurrentUser() 함수로 교채
+		//TODO: getCurrentUser() 함수로 교채
 		final User user = userUtil.findTestUser();
+		final Product product = productService.getProductEntityById(productId);
 		return Comment.of(
-			productId,
+			product,
 			user,
 			commentCreateUpdateRequestDto.content()
 		);
+	}
+
+	private void updateCommentEntity(
+		final Comment comment,
+		final CommentCreateUpdateRequestDto commentCreateUpdateRequestDto
+	) {
+		comment.update(commentCreateUpdateRequestDto.content());
+	}
+
+	private void validateProductId(final Long productId) {
+		boolean isValidProductId = productService.existsProductById(productId);
+		if (!isValidProductId) {
+			throw new ProductNotFoundException();
+		}
+	}
+
+	private void validateSameProductId(final Comment comment, final Long productId) {
+		final Long commentProductId = comment.getProduct().getProductId();
+		if (!commentProductId.equals(productId)) {
+			throw new CommentProductNotMatch();
+		}
 	}
 }
