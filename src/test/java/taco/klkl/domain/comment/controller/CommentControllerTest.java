@@ -26,11 +26,9 @@ import taco.klkl.domain.comment.exception.CommentNotFoundException;
 import taco.klkl.domain.comment.service.CommentService;
 import taco.klkl.domain.product.exception.ProductNotFoundException;
 import taco.klkl.domain.product.service.ProductService;
-import taco.klkl.domain.user.dao.UserRepository;
 import taco.klkl.domain.user.domain.User;
 import taco.klkl.domain.user.dto.request.UserCreateRequestDto;
 import taco.klkl.global.common.enums.Gender;
-import taco.klkl.global.common.validation.UserIdValidator;
 import taco.klkl.global.error.exception.ErrorCode;
 
 @WebMvcTest(CommentController.class)
@@ -44,12 +42,6 @@ public class CommentControllerTest {
 
 	@MockBean
 	private ProductService productService;
-
-	@MockBean
-	private UserRepository userRepository;
-
-	@MockBean
-	private UserIdValidator userIdValidator;
 
 	@Autowired
 	private ObjectMapper objectMapper;
@@ -77,12 +69,10 @@ public class CommentControllerTest {
 	private final Comment comment2 = Comment.of(1L, user, "안녕하세요");
 
 	private final CommentCreateUpdateRequestDto commentCreateRequestDto = new CommentCreateUpdateRequestDto(
-		1L,
 		"개추 ^^"
 	);
 
 	private final CommentCreateUpdateRequestDto commentUpdateRequestDto = new CommentCreateUpdateRequestDto(
-		1L,
 		"윤상정은 바보다, 반박시 님 말이 틀림."
 	);
 
@@ -115,8 +105,6 @@ public class CommentControllerTest {
 	@DisplayName("댓글 등록 성공 테스트")
 	public void testCreateComment() throws Exception {
 		//given
-		when(userRepository.existsById(any(Long.class))).thenReturn(true);
-
 		CommentResponseDto responseDto = CommentResponseDto.from(comment1);
 
 		when(commentService.createComment(any(Long.class), any(CommentCreateUpdateRequestDto.class))).thenReturn(
@@ -142,9 +130,10 @@ public class CommentControllerTest {
 	public void testCreateCommentWhenProductNotFound() throws Exception {
 		//given
 		Long wrongProductId = 2L;
-		when(userRepository.existsById(any(Long.class))).thenReturn(true);
 
-		doThrow(new ProductNotFoundException()).when(productService).validateProductId(any(Long.class));
+		doThrow(new ProductNotFoundException())
+			.when(commentService)
+			.createComment(any(Long.class), any(CommentCreateUpdateRequestDto.class));
 
 		//when & then
 		mockMvc.perform(post("/v1/products/{wrongProductId}/comments", wrongProductId)
@@ -160,8 +149,6 @@ public class CommentControllerTest {
 	@DisplayName("댓글 수정 성공 테스트")
 	public void testUpdateComment() throws Exception {
 		///given
-		when(userRepository.existsById(any(Long.class))).thenReturn(true);
-
 		CommentResponseDto responseDto = CommentResponseDto.from(comment1);
 
 		when(commentService.updateComment(
@@ -190,7 +177,6 @@ public class CommentControllerTest {
 	public void testUpdateCommentWhenCommentNotFound() throws Exception {
 		///given
 		Long wrongCommentId = 2L;
-		when(userRepository.existsById(any(Long.class))).thenReturn(true);
 
 		when(commentService.updateComment(any(Long.class), any(Long.class), any(CommentCreateUpdateRequestDto.class)))
 			.thenThrow(new CommentNotFoundException());
@@ -213,7 +199,6 @@ public class CommentControllerTest {
 	public void testUpdateCommentWhenProductNotFound() throws Exception {
 		//given
 		Long wrongProductId = 2L;
-		when(userRepository.existsById(any(Long.class))).thenReturn(true);
 
 		when(commentService.updateComment(any(Long.class), any(Long.class), any(CommentCreateUpdateRequestDto.class)))
 			.thenThrow(new ProductNotFoundException());
@@ -232,10 +217,30 @@ public class CommentControllerTest {
 	}
 
 	@Test
+	@DisplayName("댓글 수정시 존재하는 상품이지만 댓글에 저장된 상품 Id와 달라 실패하는 경우 테스트")
+	public void testUpdateCommentWhenExistProductButNotMatchWithComment() throws Exception {
+		//given
+
+		when(commentService.updateComment(any(Long.class), any(Long.class), any(CommentCreateUpdateRequestDto.class)))
+			.thenThrow(new CommentProductNotMatch());
+
+		//when & then
+		mockMvc.perform(put("/v1/products/{wrongProductId}/comments/{commentId}", productId, commentId)
+				.content(objectMapper.writeValueAsString(commentUpdateRequestDto))
+				.contentType(MediaType.APPLICATION_JSON))
+			.andExpect(status().isBadRequest())
+			.andExpect(jsonPath("$.isSuccess", is(false)))
+			.andExpect(jsonPath("$.code", is(ErrorCode.COMMENT_PRODUCT_NOT_MATCH.getCode())))
+			.andExpect(jsonPath("$.data.message", is(ErrorCode.COMMENT_PRODUCT_NOT_MATCH.getMessage())));
+
+		verify(commentService, times(1))
+			.updateComment(productId, commentId, commentUpdateRequestDto);
+	}
+
+	@Test
 	@DisplayName("댓글 삭제 성공 테스트")
 	public void testDeleteComment() throws Exception {
 		//given
-		when(userRepository.existsById(any(Long.class))).thenReturn(true);
 
 		//when & then
 		mockMvc.perform(delete("/v1/products/{productId}/comments/{commentId}", productId, commentId))
@@ -252,7 +257,6 @@ public class CommentControllerTest {
 	public void testDeleteCommentWhenCommentNotFound() throws Exception {
 		//given
 		Long wrongCommentId = 2L;
-		when(userRepository.existsById(any(Long.class))).thenReturn(true);
 
 		doThrow(new CommentNotFoundException()).when(commentService).deleteComment(productId, wrongCommentId);
 
@@ -272,7 +276,6 @@ public class CommentControllerTest {
 	public void testDeleteCommentWhenProductNotFound() throws Exception {
 		//given
 		Long wrongProductId = 2L;
-		when(userRepository.existsById(any(Long.class))).thenReturn(true);
 
 		doThrow(new ProductNotFoundException()).when(commentService).deleteComment(wrongProductId, commentId);
 
@@ -285,5 +288,25 @@ public class CommentControllerTest {
 			.andExpect(jsonPath("$.data.message", is(ErrorCode.PRODUCT_NOT_FOUND.getMessage())));
 
 		verify(commentService, times(1)).deleteComment(wrongProductId, commentId);
+	}
+
+	@Test
+	@DisplayName("댓글 삭제시 존재하는 상품이지만 댓글에 저장된 상품 Id와 달라 실패하는 경우 테스트")
+	public void testDeleteCommentWhenExistProductButNotMatchWithComment() throws Exception {
+		//given
+
+		doThrow(new CommentProductNotMatch()).when(commentService).deleteComment(productId, commentId);
+
+		//when & then
+		mockMvc.perform(delete("/v1/products/{wrongProductId}/comments/{commentId}", productId, commentId)
+				.content(objectMapper.writeValueAsString(commentUpdateRequestDto))
+				.contentType(MediaType.APPLICATION_JSON))
+			.andExpect(status().isBadRequest())
+			.andExpect(jsonPath("$.isSuccess", is(false)))
+			.andExpect(jsonPath("$.code", is(ErrorCode.COMMENT_PRODUCT_NOT_MATCH.getCode())))
+			.andExpect(jsonPath("$.data.message", is(ErrorCode.COMMENT_PRODUCT_NOT_MATCH.getMessage())));
+
+		verify(commentService, times(1))
+			.deleteComment(productId, commentId);
 	}
 }
