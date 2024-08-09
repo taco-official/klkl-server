@@ -1,4 +1,4 @@
-package taco.klkl.domain.comment.annotation;
+package taco.klkl.global.common.validation.constraints;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -8,14 +8,15 @@ import java.lang.annotation.Target;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
-import taco.klkl.domain.comment.validator.ExistUserValidator;
+import taco.klkl.global.common.constants.CommentValidationMessages;
+import taco.klkl.global.common.validation.UserIdValidator;
 
 @Documented
-@Constraint(validatedBy = ExistUserValidator.class)
-@Target({ElementType.FIELD})
+@Constraint(validatedBy = UserIdValidator.class)
+@Target({ElementType.FIELD, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ExistUser {
-	String message() default "";
+public @interface ValidUserId {
+	String message() default CommentValidationMessages.USER_ID_INVALID;
 
 	Class<?>[] groups() default {};
 

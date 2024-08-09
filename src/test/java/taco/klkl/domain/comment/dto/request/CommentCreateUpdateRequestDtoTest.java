@@ -13,10 +13,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
-import taco.klkl.global.common.constants.CommentValidationMessage;
+import taco.klkl.global.common.constants.CommentValidationMessages;
 
 @SpringBootTest
-public class CommentRequestDtoTest {
+public class CommentCreateUpdateRequestDtoTest {
 	@Autowired
 	private Validator validator;
 
@@ -24,15 +24,16 @@ public class CommentRequestDtoTest {
 	@DisplayName("없는 유저일 경우")
 	public void testNotExistUserId() {
 		//given
-		final CommentRequestDto commentRequestNotExistUser = new CommentRequestDto(
+		final CommentCreateUpdateRequestDto commentRequestNotExistUser = new CommentCreateUpdateRequestDto(
 			2L,
 			"개추 ^^"
 		);
 
 		//when & then
-		Set<ConstraintViolation<CommentRequestDto>> violations = validator.validate(commentRequestNotExistUser);
+		Set<ConstraintViolation<CommentCreateUpdateRequestDto>> violations = validator.validate(
+			commentRequestNotExistUser);
 		boolean foundNotNullMessage = violations.stream()
-			.anyMatch(violation -> violation.getMessage().equals(CommentValidationMessage.USER_NOT_FOUND));
+			.anyMatch(violation -> violation.getMessage().equals(CommentValidationMessages.USER_ID_INVALID));
 
 		assertTrue(foundNotNullMessage);
 	}
@@ -41,15 +42,16 @@ public class CommentRequestDtoTest {
 	@DisplayName("user_id가 널값일 경우")
 	public void testNulluserId() {
 		//given
-		final CommentRequestDto commentRequestNotExistUser = new CommentRequestDto(
+		final CommentCreateUpdateRequestDto commentRequestNotExistUser = new CommentCreateUpdateRequestDto(
 			null,
 			"개추 ^^"
 		);
 
 		//when & then
-		Set<ConstraintViolation<CommentRequestDto>> violations = validator.validate(commentRequestNotExistUser);
+		Set<ConstraintViolation<CommentCreateUpdateRequestDto>> violations = validator.validate(
+			commentRequestNotExistUser);
 		boolean foundNotNullMessage = violations.stream()
-			.anyMatch(violation -> violation.getMessage().equals(CommentValidationMessage.USER_NOT_NULL));
+			.anyMatch(violation -> violation.getMessage().equals(CommentValidationMessages.USER_NOT_NULL));
 
 		assertTrue(foundNotNullMessage);
 	}
@@ -58,15 +60,16 @@ public class CommentRequestDtoTest {
 	@DisplayName("내용이 널값일 경우")
 	public void testNullContent() {
 		//given
-		final CommentRequestDto commentRequestNotExistUser = new CommentRequestDto(
+		final CommentCreateUpdateRequestDto commentRequestNotExistUser = new CommentCreateUpdateRequestDto(
 			1L,
 			null
 		);
 
 		//when & then
-		Set<ConstraintViolation<CommentRequestDto>> violations = validator.validate(commentRequestNotExistUser);
+		Set<ConstraintViolation<CommentCreateUpdateRequestDto>> violations = validator.validate(
+			commentRequestNotExistUser);
 		boolean foundNotNullMessage = violations.stream()
-			.anyMatch(violation -> violation.getMessage().equals(CommentValidationMessage.CONTENT_NOT_NULL));
+			.anyMatch(violation -> violation.getMessage().equals(CommentValidationMessages.CONTENT_NOT_NULL));
 
 		assertTrue(foundNotNullMessage);
 	}
@@ -75,15 +78,16 @@ public class CommentRequestDtoTest {
 	@DisplayName("내용이 빈칸일 경우")
 	public void testBlankContent() {
 		//given
-		final CommentRequestDto commentRequestNotExistUser = new CommentRequestDto(
+		final CommentCreateUpdateRequestDto commentRequestNotExistUser = new CommentCreateUpdateRequestDto(
 			1L,
 			" "
 		);
 
 		//when & then
-		Set<ConstraintViolation<CommentRequestDto>> violations = validator.validate(commentRequestNotExistUser);
+		Set<ConstraintViolation<CommentCreateUpdateRequestDto>> violations = validator.validate(
+			commentRequestNotExistUser);
 		boolean foundNotNullMessage = violations.stream()
-			.anyMatch(violation -> violation.getMessage().equals(CommentValidationMessage.CONTENT_NOT_BLANK));
+			.anyMatch(violation -> violation.getMessage().equals(CommentValidationMessages.CONTENT_NOT_BLANK));
 
 		assertTrue(foundNotNullMessage);
 	}
@@ -94,15 +98,16 @@ public class CommentRequestDtoTest {
 	public void testBigContent(int length) {
 		//given
 		String longContent = "hello".repeat(length);
-		final CommentRequestDto commentRequestNotExistUser = new CommentRequestDto(
+		final CommentCreateUpdateRequestDto commentRequestNotExistUser = new CommentCreateUpdateRequestDto(
 			1L,
 			longContent
 		);
 
 		//when & then
-		Set<ConstraintViolation<CommentRequestDto>> violations = validator.validate(commentRequestNotExistUser);
+		Set<ConstraintViolation<CommentCreateUpdateRequestDto>> violations = validator.validate(
+			commentRequestNotExistUser);
 		boolean foundNotNullMessage = violations.stream()
-			.anyMatch(violation -> violation.getMessage().equals(CommentValidationMessage.CONTENT_SIZE));
+			.anyMatch(violation -> violation.getMessage().equals(CommentValidationMessages.CONTENT_SIZE));
 
 		assertTrue(foundNotNullMessage);
 	}

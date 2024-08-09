@@ -4,7 +4,6 @@ import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import org.junit.jupiter.api.DisplayName;
@@ -18,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import taco.klkl.domain.comment.dto.request.CommentRequestDto;
+import taco.klkl.domain.comment.dto.request.CommentCreateUpdateRequestDto;
 import taco.klkl.domain.comment.dto.response.CommentResponseDto;
 import taco.klkl.domain.comment.service.CommentService;
 import taco.klkl.global.error.exception.ErrorCode;
@@ -39,12 +38,12 @@ public class CommentIntegrationTest {
 	private final Long productId = 1L;
 	private final Long commentId = 500L;
 
-	private final CommentRequestDto commentCreateRequestDto = new CommentRequestDto(
+	private final CommentCreateUpdateRequestDto commentCreateRequestDto = new CommentCreateUpdateRequestDto(
 		1L,
 		"개추 ^^"
 	);
 
-	private final CommentRequestDto commentUpdateRequestDto = new CommentRequestDto(
+	private final CommentCreateUpdateRequestDto commentUpdateRequestDto = new CommentCreateUpdateRequestDto(
 		1L,
 		"윤상정은 바보다, 반박시 님 말이 틀림."
 	);
@@ -78,8 +77,7 @@ public class CommentIntegrationTest {
 			.andExpect(jsonPath("$.code", is("C000")))
 			.andExpect(jsonPath("$.data.commentId", is(1)))
 			.andExpect(jsonPath("$.data.userId", is(commentCreateRequestDto.userId().intValue())))
-			.andExpect(jsonPath("$.data.content", is(commentCreateRequestDto.content())))
-			.andExpect(jsonPath("$.data.createdAt", is(LocalDate.now().toString())));
+			.andExpect(jsonPath("$.data.content", is(commentCreateRequestDto.content())));
 	}
 
 	@Test
@@ -112,8 +110,7 @@ public class CommentIntegrationTest {
 			.andExpect(jsonPath("$.code", is("C000")))
 			.andExpect(jsonPath("$.data.commentId", is(commentId.intValue())))
 			.andExpect(jsonPath("$.data.userId", is(commentUpdateRequestDto.userId().intValue())))
-			.andExpect(jsonPath("$.data.content", is(commentUpdateRequestDto.content())))
-			.andExpect(jsonPath("$.data.createdAt", is(LocalDate.now().toString())));
+			.andExpect(jsonPath("$.data.content", is(commentUpdateRequestDto.content())));
 	}
 
 	@Test

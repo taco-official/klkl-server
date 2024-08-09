@@ -1,6 +1,6 @@
 package taco.klkl.domain.comment.dto.response;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import taco.klkl.domain.comment.domain.Comment;
 
@@ -8,13 +8,13 @@ public record CommentResponseDto(
 	Long commentId,
 	Long userId,
 	String content,
-	LocalDate createdAt
+	LocalDateTime createdAt
 ) {
-	public static CommentResponseDto from(Comment comment) {
+	public static CommentResponseDto from(final Comment comment) {
 		return new CommentResponseDto(comment.getId(),
 			comment.getUser().getId(),
 			comment.getContent(),
-			comment.getDate()
+			comment.getCreatedAt()
 		);
 	}
 }

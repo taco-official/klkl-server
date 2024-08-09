@@ -27,8 +27,8 @@ public class ProductService {
 		return ProductDetailResponseDto.from(product);
 	}
 
-	public void isProductExits(final Long id) {
-		productRepository.findById(id)
+	public void validateProductId(final Long productId) {
+		productRepository.findById(productId)
 			.orElseThrow(ProductNotFoundException::new);
 	}
 

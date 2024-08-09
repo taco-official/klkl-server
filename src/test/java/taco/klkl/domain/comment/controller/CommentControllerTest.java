@@ -20,17 +20,17 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import taco.klkl.domain.comment.domain.Comment;
-import taco.klkl.domain.comment.dto.request.CommentRequestDto;
+import taco.klkl.domain.comment.dto.request.CommentCreateUpdateRequestDto;
 import taco.klkl.domain.comment.dto.response.CommentResponseDto;
 import taco.klkl.domain.comment.exception.CommentNotFoundException;
 import taco.klkl.domain.comment.service.CommentService;
-import taco.klkl.domain.comment.validator.ExistUserValidator;
 import taco.klkl.domain.product.exception.ProductNotFoundException;
 import taco.klkl.domain.product.service.ProductService;
 import taco.klkl.domain.user.dao.UserRepository;
 import taco.klkl.domain.user.domain.User;
 import taco.klkl.domain.user.dto.request.UserCreateRequestDto;
 import taco.klkl.global.common.enums.Gender;
+import taco.klkl.global.common.validation.UserIdValidator;
 import taco.klkl.global.error.exception.ErrorCode;
 
 @WebMvcTest(CommentController.class)
@@ -49,7 +49,7 @@ public class CommentControllerTest {
 	private UserRepository userRepository;
 
 	@MockBean
-	private ExistUserValidator existUserValidator;
+	private UserIdValidator userIdValidator;
 
 	@Autowired
 	private ObjectMapper objectMapper;
@@ -76,12 +76,12 @@ public class CommentControllerTest {
 	private final Comment comment1 = Comment.of(1L, user, "개추 ^^");
 	private final Comment comment2 = Comment.of(1L, user, "안녕하세요");
 
-	private final CommentRequestDto commentCreateRequestDto = new CommentRequestDto(
+	private final CommentCreateUpdateRequestDto commentCreateRequestDto = new CommentCreateUpdateRequestDto(
 		1L,
 		"개추 ^^"
 	);
 
-	private final CommentRequestDto commentUpdateRequestDto = new CommentRequestDto(
+	private final CommentCreateUpdateRequestDto commentUpdateRequestDto = new CommentCreateUpdateRequestDto(
 		1L,
 		"윤상정은 바보다, 반박시 님 말이 틀림."
 	);
@@ -104,8 +104,8 @@ public class CommentControllerTest {
 			.andExpect(jsonPath("$.data", hasSize(2)))
 			.andExpect(jsonPath("$.data[0].commentId", is(comment1.getId())))
 			.andExpect(jsonPath("$.data[0].content", is(comment1.getContent())))
-			.andExpect(jsonPath("$.data[1].commentId", is(comment1.getId())))
-			.andExpect(jsonPath("$.data[0].content", is(comment1.getContent())));
+			.andExpect(jsonPath("$.data[1].commentId", is(comment2.getId())))
+			.andExpect(jsonPath("$.data[1].content", is(comment2.getContent())));
 
 		verify(commentService, times(1))
 			.getComments(productId);
@@ -119,19 +119,19 @@ public class CommentControllerTest {
 
 		CommentResponseDto responseDto = CommentResponseDto.from(comment1);
 
-		when(commentService.createComment(any(Long.class), any(CommentRequestDto.class))).thenReturn(responseDto);
+		when(commentService.createComment(any(Long.class), any(CommentCreateUpdateRequestDto.class))).thenReturn(
+			responseDto);
 
 		//when & then
 		mockMvc.perform(post("/v1/products/{productId}/comments", productId)
-				.content(objectMapper.writeValueAsBytes(commentCreateRequestDto))
+				.content(objectMapper.writeValueAsString(commentCreateRequestDto))
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isCreated())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
 			.andExpect(jsonPath("$.code", is("C000")))
 			.andExpect(jsonPath("$.data.commentId", is(comment1.getId())))
 			.andExpect(jsonPath("$.data.userId", is(comment1.getUser().getId())))
-			.andExpect(jsonPath("$.data.content", is(comment1.getContent())))
-			.andExpect(jsonPath("$.data.createdAt", is(comment1.getDate().toString())));
+			.andExpect(jsonPath("$.data.content", is(comment1.getContent())));
 
 		verify(commentService, times(1))
 			.createComment(productId, commentCreateRequestDto);
@@ -144,11 +144,11 @@ public class CommentControllerTest {
 		Long wrongProductId = 2L;
 		when(userRepository.existsById(any(Long.class))).thenReturn(true);
 
-		doThrow(new ProductNotFoundException()).when(productService).isProductExits(any(Long.class));
+		doThrow(new ProductNotFoundException()).when(productService).validateProductId(any(Long.class));
 
 		//when & then
 		mockMvc.perform(post("/v1/products/{wrongProductId}/comments", wrongProductId)
-				.content(objectMapper.writeValueAsBytes(commentCreateRequestDto))
+				.content(objectMapper.writeValueAsString(commentCreateRequestDto))
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isNotFound())
 			.andExpect(jsonPath("$.isSuccess", is(false)))
@@ -167,20 +167,19 @@ public class CommentControllerTest {
 		when(commentService.updateComment(
 			any(Long.class),
 			any(Long.class),
-			any(CommentRequestDto.class)))
+			any(CommentCreateUpdateRequestDto.class)))
 			.thenReturn(responseDto);
 
 		//when & then
 		mockMvc.perform(put("/v1/products/{productId}/comments/{commentId}", productId, commentId)
-				.content(objectMapper.writeValueAsBytes(commentUpdateRequestDto))
+				.content(objectMapper.writeValueAsString(commentUpdateRequestDto))
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
 			.andExpect(jsonPath("$.code", is("C000")))
 			.andExpect(jsonPath("$.data.commentId", is(comment1.getId())))
 			.andExpect(jsonPath("$.data.userId", is(comment1.getUser().getId())))
-			.andExpect(jsonPath("$.data.content", is(comment1.getContent())))
-			.andExpect(jsonPath("$.data.createdAt", is(comment1.getDate().toString())));
+			.andExpect(jsonPath("$.data.content", is(comment1.getContent())));
 
 		verify(commentService, times(1))
 			.updateComment(productId, commentId, commentUpdateRequestDto);
@@ -193,12 +192,12 @@ public class CommentControllerTest {
 		Long wrongCommentId = 2L;
 		when(userRepository.existsById(any(Long.class))).thenReturn(true);
 
-		when(commentService.updateComment(any(Long.class), any(Long.class), any(CommentRequestDto.class)))
+		when(commentService.updateComment(any(Long.class), any(Long.class), any(CommentCreateUpdateRequestDto.class)))
 			.thenThrow(new CommentNotFoundException());
 
 		//when & then
 		mockMvc.perform(put("/v1/products/{productId}/comments/{wrongCommentId}", productId, wrongCommentId)
-				.content(objectMapper.writeValueAsBytes(commentUpdateRequestDto))
+				.content(objectMapper.writeValueAsString(commentUpdateRequestDto))
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isNotFound())
 			.andExpect(jsonPath("$.isSuccess", is(false)))
@@ -216,12 +215,12 @@ public class CommentControllerTest {
 		Long wrongProductId = 2L;
 		when(userRepository.existsById(any(Long.class))).thenReturn(true);
 
-		when(commentService.updateComment(any(Long.class), any(Long.class), any(CommentRequestDto.class)))
+		when(commentService.updateComment(any(Long.class), any(Long.class), any(CommentCreateUpdateRequestDto.class)))
 			.thenThrow(new ProductNotFoundException());
 
 		//when & then
 		mockMvc.perform(put("/v1/products/{wrongProductId}/comments/{commentId}", wrongProductId, commentId)
-				.content(objectMapper.writeValueAsBytes(commentUpdateRequestDto))
+				.content(objectMapper.writeValueAsString(commentUpdateRequestDto))
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isNotFound())
 			.andExpect(jsonPath("$.isSuccess", is(false)))

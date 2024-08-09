@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import taco.klkl.domain.comment.dao.CommentRepository;
 import taco.klkl.domain.comment.domain.Comment;
-import taco.klkl.domain.comment.dto.request.CommentRequestDto;
+import taco.klkl.domain.comment.dto.request.CommentCreateUpdateRequestDto;
 import taco.klkl.domain.comment.dto.response.CommentResponseDto;
 import taco.klkl.domain.comment.exception.CommentNotFoundException;
 import taco.klkl.domain.product.exception.ProductNotFoundException;
@@ -54,12 +54,12 @@ public class CommentServiceTest {
 		userRequestDto.description()
 	);
 
-	private final CommentRequestDto commentCreateRequestDto = new CommentRequestDto(
+	private final CommentCreateUpdateRequestDto commentCreateRequestDto = new CommentCreateUpdateRequestDto(
 		1L,
 		"이거 진짜에요?"
 	);
 
-	private final CommentRequestDto commentUpdateRequestDto = new CommentRequestDto(
+	private final CommentCreateUpdateRequestDto commentUpdateRequestDto = new CommentCreateUpdateRequestDto(
 		1L,
 		"윤상정은 바보다, 반박시 님 말이 틀림."
 	);
@@ -83,8 +83,8 @@ public class CommentServiceTest {
 		assertThat(result.get(1).commentId()).isEqualTo(comment2.getId());
 		assertThat(result.get(0).content()).isEqualTo(comment1.getContent());
 		assertThat(result.get(1).content()).isEqualTo(comment2.getContent());
-		assertThat(result.get(0).createdAt()).isEqualTo(comment1.getDate());
-		assertThat(result.get(1).createdAt()).isEqualTo(comment2.getDate());
+		assertThat(result.get(0).createdAt()).isEqualTo(comment1.getCreatedAt());
+		assertThat(result.get(1).createdAt()).isEqualTo(comment2.getCreatedAt());
 
 		verify(commentRepository, times(1)).findAllByProductId(productId);
 	}
@@ -93,8 +93,8 @@ public class CommentServiceTest {
 	@DisplayName("댓글 등록이 성공하는 경우 테스트")
 	public void testCreateComment() {
 		//given
-		Long productId = 1L;
-		Comment comment = Comment.of(1L, user, "이거 진짜에요?");
+		final Long productId = 1L;
+		final Comment comment = Comment.of(1L, user, "이거 진짜에요?");
 
 		when(userUtil.findTestUser()).thenReturn(user);
 		when(commentRepository.save(any(Comment.class))).thenReturn(comment);
@@ -106,7 +106,6 @@ public class CommentServiceTest {
 		assertThat(result.commentId()).isEqualTo(comment.getId());
 		assertThat(result.userId()).isEqualTo(user.getId());
 		assertThat(result.content()).isEqualTo(comment.getContent());
-		assertThat(result.createdAt()).isEqualTo(comment.getDate());
 	}
 
 	@Test
@@ -126,7 +125,7 @@ public class CommentServiceTest {
 		assertThat(result.commentId()).isEqualTo(comment.getId());
 		assertThat(result.userId()).isEqualTo(user.getId());
 		assertThat(result.content()).isEqualTo(commentUpdateRequestDto.content());
-		assertThat(result.createdAt()).isEqualTo(comment.getDate());
+		assertThat(result.createdAt()).isEqualTo(comment.getCreatedAt());
 	}
 
 	@Test
