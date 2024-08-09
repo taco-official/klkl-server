@@ -27,6 +27,11 @@ public class ProductService {
 		return ProductDetailResponseDto.from(product);
 	}
 
+	public void validateProductId(final Long productId) {
+		productRepository.findById(productId)
+			.orElseThrow(ProductNotFoundException::new);
+	}
+
 	@Transactional
 	public ProductDetailResponseDto createProduct(final ProductCreateRequestDto productDto) {
 		final Product product = createProductEntity(productDto);

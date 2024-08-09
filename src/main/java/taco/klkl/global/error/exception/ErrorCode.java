@@ -25,6 +25,7 @@ public enum ErrorCode {
 	// Like
 
 	// Comment
+	COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "C040", "존재하지 않는 댓글입니다."),
 
 	// Region
 	REGION_NOT_FOUND(HttpStatus.NOT_FOUND, "C050", "해당 지역을 찾을 수 없습니다."),
