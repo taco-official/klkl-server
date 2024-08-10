@@ -18,9 +18,14 @@ public enum RegionType {
 
 	private final String koreanName;
 
-	public static RegionType getRegionByName(String regionName) {
+	/**
+	 *
+	 * @param koreanName RegionType koreanName
+	 * @return RegionType
+	 */
+	public static RegionType getRegionTypeByKoreanName(String koreanName) {
 		return Arrays.stream(RegionType.values())
-			.filter(r -> r.getKoreanName().equals(regionName))
+			.filter(r -> r.getKoreanName().equals(koreanName))
 			.findFirst()
 			.orElse(NONE);
 	}

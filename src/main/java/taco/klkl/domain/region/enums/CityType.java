@@ -1,6 +1,8 @@
 package taco.klkl.domain.region.enums;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.regex.Pattern;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -54,10 +56,34 @@ public enum CityType {
 
 	private final String koreanName;
 
+	/**
+	 *
+	 * @param koreanName City 이름
+	 * @return CityType
+	 */
 	public static CityType getCityTypeByKoreanName(String koreanName) {
 		return Arrays.stream(CityType.values())
 			.filter(c -> c.getKoreanName().equals(koreanName))
 			.findFirst()
 			.orElse(NONE);
+	}
+
+	/**
+	 * 부분문자열을 포함하는 CityType을 찾는 함수
+	 * @param partialString 부분 문자열
+	 * @return 부분문자열을 포함하는 CityType의 리스트
+	 */
+	public static List<CityType> getCityTypesByPartialString(String partialString) {
+
+		if (partialString == null || partialString.isEmpty()) {
+			return List.of();
+		}
+
+		String regex = ".*" + Pattern.quote(partialString) + ".*";
+		Pattern pattern = Pattern.compile(regex);
+
+		return Arrays.stream(CityType.values())
+			.filter(c -> pattern.matcher(c.getKoreanName()).matches())
+			.toList();
 	}
 }

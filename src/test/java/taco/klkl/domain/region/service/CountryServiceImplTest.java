@@ -24,6 +24,7 @@ import taco.klkl.domain.region.domain.Currency;
 import taco.klkl.domain.region.domain.Region;
 import taco.klkl.domain.region.dto.response.CityResponseDto;
 import taco.klkl.domain.region.dto.response.CountryResponseDto;
+import taco.klkl.domain.region.dto.response.CountrySimpleResponseDto;
 import taco.klkl.domain.region.enums.CityType;
 import taco.klkl.domain.region.enums.CountryType;
 import taco.klkl.domain.region.enums.CurrencyType;
@@ -115,5 +116,23 @@ public class CountryServiceImplTest {
 		assertThat(findCountries.size()).isEqualTo(cities.size());
 		assertThat(findCountries.get(0).name()).isEqualTo(cities.get(0).getName().getKoreanName());
 		assertThat(findCountries.get(1).name()).isEqualTo(cities.get(1).getName().getKoreanName());
+	}
+
+	@Test
+	@DisplayName("CountryType리스트로 국가 조회")
+	void testGetCountriesByCountryTypes() {
+		// given
+		List<CountryType> countryTypes = Arrays.asList(CountryType.JAPAN, CountryType.TAIWAN);
+		CountrySimpleResponseDto country1ResponseDto = CountrySimpleResponseDto.from(country1);
+		CountrySimpleResponseDto country2ResponseDto = CountrySimpleResponseDto.from(country2);
+		when(countryRepository.findAllByNameIn(countryTypes)).thenReturn(Arrays.asList(country1, country2));
+
+		// when
+		List<CountrySimpleResponseDto> countrySimpleResponseDtos = countryService.getAllCountriesByCountryTypes(
+			countryTypes);
+
+		// then
+		assertThat(countrySimpleResponseDtos).hasSize(countryTypes.size());
+		assertThat(countrySimpleResponseDtos).containsExactlyInAnyOrder(country1ResponseDto, country2ResponseDto);
 	}
 }

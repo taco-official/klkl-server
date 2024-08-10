@@ -13,6 +13,8 @@ import taco.klkl.domain.region.dao.CountryRepository;
 import taco.klkl.domain.region.domain.Country;
 import taco.klkl.domain.region.dto.response.CityResponseDto;
 import taco.klkl.domain.region.dto.response.CountryResponseDto;
+import taco.klkl.domain.region.dto.response.CountrySimpleResponseDto;
+import taco.klkl.domain.region.enums.CountryType;
 import taco.klkl.domain.region.exception.CountryNotFoundException;
 
 @Slf4j
@@ -27,7 +29,7 @@ public class CountryServiceImpl implements CountryService {
 	@Override
 	public List<CountryResponseDto> getAllCountries() {
 
-		List<Country> countries = countryRepository.findAll();
+		final List<Country> countries = countryRepository.findAll();
 
 		if (countries.isEmpty()) {
 			return Collections.emptyList();
@@ -55,6 +57,20 @@ public class CountryServiceImpl implements CountryService {
 
 		return country.getCities().stream()
 			.map(CityResponseDto::from)
+			.toList();
+	}
+
+	@Override
+	public List<CountrySimpleResponseDto> getAllCountriesByCountryTypes(final List<CountryType> countryTypes) {
+
+		if (countryTypes == null || countryTypes.isEmpty()) {
+			return List.of();
+		}
+
+		final List<Country> findCountries = countryRepository.findAllByNameIn(countryTypes);
+
+		return findCountries.stream()
+			.map(CountrySimpleResponseDto::from)
 			.toList();
 	}
 }
