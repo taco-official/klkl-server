@@ -27,6 +27,10 @@ public class ProductService {
 		return ProductDetailResponseDto.from(product);
 	}
 
+	public boolean existsProductById(final Long id) {
+		return productRepository.existsById(id);
+	}
+
 	@Transactional
 	public ProductDetailResponseDto createProduct(final ProductCreateRequestDto productDto) {
 		final Product product = createProductEntity(productDto);
@@ -47,6 +51,11 @@ public class ProductService {
 		final Product product = productRepository.findById(id)
 			.orElseThrow(ProductNotFoundException::new);
 		productRepository.delete(product);
+	}
+
+	public Product getProductEntityById(final Long id) {
+		return productRepository.findById(id)
+			.orElseThrow(ProductNotFoundException::new);
 	}
 
 	private Product createProductEntity(final ProductCreateRequestDto productDto) {
