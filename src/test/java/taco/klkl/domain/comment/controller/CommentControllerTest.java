@@ -131,7 +131,7 @@ public class CommentControllerTest {
 			.andExpect(jsonPath("$.isSuccess", is(true)))
 			.andExpect(jsonPath("$.code", is("C000")))
 			.andExpect(jsonPath("$.data.commentId", is(comment1.getId())))
-			.andExpect(jsonPath("$.data.userId", is(comment1.getUser().getId())))
+			.andExpect(jsonPath("$.data.user.id", is(comment1.getUser().getId())))
 			.andExpect(jsonPath("$.data.content", is(comment1.getContent())));
 
 		verify(commentService, times(1))
@@ -178,7 +178,7 @@ public class CommentControllerTest {
 			.andExpect(jsonPath("$.isSuccess", is(true)))
 			.andExpect(jsonPath("$.code", is("C000")))
 			.andExpect(jsonPath("$.data.commentId", is(comment1.getId())))
-			.andExpect(jsonPath("$.data.userId", is(comment1.getUser().getId())))
+			.andExpect(jsonPath("$.data.user.id", is(comment1.getUser().getId())))
 			.andExpect(jsonPath("$.data.content", is(comment1.getContent())));
 
 		verify(commentService, times(1))
