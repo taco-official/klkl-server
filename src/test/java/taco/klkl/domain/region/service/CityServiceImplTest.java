@@ -37,14 +37,14 @@ public class CityServiceImplTest {
 
 	@Test
 	@DisplayName("id로 도시 존재 여부 확인 테스트")
-	void testGetCityById_True() {
+	void testGetCityEntityById_True() {
 		// given
 		City mockCity = mock(City.class);
 		when(cityRepository.findById(1L))
 			.thenReturn(Optional.ofNullable(mockCity));
 
 		// when
-		City city = cityService.getCityById(1L);
+		City city = cityService.getCityEntityById(1L);
 
 		// then
 		assertThat(city).isEqualTo(mockCity);

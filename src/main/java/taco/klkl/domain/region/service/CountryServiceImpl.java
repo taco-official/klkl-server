@@ -73,4 +73,9 @@ public class CountryServiceImpl implements CountryService {
 			.map(CountrySimpleResponseDto::from)
 			.toList();
 	}
+
+	@Override
+	public boolean existsCountryById(final Long countryId) {
+		return countryRepository.existsById(countryId);
+	}
 }
