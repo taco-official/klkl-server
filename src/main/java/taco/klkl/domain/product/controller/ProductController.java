@@ -41,12 +41,12 @@ public class ProductController {
 	@Operation(summary = "상품 목록 조회", description = "상품 목록을 조회합니다.")
 	public PagedResponseDto<ProductSimpleResponseDto> getProducts(
 		@PageableDefault(size = ProductConstants.DEFAULT_PAGE_SIZE) Pageable pageable,
-		@RequestParam(name = "country_id", required = false) Long countryId,
-		@RequestParam(name = "city_id", required = false) List<Long> cityIds
+		@RequestParam(name = "city_id", required = false) List<Long> cityIds,
+		@RequestParam(name = "subcategory_id", required = false) List<Long> subcategoryIds
 	) {
 		ProductFilterOptionsDto filterOptions = new ProductFilterOptionsDto(
-			countryId,
-			cityIds
+			cityIds,
+			subcategoryIds
 		);
 		return productService.getProductsByFilterOptions(pageable, filterOptions);
 	}
