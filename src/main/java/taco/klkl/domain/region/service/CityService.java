@@ -14,5 +14,5 @@ public interface CityService {
 
 	List<CityResponseDto> getAllCitiesByCityTypes(final List<CityType> cityTypes);
 
-	boolean isCitiesMappedToSameCountry(final Long countryId, final List<Long> cityIds);
+	boolean isCitiesMappedToSameCountry(final List<Long> cityIds);
 }

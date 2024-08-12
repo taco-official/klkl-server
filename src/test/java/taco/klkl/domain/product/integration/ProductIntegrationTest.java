@@ -151,60 +151,6 @@ public class ProductIntegrationTest {
 	}
 
 	@Test
-	@DisplayName("단일 국가 ID로 필터링된 상품 목록 조회 API 테스트")
-	public void testGetProductsBySingleCountryId() throws Exception {
-		// given
-		ProductCreateUpdateRequestDto createJapanRequest1 = new ProductCreateUpdateRequestDto(
-			"name1",
-			"description1",
-			"address1",
-			1000,
-			414L,
-			310L,
-			438L
-		);
-		ProductCreateUpdateRequestDto createJapanRequest2 = new ProductCreateUpdateRequestDto(
-			"name2",
-			"description2",
-			"address2",
-			2000,
-			415L,
-			311L,
-			438L
-		);
-		ProductCreateUpdateRequestDto createThailandRequest = new ProductCreateUpdateRequestDto(
-			"name3",
-			"description3",
-			"address3",
-			3000,
-			427L,
-			314L,
-			441L
-		);
-		productService.createProduct(createJapanRequest1);
-		productService.createProduct(createJapanRequest2);
-		productService.createProduct(createThailandRequest);
-
-		// when & then
-		mockMvc.perform(get("/v1/products")
-				.param("page", "0")
-				.param("size", "10")
-				.param("country_id", "406")
-				.contentType(MediaType.APPLICATION_JSON))
-			.andExpect(status().isOk())
-			.andExpect(jsonPath("$.isSuccess", is(true)))
-			.andExpect(jsonPath("$.code", is("C000")))
-			.andExpect(jsonPath("$.data.content", hasSize(1)))
-			.andExpect(jsonPath("$.data.content[0].name", is(createThailandRequest.name())))
-			.andExpect(jsonPath("$.data.pageNumber", is(0)))
-			.andExpect(jsonPath("$.data.pageSize", is(10)))
-			.andExpect(jsonPath("$.data.totalElements", is(1)))
-			.andExpect(jsonPath("$.data.totalPages", is(1)))
-			.andExpect(jsonPath("$.data.last", is(true)))
-			.andExpect(jsonPath("$.timestamp", notNullValue()));
-	}
-
-	@Test
 	@DisplayName("단일 도시 ID로 필터링된 상품 목록 조회 API 테스트")
 	public void testGetProductsBySingleCityId() throws Exception {
 		// given
