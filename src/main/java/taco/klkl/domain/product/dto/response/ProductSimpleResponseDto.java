@@ -8,24 +8,24 @@ import taco.klkl.domain.product.domain.Product;
  * @param productId
  * @param name
  * @param likeCount
- * @param cityId
- * @param subcategoryId
+ * @param countryName
+ * @param categoryName
  */
 public record ProductSimpleResponseDto(
 	Long productId,
 	String name,
 	int likeCount,
-	Long cityId,
-	Long subcategoryId
+	String countryName,
+	String categoryName
 ) {
 
 	public static ProductSimpleResponseDto from(Product product) {
 		return new ProductSimpleResponseDto(
-			product.getProductId(),
+			product.getId(),
 			product.getName(),
 			product.getLikeCount(),
-			product.getCityId(),
-			product.getSubcategoryId()
+			product.getCity().getCountry().getName().getKoreanName(),
+			product.getSubcategory().getCategory().getName().getKoreanName()
 		);
 	}
 }

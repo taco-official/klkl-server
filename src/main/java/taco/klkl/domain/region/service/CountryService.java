@@ -18,4 +18,6 @@ public interface CountryService {
 	List<CityResponseDto> getCitiesByCountryId(final Long countryId);
 
 	List<CountrySimpleResponseDto> getAllCountriesByCountryTypes(final List<CountryType> countryTypes);
+
+	boolean existsCountryById(final Long countryId);
 }

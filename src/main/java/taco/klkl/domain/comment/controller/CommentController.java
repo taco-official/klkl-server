@@ -34,8 +34,7 @@ public class CommentController {
 	@GetMapping
 	@Operation(summary = "댓글 목록 조회", description = "상품 목록에 대한 댓글 목록을 반환합니다.")
 	public List<CommentResponseDto> getComments(@PathVariable final Long productId) {
-		final List<CommentResponseDto> commentList = commentService.getComments(productId);
-		return commentList;
+		return commentService.getComments(productId);
 	}
 
 	@PostMapping
@@ -45,11 +44,10 @@ public class CommentController {
 		@PathVariable final Long productId,
 		@RequestBody @Valid final CommentCreateUpdateRequestDto commentCreateRequestDto
 	) {
-		final CommentResponseDto commentResponseDto = commentService.createComment(
+		return commentService.createComment(
 			productId,
 			commentCreateRequestDto
 		);
-		return commentResponseDto;
 	}
 
 	@PutMapping("/{commentId}")
@@ -60,12 +58,11 @@ public class CommentController {
 		@PathVariable final Long commentId,
 		@RequestBody @Valid CommentCreateUpdateRequestDto commentUpdateRequestDto
 	) {
-		final CommentResponseDto commentResponseDto = commentService.updateComment(
+		return commentService.updateComment(
 			productId,
 			commentId,
 			commentUpdateRequestDto
 		);
-		return commentResponseDto;
 	}
 
 	@DeleteMapping("/{commentId}")

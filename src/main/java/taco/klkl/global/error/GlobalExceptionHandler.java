@@ -19,9 +19,9 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import taco.klkl.global.common.response.GlobalResponse;
 import taco.klkl.global.error.exception.CustomException;
 import taco.klkl.global.error.exception.ErrorCode;
-import taco.klkl.global.response.GlobalResponse;
 
 @Slf4j
 @RestControllerAdvice

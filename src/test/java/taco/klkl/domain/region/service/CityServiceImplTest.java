@@ -5,6 +5,7 @@ import static org.mockito.Mockito.*;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -36,15 +37,17 @@ public class CityServiceImplTest {
 
 	@Test
 	@DisplayName("id로 도시 존재 여부 확인 테스트")
-	void testIsExitsCity_True() {
+	void testGetCityEntityById_True() {
 		// given
-		when(cityRepository.existsById(1L)).thenReturn(true);
+		City mockCity = mock(City.class);
+		when(cityRepository.findById(1L))
+			.thenReturn(Optional.ofNullable(mockCity));
 
 		// when
-		boolean result = cityService.existsCityById(1L);
+		City city = cityService.getCityEntityById(1L);
 
 		// then
-		assertThat(result).isTrue();
+		assertThat(city).isEqualTo(mockCity);
 	}
 
 	@Test

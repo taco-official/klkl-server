@@ -2,23 +2,11 @@
 INSERT INTO User(user_id, profile, name, gender, age, description, created_at)
 VALUES (1, 'image/test.jpg', 'testUser', '남', 20, '테스트입니다.', now());
 
-/* Product */
-INSERT INTO Product(product_id, user_id, name, description, address, price, city_id, subcategory_id, currency_id,
-                    created_at)
-VALUES (1, 1, '곤약젤리', '탱글탱글 맛있는 곤약젤리', '신사이바시 메가돈키호테', 1000, 2, 3, 4, now()),
-       (390, 1, '장충동 왕족발 보쌈', '탱글탱글 맛있는 왕족발', '김빠빠누룽지통닭', 30000, 2, 3, 4, now());
 /* Like */
-
-/* Comment */
-INSERT INTO Comment(comment_id, product_id, user_id, content, created_at)
-VALUES (500, 1, 1, '이거 정말 맛있는데 표현할 방법이 읎네.', now()),
-       (501, 1, 1, '이거 정말 맛없는데 표현할 방법이 읎네.', now()),
-       (502, 1, 1, '이거 정말 좋은데 표현할 방법이 읎네.', now());
 
 
 /* Region */
-INSERT
-INTO Region(region_id, name)
+INSERT INTO Region(region_id, name)
 VALUES (400, '동북아시아'),
        (401, '동남아시아'),
        (402, '기타');
@@ -139,3 +127,16 @@ VALUES
     (368, 315, 350);
 
 /* Notification */
+
+/* Product */
+INSERT INTO Product(product_id, user_id, name, description, address, price,
+                    city_id, subcategory_id, currency_id, created_at)
+VALUES
+    (101, 1, '곤약젤리', '탱글탱글 맛있는 곤약젤리', '신사이바시 메가돈키호테', 1000, 414, 310, 438, now()),
+    (390, 1, '왕족발 보쌈 과자', '맛있는 왕족발 보쌈 과자', '상하이 장충동', 3000, 422, 311, 439, now());
+
+/* Comment */
+INSERT INTO Comment(comment_id, product_id, user_id, content, created_at)
+VALUES (500, 390, 1, '이거 정말 맛있는데 표현할 방법이 읎네.', now()),
+       (501, 390, 1, '이거 정말 맛없는데 표현할 방법이 읎네.', now()),
+       (502, 390, 1, '이거 정말 좋은데 표현할 방법이 읎네.', now());

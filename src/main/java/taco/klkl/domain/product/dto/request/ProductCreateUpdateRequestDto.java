@@ -18,7 +18,7 @@ import taco.klkl.global.common.constants.ProductValidationMessages;
  * @param subcategoryId
  * @param currencyId
  */
-public record ProductCreateRequestDto(
+public record ProductCreateUpdateRequestDto(
 	@NotNull(message = ProductValidationMessages.NAME_NOT_NULL)
 	@NotBlank(message = ProductValidationMessages.NAME_NOT_BLANK)
 	@Size(max = ProductConstants.NAME_MAX_LENGTH, message = ProductValidationMessages.NAME_SIZE)
