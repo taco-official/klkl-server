@@ -8,6 +8,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -15,221 +17,266 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import taco.klkl.domain.product.domain.Product;
-import taco.klkl.domain.product.dto.request.ProductCreateRequestDto;
-import taco.klkl.domain.product.dto.request.ProductUpdateRequestDto;
+import taco.klkl.domain.category.domain.CategoryName;
+import taco.klkl.domain.category.dto.response.SubcategoryResponseDto;
+import taco.klkl.domain.product.dto.request.ProductCreateUpdateRequestDto;
+import taco.klkl.domain.product.dto.request.ProductFilterOptionsDto;
 import taco.klkl.domain.product.dto.response.ProductDetailResponseDto;
-import taco.klkl.domain.product.exception.ProductNotFoundException;
+import taco.klkl.domain.product.dto.response.ProductSimpleResponseDto;
 import taco.klkl.domain.product.service.ProductService;
-import taco.klkl.domain.user.domain.User;
-import taco.klkl.global.error.exception.ErrorCode;
+import taco.klkl.domain.region.dto.response.CityResponseDto;
+import taco.klkl.domain.region.dto.response.CurrencyResponseDto;
+import taco.klkl.domain.region.enums.CountryType;
+import taco.klkl.domain.user.dto.response.UserDetailResponseDto;
+import taco.klkl.global.common.response.PagedResponseDto;
 
 @WebMvcTest(ProductController.class)
-class ProductControllerTest {
+public class ProductControllerTest {
 
 	@Autowired
-	MockMvc mockMvc;
+	private MockMvc mockMvc;
 
 	@MockBean
-	ProductService productService;
+	private ProductService productService;
 
 	@Autowired
-	ObjectMapper objectMapper;
+	private ObjectMapper objectMapper;
 
+	private ProductSimpleResponseDto productSimpleResponseDto;
 	private ProductDetailResponseDto productDetailResponseDto;
+	private ProductCreateUpdateRequestDto productCreateUpdateRequestDto;
 
 	@BeforeEach
-	public void setUp() {
-		// Mock User 객체 생성
-		User mockUser = mock(User.class);
-		when(mockUser.getId()).thenReturn(1L);
+	void setUp() {
+		UserDetailResponseDto userDetailResponseDto = new UserDetailResponseDto(
+			1L,
+			"image/profile.jpg",
+			"userName",
+			"userDescription",
+			100
+		);
+		CityResponseDto cityResponseDto = new CityResponseDto(
+			1L,
+			"cityName"
+		);
+		SubcategoryResponseDto subcategoryResponseDto = new SubcategoryResponseDto(
+			1L,
+			"subcategoryName"
+		);
+		CurrencyResponseDto currencyResponseDto = new CurrencyResponseDto(
+			1L,
+			"currencyCode",
+			"image/flag.jpg"
+		);
 
-		// Mock Product 객체 생성
-		Product mockProduct = mock(Product.class);
-		when(mockProduct.getProductId()).thenReturn(1L);
-		when(mockProduct.getUser()).thenReturn(mockUser);
-		when(mockProduct.getName()).thenReturn("name");
-		when(mockProduct.getDescription()).thenReturn("description");
-		when(mockProduct.getAddress()).thenReturn("address");
-		when(mockProduct.getLikeCount()).thenReturn(0);
-		when(mockProduct.getCreatedAt()).thenReturn(LocalDateTime.now());
-		when(mockProduct.getPrice()).thenReturn(1000);
-		when(mockProduct.getCityId()).thenReturn(2L);
-		when(mockProduct.getSubcategoryId()).thenReturn(3L);
-		when(mockProduct.getCurrencyId()).thenReturn(4L);
-
-		// ProductDetailResponseDto 생성
-		productDetailResponseDto = ProductDetailResponseDto.from(mockProduct);
+		productSimpleResponseDto = new ProductSimpleResponseDto(
+			1L,
+			"productName",
+			10,
+			CountryType.THAILAND.getKoreanName(),
+			CategoryName.FOOD.getKoreanName()
+		);
+		productDetailResponseDto = new ProductDetailResponseDto(
+			1L,
+			"productName",
+			"Description",
+			"123 Street",
+			1000,
+			10,
+			userDetailResponseDto,
+			cityResponseDto,
+			subcategoryResponseDto,
+			currencyResponseDto,
+			LocalDateTime.now()
+		);
+		productCreateUpdateRequestDto = new ProductCreateUpdateRequestDto(
+			"productName",
+			"productDescription",
+			"productAddress",
+			1000,
+			1L,
+			1L,
+			1L
+		);
 	}
 
 	@Test
-	@DisplayName("상품 상세 조회 API 테스트")
-	public void testGetProductInfoById() throws Exception {
-		// given
-		when(productService.getProductInfoById(1L)).thenReturn(productDetailResponseDto);
+	@DisplayName("상품 목록 조회 - 성공")
+	void testGetProducts_ShouldReturnPagedProducts() throws Exception {
+		// Given
+		List<ProductSimpleResponseDto> products = Arrays.asList(productSimpleResponseDto);
+		PagedResponseDto<ProductSimpleResponseDto> pagedResponse = new PagedResponseDto<>(
+			products, 0, 10, 1, 1, true
+		);
+		when(productService.getProductsByFilterOptions(any(Pageable.class), any(ProductFilterOptionsDto.class)))
+			.thenReturn(pagedResponse);
 
-		// when & then
-		mockMvc.perform(get("/v1/products/1")
-				.contentType(MediaType.APPLICATION_JSON))
+		// When & Then
+		mockMvc.perform(get("/v1/products")
+				.param("page", "0")
+				.param("size", "10")
+				.param("country_id", "1", "2", "3") // Add countryIds as query parameters
+				.param("city_id", "4", "5"))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
 			.andExpect(jsonPath("$.code", is("C000")))
-			.andExpect(jsonPath("$.data.productId", is(productDetailResponseDto.productId().intValue())))
-			.andExpect(jsonPath("$.data.userId", is(productDetailResponseDto.userId().intValue())))
-			.andExpect(jsonPath("$.data.name", is(productDetailResponseDto.name())))
-			.andExpect(jsonPath("$.data.description", is(productDetailResponseDto.description())))
-			.andExpect(jsonPath("$.data.address", is(productDetailResponseDto.address())))
-			.andExpect(jsonPath("$.data.likeCount", is(productDetailResponseDto.likeCount())))
-			.andExpect(jsonPath("$.data.price", is(productDetailResponseDto.price())))
-			.andExpect(jsonPath("$.data.cityId", is(productDetailResponseDto.cityId().intValue())))
-			.andExpect(jsonPath("$.data.subcategoryId", is(productDetailResponseDto.subcategoryId().intValue())))
-			.andExpect(jsonPath("$.data.currencyId", is(productDetailResponseDto.currencyId().intValue())))
+			.andExpect(jsonPath("$.data.content", hasSize(1)))
+			.andExpect(jsonPath("$.data.content[0].productId",
+				is(productSimpleResponseDto.productId().intValue())))
+			.andExpect(jsonPath("$.data.content[0].name", is(productSimpleResponseDto.name())))
+			.andExpect(jsonPath("$.data.content[0].likeCount", is(productSimpleResponseDto.likeCount())))
+			.andExpect(jsonPath("$.data.content[0].countryName", is(productSimpleResponseDto.countryName())))
+			.andExpect(jsonPath("$.data.content[0].categoryName",
+				is(productSimpleResponseDto.categoryName())))
+			.andExpect(jsonPath("$.data.pageNumber", is(0)))
+			.andExpect(jsonPath("$.data.pageSize", is(10)))
+			.andExpect(jsonPath("$.data.totalElements", is(1)))
+			.andExpect(jsonPath("$.data.totalPages", is(1)))
+			.andExpect(jsonPath("$.data.last", is(true)))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
 	}
 
 	@Test
-	@DisplayName("상품 등록 API 테스트")
-	public void testCreateProduct() throws Exception {
-		// given
-		ProductCreateRequestDto productCreateRequestDto = new ProductCreateRequestDto(
-			"name",
-			"description",
-			"address",
-			1000,
-			2L,
-			3L,
-			4L
-		);
-		when(productService.createProduct(any(ProductCreateRequestDto.class))).thenReturn(productDetailResponseDto);
+	@DisplayName("상품 상세 조회 - 성공")
+	void testGetProductById_ShouldReturnProduct() throws Exception {
+		// Given
+		when(productService.getProductById(1L)).thenReturn(productDetailResponseDto);
 
-		// when & then
+		// When & Then
+		mockMvc.perform(get("/v1/products/1"))
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.isSuccess", is(true)))
+			.andExpect(jsonPath("$.code", is("C000")))
+			.andExpect(jsonPath("$.data.productId", is(productDetailResponseDto.productId().intValue())))
+			.andExpect(jsonPath("$.data.name", is(productDetailResponseDto.name())))
+			.andExpect(jsonPath("$.data.description", is(productDetailResponseDto.description())))
+			.andExpect(jsonPath("$.data.address", is(productDetailResponseDto.address())))
+			.andExpect(jsonPath("$.data.price", is(productDetailResponseDto.price())))
+			.andExpect(jsonPath("$.data.likeCount", is(productDetailResponseDto.likeCount())))
+			.andExpect(jsonPath("$.data.user.id", is(productDetailResponseDto.user().id().intValue())))
+			.andExpect(jsonPath("$.data.user.profile", is(productDetailResponseDto.user().profile())))
+			.andExpect(jsonPath("$.data.user.name", is(productDetailResponseDto.user().name())))
+			.andExpect(jsonPath("$.data.user.description",
+				is(productDetailResponseDto.user().description())))
+			.andExpect(jsonPath("$.data.user.totalLikeCount",
+				is(productDetailResponseDto.user().totalLikeCount())))
+			.andExpect(jsonPath("$.data.city.cityId",
+				is(productDetailResponseDto.city().cityId().intValue())))
+			.andExpect(jsonPath("$.data.city.name", is(productDetailResponseDto.city().name())))
+			.andExpect(jsonPath("$.data.subcategory.subcategoryId",
+				is(productDetailResponseDto.subcategory().subcategoryId().intValue())))
+			.andExpect(jsonPath("$.data.subcategory.subcategory",
+				is(productDetailResponseDto.subcategory().subcategory())))
+			.andExpect(jsonPath("$.data.currency.currencyId",
+				is(productDetailResponseDto.currency().currencyId().intValue())))
+			.andExpect(jsonPath("$.data.currency.code", is(productDetailResponseDto.currency().code())))
+			.andExpect(jsonPath("$.data.currency.flag", is(productDetailResponseDto.currency().flag())))
+			.andExpect(jsonPath("$.data.createdAt", notNullValue()))
+			.andExpect(jsonPath("$.timestamp", notNullValue()));
+	}
+
+	@Test
+	@DisplayName("상품 등록 - 성공")
+	void testCreateProduct_ShouldReturnCreatedProduct() throws Exception {
+		// Given
+		when(productService.createProduct(any(ProductCreateUpdateRequestDto.class)))
+			.thenReturn(productDetailResponseDto);
+
+		// When & Then
 		mockMvc.perform(post("/v1/products")
 				.contentType(MediaType.APPLICATION_JSON)
-				.content(objectMapper.writeValueAsString(productCreateRequestDto)))
+				.content(objectMapper.writeValueAsString(productCreateUpdateRequestDto)))
 			.andExpect(status().isCreated())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
 			.andExpect(jsonPath("$.code", is("C000")))
 			.andExpect(jsonPath("$.data.productId", is(productDetailResponseDto.productId().intValue())))
-			.andExpect(jsonPath("$.data.userId", is(productDetailResponseDto.userId().intValue())))
 			.andExpect(jsonPath("$.data.name", is(productDetailResponseDto.name())))
 			.andExpect(jsonPath("$.data.description", is(productDetailResponseDto.description())))
 			.andExpect(jsonPath("$.data.address", is(productDetailResponseDto.address())))
-			.andExpect(jsonPath("$.data.likeCount", is(productDetailResponseDto.likeCount())))
 			.andExpect(jsonPath("$.data.price", is(productDetailResponseDto.price())))
-			.andExpect(jsonPath("$.data.cityId", is(productDetailResponseDto.cityId().intValue())))
-			.andExpect(jsonPath("$.data.subcategoryId", is(productDetailResponseDto.subcategoryId().intValue())))
-			.andExpect(jsonPath("$.data.currencyId", is(productDetailResponseDto.currencyId().intValue())))
+			.andExpect(jsonPath("$.data.likeCount", is(productDetailResponseDto.likeCount())))
+			.andExpect(jsonPath("$.data.user.id", is(productDetailResponseDto.user().id().intValue())))
+			.andExpect(jsonPath("$.data.user.profile", is(productDetailResponseDto.user().profile())))
+			.andExpect(jsonPath("$.data.user.name", is(productDetailResponseDto.user().name())))
+			.andExpect(jsonPath("$.data.user.description",
+				is(productDetailResponseDto.user().description())))
+			.andExpect(jsonPath("$.data.user.totalLikeCount",
+				is(productDetailResponseDto.user().totalLikeCount())))
+			.andExpect(jsonPath("$.data.city.cityId",
+				is(productDetailResponseDto.city().cityId().intValue())))
+			.andExpect(jsonPath("$.data.city.name", is(productDetailResponseDto.city().name())))
+			.andExpect(jsonPath("$.data.subcategory.subcategoryId",
+				is(productDetailResponseDto.subcategory().subcategoryId().intValue())))
+			.andExpect(jsonPath("$.data.subcategory.subcategory",
+				is(productDetailResponseDto.subcategory().subcategory())))
+			.andExpect(jsonPath("$.data.currency.currencyId",
+				is(productDetailResponseDto.currency().currencyId().intValue())))
+			.andExpect(jsonPath("$.data.currency.code", is(productDetailResponseDto.currency().code())))
+			.andExpect(jsonPath("$.data.currency.flag", is(productDetailResponseDto.currency().flag())))
+			.andExpect(jsonPath("$.data.createdAt", notNullValue()))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
 	}
 
 	@Test
-	@DisplayName("상품 등록 API 유효성 검사 실패 테스트")
-	public void testCreateProductValidationFailure() throws Exception {
-		// given
-		ProductCreateRequestDto invalidRequestDto = new ProductCreateRequestDto(
-			null,
-			null,
-			null,
-			null,
-			null,
-			null,
-			null
-		);
-
-		// when & then
-		ErrorCode methodArgumentInvalidError = ErrorCode.METHOD_ARGUMENT_INVALID;
-		mockMvc.perform(post("/v1/products")
-				.contentType(MediaType.APPLICATION_JSON)
-				.content(objectMapper.writeValueAsString(invalidRequestDto)))
-			.andExpect(status().isBadRequest())
-			.andExpect(jsonPath("$.isSuccess", is(false)))
-			.andExpect(jsonPath("$.code", is(methodArgumentInvalidError.getCode())))
-			.andExpect(jsonPath("$.data.code", is(methodArgumentInvalidError.getCode())))
-			.andExpect(jsonPath("$.data.message", containsString(methodArgumentInvalidError.getMessage())))
-			.andExpect(jsonPath("$.timestamp", notNullValue()));
-	}
-
-	@Test
-	@DisplayName("상품 정보 부분 업데이트 API 테스트")
-	public void testUpdateProduct() throws Exception {
-		// given
-		Long productId = 1L;
-		ProductUpdateRequestDto updateRequest = new ProductUpdateRequestDto(
-			"Updated Name",
-			"Updated Description",
-			"Updated Address",
-			2000,
-			2L,
-			3L,
-			4L
-		);
-
-		when(productService.updateProduct(eq(productId), any(ProductUpdateRequestDto.class)))
+	@DisplayName("상품 정보 수정 - 성공")
+	void testUpdateProduct_ShouldReturnUpdatedProduct() throws Exception {
+		// Given
+		when(productService.updateProduct(eq(1L), any(ProductCreateUpdateRequestDto.class)))
 			.thenReturn(productDetailResponseDto);
 
-		// when & then
-		mockMvc.perform(patch("/v1/products/{id}", productId)
+		// When & Then
+		mockMvc.perform(put("/v1/products/1")
 				.contentType(MediaType.APPLICATION_JSON)
-				.content(objectMapper.writeValueAsString(updateRequest)))
+				.content(objectMapper.writeValueAsString(productCreateUpdateRequestDto)))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
 			.andExpect(jsonPath("$.code", is("C000")))
 			.andExpect(jsonPath("$.data.productId", is(productDetailResponseDto.productId().intValue())))
-			.andExpect(jsonPath("$.data.userId", is(productDetailResponseDto.userId().intValue())))
 			.andExpect(jsonPath("$.data.name", is(productDetailResponseDto.name())))
 			.andExpect(jsonPath("$.data.description", is(productDetailResponseDto.description())))
 			.andExpect(jsonPath("$.data.address", is(productDetailResponseDto.address())))
-			.andExpect(jsonPath("$.data.likeCount", is(productDetailResponseDto.likeCount())))
 			.andExpect(jsonPath("$.data.price", is(productDetailResponseDto.price())))
-			.andExpect(jsonPath("$.data.cityId", is(productDetailResponseDto.cityId().intValue())))
-			.andExpect(jsonPath("$.data.subcategoryId", is(productDetailResponseDto.subcategoryId().intValue())))
-			.andExpect(jsonPath("$.data.currencyId", is(productDetailResponseDto.currencyId().intValue())))
+			.andExpect(jsonPath("$.data.likeCount", is(productDetailResponseDto.likeCount())))
+			.andExpect(jsonPath("$.data.user.id", is(productDetailResponseDto.user().id().intValue())))
+			.andExpect(jsonPath("$.data.user.profile", is(productDetailResponseDto.user().profile())))
+			.andExpect(jsonPath("$.data.user.name", is(productDetailResponseDto.user().name())))
+			.andExpect(jsonPath("$.data.user.description",
+				is(productDetailResponseDto.user().description())))
+			.andExpect(jsonPath("$.data.user.totalLikeCount",
+				is(productDetailResponseDto.user().totalLikeCount())))
+			.andExpect(jsonPath("$.data.city.cityId",
+				is(productDetailResponseDto.city().cityId().intValue())))
+			.andExpect(jsonPath("$.data.city.name", is(productDetailResponseDto.city().name())))
+			.andExpect(jsonPath("$.data.subcategory.subcategoryId",
+				is(productDetailResponseDto.subcategory().subcategoryId().intValue())))
+			.andExpect(jsonPath("$.data.subcategory.subcategory",
+				is(productDetailResponseDto.subcategory().subcategory())))
+			.andExpect(jsonPath("$.data.currency.currencyId",
+				is(productDetailResponseDto.currency().currencyId().intValue())))
+			.andExpect(jsonPath("$.data.currency.code", is(productDetailResponseDto.currency().code())))
+			.andExpect(jsonPath("$.data.currency.flag", is(productDetailResponseDto.currency().flag())))
+			.andExpect(jsonPath("$.data.createdAt", notNullValue()))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
 	}
 
 	@Test
-	@DisplayName("상품 삭제 API 테스트")
-	public void testDeleteProduct() throws Exception {
-		// given
-		Long productId = 1L;
-		doNothing().when(productService).deleteProduct(productId);
+	@DisplayName("상품 삭제 - 성공")
+	void testDeleteProduct_ShouldReturnNoContent() throws Exception {
+		// Given
+		doNothing().when(productService).deleteProduct(1L);
 
-		// when & then
-		mockMvc.perform(delete("/v1/products/{id}", productId)
-				.contentType(MediaType.APPLICATION_JSON))
+		// When & Then
+		mockMvc.perform(delete("/v1/products/1"))
 			.andExpect(status().isNoContent())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
 			.andExpect(jsonPath("$.code", is("C000")))
-			.andExpect(jsonPath("$.data").doesNotExist())
+			.andExpect(jsonPath("$.data", nullValue()))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
-
-		verify(productService, times(1)).deleteProduct(productId);
-	}
-
-	@Test
-	@DisplayName("존재하지 않는 상품 삭제 시 예외 처리 테스트")
-	public void testDeleteNonExistentProduct() throws Exception {
-		// given
-		Long nonExistentProductId = 999L;
-		doThrow(new ProductNotFoundException())
-			.when(productService).deleteProduct(nonExistentProductId);
-
-		// when & then
-		ErrorCode productNotFoundError = ErrorCode.PRODUCT_NOT_FOUND;
-		mockMvc.perform(delete("/v1/products/{id}", nonExistentProductId)
-				.contentType(MediaType.APPLICATION_JSON))
-			.andExpect(status().isNotFound())
-			.andExpect(jsonPath("$.isSuccess", is(false)))
-			.andExpect(jsonPath("$.code", is(productNotFoundError.getCode())))
-			.andExpect(jsonPath("$.data.code", is(productNotFoundError.getCode())))
-			.andExpect(jsonPath("$.data.message", is(productNotFoundError.getMessage())))
-			.andExpect(jsonPath("$.timestamp", notNullValue()));
-
-		verify(productService, times(1)).deleteProduct(nonExistentProductId);
 	}
 }

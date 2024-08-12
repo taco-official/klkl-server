@@ -13,11 +13,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import taco.klkl.domain.user.dao.UserRepository;
+import taco.klkl.domain.user.domain.Gender;
 import taco.klkl.domain.user.domain.User;
 import taco.klkl.domain.user.dto.request.UserCreateRequestDto;
 import taco.klkl.domain.user.dto.response.UserDetailResponseDto;
 import taco.klkl.global.common.constants.UserConstants;
-import taco.klkl.global.common.enums.Gender;
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {

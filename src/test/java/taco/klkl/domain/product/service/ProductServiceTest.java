@@ -4,6 +4,8 @@ import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -13,227 +15,299 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.test.util.ReflectionTestUtils;
 
-import taco.klkl.domain.like.exception.LikeCountMaximumException;
-import taco.klkl.domain.like.exception.LikeCountMinimumException;
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.jpa.impl.JPAQuery;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+
+import taco.klkl.domain.category.domain.Category;
+import taco.klkl.domain.category.domain.CategoryName;
+import taco.klkl.domain.category.domain.Subcategory;
+import taco.klkl.domain.category.domain.SubcategoryName;
+import taco.klkl.domain.category.service.SubcategoryService;
 import taco.klkl.domain.product.dao.ProductRepository;
 import taco.klkl.domain.product.domain.Product;
-import taco.klkl.domain.product.dto.request.ProductCreateRequestDto;
-import taco.klkl.domain.product.dto.request.ProductUpdateRequestDto;
+import taco.klkl.domain.product.domain.QProduct;
+import taco.klkl.domain.product.dto.request.ProductCreateUpdateRequestDto;
+import taco.klkl.domain.product.dto.request.ProductFilterOptionsDto;
 import taco.klkl.domain.product.dto.response.ProductDetailResponseDto;
+import taco.klkl.domain.product.dto.response.ProductSimpleResponseDto;
 import taco.klkl.domain.product.exception.ProductNotFoundException;
+import taco.klkl.domain.region.domain.City;
+import taco.klkl.domain.region.domain.Country;
+import taco.klkl.domain.region.domain.Currency;
+import taco.klkl.domain.region.domain.Region;
+import taco.klkl.domain.region.enums.CityType;
+import taco.klkl.domain.region.enums.CountryType;
+import taco.klkl.domain.region.enums.CurrencyType;
+import taco.klkl.domain.region.enums.RegionType;
+import taco.klkl.domain.region.service.CityService;
+import taco.klkl.domain.region.service.CountryService;
+import taco.klkl.domain.region.service.CurrencyService;
 import taco.klkl.domain.user.domain.User;
-import taco.klkl.global.common.constants.ProductConstants;
+import taco.klkl.global.common.constants.UserConstants;
+import taco.klkl.global.common.response.PagedResponseDto;
 import taco.klkl.global.util.UserUtil;
 
 class ProductServiceTest {
-	@InjectMocks
-	private ProductService productService;
+
+	@Mock
+	private JPAQueryFactory queryFactory;
 
 	@Mock
 	private ProductRepository productRepository;
 
 	@Mock
+	private CityService cityService;
+
+	@Mock
+	private CountryService countryService;
+
+	@Mock
+	private CurrencyService currencyService;
+
+	@Mock
+	private SubcategoryService subcategoryService;
+
+	@Mock
 	private UserUtil userUtil;
 
+	@InjectMocks
+	private ProductService productService;
+
+	private Product testProduct;
 	private User user;
+	private City city;
+	private Subcategory subcategory;
+	private Currency currency;
+	private ProductCreateUpdateRequestDto requestDto;
 
 	private Product mockProduct;
 
 	@BeforeEach
 	void setUp() {
 		MockitoAnnotations.openMocks(this);
-		user = new User();
+
+		user = UserConstants.TEST_USER;
+
+		Region region = Region.of(RegionType.SOUTHEAST_ASIA);
+		currency = Currency.of(
+			CurrencyType.THAI_BAHT,
+			"image/baht.jpg"
+		);
+		Country country = Country.of(
+			CountryType.JAPAN,
+			region,
+			"image/thailand-flag.jpg",
+			"image/thailand-photo.jpg",
+			currency
+		);
+		city = City.of(
+			country,
+			CityType.BANGKOK
+		);
+
+		Category category = Category.of(CategoryName.FOOD);
+		subcategory = Subcategory.of(
+			category,
+			SubcategoryName.INSTANT_FOOD
+		);
+
+		testProduct = Product.of(
+			"name",
+			"description",
+			"address",
+			1000,
+			user,
+			city,
+			subcategory,
+			currency
+		);
+
+		requestDto = new ProductCreateUpdateRequestDto(
+			"productName",
+			"productDescription",
+			"productAddress",
+			1000,
+			1L,
+			1L,
+			1L
+		);
 		mockProduct = Mockito.mock(Product.class);
 	}
 
 	@Test
-	@DisplayName("ID로 상품 정보를 조회할 때, 상품이 존재하면 ProductDetailResponseDto를 반환해야 한다.")
-	void testGetProductInfoById_Success() {
-		// given
-		Long productId = 1L;
-
-		Product product = ProductConstants.TEST_PRODUCT;
-		when(productRepository.findById(productId)).thenReturn(Optional.of(product));
-
-		// when
-		ProductDetailResponseDto responseDto = productService.getProductInfoById(productId);
-
-		// then
-		assertThat(responseDto).isNotNull();
-		assertThat(responseDto.userId()).isEqualTo(user.getId());
-		assertThat(responseDto.name()).isEqualTo(product.getName());
-		assertThat(responseDto.description()).isEqualTo(product.getDescription());
-		assertThat(responseDto.address()).isEqualTo(product.getAddress());
-		assertThat(responseDto.likeCount()).isEqualTo(ProductConstants.DEFAULT_LIKE_COUNT);
-		assertThat(responseDto.price()).isEqualTo(product.getPrice());
-		assertThat(responseDto.cityId()).isEqualTo(product.getCityId());
-		assertThat(responseDto.subcategoryId()).isEqualTo(product.getSubcategoryId());
-		assertThat(responseDto.currencyId()).isEqualTo(product.getCurrencyId());
-
-		verify(productRepository).findById(productId);
-	}
-
-	@Test
-	@DisplayName("ID로 상품 정보를 조회할 때, 상품이 존재하지 않으면 ProductNotFoundException을 발생시켜야 한다.")
-	void testGetProductInfoById_NotFound() {
-		// given
-		Long productId = 1L;
-		when(productRepository.findById(productId)).thenReturn(Optional.empty());
-
-		// when & then
-		ProductNotFoundException exception = assertThrows(ProductNotFoundException.class, () -> {
-			productService.getProductInfoById(productId);
-		});
-
-		// 예외가 발생했는지 확인
-		assertThat(exception).isNotNull();
-		verify(productRepository).findById(productId);
-	}
-
-	@Test
-	@DisplayName("상품을 생성할 때, 정상적으로 ProductDetailResponseDto를 반환해야 한다.")
-	void testCreateProduct_Success() {
-		// given
-		Product product = ProductConstants.TEST_PRODUCT;
-		ProductCreateRequestDto requestDto = new ProductCreateRequestDto(
-			product.getName(),
-			product.getDescription(),
-			product.getAddress(),
-			product.getPrice(),
-			product.getCityId(),
-			product.getSubcategoryId(),
-			product.getCurrencyId()
-		);
-
-		when(userUtil.findTestUser()).thenReturn(user);
-		when(productRepository.save(any(Product.class))).thenReturn(product);
-
-		// when
-		ProductDetailResponseDto responseDto = productService.createProduct(requestDto);
-
-		// then
-		assertThat(responseDto).isNotNull();
-		assertThat(responseDto.userId()).isEqualTo(user.getId());
-		assertThat(responseDto.name()).isEqualTo(requestDto.name());
-		assertThat(responseDto.description()).isEqualTo(requestDto.description());
-		assertThat(responseDto.address()).isEqualTo(requestDto.address());
-		assertThat(responseDto.likeCount()).isEqualTo(ProductConstants.DEFAULT_LIKE_COUNT);
-		assertThat(responseDto.price()).isEqualTo(requestDto.price());
-		assertThat(responseDto.cityId()).isEqualTo(requestDto.cityId());
-		assertThat(responseDto.subcategoryId()).isEqualTo(requestDto.subcategoryId());
-		assertThat(responseDto.currencyId()).isEqualTo(requestDto.currencyId());
-
-		verify(productRepository).save(any(Product.class));
-	}
-
-	@Test
-	@DisplayName("상품 업데이트 성공 테스트")
-	void testUpdateProduct_Success() {
-		// given
-		Long productId = 1L;
-		Product existingProduct = ProductConstants.TEST_PRODUCT;
-
-		ProductUpdateRequestDto updateDto = new ProductUpdateRequestDto(
-			"Updated Name",
-			"Updated Description",
-			"Updated Address",
-			200,
-			2L,
-			2L,
-			2L
-		);
-
-		when(productRepository.findById(productId)).thenReturn(Optional.of(existingProduct));
-		when(productRepository.save(any(Product.class))).thenAnswer(invocation -> invocation.getArgument(0));
-
-		// when
-		ProductDetailResponseDto responseDto = productService.updateProduct(productId, updateDto);
-
-		// then
-		assertThat(responseDto).isNotNull();
-		assertThat(responseDto.name()).isEqualTo(updateDto.name());
-		assertThat(responseDto.description()).isEqualTo(updateDto.description());
-		assertThat(responseDto.address()).isEqualTo(updateDto.address());
-		assertThat(responseDto.price()).isEqualTo(updateDto.price());
-		assertThat(responseDto.cityId()).isEqualTo(updateDto.cityId());
-		assertThat(responseDto.subcategoryId()).isEqualTo(updateDto.subcategoryId());
-		assertThat(responseDto.currencyId()).isEqualTo(updateDto.currencyId());
-
-		verify(productRepository).findById(productId);
-	}
-
-	@Test
-	@DisplayName("상품 업데이트 실패 테스트 - 상품 없음")
-	void testUpdateProduct_NotFound() {
-		// given
-		Long productId = 1L;
-		ProductUpdateRequestDto updateDto = new ProductUpdateRequestDto(
-			"Updated Name",
-			"Updated Description",
-			"Updated Address",
-			200,
-			2L,
-			2L,
-			2L
-		);
-
-		when(productRepository.findById(productId)).thenReturn(Optional.empty());
-
-		// when & then
-		ProductNotFoundException exception = assertThrows(ProductNotFoundException.class, () -> {
-			productService.updateProduct(productId, updateDto);
-		});
-
-		// 예외가 발생했는지 확인
-		assertThat(exception).isNotNull();
-		verify(productRepository).findById(productId);
-		verify(productRepository, never()).save(any(Product.class));
-	}
-
-	@Test
-	@DisplayName("존재하는 제품 삭제 성공")
-	void deleteExistingProduct() {
+	@DisplayName("상품 목록 조회 - 성공")
+	void testGetProductsByFilterOptions() {
 		// Given
-		Long productId = 1L;
-		Product product = ProductConstants.TEST_PRODUCT;
-		when(productRepository.findById(productId)).thenReturn(Optional.of(product));
+		Long countryId = 1L;
+		List<Long> cityIds = List.of(4L, 5L);
+		ProductFilterOptionsDto filterOptions = new ProductFilterOptionsDto(
+			countryId,
+			cityIds
+		);
+		Pageable pageable = PageRequest.of(0, 10);
+
+		// Mocking QueryDSL behavior
+		List<Product> productList = Arrays.asList(testProduct);
+
+		JPAQuery<Product> productQuery = mock(JPAQuery.class);
+		JPAQuery<Long> countQuery = mock(JPAQuery.class);
+
+		QProduct product = QProduct.product;
+
+		when(queryFactory.selectFrom(product)).thenReturn(productQuery);
+		when(productQuery.where(any(BooleanBuilder.class))).thenReturn(productQuery);
+		when(productQuery.offset(pageable.getOffset())).thenReturn(productQuery);
+		when(productQuery.limit(pageable.getPageSize())).thenReturn(productQuery);
+		when(productQuery.fetch()).thenReturn(productList);
+
+		when(queryFactory.select(product.count())).thenReturn(countQuery);
+		when(countQuery.from(product)).thenReturn(countQuery);
+		when(countQuery.where(any(BooleanBuilder.class))).thenReturn(countQuery);
+		when(countQuery.fetchOne()).thenReturn((long) productList.size());
+
+		// Mocking validation behavior
+		when(countryService.existsCountryById(anyLong())).thenReturn(true);
+		when(cityService.isCitiesMappedToSameCountry(anyLong(), anyList())).thenReturn(true);
 
 		// When
-		assertDoesNotThrow(() -> productService.deleteProduct(productId));
+		PagedResponseDto<ProductSimpleResponseDto> result = productService
+			.getProductsByFilterOptions(pageable, filterOptions);
 
 		// Then
-		verify(productRepository).findById(productId);
-		verify(productRepository).delete(product);
+		assertThat(result.content()).hasSize(1);
+		assertThat(result.content().get(0).productId()).isEqualTo(testProduct.getId());
+		assertThat(result.totalElements()).isEqualTo(1);
+		assertThat(result.totalPages()).isEqualTo(1);
+		assertThat(result.pageNumber()).isEqualTo(0);
+		assertThat(result.pageSize()).isEqualTo(10);
+		assertThat(result.last()).isTrue();
+
+		// Verify that the query methods were called
+		verify(queryFactory).selectFrom(product);
+		verify(queryFactory).select(product.count());
+
+		// Verify that validation methods were called
+		verify(countryService).existsCountryById(countryId);
+		verify(cityService).isCitiesMappedToSameCountry(countryId, cityIds);
 	}
 
 	@Test
-	@DisplayName("존재하지 않는 제품 삭제 시 예외 발생")
-	void deleteNonExistingProduct() {
+	@DisplayName("상품 상세 조회 - 성공")
+	void testGetProductById() {
 		// Given
-		Long nonExistingProductId = 999L;
-		when(productRepository.findById(nonExistingProductId)).thenReturn(Optional.empty());
+		when(productRepository.findById(1L)).thenReturn(Optional.of(testProduct));
+
+		// When
+		ProductDetailResponseDto result = productService.getProductById(1L);
+
+		// Then
+		assertThat(result.productId()).isEqualTo(testProduct.getId());
+		verify(productRepository).findById(1L);
+	}
+
+	@Test
+	@DisplayName("상품 상세 조회 - 실패 (상품 없음)")
+	void testGetProductById_NotFound() {
+		// Given
+		when(productRepository.findById(1L)).thenReturn(Optional.empty());
 
 		// When & Then
-		assertThrows(ProductNotFoundException.class, () -> productService.deleteProduct(nonExistingProductId));
-		verify(productRepository).findById(nonExistingProductId);
-		verify(productRepository, never()).delete(any(Product.class));
+		assertThrows(ProductNotFoundException.class, () -> productService.getProductById(1L));
+		verify(productRepository).findById(1L);
 	}
 
 	@Test
-	@DisplayName("제품 삭제 시 repository 메소드 호출 확인")
-	void verifyRepositoryMethodsCalledOnDelete() {
+	@DisplayName("상품 생성 - 성공")
+	void testCreateProduct() {
 		// Given
-		Long productId = 1L;
-		Product product = ProductConstants.TEST_PRODUCT;
-		when(productRepository.findById(productId)).thenReturn(Optional.of(product));
+		when(userUtil.findTestUser()).thenReturn(user);
+		when(cityService.getCityEntityById(1L)).thenReturn(city);
+		when(subcategoryService.getSubcategoryEntityById(1L)).thenReturn(subcategory);
+		when(currencyService.getCurrencyEntityById(1L)).thenReturn(currency);
+
+		// save 메서드 호출 시 ID를 설정하고 저장된 객체를 반환하도록 설정
+		when(productRepository.save(any(Product.class))).thenAnswer(invocation -> {
+			Product savedProduct = invocation.getArgument(0);
+			// ID 설정 (실제로는 데이터베이스에서 생성됨)
+			ReflectionTestUtils.setField(savedProduct, "id", 1L);
+			return savedProduct;
+		});
 
 		// When
-		productService.deleteProduct(productId);
+		ProductDetailResponseDto result = productService.createProduct(requestDto);
 
 		// Then
-		verify(productRepository).findById(productId);
-		verify(productRepository).delete(product);
+		assertThat(result.productId()).isEqualTo(1L);
+		verify(productRepository).save(argThat(savedProduct -> {
+			assertThat(savedProduct.getId()).isEqualTo(1L);
+			assertThat(savedProduct.getName()).isEqualTo(requestDto.name());
+			assertThat(savedProduct.getDescription()).isEqualTo(requestDto.description());
+			assertThat(savedProduct.getAddress()).isEqualTo(requestDto.address());
+			assertThat(savedProduct.getPrice()).isEqualTo(requestDto.price());
+			assertThat(savedProduct.getUser()).isEqualTo(user);
+			assertThat(savedProduct.getCity()).isEqualTo(city);
+			assertThat(savedProduct.getSubcategory()).isEqualTo(subcategory);
+			assertThat(savedProduct.getCurrency()).isEqualTo(currency);
+			return true;
+		}));
+	}
+
+	@Test
+	@DisplayName("상품 수정 - 성공")
+	void testUpdateProduct() {
+		// Given
+		when(productRepository.findById(1L)).thenReturn(Optional.of(testProduct));
+		when(cityService.getCityEntityById(1L)).thenReturn(city);
+		when(subcategoryService.getSubcategoryEntityById(1L)).thenReturn(subcategory);
+		when(currencyService.getCurrencyEntityById(1L)).thenReturn(currency);
+
+		// When
+		ProductDetailResponseDto result = productService.updateProduct(1L, requestDto);
+
+		// Then
+		assertThat(result.productId()).isEqualTo(testProduct.getId());
+		verify(productRepository).findById(1L);
+	}
+
+	@Test
+	@DisplayName("상품 수정 - 실패 (상품 없음)")
+	void testUpdateProduct_NotFound() {
+		// Given
+		when(productRepository.findById(1L)).thenReturn(Optional.empty());
+
+		// When & Then
+		assertThrows(ProductNotFoundException.class, () -> productService.updateProduct(1L, requestDto));
+		verify(productRepository).findById(1L);
+	}
+
+	@Test
+	@DisplayName("상품 삭제 - 성공")
+	void testDeleteProduct() {
+		// Given
+		when(productRepository.findById(1L)).thenReturn(Optional.of(testProduct));
+
+		// When
+		productService.deleteProduct(1L);
+
+		// Then
+		verify(productRepository).findById(1L);
+		verify(productRepository).delete(testProduct);
+	}
+
+	@Test
+	@DisplayName("상품 삭제 - 실패 (상품 없음)")
+	void testDeleteProduct_NotFound() {
+		// Given
+		when(productRepository.findById(1L)).thenReturn(Optional.empty());
+
+		// When & Then
+		assertThrows(ProductNotFoundException.class, () -> productService.deleteProduct(1L));
+		verify(productRepository).findById(1L);
 	}
 
 	@Test

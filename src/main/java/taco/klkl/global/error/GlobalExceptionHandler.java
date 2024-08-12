@@ -9,17 +9,19 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.method.annotation.HandlerMethodValidationException;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import taco.klkl.global.common.response.GlobalResponse;
 import taco.klkl.global.error.exception.CustomException;
 import taco.klkl.global.error.exception.ErrorCode;
-import taco.klkl.global.response.GlobalResponse;
 
 @Slf4j
 @RestControllerAdvice
@@ -61,6 +63,26 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 	) {
 		log.error("HttpRequestMethodNotSupported : {}", ex.getMessage(), ex);
 		final ErrorCode errorCode = ErrorCode.METHOD_NOT_SUPPORTED;
+		final ErrorResponse errorResponse = ErrorResponse.of(errorCode.getCode(), errorCode.getMessage());
+		final GlobalResponse globalResponse = GlobalResponse.error(errorCode.getCode(), errorResponse);
+		return ResponseEntity.status(errorCode.getStatus()).body(globalResponse);
+	}
+
+	@Override
+	protected ResponseEntity<Object> handleHandlerMethodValidationException(HandlerMethodValidationException ex,
+		HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+		log.error("HandlerMethodValidationException : {}", ex.getMessage(), ex);
+		final ErrorCode errorCode = ErrorCode.QUERY_PARAM_INVALID;
+		final ErrorResponse errorResponse = ErrorResponse.of(errorCode.getCode(), errorCode.getMessage());
+		final GlobalResponse globalResponse = GlobalResponse.error(errorCode.getCode(), errorResponse);
+		return ResponseEntity.status(errorCode.getStatus()).body(globalResponse);
+	}
+
+	@Override
+	protected ResponseEntity<Object> handleMissingServletRequestParameter(MissingServletRequestParameterException ex,
+		HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+		log.error("MissingServletRequestParameter : {}", ex.getMessage(), ex);
+		final ErrorCode errorCode = ErrorCode.QUERY_PARAM_NOT_FOUND;
 		final ErrorResponse errorResponse = ErrorResponse.of(errorCode.getCode(), errorCode.getMessage());
 		final GlobalResponse globalResponse = GlobalResponse.error(errorCode.getCode(), errorResponse);
 		return ResponseEntity.status(errorCode.getStatus()).body(globalResponse);

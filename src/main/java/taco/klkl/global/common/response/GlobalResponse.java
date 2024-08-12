@@ -1,4 +1,4 @@
-package taco.klkl.global.response;
+package taco.klkl.global.common.response;
 
 import java.time.LocalDateTime;
 

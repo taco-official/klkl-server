@@ -14,22 +14,28 @@ public enum ErrorCode {
 	INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "C012", "서버에 문제가 발생했습니다. 관리자에게 문의해주세요."),
 	HTTP_MESSAGE_NOT_READABLE(HttpStatus.BAD_REQUEST, "C013", "잘못된 요청 메시지 형식입니다."),
 	QUERY_TYPE_MISMATCH(HttpStatus.BAD_REQUEST, "C014", "올바르지 않은 쿼리 타입 입니다."),
+	QUERY_PARAM_INVALID(HttpStatus.BAD_REQUEST, "C015", "올바르지 않은 쿼리 파라미터 값입니다."),
+	QUERY_PARAM_NOT_FOUND(HttpStatus.BAD_REQUEST, "C016", "쿼리 파라미터가 존재하지 않습니다."),
 
 	// User
 
 	// Product
 	PRODUCT_NOT_FOUND(HttpStatus.NOT_FOUND, "C020", "존재하지 않는 상품입니다."),
+	INVALID_CITY_IDS(HttpStatus.BAD_REQUEST, "C021", "선택한 도시들은 동일한 국가에 속하지 않습니다."),
 
 	// Like
 	LIKE_COUNT_MAXIMUM(HttpStatus.BAD_REQUEST, "C030", "상품의 좋아요수가 최대값입니다. 2147483647"),
 	LIKE_COUNT_MINIMUM(HttpStatus.BAD_REQUEST, "C031", "상품의 좋아요수가 최소값입니다. 0"),
 	// Comment
+	COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "C040", "존재하지 않는 댓글입니다."),
+	COMMENT_PRODUCT_NOT_MATCH(HttpStatus.BAD_REQUEST, "C041", "다른 상품에 있는 댓글입니다."),
 
 	// Region
 	REGION_NOT_FOUND(HttpStatus.NOT_FOUND, "C050", "해당 지역을 찾을 수 없습니다."),
 	COUNTRY_NOT_FOUND(HttpStatus.NOT_FOUND, "C051", "해당 국가를 찾을 수 없습니다."),
 	CITY_NOT_FOUND(HttpStatus.NOT_FOUND, "C052", "해당 도시를 찾을 수 없습니다."),
 	CURRENCY_NOT_FOUND(HttpStatus.NOT_FOUND, "C053", "해당 통화를 찾을 수 없습니다."),
+
 	// Category
 	CATEGORY_ID_NOT_FOUND(HttpStatus.NOT_FOUND, "C060", "존재하지 않는 카테고리 ID 입니다."),
 
