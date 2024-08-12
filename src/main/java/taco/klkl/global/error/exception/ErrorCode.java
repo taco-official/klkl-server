@@ -44,6 +44,7 @@ public enum ErrorCode {
 	SUBCATEGORY_ID_NOT_FOUND(HttpStatus.NOT_FOUND, "C061", "존재하지 않는 서브카테고리 ID 입니다."),
 
 	// Notification
+	NOTIFICATION_NOT_FOUND(HttpStatus.NOT_FOUND, "C070", "존재하지 않는 알림 입니다."),
 
 	// Search
 
