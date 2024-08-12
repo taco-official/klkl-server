@@ -19,6 +19,10 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import taco.klkl.domain.category.domain.Category;
+import taco.klkl.domain.category.domain.CategoryName;
+import taco.klkl.domain.category.domain.Subcategory;
+import taco.klkl.domain.category.domain.SubcategoryName;
 import taco.klkl.domain.comment.domain.Comment;
 import taco.klkl.domain.comment.dto.request.CommentCreateUpdateRequestDto;
 import taco.klkl.domain.comment.dto.response.CommentResponseDto;
@@ -28,9 +32,17 @@ import taco.klkl.domain.comment.service.CommentService;
 import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.product.exception.ProductNotFoundException;
 import taco.klkl.domain.product.service.ProductService;
+import taco.klkl.domain.region.domain.City;
+import taco.klkl.domain.region.domain.Country;
+import taco.klkl.domain.region.domain.Currency;
+import taco.klkl.domain.region.domain.Region;
+import taco.klkl.domain.region.enums.CityType;
+import taco.klkl.domain.region.enums.CountryType;
+import taco.klkl.domain.region.enums.CurrencyType;
+import taco.klkl.domain.region.enums.RegionType;
+import taco.klkl.domain.user.domain.Gender;
 import taco.klkl.domain.user.domain.User;
 import taco.klkl.domain.user.dto.request.UserCreateRequestDto;
-import taco.klkl.global.common.enums.Gender;
 import taco.klkl.global.error.exception.ErrorCode;
 
 @WebMvcTest(CommentController.class)
@@ -67,15 +79,36 @@ public class CommentControllerTest {
 		requestDto.description()
 	);
 
+	private final Region region = Region.of(RegionType.SOUTHEAST_ASIA);
+
+	private final Currency currency = Currency.of(
+		CurrencyType.MALAYSIAN_RINGGIT,
+		"image/malaysia-ringgit.jpg"
+	);
+
+	private final Country country = Country.of(
+		CountryType.MALAYSIA,
+		region,
+		"image/malaysia-flag.jpg",
+		"image/malaysia-photo.jpg",
+		currency
+	);
+
+	private final City city = City.of(country, CityType.KUALA_LUMPUR);
+
+	private final Category category = Category.of(CategoryName.FOOD);
+
+	private final Subcategory subcategory = Subcategory.of(category, SubcategoryName.INSTANT_FOOD);
+
 	private final Product product = Product.of(
-		user,
 		"name",
 		"description",
 		"address",
 		1000,
-		1L,
-		1L,
-		1L
+		user,
+		city,
+		subcategory,
+		currency
 	);
 
 	private final Comment comment1 = Comment.of(product, user, "개추 ^^");

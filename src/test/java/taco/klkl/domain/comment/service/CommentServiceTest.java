@@ -24,9 +24,9 @@ import taco.klkl.domain.comment.exception.CommentProductNotMatch;
 import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.product.exception.ProductNotFoundException;
 import taco.klkl.domain.product.service.ProductService;
+import taco.klkl.domain.user.domain.Gender;
 import taco.klkl.domain.user.domain.User;
 import taco.klkl.domain.user.dto.request.UserCreateRequestDto;
-import taco.klkl.global.common.enums.Gender;
 import taco.klkl.global.util.UserUtil;
 
 @ExtendWith(MockitoExtension.class)
@@ -79,9 +79,9 @@ public class CommentServiceTest {
 		Comment comment2 = Comment.of(product, user, "이거 진짜에요?");
 		List<Comment> comments = List.of(comment1, comment2);
 
-		when(product.getProductId()).thenReturn(productId);
+		when(product.getId()).thenReturn(productId);
 		when(productService.existsProductById(productId)).thenReturn(true);
-		when(commentRepository.findAllByProduct_ProductId(productId)).thenReturn(comments);
+		when(commentRepository.findAllByProduct_Id(productId)).thenReturn(comments);
 
 		//when
 		List<CommentResponseDto> result = commentService.getComments(productId);
@@ -94,7 +94,7 @@ public class CommentServiceTest {
 		assertThat(result.get(0).createdAt()).isEqualTo(comment1.getCreatedAt());
 		assertThat(result.get(1).createdAt()).isEqualTo(comment2.getCreatedAt());
 
-		verify(commentRepository, times(1)).findAllByProduct_ProductId(productId);
+		verify(commentRepository, times(1)).findAllByProduct_Id(productId);
 	}
 
 	@Test
@@ -125,7 +125,7 @@ public class CommentServiceTest {
 
 		Comment comment = Comment.of(product, user, "이거 진짜에요?");
 
-		when(product.getProductId()).thenReturn(productId);
+		when(product.getId()).thenReturn(productId);
 		when(productService.existsProductById(productId)).thenReturn(true);
 		when(commentRepository.findById(commentId)).thenReturn(Optional.of(comment));
 
@@ -148,7 +148,7 @@ public class CommentServiceTest {
 
 		Comment comment = Comment.of(product, user, "이거 진짜에요?");
 
-		when(product.getProductId()).thenReturn(productId);
+		when(product.getId()).thenReturn(productId);
 		when(productService.existsProductById(productId)).thenReturn(true);
 
 		//when & then
@@ -163,7 +163,7 @@ public class CommentServiceTest {
 		Long productId = 1L;
 		Long commentId = 1L;
 
-		when(product.getProductId()).thenReturn(productId);
+		when(product.getId()).thenReturn(productId);
 
 		//when & then
 		assertThrows(ProductNotFoundException.class,
@@ -180,7 +180,7 @@ public class CommentServiceTest {
 		Long commentId = 1L;
 		Comment comment = Comment.of(product, user, "이거 진짜에요?");
 
-		when(product.getProductId()).thenReturn(wrongProductId);
+		when(product.getId()).thenReturn(wrongProductId);
 		when(productService.existsProductById(productId)).thenReturn(true);
 		when(commentRepository.findById(commentId)).thenReturn(Optional.of(comment));
 
@@ -199,7 +199,7 @@ public class CommentServiceTest {
 
 		Comment comment = Comment.of(product, user, "이거 진짜에요?");
 
-		when(product.getProductId()).thenReturn(productId);
+		when(product.getId()).thenReturn(productId);
 		when(productService.existsProductById(productId)).thenReturn(true);
 		when(commentRepository.findById(commentId)).thenReturn(Optional.of(comment));
 
@@ -217,7 +217,7 @@ public class CommentServiceTest {
 
 		Comment comment = Comment.of(product, user, "이거 진짜에요?");
 
-		when(product.getProductId()).thenReturn(productId);
+		when(product.getId()).thenReturn(productId);
 		when(productService.existsProductById(productId)).thenReturn(true);
 		when(commentRepository.findById(commentID)).thenReturn(Optional.empty());
 
@@ -246,7 +246,7 @@ public class CommentServiceTest {
 		Long commentId = 1L;
 		Comment comment = Comment.of(product, user, "이거 진짜에요?");
 
-		when(product.getProductId()).thenReturn(wrongProductId);
+		when(product.getId()).thenReturn(wrongProductId);
 		when(productService.existsProductById(productId)).thenReturn(true);
 		when(commentRepository.findById(commentId)).thenReturn(Optional.of(comment));
 

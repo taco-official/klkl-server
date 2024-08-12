@@ -28,7 +28,7 @@ public class CommentService {
 
 	public List<CommentResponseDto> getComments(final Long productId) {
 		validateProductId(productId);
-		final List<Comment> comments = commentRepository.findAllByProduct_ProductId(productId);
+		final List<Comment> comments = commentRepository.findAllByProduct_Id(productId);
 		return comments.stream()
 			.map(CommentResponseDto::from)
 			.toList();
@@ -100,7 +100,7 @@ public class CommentService {
 	}
 
 	private void validateSameProductId(final Comment comment, final Long productId) {
-		final Long commentProductId = comment.getProduct().getProductId();
+		final Long commentProductId = comment.getProduct().getId();
 		if (!commentProductId.equals(productId)) {
 			throw new CommentProductNotMatch();
 		}

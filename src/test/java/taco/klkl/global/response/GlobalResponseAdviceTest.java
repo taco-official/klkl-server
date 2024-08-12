@@ -14,6 +14,9 @@ import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServletServerHttpResponse;
 import org.springframework.mock.web.MockHttpServletResponse;
 
+import taco.klkl.global.common.response.GlobalResponse;
+import taco.klkl.global.common.response.GlobalResponseAdvice;
+
 class GlobalResponseAdviceTest {
 
 	private GlobalResponseAdvice advice;

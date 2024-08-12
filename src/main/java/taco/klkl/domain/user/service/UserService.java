@@ -6,11 +6,11 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import taco.klkl.domain.user.dao.UserRepository;
+import taco.klkl.domain.user.domain.Gender;
 import taco.klkl.domain.user.domain.User;
 import taco.klkl.domain.user.dto.request.UserCreateRequestDto;
 import taco.klkl.domain.user.dto.response.UserDetailResponseDto;
 import taco.klkl.global.common.constants.UserConstants;
-import taco.klkl.global.common.enums.Gender;
 
 @Slf4j
 @Service

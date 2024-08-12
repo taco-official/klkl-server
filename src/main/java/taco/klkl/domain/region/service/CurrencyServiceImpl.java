@@ -38,16 +38,9 @@ public class CurrencyServiceImpl implements CurrencyService {
 	}
 
 	@Override
-	public CurrencyResponseDto getCurrencyById(final Long id) {
+	public Currency getCurrencyEntityById(final Long id) {
 
-		final Currency findCurrency = currencyRepository.findById(id)
+		return currencyRepository.findById(id)
 			.orElseThrow(CurrencyNotFoundException::new);
-
-		return CurrencyResponseDto.from(findCurrency);
-	}
-
-	@Override
-	public boolean exitsCurrencyById(final Long id) {
-		return currencyRepository.existsById(id);
 	}
 }

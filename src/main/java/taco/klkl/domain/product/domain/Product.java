@@ -7,6 +7,7 @@ import org.hibernate.annotations.DynamicInsert;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -16,7 +17,9 @@ import jakarta.persistence.PrePersist;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import taco.klkl.domain.product.dto.request.ProductUpdateRequestDto;
+import taco.klkl.domain.category.domain.Subcategory;
+import taco.klkl.domain.region.domain.City;
+import taco.klkl.domain.region.domain.Currency;
 import taco.klkl.domain.user.domain.User;
 import taco.klkl.global.common.constants.DefaultConstants;
 import taco.klkl.global.common.constants.ProductConstants;
@@ -30,11 +33,7 @@ public class Product {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "product_id")
-	private Long productId;
-
-	@ManyToOne
-	@JoinColumn(name = "user_id")
-	private User user;
+	private Long id;
 
 	@Column(
 		name = "name",
@@ -59,20 +58,6 @@ public class Product {
 	private String address;
 
 	@Column(
-		name = "like_count",
-		nullable = false
-	)
-	@ColumnDefault(DefaultConstants.DEFAULT_INT_STRING)
-	private Integer likeCount;
-
-	@Column(
-		name = "created_at",
-		nullable = false,
-		updatable = false
-	)
-	private LocalDateTime createdAt;
-
-	@Column(
 		name = "price",
 		nullable = false
 	)
@@ -80,22 +65,58 @@ public class Product {
 	private Integer price;
 
 	@Column(
+		name = "like_count",
+		nullable = false
+	)
+	@ColumnDefault(DefaultConstants.DEFAULT_INT_STRING)
+	private Integer likeCount;
+
+	@ManyToOne(
+		fetch = FetchType.LAZY,
+		optional = false
+	)
+	@JoinColumn(
+		name = "user_id",
+		nullable = false
+	)
+	private User user;
+
+	@ManyToOne(
+		fetch = FetchType.LAZY,
+		optional = false
+	)
+	@JoinColumn(
 		name = "city_id",
 		nullable = false
 	)
-	private Long cityId;
+	private City city;
 
-	@Column(
+	@ManyToOne(
+		fetch = FetchType.LAZY,
+		optional = false
+	)
+	@JoinColumn(
 		name = "subcategory_id",
 		nullable = false
 	)
-	private Long subcategoryId;
+	private Subcategory subcategory;
 
-	@Column(
+	@ManyToOne(
+		fetch = FetchType.LAZY,
+		optional = false
+	)
+	@JoinColumn(
 		name = "currency_id",
 		nullable = false
 	)
-	private Long currencyId;
+	private Currency currency;
+
+	@Column(
+		name = "created_at",
+		nullable = false,
+		updatable = false
+	)
+	private LocalDateTime createdAt;
 
 	@PrePersist
 	protected void prePersist() {
@@ -108,61 +129,55 @@ public class Product {
 	}
 
 	private Product(
-		final User user,
 		final String name,
 		final String description,
 		final String address,
 		final Integer price,
-		final Long cityId,
-		final Long subcategoryId,
-		final Long currencyId
+		final User user,
+		final City city,
+		final Subcategory subcategory,
+		final Currency currency
 	) {
-		this.user = user;
 		this.name = name;
 		this.description = description;
 		this.address = address;
 		this.price = price;
-		this.cityId = cityId;
-		this.subcategoryId = subcategoryId;
-		this.currencyId = currencyId;
+		this.user = user;
+		this.city = city;
+		this.subcategory = subcategory;
+		this.currency = currency;
 		this.likeCount = DefaultConstants.DEFAULT_INT_VALUE;
 		this.createdAt = LocalDateTime.now();
 	}
 
 	public static Product of(
-		final User user,
 		final String name,
 		final String description,
 		final String address,
 		final Integer price,
-		final Long cityId,
-		final Long subcategoryId,
-		final Long currencyId
+		final User user,
+		final City city,
+		final Subcategory subcategory,
+		final Currency currency
 	) {
-		return new Product(user, name, description, address, price, cityId, subcategoryId, currencyId);
+		return new Product(name, description, address, price, user, city, subcategory, currency);
 	}
 
-	public void update(ProductUpdateRequestDto updateDto) {
-		if (updateDto.name() != null) {
-			this.name = updateDto.name();
-		}
-		if (updateDto.description() != null) {
-			this.description = updateDto.description();
-		}
-		if (updateDto.address() != null) {
-			this.address = updateDto.address();
-		}
-		if (updateDto.price() != null) {
-			this.price = updateDto.price();
-		}
-		if (updateDto.cityId() != null) {
-			this.cityId = updateDto.cityId();
-		}
-		if (updateDto.subcategoryId() != null) {
-			this.subcategoryId = updateDto.subcategoryId();
-		}
-		if (updateDto.currencyId() != null) {
-			this.currencyId = updateDto.currencyId();
-		}
+	public void update(
+		final String name,
+		final String description,
+		final String address,
+		final Integer price,
+		final City city,
+		final Subcategory subcategory,
+		final Currency currency
+	) {
+		this.name = name;
+		this.description = description;
+		this.address = address;
+		this.price = price;
+		this.city = city;
+		this.subcategory = subcategory;
+		this.currency = currency;
 	}
 }

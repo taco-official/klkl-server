@@ -39,6 +39,11 @@ public class SubcategoryService {
 		return subcategories;
 	}
 
+	public Subcategory getSubcategoryEntityById(Long id) {
+		return subcategoryRepository.findById(id)
+			.orElseThrow(SubcategoryNotFoundException::new);
+	}
+
 	private void validateSubcategories(final int request, final int result) {
 		if (request != result) {
 			throw new SubcategoryNotFoundException();
