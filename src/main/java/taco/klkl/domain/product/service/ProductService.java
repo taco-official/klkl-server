@@ -116,6 +116,9 @@ public class ProductService {
 		if (options.cityIds() != null && !options.cityIds().isEmpty()) {
 			builder.and(product.city.cityId.in(options.cityIds()));
 		}
+		if (options.subcategoryIds() != null && !options.subcategoryIds().isEmpty()) {
+			builder.and(product.subcategory.id.in(options.subcategoryIds()));
+		}
 
 		return builder;
 	}
@@ -170,6 +173,9 @@ public class ProductService {
 		if (filterOptions.cityIds() != null) {
 			validateCityIds(filterOptions.cityIds());
 		}
+		if (filterOptions.subcategoryIds() != null) {
+			validateSubcategoryIds(filterOptions.subcategoryIds());
+		}
 	}
 
 	private void validateCityIds(final List<Long> cityIds) throws InvalidCityIdsException {
@@ -177,5 +183,9 @@ public class ProductService {
 		if (!isValidCityIds) {
 			throw new InvalidCityIdsException();
 		}
+	}
+
+	private void validateSubcategoryIds(final List<Long> subcategoryIds) {
+		subcategoryService.getSubcategoryList(subcategoryIds);
 	}
 }

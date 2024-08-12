@@ -140,8 +140,10 @@ class ProductServiceTest {
 	void testGetProductsByFilterOptions() {
 		// Given
 		List<Long> cityIds = List.of(4L, 5L);
+		List<Long> subcategoryIds = List.of(1L, 2L, 3L);
 		ProductFilterOptionsDto filterOptions = new ProductFilterOptionsDto(
-			cityIds
+			cityIds,
+			subcategoryIds
 		);
 		Pageable pageable = PageRequest.of(0, 10);
 
@@ -167,6 +169,7 @@ class ProductServiceTest {
 		// Mocking validation behavior
 		when(countryService.existsCountryById(anyLong())).thenReturn(true);
 		when(cityService.isCitiesMappedToSameCountry(anyList())).thenReturn(true);
+		when(subcategoryService.getSubcategoryList(anyList())).thenReturn(anyList());
 
 		// When
 		PagedResponseDto<ProductSimpleResponseDto> result = productService
@@ -187,6 +190,7 @@ class ProductServiceTest {
 
 		// Verify that validation methods were called
 		verify(cityService).isCitiesMappedToSameCountry(cityIds);
+		verify(subcategoryService).getSubcategoryList(subcategoryIds);
 	}
 
 	@Test

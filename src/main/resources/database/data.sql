@@ -132,7 +132,7 @@ VALUES
 INSERT INTO Product(product_id, user_id, name, description, address, price,
                     city_id, subcategory_id, currency_id, created_at)
 VALUES
-    (101, 1, '곤약젤리', '탱글탱글 맛있는 곤약젤리', '신사이바시 메가돈키호테', 1000, 414, 310, 438, now()),
+    (101, 1, '곤약젤리', '탱글탱글 맛있는 곤약젤리', '신사이바시 메가돈키호테', 1000, 414, 311, 438, now()),
     (390, 1, '왕족발 보쌈 과자', '맛있는 왕족발 보쌈 과자', '상하이 장충동', 3000, 422, 311, 439, now());
 
 /* Comment */

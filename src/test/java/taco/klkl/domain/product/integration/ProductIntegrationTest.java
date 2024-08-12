@@ -187,8 +187,6 @@ public class ProductIntegrationTest {
 
 		// when & then
 		mockMvc.perform(get("/v1/products")
-				.param("page", "0")
-				.param("size", "10")
 				.param("city_id", "416")  // 도쿄
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
@@ -197,7 +195,7 @@ public class ProductIntegrationTest {
 			.andExpect(jsonPath("$.data.content", hasSize(1)))
 			.andExpect(jsonPath("$.data.content[0].name", is(createTokyoRequest.name())))
 			.andExpect(jsonPath("$.data.pageNumber", is(0)))
-			.andExpect(jsonPath("$.data.pageSize", is(10)))
+			.andExpect(jsonPath("$.data.pageSize", is(ProductConstants.DEFAULT_PAGE_SIZE)))
 			.andExpect(jsonPath("$.data.totalElements", is(1)))
 			.andExpect(jsonPath("$.data.totalPages", is(1)))
 			.andExpect(jsonPath("$.data.last", is(true)))
@@ -241,8 +239,6 @@ public class ProductIntegrationTest {
 
 		// when & then
 		mockMvc.perform(get("/v1/products")
-				.param("page", "0")
-				.param("size", "10")
 				.param("city_id", "415", "416")  // 교토, 도쿄
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
@@ -253,7 +249,134 @@ public class ProductIntegrationTest {
 			.andExpect(jsonPath("$.data.content[1].name", is(createKyotoRequest2.name())))
 			.andExpect(jsonPath("$.data.content[2].name", is(createTokyoRequest.name())))
 			.andExpect(jsonPath("$.data.pageNumber", is(0)))
-			.andExpect(jsonPath("$.data.pageSize", is(10)))
+			.andExpect(jsonPath("$.data.pageSize", is(ProductConstants.DEFAULT_PAGE_SIZE)))
+			.andExpect(jsonPath("$.data.totalElements", is(3)))
+			.andExpect(jsonPath("$.data.totalPages", is(1)))
+			.andExpect(jsonPath("$.data.last", is(true)))
+			.andExpect(jsonPath("$.timestamp", notNullValue()));
+	}
+
+	@Test
+	@DisplayName("단일 소분류 ID로 필터링된 상품 목록 조회 API 테스트")
+	public void testGetProductsBySingleSubcategoryIds() throws Exception {
+		// given
+		ProductCreateUpdateRequestDto createRamenRequest1 = new ProductCreateUpdateRequestDto(
+			"name1",
+			"description1",
+			"address1",
+			1000,
+			415L,
+			310L,
+			438L
+		);
+		ProductCreateUpdateRequestDto createRamenRequest2 = new ProductCreateUpdateRequestDto(
+			"name2",
+			"description2",
+			"address2",
+			2000,
+			431L,
+			310L,
+			442L
+		);
+		ProductCreateUpdateRequestDto createShoeRequest = new ProductCreateUpdateRequestDto(
+			"name3",
+			"description3",
+			"address3",
+			3000,
+			416L,
+			324L,
+			438L
+		);
+		ProductCreateUpdateRequestDto createAlcoholRequest = new ProductCreateUpdateRequestDto(
+			"name4",
+			"description4",
+			"address4",
+			4000,
+			423L,
+			315L,
+			439L
+		);
+		productService.createProduct(createRamenRequest1);
+		productService.createProduct(createRamenRequest2);
+		productService.createProduct(createShoeRequest);
+		productService.createProduct(createAlcoholRequest);
+
+		// when & then
+		mockMvc.perform(get("/v1/products")
+				.param("subcategory_id", "310")  // 라면
+				.contentType(MediaType.APPLICATION_JSON))
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.isSuccess", is(true)))
+			.andExpect(jsonPath("$.code", is("C000")))
+			.andExpect(jsonPath("$.data.content", hasSize(2)))
+			.andExpect(jsonPath("$.data.content[0].name", is(createRamenRequest1.name())))
+			.andExpect(jsonPath("$.data.content[1].name", is(createRamenRequest2.name())))
+			.andExpect(jsonPath("$.data.pageNumber", is(0)))
+			.andExpect(jsonPath("$.data.pageSize", is(ProductConstants.DEFAULT_PAGE_SIZE)))
+			.andExpect(jsonPath("$.data.totalElements", is(2)))
+			.andExpect(jsonPath("$.data.totalPages", is(1)))
+			.andExpect(jsonPath("$.data.last", is(true)))
+			.andExpect(jsonPath("$.timestamp", notNullValue()));
+	}
+
+	@Test
+	@DisplayName("여러 소분류 ID로 필터링된 상품 목록 조회 API 테스트")
+	public void testGetProductsByMultipleSubcategoryIds() throws Exception {
+		// given
+		ProductCreateUpdateRequestDto createRamenRequest1 = new ProductCreateUpdateRequestDto(
+			"name1",
+			"description1",
+			"address1",
+			1000,
+			415L,
+			310L,
+			438L
+		);
+		ProductCreateUpdateRequestDto createRamenRequest2 = new ProductCreateUpdateRequestDto(
+			"name2",
+			"description2",
+			"address2",
+			2000,
+			431L,
+			310L,
+			442L
+		);
+		ProductCreateUpdateRequestDto createShoeRequest = new ProductCreateUpdateRequestDto(
+			"name3",
+			"description3",
+			"address3",
+			3000,
+			416L,
+			324L,
+			438L
+		);
+		ProductCreateUpdateRequestDto createAlcoholRequest = new ProductCreateUpdateRequestDto(
+			"name4",
+			"description4",
+			"address4",
+			4000,
+			423L,
+			315L,
+			439L
+		);
+		productService.createProduct(createRamenRequest1);
+		productService.createProduct(createRamenRequest2);
+		productService.createProduct(createShoeRequest);
+		productService.createProduct(createAlcoholRequest);
+
+		// when & then
+		mockMvc.perform(get("/v1/products")
+				.param("subcategory_id", "310", "324")  // 라면, 신발
+				.contentType(MediaType.APPLICATION_JSON))
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.isSuccess", is(true)))
+			.andExpect(jsonPath("$.code", is("C000")))
+			.andExpect(jsonPath("$.data.content", hasSize(3)))
+			.andExpect(jsonPath("$.data.content[0].name", is(createRamenRequest1.name())))
+			.andExpect(jsonPath("$.data.content[1].name", is(createRamenRequest2.name())))
+			.andExpect(jsonPath("$.data.content[2].name", is(createShoeRequest.name())))
+			.andExpect(jsonPath("$.data.pageNumber", is(0)))
+			.andExpect(jsonPath("$.data.pageSize", is(ProductConstants.DEFAULT_PAGE_SIZE)))
 			.andExpect(jsonPath("$.data.totalElements", is(3)))
 			.andExpect(jsonPath("$.data.totalPages", is(1)))
 			.andExpect(jsonPath("$.data.last", is(true)))
