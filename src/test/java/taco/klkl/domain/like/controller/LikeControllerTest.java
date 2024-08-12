@@ -16,8 +16,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import taco.klkl.domain.like.dto.response.LikeResponseDto;
-import taco.klkl.domain.like.exception.LikeCountMaximumException;
-import taco.klkl.domain.like.exception.LikeCountMinimumException;
+import taco.klkl.domain.like.exception.LikeCountBelowMinimumException;
+import taco.klkl.domain.like.exception.LikeCountOverMaximumException;
 import taco.klkl.domain.like.service.LikeService;
 
 @WebMvcTest(LikeController.class)
@@ -76,7 +76,7 @@ class LikeControllerTest {
 	void testPostLikeMaximumError() throws Exception {
 		// given
 		Long productId = 1L;
-		LikeCountMaximumException exception = new LikeCountMaximumException();
+		LikeCountOverMaximumException exception = new LikeCountOverMaximumException();
 		doThrow(exception).when(likeService).createLike(productId);
 
 		// when & then
@@ -94,7 +94,7 @@ class LikeControllerTest {
 	void testDeleteLikeMaximumError() throws Exception {
 		// given
 		Long productId = 1L;
-		LikeCountMinimumException exception = new LikeCountMinimumException();
+		LikeCountBelowMinimumException exception = new LikeCountBelowMinimumException();
 		doThrow(exception).when(likeService).deleteLike(productId);
 
 		// when & then

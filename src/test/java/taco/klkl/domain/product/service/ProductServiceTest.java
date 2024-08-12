@@ -28,8 +28,8 @@ import taco.klkl.domain.category.domain.CategoryName;
 import taco.klkl.domain.category.domain.Subcategory;
 import taco.klkl.domain.category.domain.SubcategoryName;
 import taco.klkl.domain.category.service.SubcategoryService;
-import taco.klkl.domain.like.exception.LikeCountMaximumException;
-import taco.klkl.domain.like.exception.LikeCountMinimumException;
+import taco.klkl.domain.like.exception.LikeCountBelowMinimumException;
+import taco.klkl.domain.like.exception.LikeCountOverMaximumException;
 import taco.klkl.domain.product.dao.ProductRepository;
 import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.product.domain.QProduct;
@@ -330,10 +330,10 @@ class ProductServiceTest {
 	@DisplayName("상품 좋아요수 최대값 에러 테스트")
 	void testIncreaseLikeCountMaximum() {
 		// given
-		when(mockProduct.increaseLikeCount()).thenThrow(LikeCountMaximumException.class);
+		when(mockProduct.increaseLikeCount()).thenThrow(LikeCountOverMaximumException.class);
 
 		// when & then
-		org.junit.jupiter.api.Assertions.assertThrows(LikeCountMaximumException.class, () -> {
+		org.junit.jupiter.api.Assertions.assertThrows(LikeCountOverMaximumException.class, () -> {
 			productService.increaseLikeCount(mockProduct);
 		});
 	}
@@ -356,10 +356,10 @@ class ProductServiceTest {
 	@DisplayName("상품 좋아요수 최소값 에러 테스트")
 	void testIncreaseLikeCountMinimum() {
 		// given
-		when(mockProduct.decreaseLikeCount()).thenThrow(LikeCountMinimumException.class);
+		when(mockProduct.decreaseLikeCount()).thenThrow(LikeCountBelowMinimumException.class);
 
 		// when & then
-		org.junit.jupiter.api.Assertions.assertThrows(LikeCountMinimumException.class, () -> {
+		org.junit.jupiter.api.Assertions.assertThrows(LikeCountBelowMinimumException.class, () -> {
 			productService.decreaseLikeCount(mockProduct);
 		});
 	}

@@ -18,8 +18,8 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import taco.klkl.domain.category.domain.Subcategory;
-import taco.klkl.domain.like.exception.LikeCountMaximumException;
-import taco.klkl.domain.like.exception.LikeCountMinimumException;
+import taco.klkl.domain.like.exception.LikeCountBelowMinimumException;
+import taco.klkl.domain.like.exception.LikeCountOverMaximumException;
 import taco.klkl.domain.region.domain.City;
 import taco.klkl.domain.region.domain.Currency;
 import taco.klkl.domain.user.domain.User;
@@ -183,18 +183,18 @@ public class Product {
 		this.currency = currency;
 	}
 
-	public int increaseLikeCount() throws LikeCountMaximumException {
+	public int increaseLikeCount() throws LikeCountOverMaximumException {
 		if (this.likeCount == Integer.MAX_VALUE) {
-			throw new LikeCountMaximumException();
+			throw new LikeCountOverMaximumException();
 		}
 		this.likeCount += 1;
 
 		return this.likeCount;
 	}
 
-	public int decreaseLikeCount() throws LikeCountMinimumException {
+	public int decreaseLikeCount() throws LikeCountBelowMinimumException {
 		if (this.likeCount == 0) {
-			throw new LikeCountMinimumException();
+			throw new LikeCountBelowMinimumException();
 		}
 		this.likeCount -= 1;
 

@@ -14,8 +14,8 @@ import org.mockito.MockitoAnnotations;
 import taco.klkl.domain.like.dao.LikeRepository;
 import taco.klkl.domain.like.domain.Like;
 import taco.klkl.domain.like.dto.response.LikeResponseDto;
-import taco.klkl.domain.like.exception.LikeCountMaximumException;
-import taco.klkl.domain.like.exception.LikeCountMinimumException;
+import taco.klkl.domain.like.exception.LikeCountBelowMinimumException;
+import taco.klkl.domain.like.exception.LikeCountOverMaximumException;
 import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.product.service.ProductService;
 import taco.klkl.domain.user.domain.User;
@@ -149,13 +149,13 @@ class LikeServiceImplTest {
 		when(productService.getProductEntityById(productId)).thenReturn(product);
 		when(userUtil.getCurrentUser()).thenReturn(user);
 		when(likeRepository.existsByProductAndUser(product, user)).thenReturn(false);
-		when(productService.increaseLikeCount(product)).thenThrow(LikeCountMaximumException.class);
-		doThrow(LikeCountMaximumException.class).when(product).increaseLikeCount();
+		when(productService.increaseLikeCount(product)).thenThrow(LikeCountOverMaximumException.class);
+		doThrow(LikeCountOverMaximumException.class).when(product).increaseLikeCount();
 
 		// when & then
 		assertThatThrownBy(() -> {
 			likeService.createLike(productId);
-		}).isInstanceOf(LikeCountMaximumException.class);
+		}).isInstanceOf(LikeCountOverMaximumException.class);
 	}
 
 	@Test
@@ -167,12 +167,12 @@ class LikeServiceImplTest {
 		when(productService.getProductEntityById(productId)).thenReturn(product);
 		when(userUtil.getCurrentUser()).thenReturn(user);
 		when(likeRepository.existsByProductAndUser(product, user)).thenReturn(true);
-		when(productService.decreaseLikeCount(product)).thenThrow(LikeCountMinimumException.class);
-		doThrow(LikeCountMinimumException.class).when(product).decreaseLikeCount();
+		when(productService.decreaseLikeCount(product)).thenThrow(LikeCountBelowMinimumException.class);
+		doThrow(LikeCountBelowMinimumException.class).when(product).decreaseLikeCount();
 
 		// when & then
 		assertThatThrownBy(() -> {
 			likeService.deleteLike(productId);
-		}).isInstanceOf(LikeCountMinimumException.class);
+		}).isInstanceOf(LikeCountBelowMinimumException.class);
 	}
 }
