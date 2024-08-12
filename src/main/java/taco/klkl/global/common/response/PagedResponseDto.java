@@ -1,4 +1,4 @@
-package taco.klkl.domain.product.dto.response;
+package taco.klkl.global.common.response;
 
 import java.util.List;
 import java.util.function.Function;

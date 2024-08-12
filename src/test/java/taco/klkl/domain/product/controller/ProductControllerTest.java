@@ -27,7 +27,6 @@ import taco.klkl.domain.category.domain.CategoryName;
 import taco.klkl.domain.category.dto.response.SubcategoryResponseDto;
 import taco.klkl.domain.product.dto.request.ProductCreateUpdateRequestDto;
 import taco.klkl.domain.product.dto.request.ProductFilterOptionsDto;
-import taco.klkl.domain.product.dto.response.PagedResponseDto;
 import taco.klkl.domain.product.dto.response.ProductDetailResponseDto;
 import taco.klkl.domain.product.dto.response.ProductSimpleResponseDto;
 import taco.klkl.domain.product.service.ProductService;
@@ -35,6 +34,7 @@ import taco.klkl.domain.region.dto.response.CityResponseDto;
 import taco.klkl.domain.region.dto.response.CurrencyResponseDto;
 import taco.klkl.domain.region.enums.CountryType;
 import taco.klkl.domain.user.dto.response.UserDetailResponseDto;
+import taco.klkl.global.common.response.PagedResponseDto;
 
 @WebMvcTest(ProductController.class)
 public class ProductControllerTest {

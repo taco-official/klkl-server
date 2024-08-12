@@ -23,11 +23,11 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import taco.klkl.domain.product.dto.request.ProductCreateUpdateRequestDto;
 import taco.klkl.domain.product.dto.request.ProductFilterOptionsDto;
-import taco.klkl.domain.product.dto.response.PagedResponseDto;
 import taco.klkl.domain.product.dto.response.ProductDetailResponseDto;
 import taco.klkl.domain.product.dto.response.ProductSimpleResponseDto;
 import taco.klkl.domain.product.service.ProductService;
 import taco.klkl.global.common.constants.ProductConstants;
+import taco.klkl.global.common.response.PagedResponseDto;
 
 @RestController
 @RequestMapping("/v1/products")

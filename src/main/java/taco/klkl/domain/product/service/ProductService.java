@@ -20,7 +20,6 @@ import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.product.domain.QProduct;
 import taco.klkl.domain.product.dto.request.ProductCreateUpdateRequestDto;
 import taco.klkl.domain.product.dto.request.ProductFilterOptionsDto;
-import taco.klkl.domain.product.dto.response.PagedResponseDto;
 import taco.klkl.domain.product.dto.response.ProductDetailResponseDto;
 import taco.klkl.domain.product.dto.response.ProductSimpleResponseDto;
 import taco.klkl.domain.product.exception.InvalidCityIdsException;
@@ -34,6 +33,7 @@ import taco.klkl.domain.region.service.CityService;
 import taco.klkl.domain.region.service.CountryService;
 import taco.klkl.domain.region.service.CurrencyService;
 import taco.klkl.domain.user.domain.User;
+import taco.klkl.global.common.response.PagedResponseDto;
 import taco.klkl.global.util.UserUtil;
 
 @Service
