@@ -57,17 +57,16 @@ public class CityServiceImpl implements CityService {
 			.map(Country::getCountryId)
 			.collect(Collectors.toSet());
 
-		boolean hasDifferentCountries = countryIds.size() != 1;
-		if (hasDifferentCountries) {
+		if (countryIds.size() != 1) {
 			return false;
 		}
-
-		boolean isMappedToSameCountry = countryId == null;
-		boolean isMappedToGivenCountry = countryIds.contains(countryId);
-		if (!isMappedToSameCountry && !isMappedToGivenCountry) {
-			return false;
+		if (countryId == null) {
+			return true;
+		}
+		if (countryIds.contains(countryId)) {
+			return true;
 		}
 
-		return true;
+		return false;
 	}
 }
