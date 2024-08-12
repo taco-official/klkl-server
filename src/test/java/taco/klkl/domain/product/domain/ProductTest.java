@@ -10,16 +10,15 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import taco.klkl.domain.category.domain.Subcategory;
+import taco.klkl.domain.like.exception.LikeCountMaximumException;
+import taco.klkl.domain.like.exception.LikeCountMinimumException;
 import taco.klkl.domain.region.domain.City;
 import taco.klkl.domain.region.domain.Currency;
 import taco.klkl.domain.user.domain.User;
 import taco.klkl.global.common.constants.ProductConstants;
-import taco.klkl.domain.like.exception.LikeCountMaximumException;
-import taco.klkl.domain.like.exception.LikeCountMinimumException;
 
 class ProductTest {
 
-	private User user;
 	private User mockUser;
 	private City mockCity;
 	private Subcategory mockSubcategory;
@@ -33,7 +32,6 @@ class ProductTest {
 		mockCity = mock(City.class);
 		mockSubcategory = mock(Subcategory.class);
 		mockCurrency = mock(Currency.class);
-		user = Mockito.mock(User.class);
 		mockProduct = Mockito.mock(Product.class);
 	}
 
@@ -196,14 +194,14 @@ class ProductTest {
 	public void testIncreaseLikeCount() {
 		// given
 		Product product = Product.of(
-			user,
+			"mockUser",
 			"Original Name",
 			"Original Description",
-			"Original Address",
 			100,
-			1L,
-			1L,
-			1L);
+			mockUser,
+			mockCity,
+			mockSubcategory,
+			mockCurrency);
 		int beforeLikeCount = product.getLikeCount();
 
 		// when
@@ -228,14 +226,14 @@ class ProductTest {
 	public void testDecreaseLikeCount() {
 		// given
 		Product product = Product.of(
-			user,
-			"Original Name",
+			"name",
 			"Original Description",
-			"Original Address",
+			"Original address",
 			100,
-			1L,
-			1L,
-			1L);
+			mockUser,
+			mockCity,
+			mockSubcategory,
+			mockCurrency);
 		product.increaseLikeCount();
 		int beforeLikeCount = product.getLikeCount();
 

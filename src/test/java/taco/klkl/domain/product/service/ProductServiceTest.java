@@ -28,6 +28,8 @@ import taco.klkl.domain.category.domain.CategoryName;
 import taco.klkl.domain.category.domain.Subcategory;
 import taco.klkl.domain.category.domain.SubcategoryName;
 import taco.klkl.domain.category.service.SubcategoryService;
+import taco.klkl.domain.like.exception.LikeCountMaximumException;
+import taco.klkl.domain.like.exception.LikeCountMinimumException;
 import taco.klkl.domain.product.dao.ProductRepository;
 import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.product.domain.QProduct;
@@ -168,7 +170,7 @@ class ProductServiceTest {
 		when(queryFactory.select(product.count())).thenReturn(countQuery);
 		when(countQuery.from(product)).thenReturn(countQuery);
 		when(countQuery.where(any(BooleanBuilder.class))).thenReturn(countQuery);
-		when(countQuery.fetchOne()).thenReturn((long) productList.size());
+		when(countQuery.fetchOne()).thenReturn((long)productList.size());
 
 		// Mocking validation behavior
 		when(countryService.existsCountryById(anyLong())).thenReturn(true);
@@ -340,15 +342,14 @@ class ProductServiceTest {
 	@DisplayName("상품 좋아요수 빼기 테스트")
 	void testSubtractLikeCount() {
 		// given
-		Product product = ProductConstants.TEST_PRODUCT;
-		product.increaseLikeCount();
-		int beforeLikeCount = product.getLikeCount();
+		testProduct.increaseLikeCount();
+		int beforeLikeCount = testProduct.getLikeCount();
 
 		// when
-		productService.decreaseLikeCount(product);
+		productService.decreaseLikeCount(testProduct);
 
 		// then
-		assertThat(product.getLikeCount()).isEqualTo(beforeLikeCount - 1);
+		assertThat(testProduct.getLikeCount()).isEqualTo(beforeLikeCount - 1);
 	}
 
 	@Test

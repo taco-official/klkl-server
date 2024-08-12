@@ -57,7 +57,7 @@ public class LikeServiceImpl implements LikeService {
 	}
 
 	private Product getProductById(Long productId) {
-		return productService.getProductById(productId);
+		return productService.getProductEntityById(productId);
 	}
 
 	private User getCurrentUser() {
