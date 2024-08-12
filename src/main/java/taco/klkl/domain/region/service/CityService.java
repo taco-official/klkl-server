@@ -10,7 +10,9 @@ import taco.klkl.domain.region.enums.CityType;
 
 @Service
 public interface CityService {
-	City getCityById(Long id);
+	City getCityEntityById(final Long id);
 
 	List<CityResponseDto> getAllCitiesByCityTypes(final List<CityType> cityTypes);
+
+	boolean isCitiesMappedToSameCountry(final Long countryId, final List<Long> cityIds);
 }

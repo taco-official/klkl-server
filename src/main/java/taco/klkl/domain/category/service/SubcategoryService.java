@@ -39,7 +39,7 @@ public class SubcategoryService {
 		return subcategories;
 	}
 
-	public Subcategory getSubcategoryById(Long id) {
+	public Subcategory getSubcategoryEntityById(Long id) {
 		return subcategoryRepository.findById(id)
 			.orElseThrow(SubcategoryNotFoundException::new);
 	}

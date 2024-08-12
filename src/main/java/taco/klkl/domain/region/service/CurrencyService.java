@@ -11,5 +11,5 @@ import taco.klkl.domain.region.dto.response.CurrencyResponseDto;
 public interface CurrencyService {
 	List<CurrencyResponseDto> getAllCurrencies();
 
-	Currency getCurrencyById(final Long id);
+	Currency getCurrencyEntityById(final Long id);
 }

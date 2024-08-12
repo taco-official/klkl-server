@@ -21,6 +21,7 @@ public enum ErrorCode {
 
 	// Product
 	PRODUCT_NOT_FOUND(HttpStatus.NOT_FOUND, "C020", "존재하지 않는 상품입니다."),
+	INVALID_CITY_IDS(HttpStatus.BAD_REQUEST, "C021", "선택한 도시들은 동일한 국가에 속하지 않습니다."),
 
 	// Like
 

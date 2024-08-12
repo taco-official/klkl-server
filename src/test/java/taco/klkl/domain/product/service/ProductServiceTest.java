@@ -45,6 +45,7 @@ import taco.klkl.domain.region.enums.CountryType;
 import taco.klkl.domain.region.enums.CurrencyType;
 import taco.klkl.domain.region.enums.RegionType;
 import taco.klkl.domain.region.service.CityService;
+import taco.klkl.domain.region.service.CountryService;
 import taco.klkl.domain.region.service.CurrencyService;
 import taco.klkl.domain.user.domain.User;
 import taco.klkl.global.common.constants.UserConstants;
@@ -60,6 +61,9 @@ class ProductServiceTest {
 
 	@Mock
 	private CityService cityService;
+
+	@Mock
+	private CountryService countryService;
 
 	@Mock
 	private CurrencyService currencyService;
@@ -135,9 +139,11 @@ class ProductServiceTest {
 	@DisplayName("상품 목록 조회 - 성공")
 	void testGetProductsByFilterOptions() {
 		// Given
-		List<Long> countryIds = List.of(1L, 2L, 3L);
+		Long countryId = 1L;
+		List<Long> cityIds = List.of(4L, 5L);
 		ProductFilterOptionsDto filterOptions = new ProductFilterOptionsDto(
-			countryIds
+			countryId,
+			cityIds
 		);
 		Pageable pageable = PageRequest.of(0, 10);
 
@@ -158,7 +164,11 @@ class ProductServiceTest {
 		when(queryFactory.select(product.count())).thenReturn(countQuery);
 		when(countQuery.from(product)).thenReturn(countQuery);
 		when(countQuery.where(any(BooleanBuilder.class))).thenReturn(countQuery);
-		when(countQuery.fetchOne()).thenReturn((long)productList.size());
+		when(countQuery.fetchOne()).thenReturn((long) productList.size());
+
+		// Mocking validation behavior
+		when(countryService.existsCountryById(anyLong())).thenReturn(true);
+		when(cityService.isCitiesMappedToSameCountry(anyLong(), anyList())).thenReturn(true);
 
 		// When
 		PagedResponseDto<ProductSimpleResponseDto> result = productService
@@ -176,6 +186,10 @@ class ProductServiceTest {
 		// Verify that the query methods were called
 		verify(queryFactory).selectFrom(product);
 		verify(queryFactory).select(product.count());
+
+		// Verify that validation methods were called
+		verify(countryService).existsCountryById(countryId);
+		verify(cityService).isCitiesMappedToSameCountry(countryId, cityIds);
 	}
 
 	@Test
@@ -208,9 +222,9 @@ class ProductServiceTest {
 	void testCreateProduct() {
 		// Given
 		when(userUtil.findTestUser()).thenReturn(user);
-		when(cityService.getCityById(1L)).thenReturn(city);
-		when(subcategoryService.getSubcategoryById(1L)).thenReturn(subcategory);
-		when(currencyService.getCurrencyById(1L)).thenReturn(currency);
+		when(cityService.getCityEntityById(1L)).thenReturn(city);
+		when(subcategoryService.getSubcategoryEntityById(1L)).thenReturn(subcategory);
+		when(currencyService.getCurrencyEntityById(1L)).thenReturn(currency);
 
 		// save 메서드 호출 시 ID를 설정하고 저장된 객체를 반환하도록 설정
 		when(productRepository.save(any(Product.class))).thenAnswer(invocation -> {
@@ -244,9 +258,9 @@ class ProductServiceTest {
 	void testUpdateProduct() {
 		// Given
 		when(productRepository.findById(1L)).thenReturn(Optional.of(testProduct));
-		when(cityService.getCityById(1L)).thenReturn(city);
-		when(subcategoryService.getSubcategoryById(1L)).thenReturn(subcategory);
-		when(currencyService.getCurrencyById(1L)).thenReturn(currency);
+		when(cityService.getCityEntityById(1L)).thenReturn(city);
+		when(subcategoryService.getSubcategoryEntityById(1L)).thenReturn(subcategory);
+		when(currencyService.getCurrencyEntityById(1L)).thenReturn(currency);
 
 		// When
 		ProductDetailResponseDto result = productService.updateProduct(1L, requestDto);

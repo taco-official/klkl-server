@@ -121,7 +121,8 @@ public class ProductControllerTest {
 		mockMvc.perform(get("/v1/products")
 				.param("page", "0")
 				.param("size", "10")
-				.param("countryIds", "1", "2", "3")) // Add countryIds as query parameters
+				.param("country_id", "1", "2", "3") // Add countryIds as query parameters
+				.param("city_id", "4", "5"))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
 			.andExpect(jsonPath("$.code", is("C000")))

@@ -38,7 +38,7 @@ public class CurrencyServiceImpl implements CurrencyService {
 	}
 
 	@Override
-	public Currency getCurrencyById(final Long id) {
+	public Currency getCurrencyEntityById(final Long id) {
 
 		return currencyRepository.findById(id)
 			.orElseThrow(CurrencyNotFoundException::new);
