@@ -98,6 +98,15 @@ public class ProductService {
 		productRepository.delete(product);
 	}
 
+	public Product getProductEntityById(final Long id) {
+		return productRepository.findById(id)
+			.orElseThrow(ProductNotFoundException::new);
+	}
+
+	public boolean existsProductById(final Long id) {
+		return productRepository.existsById(id);
+	}
+
 	private BooleanBuilder buildFilterOptions(ProductFilterOptionsDto options, QProduct product) {
 		BooleanBuilder builder = new BooleanBuilder();
 
