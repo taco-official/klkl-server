@@ -206,7 +206,7 @@ public class ProductIntegrationTest {
 
 	@Test
 	@DisplayName("단일 도시 ID로 필터링된 상품 목록 조회 API 테스트")
-	public void testGetProductsBySingleCityyId() throws Exception {
+	public void testGetProductsBySingleCityId() throws Exception {
 		// given
 		ProductCreateUpdateRequestDto createOsakaRequest1 = new ProductCreateUpdateRequestDto(
 			"name1",
