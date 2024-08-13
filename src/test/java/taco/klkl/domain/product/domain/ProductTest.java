@@ -3,11 +3,15 @@ package taco.klkl.domain.product.domain;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import taco.klkl.domain.category.domain.Subcategory;
+import taco.klkl.domain.like.exception.LikeCountBelowMinimumException;
+import taco.klkl.domain.like.exception.LikeCountOverMaximumException;
 import taco.klkl.domain.region.domain.City;
 import taco.klkl.domain.region.domain.Currency;
 import taco.klkl.domain.user.domain.User;
@@ -20,12 +24,15 @@ class ProductTest {
 	private Subcategory mockSubcategory;
 	private Currency mockCurrency;
 
+	private Product mockProduct;
+
 	@BeforeEach
 	public void beforeEach() {
 		mockUser = mock(User.class);
 		mockCity = mock(City.class);
 		mockSubcategory = mock(Subcategory.class);
 		mockCurrency = mock(Currency.class);
+		mockProduct = Mockito.mock(Product.class);
 	}
 
 	@Test
@@ -180,5 +187,70 @@ class ProductTest {
 		assertThat(product.getCity()).isEqualTo(updatedCity);
 		assertThat(product.getSubcategory()).isEqualTo(updatedSubcategory);
 		assertThat(product.getCurrency()).isEqualTo(updatedCurrency);
+	}
+
+	@Test
+	@DisplayName("상품 좋아요수 증가 테스트")
+	public void testIncreaseLikeCount() {
+		// given
+		Product product = Product.of(
+			"mockUser",
+			"Original Name",
+			"Original Description",
+			100,
+			mockUser,
+			mockCity,
+			mockSubcategory,
+			mockCurrency);
+		int beforeLikeCount = product.getLikeCount();
+
+		// when
+		product.increaseLikeCount();
+
+		// then
+		assertThat(product.getLikeCount()).isEqualTo(beforeLikeCount + 1);
+	}
+
+	@Test
+	@DisplayName("상품 좋아요수 최대값 에러 테스트")
+	public void testIncreaseLikeCountMaximum() {
+		// given
+		when(mockProduct.increaseLikeCount()).thenThrow(LikeCountOverMaximumException.class);
+
+		// when & then
+		Assertions.assertThrows(LikeCountOverMaximumException.class, mockProduct::increaseLikeCount);
+	}
+
+	@Test
+	@DisplayName("상품 좋아요수 감소 테스트")
+	public void testDecreaseLikeCount() {
+		// given
+		Product product = Product.of(
+			"name",
+			"Original Description",
+			"Original address",
+			100,
+			mockUser,
+			mockCity,
+			mockSubcategory,
+			mockCurrency);
+		product.increaseLikeCount();
+		int beforeLikeCount = product.getLikeCount();
+
+		// when
+		product.decreaseLikeCount();
+
+		// then
+		assertThat(product.getLikeCount()).isEqualTo(beforeLikeCount - 1);
+	}
+
+	@Test
+	@DisplayName("상품 좋아요수 최소값 에러 테스트")
+	public void testDecreaseLikeCountMinimum() {
+		// given
+		when(mockProduct.increaseLikeCount()).thenThrow(LikeCountBelowMinimumException.class);
+
+		// when & then
+		Assertions.assertThrows(LikeCountBelowMinimumException.class, mockProduct::increaseLikeCount);
 	}
 }

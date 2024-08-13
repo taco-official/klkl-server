@@ -126,6 +126,16 @@ public class ProductService {
 		return builder;
 	}
 
+	@Transactional
+	public int increaseLikeCount(Product product) {
+		return product.increaseLikeCount();
+	}
+
+	@Transactional
+	public int decreaseLikeCount(Product product) {
+		return product.decreaseLikeCount();
+	}
+
 	private Product createProductEntity(final ProductCreateUpdateRequestDto createRequest) {
 		final User user = userUtil.findTestUser();
 		final City city = getCityEntity(createRequest.cityId());

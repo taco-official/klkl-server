@@ -13,6 +13,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -27,6 +28,8 @@ import taco.klkl.domain.category.domain.CategoryName;
 import taco.klkl.domain.category.domain.Subcategory;
 import taco.klkl.domain.category.domain.SubcategoryName;
 import taco.klkl.domain.category.service.SubcategoryService;
+import taco.klkl.domain.like.exception.LikeCountBelowMinimumException;
+import taco.klkl.domain.like.exception.LikeCountOverMaximumException;
 import taco.klkl.domain.product.dao.ProductRepository;
 import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.product.domain.QProduct;
@@ -84,6 +87,8 @@ class ProductServiceTest {
 	private Currency currency;
 	private ProductCreateUpdateRequestDto requestDto;
 
+	private Product mockProduct;
+
 	@BeforeEach
 	void setUp() {
 		MockitoAnnotations.openMocks(this);
@@ -133,6 +138,7 @@ class ProductServiceTest {
 			1L,
 			1L
 		);
+		mockProduct = Mockito.mock(Product.class);
 	}
 
 	@Test
@@ -164,7 +170,7 @@ class ProductServiceTest {
 		when(queryFactory.select(product.count())).thenReturn(countQuery);
 		when(countQuery.from(product)).thenReturn(countQuery);
 		when(countQuery.where(any(BooleanBuilder.class))).thenReturn(countQuery);
-		when(countQuery.fetchOne()).thenReturn((long) productList.size());
+		when(countQuery.fetchOne()).thenReturn((long)productList.size());
 
 		// Mocking validation behavior
 		when(countryService.existsCountryById(anyLong())).thenReturn(true);
@@ -305,4 +311,57 @@ class ProductServiceTest {
 		assertThrows(ProductNotFoundException.class, () -> productService.deleteProduct(1L));
 		verify(productRepository).findById(1L);
 	}
+
+	@Test
+	@DisplayName("상품 좋아요수 추가 테스트")
+	void testAddLikeCount() {
+		// given
+		when(mockProduct.increaseLikeCount()).thenReturn(1);
+		when(mockProduct.getLikeCount()).thenReturn(1);
+
+		// when
+		int likeCount = productService.increaseLikeCount(mockProduct);
+
+		// then
+		assertThat(mockProduct.getLikeCount()).isEqualTo(likeCount);
+	}
+
+	@Test
+	@DisplayName("상품 좋아요수 최대값 에러 테스트")
+	void testIncreaseLikeCountMaximum() {
+		// given
+		when(mockProduct.increaseLikeCount()).thenThrow(LikeCountOverMaximumException.class);
+
+		// when & then
+		org.junit.jupiter.api.Assertions.assertThrows(LikeCountOverMaximumException.class, () -> {
+			productService.increaseLikeCount(mockProduct);
+		});
+	}
+
+	@Test
+	@DisplayName("상품 좋아요수 빼기 테스트")
+	void testSubtractLikeCount() {
+		// given
+		testProduct.increaseLikeCount();
+		int beforeLikeCount = testProduct.getLikeCount();
+
+		// when
+		productService.decreaseLikeCount(testProduct);
+
+		// then
+		assertThat(testProduct.getLikeCount()).isEqualTo(beforeLikeCount - 1);
+	}
+
+	@Test
+	@DisplayName("상품 좋아요수 최소값 에러 테스트")
+	void testIncreaseLikeCountMinimum() {
+		// given
+		when(mockProduct.decreaseLikeCount()).thenThrow(LikeCountBelowMinimumException.class);
+
+		// when & then
+		org.junit.jupiter.api.Assertions.assertThrows(LikeCountBelowMinimumException.class, () -> {
+			productService.decreaseLikeCount(mockProduct);
+		});
+	}
+
 }
