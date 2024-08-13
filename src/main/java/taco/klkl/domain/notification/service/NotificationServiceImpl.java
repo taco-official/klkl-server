@@ -22,7 +22,6 @@ import taco.klkl.domain.notification.domain.Notification;
 import taco.klkl.domain.notification.domain.QNotification;
 import taco.klkl.domain.notification.dto.response.NotificationResponse;
 import taco.klkl.domain.notification.exception.NotificationNotFoundException;
-import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.user.domain.User;
 import taco.klkl.global.common.response.PagedResponseDto;
 import taco.klkl.global.util.UserUtil;
@@ -58,11 +57,8 @@ public class NotificationServiceImpl implements NotificationService {
 			.fetchOne();
 
 		List<NotificationResponse> notificationResponses = notifications.stream()
-			.map(n -> {
-				Comment comment = n.getComment();
-				Product product = comment.getProduct();
-				return NotificationResponse.from(n, product, comment);
-			}).toList();
+			.map(NotificationResponse::from)
+			.toList();
 
 		Page<NotificationResponse> notificationPage = new PageImpl<>(notificationResponses, pageable, total);
 
@@ -79,9 +75,7 @@ public class NotificationServiceImpl implements NotificationService {
 		return notifications.stream()
 			.map(n -> {
 				n.read();
-				Comment comment = n.getComment();
-				Product product = comment.getProduct();
-				return NotificationResponse.from(n, product, comment);
+				return NotificationResponse.from(n);
 			}).toList();
 	}
 
@@ -92,9 +86,7 @@ public class NotificationServiceImpl implements NotificationService {
 		Notification notification = notificationRepository.findById(id)
 			.orElseThrow(NotificationNotFoundException::new);
 		notification.read();
-		Comment comment = notification.getComment();
-		Product product = comment.getProduct();
-		return NotificationResponse.from(notification, product, comment);
+		return NotificationResponse.from(notification);
 	}
 
 	@Override

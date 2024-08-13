@@ -1,4 +1,4 @@
-package taco.klkl.domain.notifocation.service;
+package taco.klkl.domain.notification.service;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -35,7 +35,6 @@ import taco.klkl.domain.notification.domain.Notification;
 import taco.klkl.domain.notification.domain.QNotification;
 import taco.klkl.domain.notification.dto.response.NotificationResponse;
 import taco.klkl.domain.notification.exception.NotificationNotFoundException;
-import taco.klkl.domain.notification.service.NotificationServiceImpl;
 import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.product.service.ProductService;
 import taco.klkl.domain.region.domain.City;
