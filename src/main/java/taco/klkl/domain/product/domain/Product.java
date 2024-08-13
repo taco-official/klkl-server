@@ -1,6 +1,9 @@
 package taco.klkl.domain.product.domain;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
@@ -13,10 +16,12 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import taco.klkl.domain.category.domain.Filter;
 import taco.klkl.domain.category.domain.Subcategory;
 import taco.klkl.domain.region.domain.City;
 import taco.klkl.domain.region.domain.Currency;
@@ -111,6 +116,12 @@ public class Product {
 	)
 	private Currency currency;
 
+	@OneToMany(
+		mappedBy = "product",
+		orphanRemoval = true
+	)
+	private Set<ProductFilter> filters = new HashSet<>();
+
 	@Column(
 		name = "created_at",
 		nullable = false,
@@ -179,5 +190,21 @@ public class Product {
 		this.city = city;
 		this.subcategory = subcategory;
 		this.currency = currency;
+	}
+
+	public void addFilters(
+		final Set<Filter> filters
+	) {
+		filters.stream()
+			.map(filter -> ProductFilter.of(this, filter))
+			.forEach(this.filters::add);
+	}
+
+	public void updateFilters(
+		final Set<Filter> updatedFilters
+	) {
+		this.filters = updatedFilters.stream()
+			.map(filter -> ProductFilter.of(this, filter))
+			.collect(Collectors.toSet());
 	}
 }

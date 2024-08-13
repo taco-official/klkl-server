@@ -4,6 +4,8 @@ import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import java.util.Set;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,17 +49,18 @@ public class ProductIntegrationTest {
 			1000,
 			414L,
 			310L,
-			438L
+			438L,
+			Set.of(350L, 351L)
 		);
 		ProductDetailResponseDto productDto = productService.createProduct(createRequest);
 
 		// when & then
-		mockMvc.perform(get("/v1/products/" + productDto.productId())
+		mockMvc.perform(get("/v1/products/" + productDto.id())
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
 			.andExpect(jsonPath("$.code", is("C000")))
-			.andExpect(jsonPath("$.data.productId", notNullValue()))
+			.andExpect(jsonPath("$.data.id", notNullValue()))
 			.andExpect(jsonPath("$.data.name", is(createRequest.name())))
 			.andExpect(jsonPath("$.data.description", is(createRequest.description())))
 			.andExpect(jsonPath("$.data.address", is(createRequest.address())))
@@ -82,7 +85,8 @@ public class ProductIntegrationTest {
 			1000,
 			414L,
 			310L,
-			438L
+			438L,
+			Set.of(350L, 351L)
 		);
 
 		// when & then
@@ -92,7 +96,7 @@ public class ProductIntegrationTest {
 			.andExpect(status().isCreated())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
 			.andExpect(jsonPath("$.code", is("C000")))
-			.andExpect(jsonPath("$.data.productId", notNullValue()))
+			.andExpect(jsonPath("$.data.id", notNullValue()))
 			.andExpect(jsonPath("$.data.name", is(createRequest.name())))
 			.andExpect(jsonPath("$.data.description", is(createRequest.description())))
 			.andExpect(jsonPath("$.data.address", is(createRequest.address())))
@@ -117,7 +121,8 @@ public class ProductIntegrationTest {
 			1000,
 			414L,
 			310L,
-			438L
+			438L,
+			null
 		);
 		ProductCreateUpdateRequestDto createRequest2 = new ProductCreateUpdateRequestDto(
 			"name2",
@@ -126,7 +131,8 @@ public class ProductIntegrationTest {
 			2000,
 			415L,
 			311L,
-			438L
+			438L,
+			null
 		);
 		productService.createProduct(createRequest1);
 		productService.createProduct(createRequest2);
@@ -161,7 +167,8 @@ public class ProductIntegrationTest {
 			1000,
 			414L,
 			310L,
-			438L
+			438L,
+			null
 		);
 		ProductCreateUpdateRequestDto createOsakaRequest2 = new ProductCreateUpdateRequestDto(
 			"name2",
@@ -170,7 +177,8 @@ public class ProductIntegrationTest {
 			2000,
 			414L,
 			311L,
-			438L
+			438L,
+			null
 		);
 		ProductCreateUpdateRequestDto createTokyoRequest = new ProductCreateUpdateRequestDto(
 			"name3",
@@ -179,7 +187,8 @@ public class ProductIntegrationTest {
 			2000,
 			416L,
 			311L,
-			438L
+			438L,
+			null
 		);
 		productService.createProduct(createOsakaRequest1);
 		productService.createProduct(createOsakaRequest2);
@@ -213,7 +222,8 @@ public class ProductIntegrationTest {
 			1000,
 			415L,
 			310L,
-			438L
+			438L,
+			null
 		);
 		ProductCreateUpdateRequestDto createKyotoRequest2 = new ProductCreateUpdateRequestDto(
 			"name2",
@@ -222,7 +232,8 @@ public class ProductIntegrationTest {
 			2000,
 			415L,
 			311L,
-			438L
+			438L,
+			null
 		);
 		ProductCreateUpdateRequestDto createTokyoRequest = new ProductCreateUpdateRequestDto(
 			"name3",
@@ -231,7 +242,8 @@ public class ProductIntegrationTest {
 			2000,
 			416L,
 			311L,
-			438L
+			438L,
+			null
 		);
 		productService.createProduct(createKyotoRequest1);
 		productService.createProduct(createKyotoRequest2);
@@ -267,7 +279,8 @@ public class ProductIntegrationTest {
 			1000,
 			415L,
 			310L,
-			438L
+			438L,
+			null
 		);
 		ProductCreateUpdateRequestDto createRamenRequest2 = new ProductCreateUpdateRequestDto(
 			"name2",
@@ -276,7 +289,8 @@ public class ProductIntegrationTest {
 			2000,
 			431L,
 			310L,
-			442L
+			442L,
+			null
 		);
 		ProductCreateUpdateRequestDto createShoeRequest = new ProductCreateUpdateRequestDto(
 			"name3",
@@ -285,7 +299,8 @@ public class ProductIntegrationTest {
 			3000,
 			416L,
 			324L,
-			438L
+			438L,
+			null
 		);
 		ProductCreateUpdateRequestDto createAlcoholRequest = new ProductCreateUpdateRequestDto(
 			"name4",
@@ -294,7 +309,8 @@ public class ProductIntegrationTest {
 			4000,
 			423L,
 			315L,
-			439L
+			439L,
+			null
 		);
 		productService.createProduct(createRamenRequest1);
 		productService.createProduct(createRamenRequest2);
@@ -330,7 +346,8 @@ public class ProductIntegrationTest {
 			1000,
 			415L,
 			310L,
-			438L
+			438L,
+			null
 		);
 		ProductCreateUpdateRequestDto createRamenRequest2 = new ProductCreateUpdateRequestDto(
 			"name2",
@@ -339,7 +356,8 @@ public class ProductIntegrationTest {
 			2000,
 			431L,
 			310L,
-			442L
+			442L,
+			null
 		);
 		ProductCreateUpdateRequestDto createShoeRequest = new ProductCreateUpdateRequestDto(
 			"name3",
@@ -348,7 +366,8 @@ public class ProductIntegrationTest {
 			3000,
 			416L,
 			324L,
-			438L
+			438L,
+			null
 		);
 		ProductCreateUpdateRequestDto createAlcoholRequest = new ProductCreateUpdateRequestDto(
 			"name4",
@@ -357,7 +376,8 @@ public class ProductIntegrationTest {
 			4000,
 			423L,
 			315L,
-			439L
+			439L,
+			null
 		);
 		productService.createProduct(createRamenRequest1);
 		productService.createProduct(createRamenRequest2);
@@ -394,7 +414,8 @@ public class ProductIntegrationTest {
 			1000,
 			414L,
 			310L,
-			438L
+			438L,
+			null
 		);
 		ProductDetailResponseDto productDto = productService.createProduct(createRequest);
 
@@ -405,17 +426,18 @@ public class ProductIntegrationTest {
 			2000,
 			415L,
 			310L,
-			438L
+			438L,
+			Set.of(350L, 351L)
 		);
 
 		// when & then
-		mockMvc.perform(put("/v1/products/" + productDto.productId())
+		mockMvc.perform(put("/v1/products/" + productDto.id())
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(new ObjectMapper().writeValueAsString(updateRequest)))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
 			.andExpect(jsonPath("$.code", is("C000")))
-			.andExpect(jsonPath("$.data.productId", is(productDto.productId().intValue())))
+			.andExpect(jsonPath("$.data.id", is(productDto.id().intValue())))
 			.andExpect(jsonPath("$.data.name", is(updateRequest.name())))
 			.andExpect(jsonPath("$.data.description", is(updateRequest.description())))
 			.andExpect(jsonPath("$.data.address", is(updateRequest.address())))
@@ -441,12 +463,13 @@ public class ProductIntegrationTest {
 			1000,
 			414L,
 			310L,
-			438L
+			438L,
+			Set.of(350L, 351L)
 		);
 		ProductDetailResponseDto productDto = productService.createProduct(createRequest);
 
 		// when & then
-		mockMvc.perform(delete("/v1/products/" + productDto.productId())
+		mockMvc.perform(delete("/v1/products/" + productDto.id())
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isNoContent())
 			.andExpect(jsonPath("$.isSuccess", is(true)))

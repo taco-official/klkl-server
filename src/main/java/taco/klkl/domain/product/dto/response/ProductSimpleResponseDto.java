@@ -5,14 +5,14 @@ import taco.klkl.domain.product.domain.Product;
 /**
  * TODO: 상품필터속성 추가 해야함 (상품필터속성 테이블 개발 후)
  * TODO: 상품필터속성 추가 해야함 (상품필터속성 테이블 개발 후)
- * @param productId
+ * @param id
  * @param name
  * @param likeCount
  * @param countryName
  * @param categoryName
  */
 public record ProductSimpleResponseDto(
-	Long productId,
+	Long id,
 	String name,
 	int likeCount,
 	String countryName,

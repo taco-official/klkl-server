@@ -1,6 +1,6 @@
 package taco.klkl.domain.product.controller;
 
-import java.util.List;
+import java.util.Set;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -41,9 +41,9 @@ public class ProductController {
 	@Operation(summary = "상품 목록 조회", description = "상품 목록을 조회합니다.")
 	public PagedResponseDto<ProductSimpleResponseDto> getProducts(
 		@PageableDefault(size = ProductConstants.DEFAULT_PAGE_SIZE) Pageable pageable,
-		@RequestParam(name = "city_id", required = false) List<Long> cityIds,
-		@RequestParam(name = "subcategory_id", required = false) List<Long> subcategoryIds,
-		@RequestParam(name = "filter_id", required = false) List<Long> filterIds
+		@RequestParam(name = "city_id", required = false) Set<Long> cityIds,
+		@RequestParam(name = "subcategory_id", required = false) Set<Long> subcategoryIds,
+		@RequestParam(name = "filter_id", required = false) Set<Long> filterIds
 	) {
 		ProductFilterOptionsDto filterOptions = new ProductFilterOptionsDto(
 			cityIds,

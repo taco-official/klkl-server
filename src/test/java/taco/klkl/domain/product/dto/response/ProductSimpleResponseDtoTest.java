@@ -82,7 +82,7 @@ class ProductSimpleResponseDtoTest {
 		ProductSimpleResponseDto dto = ProductSimpleResponseDto.from(product);
 
 		// then
-		assertThat(dto.productId()).isEqualTo(product.getId());
+		assertThat(dto.id()).isEqualTo(product.getId());
 		assertThat(dto.name()).isEqualTo(product.getName());
 		assertThat(dto.likeCount()).isEqualTo(product.getLikeCount());
 		assertThat(dto.countryName()).isEqualTo(product.getCity().getCountry().getName().getKoreanName());
@@ -102,7 +102,7 @@ class ProductSimpleResponseDtoTest {
 		);
 
 		// then
-		assertThat(dto.productId()).isEqualTo(product.getId());
+		assertThat(dto.id()).isEqualTo(product.getId());
 		assertThat(dto.name()).isEqualTo(product.getName());
 		assertThat(dto.likeCount()).isEqualTo(product.getLikeCount());
 		assertThat(dto.countryName()).isEqualTo(city.getCountry().getName().getKoreanName());

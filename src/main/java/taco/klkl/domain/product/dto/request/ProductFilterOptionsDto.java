@@ -1,10 +1,10 @@
 package taco.klkl.domain.product.dto.request;
 
-import java.util.List;
+import java.util.Set;
 
 public record ProductFilterOptionsDto(
-	List<Long> cityIds,
-	List<Long> subcategoryIds,
-	List<Long> filterIds
+	Set<Long> cityIds,
+	Set<Long> subcategoryIds,
+	Set<Long> filterIds
 ) {
 }

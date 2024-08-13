@@ -70,7 +70,7 @@ class ProductDetailResponseDtoTest {
 		ProductDetailResponseDto dto = ProductDetailResponseDto.from(mockProduct);
 
 		// then
-		assertThat(dto.productId()).isEqualTo(mockProduct.getId());
+		assertThat(dto.id()).isEqualTo(mockProduct.getId());
 		assertThat(dto.name()).isEqualTo(mockProduct.getName());
 		assertThat(dto.description()).isEqualTo(mockProduct.getDescription());
 		assertThat(dto.address()).isEqualTo(mockProduct.getAddress());
@@ -89,7 +89,7 @@ class ProductDetailResponseDtoTest {
 		ProductDetailResponseDto dto = ProductDetailResponseDto.from(mockProduct);
 
 		// then
-		assertThat(dto.productId()).isEqualTo(mockProduct.getId());
+		assertThat(dto.id()).isEqualTo(mockProduct.getId());
 		assertThat(dto.name()).isEqualTo(mockProduct.getName());
 		assertThat(dto.description()).isEqualTo(mockProduct.getDescription());
 		assertThat(dto.address()).isEqualTo(mockProduct.getAddress());

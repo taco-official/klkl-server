@@ -10,6 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -24,6 +25,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import taco.klkl.domain.category.domain.CategoryName;
+import taco.klkl.domain.category.dto.response.FilterResponseDto;
 import taco.klkl.domain.category.dto.response.SubcategoryResponseDto;
 import taco.klkl.domain.product.dto.request.ProductCreateUpdateRequestDto;
 import taco.klkl.domain.product.dto.request.ProductFilterOptionsDto;
@@ -74,6 +76,14 @@ public class ProductControllerTest {
 			"currencyCode",
 			"image/flag.jpg"
 		);
+		FilterResponseDto filterResponseDto1 = new FilterResponseDto(
+			1L,
+			"filterName1"
+		);
+		FilterResponseDto filterResponseDto2 = new FilterResponseDto(
+			2L,
+			"filterName2"
+		);
 
 		productSimpleResponseDto = new ProductSimpleResponseDto(
 			1L,
@@ -93,6 +103,7 @@ public class ProductControllerTest {
 			cityResponseDto,
 			subcategoryResponseDto,
 			currencyResponseDto,
+			Set.of(filterResponseDto1, filterResponseDto2),
 			LocalDateTime.now()
 		);
 		productCreateUpdateRequestDto = new ProductCreateUpdateRequestDto(
@@ -102,7 +113,8 @@ public class ProductControllerTest {
 			1000,
 			1L,
 			1L,
-			1L
+			1L,
+			Set.of(1L, 2L)
 		);
 	}
 
@@ -110,7 +122,7 @@ public class ProductControllerTest {
 	@DisplayName("상품 목록 조회 - 성공")
 	void testGetProducts_ShouldReturnPagedProducts() throws Exception {
 		// Given
-		List<ProductSimpleResponseDto> products = Arrays.asList(productSimpleResponseDto);
+		List<ProductSimpleResponseDto> products = List.of(productSimpleResponseDto);
 		PagedResponseDto<ProductSimpleResponseDto> pagedResponse = new PagedResponseDto<>(
 			products, 0, 10, 1, 1, true
 		);
@@ -127,8 +139,8 @@ public class ProductControllerTest {
 			.andExpect(jsonPath("$.isSuccess", is(true)))
 			.andExpect(jsonPath("$.code", is("C000")))
 			.andExpect(jsonPath("$.data.content", hasSize(1)))
-			.andExpect(jsonPath("$.data.content[0].productId",
-				is(productSimpleResponseDto.productId().intValue())))
+			.andExpect(jsonPath("$.data.content[0].id",
+				is(productSimpleResponseDto.id().intValue())))
 			.andExpect(jsonPath("$.data.content[0].name", is(productSimpleResponseDto.name())))
 			.andExpect(jsonPath("$.data.content[0].likeCount", is(productSimpleResponseDto.likeCount())))
 			.andExpect(jsonPath("$.data.content[0].countryName", is(productSimpleResponseDto.countryName())))
@@ -153,7 +165,7 @@ public class ProductControllerTest {
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
 			.andExpect(jsonPath("$.code", is("C000")))
-			.andExpect(jsonPath("$.data.productId", is(productDetailResponseDto.productId().intValue())))
+			.andExpect(jsonPath("$.data.id", is(productDetailResponseDto.id().intValue())))
 			.andExpect(jsonPath("$.data.name", is(productDetailResponseDto.name())))
 			.andExpect(jsonPath("$.data.description", is(productDetailResponseDto.description())))
 			.andExpect(jsonPath("$.data.address", is(productDetailResponseDto.address())))
@@ -195,7 +207,7 @@ public class ProductControllerTest {
 			.andExpect(status().isCreated())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
 			.andExpect(jsonPath("$.code", is("C000")))
-			.andExpect(jsonPath("$.data.productId", is(productDetailResponseDto.productId().intValue())))
+			.andExpect(jsonPath("$.data.id", is(productDetailResponseDto.id().intValue())))
 			.andExpect(jsonPath("$.data.name", is(productDetailResponseDto.name())))
 			.andExpect(jsonPath("$.data.description", is(productDetailResponseDto.description())))
 			.andExpect(jsonPath("$.data.address", is(productDetailResponseDto.address())))
@@ -237,7 +249,7 @@ public class ProductControllerTest {
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
 			.andExpect(jsonPath("$.code", is("C000")))
-			.andExpect(jsonPath("$.data.productId", is(productDetailResponseDto.productId().intValue())))
+			.andExpect(jsonPath("$.data.id", is(productDetailResponseDto.id().intValue())))
 			.andExpect(jsonPath("$.data.name", is(productDetailResponseDto.name())))
 			.andExpect(jsonPath("$.data.description", is(productDetailResponseDto.description())))
 			.andExpect(jsonPath("$.data.address", is(productDetailResponseDto.address())))

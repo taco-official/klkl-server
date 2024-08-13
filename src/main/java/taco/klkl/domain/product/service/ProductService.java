@@ -1,6 +1,8 @@
 package taco.klkl.domain.product.service;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -12,6 +14,7 @@ import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.RequiredArgsConstructor;
+import taco.klkl.domain.category.domain.Filter;
 import taco.klkl.domain.category.domain.Subcategory;
 import taco.klkl.domain.category.exception.SubcategoryNotFoundException;
 import taco.klkl.domain.category.service.FilterService;
@@ -85,6 +88,12 @@ public class ProductService {
 	public ProductDetailResponseDto createProduct(final ProductCreateUpdateRequestDto createRequest) {
 		final Product product = createProductEntity(createRequest);
 		productRepository.save(product);
+		if (createRequest.filterIds() != null) {
+			Set<Filter> filters = createRequest.filterIds().stream()
+				.map(filterService::getFilterEntityById)
+				.collect(Collectors.toSet());
+			product.addFilters(filters);
+		}
 		return ProductDetailResponseDto.from(product);
 	}
 
@@ -94,6 +103,12 @@ public class ProductService {
 		final Product product = productRepository.findById(id)
 			.orElseThrow(ProductNotFoundException::new);
 		updateProductEntity(product, updateRequest);
+		if (updateRequest.filterIds() != null) {
+			Set<Filter> updatedFilters = updateRequest.filterIds().stream()
+				.map(filterService::getFilterEntityById)
+				.collect(Collectors.toSet());
+			product.updateFilters(updatedFilters);
+		}
 		return ProductDetailResponseDto.from(product);
 	}
 
@@ -102,15 +117,6 @@ public class ProductService {
 		final Product product = productRepository.findById(id)
 			.orElseThrow(ProductNotFoundException::new);
 		productRepository.delete(product);
-	}
-
-	public Product getProductEntityById(final Long id) {
-		return productRepository.findById(id)
-			.orElseThrow(ProductNotFoundException::new);
-	}
-
-	public boolean existsProductById(final Long id) {
-		return productRepository.existsById(id);
 	}
 
 	private BooleanBuilder buildFilterOptions(
@@ -191,20 +197,18 @@ public class ProductService {
 		}
 	}
 
-	private void validateCityIds(final List<Long> cityIds) throws InvalidCityIdsException {
+	private void validateCityIds(final Set<Long> cityIds) throws InvalidCityIdsException {
 		boolean isValidCityIds = cityService.isCitiesMappedToSameCountry(cityIds);
 		if (!isValidCityIds) {
 			throw new InvalidCityIdsException();
 		}
 	}
 
-	private void validateSubcategoryIds(final List<Long> subcategoryIds) {
-		subcategoryIds.stream()
-			.forEach(subcategoryService::getSubcategoryEntityById);
+	private void validateSubcategoryIds(final Set<Long> subcategoryIds) {
+		subcategoryIds.forEach(subcategoryService::getSubcategoryEntityById);
 	}
 
-	private void validateFilterIds(final List<Long> filterIds) {
-		filterIds.stream()
-			.forEach(filterService::getFilterEntityById);
+	private void validateFilterIds(final Set<Long> filterIds) {
+		filterIds.forEach(filterService::getFilterEntityById);
 	}
 }

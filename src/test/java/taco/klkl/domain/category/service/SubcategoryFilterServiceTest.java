@@ -67,7 +67,7 @@ public class SubcategoryFilterServiceTest {
 		assertEquals(1, result.size());
 		assertEquals(SubcategoryName.INSTANT_FOOD.getKoreanName(), result.get(0).subcategory());
 		assertEquals(2, result.get(0).filters().size());
-		assertEquals(FilterName.CONVENIENCE_STORE.getKoreanName(), result.get(0).filters().get(0).filter());
-		assertEquals(FilterName.CILANTRO.getKoreanName(), result.get(0).filters().get(1).filter());
+		assertEquals(FilterName.CONVENIENCE_STORE.getKoreanName(), result.get(0).filters().get(0).name());
+		assertEquals(FilterName.CILANTRO.getKoreanName(), result.get(0).filters().get(1).name());
 	}
 }

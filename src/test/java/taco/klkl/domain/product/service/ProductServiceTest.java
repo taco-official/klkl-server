@@ -4,9 +4,10 @@ import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -27,10 +28,12 @@ import taco.klkl.domain.category.domain.CategoryName;
 import taco.klkl.domain.category.domain.Filter;
 import taco.klkl.domain.category.domain.Subcategory;
 import taco.klkl.domain.category.domain.SubcategoryName;
+import taco.klkl.domain.category.dto.response.FilterResponseDto;
 import taco.klkl.domain.category.service.FilterService;
 import taco.klkl.domain.category.service.SubcategoryService;
 import taco.klkl.domain.product.dao.ProductRepository;
 import taco.klkl.domain.product.domain.Product;
+import taco.klkl.domain.product.domain.ProductFilter;
 import taco.klkl.domain.product.domain.QProduct;
 import taco.klkl.domain.product.dto.request.ProductCreateUpdateRequestDto;
 import taco.klkl.domain.product.dto.request.ProductFilterOptionsDto;
@@ -132,7 +135,8 @@ class ProductServiceTest {
 			1000,
 			1L,
 			1L,
-			1L
+			1L,
+			Set.of(1L, 2L)
 		);
 	}
 
@@ -140,9 +144,9 @@ class ProductServiceTest {
 	@DisplayName("상품 목록 조회 - 성공")
 	void testGetProductsByFilterOptions() {
 		// Given
-		List<Long> cityIds = List.of(4L, 5L);
-		List<Long> subcategoryIds = List.of(1L, 2L, 3L);
-		List<Long> filterIds = List.of(6L, 7L);
+		Set<Long> cityIds = Set.of(4L, 5L);
+		Set<Long> subcategoryIds = Set.of(1L, 2L, 3L);
+		Set<Long> filterIds = Set.of(6L, 7L);
 		ProductFilterOptionsDto filterOptions = new ProductFilterOptionsDto(
 			cityIds,
 			subcategoryIds,
@@ -151,7 +155,7 @@ class ProductServiceTest {
 		Pageable pageable = PageRequest.of(0, 10);
 
 		// Mocking QueryDSL behavior
-		List<Product> productList = Arrays.asList(testProduct);
+		List<Product> productList = List.of(testProduct);
 
 		JPAQuery<Product> productQuery = mock(JPAQuery.class);
 		JPAQuery<Long> countQuery = mock(JPAQuery.class);
@@ -167,12 +171,12 @@ class ProductServiceTest {
 		when(queryFactory.select(product.count())).thenReturn(countQuery);
 		when(countQuery.from(product)).thenReturn(countQuery);
 		when(countQuery.where(any(BooleanBuilder.class))).thenReturn(countQuery);
-		when(countQuery.fetchOne()).thenReturn((long) productList.size());
+		when(countQuery.fetchOne()).thenReturn((long)productList.size());
 
 		// Mocking validation behavior
 		Subcategory mockSubcategory = mock(Subcategory.class);
 		Filter mockFilter = mock(Filter.class);
-		when(cityService.isCitiesMappedToSameCountry(anyList())).thenReturn(true);
+		when(cityService.isCitiesMappedToSameCountry(anySet())).thenReturn(true);
 		when(subcategoryService.getSubcategoryEntityById(anyLong())).thenReturn(mockSubcategory);
 		when(filterService.getFilterEntityById(anyLong())).thenReturn(mockFilter);
 
@@ -182,7 +186,7 @@ class ProductServiceTest {
 
 		// Then
 		assertThat(result.content()).hasSize(1);
-		assertThat(result.content().get(0).productId()).isEqualTo(testProduct.getId());
+		assertThat(result.content().get(0).id()).isEqualTo(testProduct.getId());
 		assertThat(result.totalElements()).isEqualTo(1);
 		assertThat(result.totalPages()).isEqualTo(1);
 		assertThat(result.pageNumber()).isEqualTo(0);
@@ -203,14 +207,43 @@ class ProductServiceTest {
 	@DisplayName("상품 상세 조회 - 성공")
 	void testGetProductById() {
 		// Given
-		when(productRepository.findById(1L)).thenReturn(Optional.of(testProduct));
+		Long productId = 1L;
+		when(productRepository.findById(productId)).thenReturn(Optional.of(testProduct));
 
 		// When
-		ProductDetailResponseDto result = productService.getProductById(1L);
+		ProductDetailResponseDto result = productService.getProductById(productId);
 
 		// Then
-		assertThat(result.productId()).isEqualTo(testProduct.getId());
-		verify(productRepository).findById(1L);
+		assertThat(result).isNotNull();
+		assertThat(result.id()).isEqualTo(testProduct.getId());
+		assertThat(result.name()).isEqualTo(testProduct.getName());
+		assertThat(result.description()).isEqualTo(testProduct.getDescription());
+		assertThat(result.address()).isEqualTo(testProduct.getAddress());
+		assertThat(result.price()).isEqualTo(testProduct.getPrice());
+
+		// 필터 검증
+		if (testProduct.getFilters() != null && !testProduct.getFilters().isEmpty()) {
+			assertThat(result.filters()).isNotNull();
+			assertThat(result.filters()).hasSize(testProduct.getFilters().size());
+			Set<Long> resultFilterIds = result.filters().stream()
+				.map(FilterResponseDto::id)
+				.collect(Collectors.toSet());
+
+			Set<Long> testProductFilterIds = testProduct.getFilters().stream()
+				.map(ProductFilter::getFilter)
+				.map(Filter::getId)
+				.collect(Collectors.toSet());
+
+			assertThat(resultFilterIds).containsExactlyInAnyOrderElementsOf(testProductFilterIds);
+		} else {
+			assertThat(result.filters()).isEmpty();
+		}
+
+		// City, Subcategory, Currency 검증
+		assertThat(result.city().cityId()).isEqualTo(testProduct.getCity().getCityId());
+		assertThat(result.subcategory().subcategoryId()).isEqualTo(testProduct.getSubcategory().getId());
+		assertThat(result.currency().currencyId()).isEqualTo(testProduct.getCurrency().getCurrencyId());
+		verify(productRepository).findById(productId);
 	}
 
 	@Test
@@ -245,7 +278,7 @@ class ProductServiceTest {
 		ProductDetailResponseDto result = productService.createProduct(requestDto);
 
 		// Then
-		assertThat(result.productId()).isEqualTo(1L);
+		assertThat(result.id()).isEqualTo(1L);
 		verify(productRepository).save(argThat(savedProduct -> {
 			assertThat(savedProduct.getId()).isEqualTo(1L);
 			assertThat(savedProduct.getName()).isEqualTo(requestDto.name());
@@ -273,7 +306,7 @@ class ProductServiceTest {
 		ProductDetailResponseDto result = productService.updateProduct(1L, requestDto);
 
 		// Then
-		assertThat(result.productId()).isEqualTo(testProduct.getId());
+		assertThat(result.id()).isEqualTo(testProduct.getId());
 		verify(productRepository).findById(1L);
 	}
 
