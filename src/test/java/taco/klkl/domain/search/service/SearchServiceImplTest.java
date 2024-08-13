@@ -21,6 +21,9 @@ import taco.klkl.domain.category.dto.response.CategoryResponseDto;
 import taco.klkl.domain.category.dto.response.SubcategoryResponseDto;
 import taco.klkl.domain.category.service.CategoryService;
 import taco.klkl.domain.category.service.SubcategoryService;
+import taco.klkl.domain.product.domain.Product;
+import taco.klkl.domain.product.dto.response.ProductSimpleResponseDto;
+import taco.klkl.domain.product.service.ProductService;
 import taco.klkl.domain.region.domain.City;
 import taco.klkl.domain.region.domain.Country;
 import taco.klkl.domain.region.domain.Currency;
@@ -32,6 +35,8 @@ import taco.klkl.domain.region.enums.CountryType;
 import taco.klkl.domain.region.service.CityService;
 import taco.klkl.domain.region.service.CountryService;
 import taco.klkl.domain.search.dto.response.SearchResponseDto;
+import taco.klkl.domain.user.domain.User;
+import taco.klkl.global.common.constants.UserConstants;
 
 @ExtendWith(MockitoExtension.class)
 class SearchServiceImplTest {
@@ -52,6 +57,9 @@ class SearchServiceImplTest {
 	SubcategoryService subcategoryService;
 
 	@Mock
+	ProductService productService;
+
+	@Mock
 	Region region;
 
 	@Mock
@@ -61,12 +69,23 @@ class SearchServiceImplTest {
 	private final City city = City.of(country, CityType.BORACAY);
 	private final Category category = Category.of(CategoryName.CLOTHES);
 	private final Subcategory subcategory = Subcategory.of(category, SubcategoryName.MAKEUP);
+	private final User user = UserConstants.TEST_USER;
+	private final Product product = Product.of(
+		"ProductTestProduct",
+		"description",
+		"address",
+		1000,
+		user,
+		city,
+		subcategory,
+		currency
+	);
 
 	@Test
 	@DisplayName("SearchService 테스트")
 	void testGetSearchResult() {
 		// given
-		String queryParam = "test";
+		String queryParam = "Test";
 
 		List<CountrySimpleResponseDto> mockCountries = Collections.singletonList(
 			CountrySimpleResponseDto.from(country));
@@ -74,11 +93,13 @@ class SearchServiceImplTest {
 		List<CategoryResponseDto> mockCategories = Collections.singletonList(CategoryResponseDto.from(category));
 		List<SubcategoryResponseDto> mockSubcategories = Collections.singletonList(
 			SubcategoryResponseDto.from(subcategory));
+		List<ProductSimpleResponseDto> mockProducts = Collections.singletonList(ProductSimpleResponseDto.from(product));
 
 		when(countryService.getAllCountriesByCountryTypes(any(List.class))).thenReturn(mockCountries);
 		when(cityService.getAllCitiesByCityTypes(any(List.class))).thenReturn(mockCities);
 		when(categoryService.getCategoriesByCategoryNames(any(List.class))).thenReturn(mockCategories);
 		when(subcategoryService.getSubcategoriesBySubcategoryNames(any(List.class))).thenReturn(mockSubcategories);
+		when(productService.getProductsByPartialName(queryParam)).thenReturn(mockProducts);
 
 		// when
 		SearchResponseDto result = searchService.getSearchResult(queryParam);
@@ -89,5 +110,6 @@ class SearchServiceImplTest {
 		assertThat(result.cities()).isEqualTo(mockCities);
 		assertThat(result.categories()).isEqualTo(mockCategories);
 		assertThat(result.subcategories()).isEqualTo(mockSubcategories);
+		assertThat(result.products()).isEqualTo(mockProducts);
 	}
 }
