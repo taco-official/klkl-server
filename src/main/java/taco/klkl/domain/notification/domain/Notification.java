@@ -44,7 +44,7 @@ public class Notification {
 	private Comment comment;
 
 	@PrePersist
-	protected void prePersist() {
+	public void prePersist() {
 		if (isRead == null) {
 			isRead = NotificationConstants.DEFAULT_IS_READ_VALUE;
 		}
