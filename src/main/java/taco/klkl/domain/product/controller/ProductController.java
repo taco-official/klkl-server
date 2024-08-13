@@ -42,11 +42,13 @@ public class ProductController {
 	public PagedResponseDto<ProductSimpleResponseDto> getProducts(
 		@PageableDefault(size = ProductConstants.DEFAULT_PAGE_SIZE) Pageable pageable,
 		@RequestParam(name = "city_id", required = false) List<Long> cityIds,
-		@RequestParam(name = "subcategory_id", required = false) List<Long> subcategoryIds
+		@RequestParam(name = "subcategory_id", required = false) List<Long> subcategoryIds,
+		@RequestParam(name = "filter_id", required = false) List<Long> filterIds
 	) {
 		ProductFilterOptionsDto filterOptions = new ProductFilterOptionsDto(
 			cityIds,
-			subcategoryIds
+			subcategoryIds,
+			filterIds
 		);
 		return productService.getProductsByFilterOptions(pageable, filterOptions);
 	}

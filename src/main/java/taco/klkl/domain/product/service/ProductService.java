@@ -14,10 +14,12 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import taco.klkl.domain.category.domain.Subcategory;
 import taco.klkl.domain.category.exception.SubcategoryNotFoundException;
+import taco.klkl.domain.category.service.FilterService;
 import taco.klkl.domain.category.service.SubcategoryService;
 import taco.klkl.domain.product.dao.ProductRepository;
 import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.product.domain.QProduct;
+import taco.klkl.domain.product.domain.QProductFilter;
 import taco.klkl.domain.product.dto.request.ProductCreateUpdateRequestDto;
 import taco.klkl.domain.product.dto.request.ProductFilterOptionsDto;
 import taco.klkl.domain.product.dto.response.ProductDetailResponseDto;
@@ -45,6 +47,7 @@ public class ProductService {
 	private final CityService cityService;
 	private final CurrencyService currencyService;
 	private final SubcategoryService subcategoryService;
+	private final FilterService filterService;
 
 	private final UserUtil userUtil;
 
@@ -110,14 +113,21 @@ public class ProductService {
 		return productRepository.existsById(id);
 	}
 
-	private BooleanBuilder buildFilterOptions(ProductFilterOptionsDto options, QProduct product) {
+	private BooleanBuilder buildFilterOptions(
+		final ProductFilterOptionsDto options,
+		final QProduct product
+	) {
 		BooleanBuilder builder = new BooleanBuilder();
+		QProductFilter productFilter = QProductFilter.productFilter;
 
 		if (options.cityIds() != null && !options.cityIds().isEmpty()) {
 			builder.and(product.city.cityId.in(options.cityIds()));
 		}
 		if (options.subcategoryIds() != null && !options.subcategoryIds().isEmpty()) {
 			builder.and(product.subcategory.id.in(options.subcategoryIds()));
+		}
+		if (options.filterIds() != null && !options.filterIds().isEmpty()) {
+			builder.and(productFilter.filter.id.in(options.filterIds()));
 		}
 
 		return builder;
@@ -176,6 +186,9 @@ public class ProductService {
 		if (filterOptions.subcategoryIds() != null) {
 			validateSubcategoryIds(filterOptions.subcategoryIds());
 		}
+		if (filterOptions.filterIds() != null) {
+			validateFilterIds(filterOptions.filterIds());
+		}
 	}
 
 	private void validateCityIds(final List<Long> cityIds) throws InvalidCityIdsException {
@@ -186,6 +199,12 @@ public class ProductService {
 	}
 
 	private void validateSubcategoryIds(final List<Long> subcategoryIds) {
-		subcategoryService.getSubcategoryList(subcategoryIds);
+		subcategoryIds.stream()
+			.forEach(subcategoryService::getSubcategoryEntityById);
+	}
+
+	private void validateFilterIds(final List<Long> filterIds) {
+		filterIds.stream()
+			.forEach(filterService::getFilterEntityById);
 	}
 }

@@ -24,8 +24,10 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import taco.klkl.domain.category.domain.Category;
 import taco.klkl.domain.category.domain.CategoryName;
+import taco.klkl.domain.category.domain.Filter;
 import taco.klkl.domain.category.domain.Subcategory;
 import taco.klkl.domain.category.domain.SubcategoryName;
+import taco.klkl.domain.category.service.FilterService;
 import taco.klkl.domain.category.service.SubcategoryService;
 import taco.klkl.domain.product.dao.ProductRepository;
 import taco.klkl.domain.product.domain.Product;
@@ -44,7 +46,6 @@ import taco.klkl.domain.region.enums.CountryType;
 import taco.klkl.domain.region.enums.CurrencyType;
 import taco.klkl.domain.region.enums.RegionType;
 import taco.klkl.domain.region.service.CityService;
-import taco.klkl.domain.region.service.CountryService;
 import taco.klkl.domain.region.service.CurrencyService;
 import taco.klkl.domain.user.domain.User;
 import taco.klkl.global.common.constants.UserConstants;
@@ -63,13 +64,13 @@ class ProductServiceTest {
 	private CityService cityService;
 
 	@Mock
-	private CountryService countryService;
-
-	@Mock
 	private CurrencyService currencyService;
 
 	@Mock
 	private SubcategoryService subcategoryService;
+
+	@Mock
+	private FilterService filterService;
 
 	@Mock
 	private UserUtil userUtil;
@@ -141,9 +142,11 @@ class ProductServiceTest {
 		// Given
 		List<Long> cityIds = List.of(4L, 5L);
 		List<Long> subcategoryIds = List.of(1L, 2L, 3L);
+		List<Long> filterIds = List.of(6L, 7L);
 		ProductFilterOptionsDto filterOptions = new ProductFilterOptionsDto(
 			cityIds,
-			subcategoryIds
+			subcategoryIds,
+			filterIds
 		);
 		Pageable pageable = PageRequest.of(0, 10);
 
@@ -167,9 +170,11 @@ class ProductServiceTest {
 		when(countQuery.fetchOne()).thenReturn((long) productList.size());
 
 		// Mocking validation behavior
-		when(countryService.existsCountryById(anyLong())).thenReturn(true);
+		Subcategory mockSubcategory = mock(Subcategory.class);
+		Filter mockFilter = mock(Filter.class);
 		when(cityService.isCitiesMappedToSameCountry(anyList())).thenReturn(true);
-		when(subcategoryService.getSubcategoryList(anyList())).thenReturn(anyList());
+		when(subcategoryService.getSubcategoryEntityById(anyLong())).thenReturn(mockSubcategory);
+		when(filterService.getFilterEntityById(anyLong())).thenReturn(mockFilter);
 
 		// When
 		PagedResponseDto<ProductSimpleResponseDto> result = productService
@@ -190,7 +195,8 @@ class ProductServiceTest {
 
 		// Verify that validation methods were called
 		verify(cityService).isCitiesMappedToSameCountry(cityIds);
-		verify(subcategoryService).getSubcategoryList(subcategoryIds);
+		verify(subcategoryService, times(3)).getSubcategoryEntityById(anyLong());
+		verify(filterService, times(2)).getFilterEntityById(anyLong());
 	}
 
 	@Test
