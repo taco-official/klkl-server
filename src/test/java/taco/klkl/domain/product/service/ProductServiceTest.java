@@ -2,6 +2,7 @@ package taco.klkl.domain.product.service;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
 import java.util.Arrays;
@@ -25,6 +26,8 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import taco.klkl.domain.category.domain.Category;
 import taco.klkl.domain.category.domain.CategoryName;
+import taco.klkl.domain.category.domain.QCategory;
+import taco.klkl.domain.category.domain.QSubcategory;
 import taco.klkl.domain.category.domain.Subcategory;
 import taco.klkl.domain.category.domain.SubcategoryName;
 import taco.klkl.domain.category.service.SubcategoryService;
@@ -41,6 +44,8 @@ import taco.klkl.domain.product.exception.ProductNotFoundException;
 import taco.klkl.domain.region.domain.City;
 import taco.klkl.domain.region.domain.Country;
 import taco.klkl.domain.region.domain.Currency;
+import taco.klkl.domain.region.domain.QCity;
+import taco.klkl.domain.region.domain.QCountry;
 import taco.klkl.domain.region.domain.Region;
 import taco.klkl.domain.region.enums.CityType;
 import taco.klkl.domain.region.enums.CountryType;
@@ -362,6 +367,34 @@ class ProductServiceTest {
 		org.junit.jupiter.api.Assertions.assertThrows(LikeCountBelowMinimumException.class, () -> {
 			productService.decreaseLikeCount(mockProduct);
 		});
+	}
+
+	@Test
+	@DisplayName("상품이름 부분문자열 조회 테스트")
+	void testGetProductsByPartialName() {
+		// given
+		String partialName = "am";
+		List<Product> mockProducts = List.of(testProduct);
+
+		JPAQuery<Product> mockQuery = mock(JPAQuery.class);
+		when(queryFactory.selectFrom(QProduct.product)).thenReturn(mockQuery);
+		when(mockQuery.join(QProduct.product.city, QCity.city)).thenReturn(mockQuery);
+		when(mockQuery.fetchJoin()).thenReturn(mockQuery);
+		when(mockQuery.join(QCity.city.country, QCountry.country)).thenReturn(mockQuery);
+		when(mockQuery.fetchJoin()).thenReturn(mockQuery);
+		when(mockQuery.join(QProduct.product.subcategory, QSubcategory.subcategory)).thenReturn(mockQuery);
+		when(mockQuery.fetchJoin()).thenReturn(mockQuery);
+		when(mockQuery.join(QSubcategory.subcategory.category, QCategory.category)).thenReturn(mockQuery);
+		when(mockQuery.fetchJoin()).thenReturn(mockQuery);
+		when(mockQuery.where(QProduct.product.name.contains(partialName))).thenReturn(mockQuery);
+		when(mockQuery.fetch()).thenReturn(mockProducts);
+
+		// when
+		List<ProductSimpleResponseDto> responseDtos = productService.getProductsByPartialName(partialName);
+
+		// then
+		assertThat(responseDtos.get(0)).isEqualTo(ProductSimpleResponseDto.from(testProduct));
+
 	}
 
 }
