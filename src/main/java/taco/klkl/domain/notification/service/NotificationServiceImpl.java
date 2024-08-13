@@ -21,7 +21,7 @@ import taco.klkl.domain.notification.dao.NotificationRepository;
 import taco.klkl.domain.notification.domain.Notification;
 import taco.klkl.domain.notification.domain.QNotification;
 import taco.klkl.domain.notification.dto.response.NotificationResponse;
-import taco.klkl.domain.notification.exception.NotificationException;
+import taco.klkl.domain.notification.exception.NotificationNotFoundException;
 import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.user.domain.User;
 import taco.klkl.global.common.response.PagedResponseDto;
@@ -90,7 +90,7 @@ public class NotificationServiceImpl implements NotificationService {
 	public NotificationResponse readNotificationById(long id) {
 
 		Notification notification = notificationRepository.findById(id)
-			.orElseThrow(NotificationException::new);
+			.orElseThrow(NotificationNotFoundException::new);
 		notification.read();
 		Comment comment = notification.getComment();
 		Product product = comment.getProduct();
