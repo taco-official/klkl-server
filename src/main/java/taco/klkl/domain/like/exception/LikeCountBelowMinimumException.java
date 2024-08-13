@@ -5,6 +5,6 @@ import taco.klkl.global.error.exception.ErrorCode;
 
 public class LikeCountBelowMinimumException extends CustomException {
 	public LikeCountBelowMinimumException() {
-		super(ErrorCode.LIKES_BELOW_MINIMUM);
+		super(ErrorCode.LIKE_BELOW_MINIMUM);
 	}
 }

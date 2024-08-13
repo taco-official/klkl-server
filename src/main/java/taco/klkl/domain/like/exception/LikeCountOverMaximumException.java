@@ -5,6 +5,6 @@ import taco.klkl.global.error.exception.ErrorCode;
 
 public class LikeCountOverMaximumException extends CustomException {
 	public LikeCountOverMaximumException() {
-		super(ErrorCode.LIKES_OVER_MAXIMUM);
+		super(ErrorCode.LIKE_OVER_MAXIMUM);
 	}
 }
