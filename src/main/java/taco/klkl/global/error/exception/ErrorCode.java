@@ -24,8 +24,8 @@ public enum ErrorCode {
 	INVALID_CITY_IDS(HttpStatus.BAD_REQUEST, "C021", "선택한 도시들은 동일한 국가에 속하지 않습니다."),
 
 	// Like
-	LIKE_OVER_MAXIMUM(HttpStatus.BAD_REQUEST, "C030", "상품의 좋아요수가 최대값입니다. 2147483647"),
-	LIKE_BELOW_MINIMUM(HttpStatus.BAD_REQUEST, "C031", "상품의 좋아요수가 최소값입니다. 0"),
+	LIKE_COUNT_OVER_MAXIMUM(HttpStatus.BAD_REQUEST, "C030", "상품의 좋아요수가 최대값입니다. 2147483647"),
+	LIKE_COUNT_BELOW_MINIMUM(HttpStatus.BAD_REQUEST, "C031", "상품의 좋아요수가 최소값입니다. 0"),
 	// Comment
 	COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "C040", "존재하지 않는 댓글입니다."),
 	COMMENT_PRODUCT_NOT_MATCH(HttpStatus.BAD_REQUEST, "C041", "다른 상품에 있는 댓글입니다."),
