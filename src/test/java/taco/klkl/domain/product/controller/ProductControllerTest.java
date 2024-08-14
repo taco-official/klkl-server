@@ -8,7 +8,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -90,7 +89,8 @@ public class ProductControllerTest {
 			"productName",
 			10,
 			CountryType.THAILAND.getKoreanName(),
-			CategoryName.FOOD.getKoreanName()
+			CategoryName.FOOD.getKoreanName(),
+			Set.of(filterResponseDto1, filterResponseDto2)
 		);
 		productDetailResponseDto = new ProductDetailResponseDto(
 			1L,

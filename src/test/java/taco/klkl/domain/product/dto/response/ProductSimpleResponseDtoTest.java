@@ -3,6 +3,9 @@ package taco.klkl.domain.product.dto.response;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -10,9 +13,13 @@ import org.mockito.MockitoAnnotations;
 
 import taco.klkl.domain.category.domain.Category;
 import taco.klkl.domain.category.domain.CategoryName;
+import taco.klkl.domain.category.domain.Filter;
+import taco.klkl.domain.category.domain.FilterName;
 import taco.klkl.domain.category.domain.Subcategory;
 import taco.klkl.domain.category.domain.SubcategoryName;
+import taco.klkl.domain.category.dto.response.FilterResponseDto;
 import taco.klkl.domain.product.domain.Product;
+import taco.klkl.domain.product.domain.ProductFilter;
 import taco.klkl.domain.region.domain.City;
 import taco.klkl.domain.region.domain.Country;
 import taco.klkl.domain.region.domain.Currency;
@@ -62,6 +69,12 @@ class ProductSimpleResponseDtoTest {
 			SubcategoryName.INSTANT_FOOD
 		);
 
+		Filter filter1 = Filter.of(FilterName.CILANTRO);
+		Filter filter2 = Filter.of(FilterName.CONVENIENCE_STORE);
+		Set<ProductFilter> productFilters = Set.of(filter1, filter2).stream()
+			.map(filter -> ProductFilter.of(product, filter))
+			.collect(Collectors.toSet());
+
 		product = mock(Product.class);
 		when(product.getId()).thenReturn(1L);
 		when(product.getName()).thenReturn("productName");
@@ -73,6 +86,7 @@ class ProductSimpleResponseDtoTest {
 		when(product.getCity()).thenReturn(city);
 		when(product.getSubcategory()).thenReturn(subcategory);
 		when(product.getCurrency()).thenReturn(currency);
+		when(product.getFilters()).thenReturn(productFilters);
 	}
 
 	@Test
@@ -93,12 +107,18 @@ class ProductSimpleResponseDtoTest {
 	@DisplayName("생성자를 통해 ProductSimpleResponseDto 생성 테스트")
 	void testConstructor() {
 		// when
+		Set<FilterResponseDto> filters = product.getFilters().stream()
+			.map(ProductFilter::getFilter)
+			.map(FilterResponseDto::from)
+			.collect(Collectors.toSet());
+
 		ProductSimpleResponseDto dto = new ProductSimpleResponseDto(
 			product.getId(),
 			product.getName(),
 			product.getLikeCount(),
 			city.getCountry().getName().getKoreanName(),
-			product.getSubcategory().getCategory().getName().getKoreanName()
+			product.getSubcategory().getCategory().getName().getKoreanName(),
+			filters
 		);
 
 		// then
