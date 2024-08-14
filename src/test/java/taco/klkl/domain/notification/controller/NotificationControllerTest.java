@@ -1,7 +1,6 @@
 package taco.klkl.domain.notification.controller;
 
 import static org.hamcrest.Matchers.*;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -15,7 +14,6 @@ import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.Pageable;
 import org.springframework.test.web.servlet.MockMvc;
 
 import taco.klkl.domain.category.domain.Category;
@@ -35,7 +33,6 @@ import taco.klkl.domain.region.enums.CityType;
 import taco.klkl.domain.region.enums.CountryType;
 import taco.klkl.domain.user.domain.User;
 import taco.klkl.global.common.constants.UserConstants;
-import taco.klkl.global.common.response.PagedResponseDto;
 
 @WebMvcTest(NotificationController.class)
 class NotificationControllerTest {
@@ -71,11 +68,13 @@ class NotificationControllerTest {
 
 	private final Comment comment1 = Comment.of(product, user, "content1");
 	private final Comment comment2 = Comment.of(product, user, "content2");
-	private final Notification notification1 = Notification.of(comment1);
-	private final Notification notification2 = Notification.of(comment2);
+	private Notification notification1;
+	private Notification notification2;
 
 	@BeforeEach
 	void setUp() {
+		notification1 = Notification.of(comment1);
+		notification2 = Notification.of(comment2);
 		notification1.prePersist();
 		notification2.prePersist();
 	}
@@ -88,28 +87,62 @@ class NotificationControllerTest {
 		NotificationResponse notificationResponse = NotificationResponse.from(notification1);
 		NotificationResponse notificationResponse2 = NotificationResponse.from(notification2);
 		List<NotificationResponse> notificationResponses = List.of(notificationResponse, notificationResponse2);
-		PagedResponseDto<NotificationResponse> pagedResponse = new PagedResponseDto<>(
-			notificationResponses, 0, 10, 2, 1, true
-		);
-		when(notificationService.getNotifications(any(Pageable.class))).thenReturn(pagedResponse);
+		when(notificationService.getNotifications()).thenReturn(notificationResponses);
 
 		// when & then
-		mockMvc.perform(get("/v1/notifications")
-				.param("page", "0")
-				.param("size", "10"))
+		mockMvc.perform(get("/v1/notifications"))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
-			.andExpect(jsonPath("$.data.content[0].notification.isRead", is(false)))
-			.andExpect(jsonPath("$.data.content[0].product.name", is(product.getName())))
-			.andExpect(jsonPath("$.data.content[0].comment.content", is(comment1.getContent())))
-			.andExpect(jsonPath("$.data.content[1].notification.isRead", is(false)))
-			.andExpect(jsonPath("$.data.content[1].product.name", is(product.getName())))
-			.andExpect(jsonPath("$.data.content[1].comment.content", is(comment2.getContent())))
-			.andExpect(jsonPath("$.data.pageNumber", is(0)))
-			.andExpect(jsonPath("$.data.pageSize", is(10)))
-			.andExpect(jsonPath("$.data.totalElements", is(2)))
-			.andExpect(jsonPath("$.data.totalPages", is(1)))
-			.andExpect(jsonPath("$.data.last", is(true)))
+			.andExpect(jsonPath("$.data[0].notification.isRead", is(false)))
+			.andExpect(jsonPath("$.data[0].product.name", is(product.getName())))
+			.andExpect(jsonPath("$.data[0].comment.content", is(comment1.getContent())))
+			.andExpect(jsonPath("$.data[1].notification.isRead", is(false)))
+			.andExpect(jsonPath("$.data[1].product.name", is(product.getName())))
+			.andExpect(jsonPath("$.data[1].comment.content", is(comment2.getContent())))
+			.andExpect(jsonPath("$.timestamp", notNullValue()));
+	}
+
+	@Test
+	@DisplayName("모든 알림 읽음 테스트")
+	void testReadAllNotifications() throws Exception {
+		// given
+		notification1.read();
+		notification2.read();
+		NotificationResponse notificationResponse1 = NotificationResponse.from(notification1);
+		NotificationResponse notificationResponse2 = NotificationResponse.from(notification2);
+		List<NotificationResponse> notificationResponseList = List.of(notificationResponse1, notificationResponse2);
+		when(notificationService.readAllNotifications()).thenReturn(notificationResponseList);
+
+		// when
+		mockMvc.perform(put("/v1/notifications/all"))
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.isSuccess", is(true)))
+			.andExpect(jsonPath("$.data[0].notification.isRead", is(true)))
+			.andExpect(jsonPath("$.data[0].product.name", is(product.getName())))
+			.andExpect(jsonPath("$.data[0].comment.content", is(comment1.getContent())))
+			.andExpect(jsonPath("$.data[1].notification.isRead", is(true)))
+			.andExpect(jsonPath("$.data[1].product.name", is(product.getName())))
+			.andExpect(jsonPath("$.data[1].comment.content", is(comment2.getContent())))
+			.andExpect(jsonPath("$.timestamp", notNullValue()));
+
+		// then
+	}
+
+	@Test
+	@DisplayName("단일 알림 읽음 테스트")
+	void testReadOneNotifications() throws Exception {
+		// given
+		notification1.read();
+		NotificationResponse notificationResponse = NotificationResponse.from(notification1);
+		when(notificationService.readNotificationById(1L)).thenReturn(notificationResponse);
+
+		// when & then
+		mockMvc.perform(put("/v1/notifications/1"))
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.isSuccess", is(true)))
+			.andExpect(jsonPath("$.data.notification.isRead", is(true)))
+			.andExpect(jsonPath("$.data.product.name", is(product.getName())))
+			.andExpect(jsonPath("$.data.comment.content", is(comment1.getContent())))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
 	}
 }
