@@ -22,6 +22,6 @@ public class RatingConverter implements AttributeConverter<Rating, BigDecimal> {
 		if (dbData == null) {
 			return null;
 		}
-		return Rating.valueOf(dbData.toString());
+		return Rating.from(dbData.doubleValue());
 	}
 }
