@@ -1,5 +1,8 @@
 package taco.klkl.domain.product.dto.request;
 
+import static taco.klkl.global.common.constants.ProductConstants.*;
+import static taco.klkl.global.common.constants.ProductValidationMessages.*;
+
 import java.util.Set;
 
 import jakarta.validation.constraints.DecimalMax;
@@ -9,9 +12,6 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
 import taco.klkl.global.common.constants.ProductConstants;
-
-import static taco.klkl.global.common.constants.ProductValidationMessages.*;
-import static taco.klkl.global.common.constants.ProductConstants.*;
 
 /**
  * TODO: 상품필터속성 추가 해야함 (상품필터속성 테이블 개발 후)
