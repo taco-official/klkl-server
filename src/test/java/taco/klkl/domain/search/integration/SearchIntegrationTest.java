@@ -28,7 +28,7 @@ public class SearchIntegrationTest {
 	@Test
 	void getSearchTest() throws Exception {
 		// given
-		String query = "이";
+		String query = "리";
 		SearchResponseDto searchResponseDto = searchService.getSearchResult(query);
 
 		// when & then
@@ -40,6 +40,7 @@ public class SearchIntegrationTest {
 			.andExpect(jsonPath("$.data.countries", hasSize(searchResponseDto.countries().size())))
 			.andExpect(jsonPath("$.data.cities", hasSize(searchResponseDto.cities().size())))
 			.andExpect(jsonPath("$.data.categories", hasSize(searchResponseDto.categories().size())))
-			.andExpect(jsonPath("$.data.subcategories", hasSize(searchResponseDto.subcategories().size())));
+			.andExpect(jsonPath("$.data.subcategories", hasSize(searchResponseDto.subcategories().size())))
+			.andExpect(jsonPath("$.data.products", hasSize(searchResponseDto.products().size())));
 	}
 }

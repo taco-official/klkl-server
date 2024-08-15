@@ -14,6 +14,8 @@ import taco.klkl.domain.category.dto.response.CategoryResponseDto;
 import taco.klkl.domain.category.dto.response.SubcategoryResponseDto;
 import taco.klkl.domain.category.service.CategoryService;
 import taco.klkl.domain.category.service.SubcategoryService;
+import taco.klkl.domain.product.dto.response.ProductSimpleResponseDto;
+import taco.klkl.domain.product.service.ProductService;
 import taco.klkl.domain.region.dto.response.CityResponseDto;
 import taco.klkl.domain.region.dto.response.CountrySimpleResponseDto;
 import taco.klkl.domain.region.enums.CityType;
@@ -33,6 +35,7 @@ public class SearchServiceImpl implements SearchService {
 	private final CityService cityService;
 	private final CategoryService categoryService;
 	private final SubcategoryService subcategoryService;
+	private final ProductService productService;
 
 	@Override
 	public SearchResponseDto getSearchResult(final String queryParam) {
@@ -41,8 +44,9 @@ public class SearchServiceImpl implements SearchService {
 		final List<CityResponseDto> findCities = getCitiesByQueryParam(queryParam);
 		final List<CategoryResponseDto> findCategories = getCategoriesByQueryParam(queryParam);
 		final List<SubcategoryResponseDto> findSubcategories = getSubcategoriesByQueryParam(queryParam);
+		List<ProductSimpleResponseDto> findProducts = getProductsByQueryParam(queryParam);
 
-		return SearchResponseDto.of(findCountries, findCities, findCategories, findSubcategories);
+		return SearchResponseDto.of(findCountries, findCities, findCategories, findSubcategories, findProducts);
 	}
 
 	private List<CountrySimpleResponseDto> getCountriesByQueryParam(final String queryParam) {
@@ -67,6 +71,10 @@ public class SearchServiceImpl implements SearchService {
 		final List<SubcategoryName> subcategoryNames = SubcategoryName.getSubcategoryNamesByPartialString(queryParam);
 
 		return subcategoryService.getSubcategoriesBySubcategoryNames(subcategoryNames);
+	}
+
+	private List<ProductSimpleResponseDto> getProductsByQueryParam(final String queryParam) {
+		return productService.getProductsByPartialName(queryParam);
 	}
 
 }

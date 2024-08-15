@@ -12,6 +12,8 @@ import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.RequiredArgsConstructor;
+import taco.klkl.domain.category.domain.QCategory;
+import taco.klkl.domain.category.domain.QSubcategory;
 import taco.klkl.domain.category.domain.Subcategory;
 import taco.klkl.domain.category.exception.SubcategoryNotFoundException;
 import taco.klkl.domain.category.service.SubcategoryService;
@@ -26,6 +28,8 @@ import taco.klkl.domain.product.exception.InvalidCityIdsException;
 import taco.klkl.domain.product.exception.ProductNotFoundException;
 import taco.klkl.domain.region.domain.City;
 import taco.klkl.domain.region.domain.Currency;
+import taco.klkl.domain.region.domain.QCity;
+import taco.klkl.domain.region.domain.QCountry;
 import taco.klkl.domain.region.exception.CityNotFoundException;
 import taco.klkl.domain.region.exception.CountryNotFoundException;
 import taco.klkl.domain.region.exception.CurrencyNotFoundException;
@@ -111,6 +115,28 @@ public class ProductService {
 
 	public boolean existsProductById(final Long id) {
 		return productRepository.existsById(id);
+	}
+
+	public List<ProductSimpleResponseDto> getProductsByPartialName(String partialName) {
+
+		QProduct product = QProduct.product;
+		QCity city = QCity.city;
+		QCountry country = QCountry.country;
+		QSubcategory subcategory = QSubcategory.subcategory;
+		QCategory category = QCategory.category;
+
+		List<Product> products = queryFactory
+			.selectFrom(product)
+			.join(product.city, city).fetchJoin()
+			.join(city.country, country).fetchJoin()
+			.join(product.subcategory, subcategory).fetchJoin()
+			.join(subcategory.category, category).fetchJoin()
+			.where(product.name.contains(partialName))
+			.fetch();
+
+		return products.stream()
+			.map(ProductSimpleResponseDto::from)
+			.toList();
 	}
 
 	private BooleanBuilder buildFilterOptions(ProductFilterOptionsDto options, QProduct product) {
