@@ -21,8 +21,9 @@ public enum ErrorCode {
 
 	// Product
 	PRODUCT_NOT_FOUND(HttpStatus.NOT_FOUND, "C020", "존재하지 않는 상품입니다."),
-	INVALID_CITY_IDS(HttpStatus.BAD_REQUEST, "C021", "선택한 도시들은 동일한 국가에 속하지 않습니다."),
-	RATING_NOT_FOUND(HttpStatus.NOT_FOUND, "C022", "존재하지 않는 평점입니다."),
+	RATING_NOT_FOUND(HttpStatus.NOT_FOUND, "C021", "존재하지 않는 평점입니다."),
+	INVALID_CITY_IDS(HttpStatus.BAD_REQUEST, "C022", "선택한 도시들은 동일한 국가에 속하지 않습니다."),
+	INVALID_SORT_OPTION(HttpStatus.BAD_REQUEST, "C023", "유효하지 않은 정렬 옵션입니다."),
 
 	// Like
 
