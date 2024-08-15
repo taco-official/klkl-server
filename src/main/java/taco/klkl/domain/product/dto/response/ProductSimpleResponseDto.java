@@ -13,13 +13,15 @@ import taco.klkl.domain.product.domain.ProductFilter;
  * @param id
  * @param name
  * @param likeCount
+ * @param rating
  * @param countryName
  * @param categoryName
  */
 public record ProductSimpleResponseDto(
 	Long id,
 	String name,
-	int likeCount,
+	Integer likeCount,
+	Double rating,
 	String countryName,
 	String categoryName,
 	Set<FilterResponseDto> filters
@@ -35,6 +37,7 @@ public record ProductSimpleResponseDto(
 			product.getId(),
 			product.getName(),
 			product.getLikeCount(),
+			product.getRating().getValue(),
 			product.getCity().getCountry().getName().getKoreanName(),
 			product.getSubcategory().getCategory().getName().getKoreanName(),
 			filters
