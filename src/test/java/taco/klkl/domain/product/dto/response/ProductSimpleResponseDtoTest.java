@@ -20,6 +20,7 @@ import taco.klkl.domain.category.domain.SubcategoryName;
 import taco.klkl.domain.category.dto.response.FilterResponseDto;
 import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.product.domain.ProductFilter;
+import taco.klkl.domain.product.domain.Rating;
 import taco.klkl.domain.region.domain.City;
 import taco.klkl.domain.region.domain.Country;
 import taco.klkl.domain.region.domain.Currency;
@@ -82,6 +83,7 @@ class ProductSimpleResponseDtoTest {
 		when(product.getAddress()).thenReturn("productAddress");
 		when(product.getPrice()).thenReturn(1000);
 		when(product.getLikeCount()).thenReturn(0);
+		when(product.getRating()).thenReturn(Rating.FIVE);
 		when(product.getUser()).thenReturn(mockUser);
 		when(product.getCity()).thenReturn(city);
 		when(product.getSubcategory()).thenReturn(subcategory);
@@ -99,6 +101,7 @@ class ProductSimpleResponseDtoTest {
 		assertThat(dto.id()).isEqualTo(product.getId());
 		assertThat(dto.name()).isEqualTo(product.getName());
 		assertThat(dto.likeCount()).isEqualTo(product.getLikeCount());
+		assertThat(dto.rating()).isEqualTo(product.getRating().getValue());
 		assertThat(dto.countryName()).isEqualTo(product.getCity().getCountry().getName().getKoreanName());
 		assertThat(dto.categoryName()).isEqualTo(product.getSubcategory().getCategory().getName().getKoreanName());
 	}
@@ -116,6 +119,7 @@ class ProductSimpleResponseDtoTest {
 			product.getId(),
 			product.getName(),
 			product.getLikeCount(),
+			product.getRating().getValue(),
 			city.getCountry().getName().getKoreanName(),
 			product.getSubcategory().getCategory().getName().getKoreanName(),
 			filters
@@ -125,6 +129,7 @@ class ProductSimpleResponseDtoTest {
 		assertThat(dto.id()).isEqualTo(product.getId());
 		assertThat(dto.name()).isEqualTo(product.getName());
 		assertThat(dto.likeCount()).isEqualTo(product.getLikeCount());
+		assertThat(dto.rating()).isEqualTo(product.getRating().getValue());
 		assertThat(dto.countryName()).isEqualTo(city.getCountry().getName().getKoreanName());
 		assertThat(dto.categoryName()).isEqualTo(product.getSubcategory().getCategory().getName().getKoreanName());
 	}

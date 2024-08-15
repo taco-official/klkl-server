@@ -47,6 +47,7 @@ public class ProductIntegrationTest {
 			"description",
 			"address",
 			1000,
+			5.0,
 			414L,
 			310L,
 			438L,
@@ -66,6 +67,7 @@ public class ProductIntegrationTest {
 			.andExpect(jsonPath("$.data.address", is(createRequest.address())))
 			.andExpect(jsonPath("$.data.price", is(createRequest.price())))
 			.andExpect(jsonPath("$.data.likeCount", is(ProductConstants.DEFAULT_LIKE_COUNT)))
+			.andExpect(jsonPath("$.data.rating", is(createRequest.rating())))
 			.andExpect(jsonPath("$.data.user.id", notNullValue()))
 			.andExpect(jsonPath("$.data.city.cityId", is(createRequest.cityId().intValue())))
 			.andExpect(jsonPath("$.data.subcategory.subcategoryId", is(createRequest.subcategoryId().intValue())))
@@ -83,6 +85,7 @@ public class ProductIntegrationTest {
 			"description",
 			"address",
 			1000,
+			5.0,
 			414L,
 			310L,
 			438L,
@@ -102,6 +105,7 @@ public class ProductIntegrationTest {
 			.andExpect(jsonPath("$.data.address", is(createRequest.address())))
 			.andExpect(jsonPath("$.data.price", is(createRequest.price())))
 			.andExpect(jsonPath("$.data.likeCount", is(ProductConstants.DEFAULT_LIKE_COUNT)))
+			.andExpect(jsonPath("$.data.rating", is(createRequest.rating())))
 			.andExpect(jsonPath("$.data.user.id", notNullValue()))
 			.andExpect(jsonPath("$.data.city.cityId", is(createRequest.cityId().intValue())))
 			.andExpect(jsonPath("$.data.subcategory.subcategoryId", is(createRequest.subcategoryId().intValue())))
@@ -119,6 +123,7 @@ public class ProductIntegrationTest {
 			"description1",
 			"address1",
 			1000,
+			5.0,
 			414L,
 			310L,
 			438L,
@@ -129,6 +134,7 @@ public class ProductIntegrationTest {
 			"description2",
 			"address2",
 			2000,
+			5.0,
 			415L,
 			311L,
 			438L,
@@ -165,6 +171,7 @@ public class ProductIntegrationTest {
 			"description1",
 			"address1",
 			1000,
+			5.0,
 			414L,
 			310L,
 			438L,
@@ -175,6 +182,7 @@ public class ProductIntegrationTest {
 			"description2",
 			"address2",
 			2000,
+			5.0,
 			414L,
 			311L,
 			438L,
@@ -185,6 +193,7 @@ public class ProductIntegrationTest {
 			"description3",
 			"address3",
 			2000,
+			5.0,
 			416L,
 			311L,
 			438L,
@@ -220,6 +229,7 @@ public class ProductIntegrationTest {
 			"description1",
 			"address1",
 			1000,
+			5.0,
 			415L,
 			310L,
 			438L,
@@ -230,6 +240,7 @@ public class ProductIntegrationTest {
 			"description2",
 			"address2",
 			2000,
+			5.0,
 			415L,
 			311L,
 			438L,
@@ -240,6 +251,7 @@ public class ProductIntegrationTest {
 			"description3",
 			"address3",
 			2000,
+			5.0,
 			416L,
 			311L,
 			438L,
@@ -277,6 +289,7 @@ public class ProductIntegrationTest {
 			"description1",
 			"address1",
 			1000,
+			5.0,
 			415L,
 			310L,
 			438L,
@@ -287,6 +300,7 @@ public class ProductIntegrationTest {
 			"description2",
 			"address2",
 			2000,
+			5.0,
 			431L,
 			310L,
 			442L,
@@ -297,6 +311,7 @@ public class ProductIntegrationTest {
 			"description3",
 			"address3",
 			3000,
+			5.0,
 			416L,
 			324L,
 			438L,
@@ -307,6 +322,7 @@ public class ProductIntegrationTest {
 			"description4",
 			"address4",
 			4000,
+			5.0,
 			423L,
 			315L,
 			439L,
@@ -344,6 +360,7 @@ public class ProductIntegrationTest {
 			"description1",
 			"address1",
 			1000,
+			5.0,
 			415L,
 			310L,
 			438L,
@@ -354,6 +371,7 @@ public class ProductIntegrationTest {
 			"description2",
 			"address2",
 			2000,
+			5.0,
 			431L,
 			310L,
 			442L,
@@ -364,6 +382,7 @@ public class ProductIntegrationTest {
 			"description3",
 			"address3",
 			3000,
+			5.0,
 			416L,
 			324L,
 			438L,
@@ -374,6 +393,7 @@ public class ProductIntegrationTest {
 			"description4",
 			"address4",
 			4000,
+			5.0,
 			423L,
 			315L,
 			439L,
@@ -412,6 +432,7 @@ public class ProductIntegrationTest {
 			"description1",
 			"address1",
 			1000,
+			5.0,
 			415L,
 			310L,
 			438L,
@@ -422,6 +443,7 @@ public class ProductIntegrationTest {
 			"description2",
 			"address2",
 			2000,
+			5.0,
 			431L,
 			310L,
 			442L,
@@ -432,6 +454,7 @@ public class ProductIntegrationTest {
 			"description3",
 			"address3",
 			3000,
+			5.0,
 			416L,
 			324L,
 			438L,
@@ -442,6 +465,7 @@ public class ProductIntegrationTest {
 			"description4",
 			"address4",
 			4000,
+			5.0,
 			423L,
 			315L,
 			439L,
@@ -479,6 +503,7 @@ public class ProductIntegrationTest {
 			"description1",
 			"address1",
 			1000,
+			5.0,
 			415L,
 			310L,
 			438L,
@@ -489,6 +514,7 @@ public class ProductIntegrationTest {
 			"description2",
 			"address2",
 			2000,
+			5.0,
 			431L,
 			310L,
 			442L,
@@ -499,6 +525,7 @@ public class ProductIntegrationTest {
 			"description3",
 			"address3",
 			3000,
+			5.0,
 			416L,
 			324L,
 			438L,
@@ -509,6 +536,7 @@ public class ProductIntegrationTest {
 			"description4",
 			"address4",
 			4000,
+			5.0,
 			423L,
 			315L,
 			439L,
@@ -547,6 +575,7 @@ public class ProductIntegrationTest {
 			"description",
 			"address",
 			1000,
+			5.0,
 			414L,
 			310L,
 			438L,
@@ -559,6 +588,7 @@ public class ProductIntegrationTest {
 			"Updated Description",
 			"Updated Address",
 			2000,
+			4.5,
 			415L,
 			310L,
 			438L,
@@ -578,6 +608,7 @@ public class ProductIntegrationTest {
 			.andExpect(jsonPath("$.data.address", is(updateRequest.address())))
 			.andExpect(jsonPath("$.data.price", is(updateRequest.price())))
 			.andExpect(jsonPath("$.data.likeCount", is(ProductConstants.DEFAULT_LIKE_COUNT)))
+			.andExpect(jsonPath("$.data.rating", is(updateRequest.rating())))
 			.andExpect(jsonPath("$.data.user.id", is(productDto.user().id().intValue())))
 			.andExpect(jsonPath("$.data.city.cityId", is(updateRequest.cityId().intValue())))
 			.andExpect(jsonPath("$.data.subcategory.subcategoryId",
@@ -596,6 +627,7 @@ public class ProductIntegrationTest {
 			"description",
 			"address",
 			1000,
+			5.0,
 			414L,
 			310L,
 			438L,
