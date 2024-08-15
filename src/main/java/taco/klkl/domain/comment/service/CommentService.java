@@ -12,6 +12,7 @@ import taco.klkl.domain.comment.dto.request.CommentCreateUpdateRequestDto;
 import taco.klkl.domain.comment.dto.response.CommentResponseDto;
 import taco.klkl.domain.comment.exception.CommentNotFoundException;
 import taco.klkl.domain.comment.exception.CommentProductNotMatch;
+import taco.klkl.domain.notification.service.NotificationService;
 import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.product.exception.ProductNotFoundException;
 import taco.klkl.domain.user.domain.User;
@@ -23,6 +24,8 @@ import taco.klkl.global.util.UserUtil;
 @Transactional(readOnly = true)
 public class CommentService {
 	private final CommentRepository commentRepository;
+
+	private final NotificationService notificationService;
 
 	private final UserUtil userUtil;
 	private final ProductUtil productUtil;
@@ -42,6 +45,7 @@ public class CommentService {
 	) {
 		final Comment comment = createCommentEntity(productId, commentCreateRequestDto);
 		commentRepository.save(comment);
+		notificationService.createNotification(comment);
 		return CommentResponseDto.from(comment);
 	}
 

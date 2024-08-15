@@ -20,6 +20,9 @@ import taco.klkl.domain.category.domain.Subcategory;
 import taco.klkl.domain.category.domain.SubcategoryName;
 import taco.klkl.domain.category.dto.response.CategoryResponseDto;
 import taco.klkl.domain.category.dto.response.SubcategoryResponseDto;
+import taco.klkl.domain.product.domain.Product;
+import taco.klkl.domain.product.domain.Rating;
+import taco.klkl.domain.product.dto.response.ProductSimpleResponseDto;
 import taco.klkl.domain.region.domain.City;
 import taco.klkl.domain.region.domain.Country;
 import taco.klkl.domain.region.domain.Currency;
@@ -30,6 +33,8 @@ import taco.klkl.domain.region.enums.CityType;
 import taco.klkl.domain.region.enums.CountryType;
 import taco.klkl.domain.search.dto.response.SearchResponseDto;
 import taco.klkl.domain.search.service.SearchService;
+import taco.klkl.domain.user.domain.User;
+import taco.klkl.global.common.constants.UserConstants;
 
 @WebMvcTest(SearchController.class)
 public class SearchControllerTest {
@@ -48,10 +53,22 @@ public class SearchControllerTest {
 	@Mock
 	Currency currency;
 
+	private final User user = UserConstants.TEST_USER;
 	private final Country country = Country.of(CountryType.MALAYSIA, region, "flag", "photo", currency);
 	private final City city = City.of(country, CityType.BORACAY);
 	private final Category category = Category.of(CategoryName.CLOTHES);
 	private final Subcategory subcategory = Subcategory.of(category, SubcategoryName.MAKEUP);
+	private final Product product = Product.of(
+		"name",
+		"description",
+		"address",
+		1000,
+		Rating.FIVE,
+		user,
+		city,
+		subcategory,
+		currency
+	);
 
 	@BeforeEach
 	void setUp() {
@@ -60,7 +77,8 @@ public class SearchControllerTest {
 			Collections.singletonList(CountrySimpleResponseDto.from(country)),
 			Collections.singletonList(CityResponseDto.from(city)),
 			Collections.singletonList(CategoryResponseDto.from(category)),
-			Collections.singletonList(SubcategoryResponseDto.from(subcategory))
+			Collections.singletonList(SubcategoryResponseDto.from(subcategory)),
+			Collections.singletonList(ProductSimpleResponseDto.from(product))
 		);
 	}
 
@@ -78,6 +96,7 @@ public class SearchControllerTest {
 			.andExpect(jsonPath("$.data.countries").isArray())
 			.andExpect(jsonPath("$.data.cities").isArray())
 			.andExpect(jsonPath("$.data.categories").isArray())
-			.andExpect(jsonPath("$.data.subcategories").isArray());
+			.andExpect(jsonPath("$.data.subcategories").isArray())
+			.andExpect(jsonPath("$.data.products").isArray());
 	}
 }

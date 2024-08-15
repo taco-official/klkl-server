@@ -2,6 +2,7 @@ package taco.klkl.domain.product.service;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
 import java.util.List;
@@ -14,6 +15,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -28,12 +30,16 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import taco.klkl.domain.category.domain.Category;
 import taco.klkl.domain.category.domain.CategoryName;
 import taco.klkl.domain.category.domain.Filter;
+import taco.klkl.domain.category.domain.QCategory;
 import taco.klkl.domain.category.domain.QFilter;
+import taco.klkl.domain.category.domain.QSubcategory;
 import taco.klkl.domain.category.domain.Subcategory;
 import taco.klkl.domain.category.domain.SubcategoryName;
 import taco.klkl.domain.category.dto.response.FilterResponseDto;
 import taco.klkl.domain.category.service.FilterService;
 import taco.klkl.domain.category.service.SubcategoryService;
+import taco.klkl.domain.like.exception.LikeCountBelowMinimumException;
+import taco.klkl.domain.like.exception.LikeCountOverMaximumException;
 import taco.klkl.domain.product.dao.ProductRepository;
 import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.product.domain.ProductFilter;
@@ -49,6 +55,8 @@ import taco.klkl.domain.product.exception.ProductNotFoundException;
 import taco.klkl.domain.region.domain.City;
 import taco.klkl.domain.region.domain.Country;
 import taco.klkl.domain.region.domain.Currency;
+import taco.klkl.domain.region.domain.QCity;
+import taco.klkl.domain.region.domain.QCountry;
 import taco.klkl.domain.region.domain.Region;
 import taco.klkl.domain.region.enums.CityType;
 import taco.klkl.domain.region.enums.CountryType;
@@ -93,6 +101,8 @@ class ProductServiceTest {
 	private Subcategory subcategory;
 	private Currency currency;
 	private ProductCreateUpdateRequestDto requestDto;
+
+	private Product mockProduct;
 
 	@BeforeEach
 	void setUp() {
@@ -146,6 +156,7 @@ class ProductServiceTest {
 			1L,
 			Set.of(1L, 2L)
 		);
+		mockProduct = Mockito.mock(Product.class);
 	}
 
 	@Test
@@ -381,4 +392,85 @@ class ProductServiceTest {
 		assertThrows(ProductNotFoundException.class, () -> productService.deleteProduct(1L));
 		verify(productRepository).findById(1L);
 	}
+
+	@Test
+	@DisplayName("상품 좋아요 수 추가 테스트")
+	void testAddLikeCount() {
+		// given
+		when(mockProduct.increaseLikeCount()).thenReturn(1);
+		when(mockProduct.getLikeCount()).thenReturn(1);
+
+		// when
+		int likeCount = productService.increaseLikeCount(mockProduct);
+
+		// then
+		assertThat(mockProduct.getLikeCount()).isEqualTo(likeCount);
+	}
+
+	@Test
+	@DisplayName("상품 좋아요 수 최대값 에러 테스트")
+	void testIncreaseLikeCountMaximum() {
+		// given
+		when(mockProduct.increaseLikeCount()).thenThrow(LikeCountOverMaximumException.class);
+
+		// when & then
+		org.junit.jupiter.api.Assertions.assertThrows(LikeCountOverMaximumException.class, () -> {
+			productService.increaseLikeCount(mockProduct);
+		});
+	}
+
+	@Test
+	@DisplayName("상품 좋아요 수 빼기 테스트")
+	void testSubtractLikeCount() {
+		// given
+		testProduct.increaseLikeCount();
+		int beforeLikeCount = testProduct.getLikeCount();
+
+		// when
+		productService.decreaseLikeCount(testProduct);
+
+		// then
+		assertThat(testProduct.getLikeCount()).isEqualTo(beforeLikeCount - 1);
+	}
+
+	@Test
+	@DisplayName("상품 좋아요 수 최소값 에러 테스트")
+	void testIncreaseLikeCountMinimum() {
+		// given
+		when(mockProduct.decreaseLikeCount()).thenThrow(LikeCountBelowMinimumException.class);
+
+		// when & then
+		org.junit.jupiter.api.Assertions.assertThrows(LikeCountBelowMinimumException.class, () -> {
+			productService.decreaseLikeCount(mockProduct);
+		});
+	}
+
+	@Test
+	@DisplayName("상품 이름 부분 문자열 조회 테스트")
+	void testGetProductsByPartialName() {
+		// given
+		String partialName = "am";
+		List<Product> mockProducts = List.of(testProduct);
+
+		JPAQuery<Product> mockQuery = mock(JPAQuery.class);
+		when(queryFactory.selectFrom(QProduct.product)).thenReturn(mockQuery);
+		when(mockQuery.join(QProduct.product.city, QCity.city)).thenReturn(mockQuery);
+		when(mockQuery.fetchJoin()).thenReturn(mockQuery);
+		when(mockQuery.join(QCity.city.country, QCountry.country)).thenReturn(mockQuery);
+		when(mockQuery.fetchJoin()).thenReturn(mockQuery);
+		when(mockQuery.join(QProduct.product.subcategory, QSubcategory.subcategory)).thenReturn(mockQuery);
+		when(mockQuery.fetchJoin()).thenReturn(mockQuery);
+		when(mockQuery.join(QSubcategory.subcategory.category, QCategory.category)).thenReturn(mockQuery);
+		when(mockQuery.fetchJoin()).thenReturn(mockQuery);
+		when(mockQuery.where(QProduct.product.name.contains(partialName))).thenReturn(mockQuery);
+		when(mockQuery.fetch()).thenReturn(mockProducts);
+
+		// when
+		List<ProductSimpleResponseDto> responseDtos = productService.getProductsByPartialName(partialName);
+
+		// then
+		assertThat(responseDtos.get(0)).isEqualTo(ProductSimpleResponseDto.from(testProduct));
+
+	}
+
 }

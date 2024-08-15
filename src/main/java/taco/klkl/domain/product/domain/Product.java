@@ -24,6 +24,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import taco.klkl.domain.category.domain.Filter;
 import taco.klkl.domain.category.domain.Subcategory;
+import taco.klkl.domain.like.exception.LikeCountBelowMinimumException;
+import taco.klkl.domain.like.exception.LikeCountOverMaximumException;
 import taco.klkl.domain.product.converter.RatingConverter;
 import taco.klkl.domain.region.domain.City;
 import taco.klkl.domain.region.domain.Currency;
@@ -221,5 +223,23 @@ public class Product {
 	public void addFilter(final Filter filter) {
 		ProductFilter productFilter = ProductFilter.of(this, filter);
 		this.productFilters.add(productFilter);
+	}
+
+	public int increaseLikeCount() throws LikeCountOverMaximumException {
+		if (this.likeCount == Integer.MAX_VALUE) {
+			throw new LikeCountOverMaximumException();
+		}
+		this.likeCount += 1;
+
+		return this.likeCount;
+	}
+
+	public int decreaseLikeCount() throws LikeCountBelowMinimumException {
+		if (this.likeCount == 0) {
+			throw new LikeCountBelowMinimumException();
+		}
+		this.likeCount -= 1;
+
+		return this.likeCount;
 	}
 }

@@ -22,7 +22,9 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.RequiredArgsConstructor;
 import taco.klkl.domain.category.domain.Filter;
+import taco.klkl.domain.category.domain.QCategory;
 import taco.klkl.domain.category.domain.QFilter;
+import taco.klkl.domain.category.domain.QSubcategory;
 import taco.klkl.domain.category.domain.Subcategory;
 import taco.klkl.domain.category.exception.SubcategoryNotFoundException;
 import taco.klkl.domain.category.service.FilterService;
@@ -42,6 +44,8 @@ import taco.klkl.domain.product.exception.InvalidSortOptionException;
 import taco.klkl.domain.product.exception.ProductNotFoundException;
 import taco.klkl.domain.region.domain.City;
 import taco.klkl.domain.region.domain.Currency;
+import taco.klkl.domain.region.domain.QCity;
+import taco.klkl.domain.region.domain.QCountry;
 import taco.klkl.domain.region.exception.CityNotFoundException;
 import taco.klkl.domain.region.exception.CurrencyNotFoundException;
 import taco.klkl.domain.region.service.CityService;
@@ -100,6 +104,16 @@ public class ProductService {
 	}
 
 	@Transactional
+	public int increaseLikeCount(Product product) {
+		return product.increaseLikeCount();
+	}
+
+	@Transactional
+	public int decreaseLikeCount(Product product) {
+		return product.decreaseLikeCount();
+	}
+
+	@Transactional
 	public ProductDetailResponseDto updateProduct(final Long id, final ProductCreateUpdateRequestDto updateRequest)
 		throws ProductNotFoundException {
 		final Product product = productRepository.findById(id)
@@ -117,6 +131,28 @@ public class ProductService {
 		final Product product = productRepository.findById(id)
 			.orElseThrow(ProductNotFoundException::new);
 		productRepository.delete(product);
+	}
+
+	public List<ProductSimpleResponseDto> getProductsByPartialName(String partialName) {
+
+		QProduct product = QProduct.product;
+		QCity city = QCity.city;
+		QCountry country = QCountry.country;
+		QSubcategory subcategory = QSubcategory.subcategory;
+		QCategory category = QCategory.category;
+
+		List<Product> products = queryFactory
+			.selectFrom(product)
+			.join(product.city, city).fetchJoin()
+			.join(city.country, country).fetchJoin()
+			.join(product.subcategory, subcategory).fetchJoin()
+			.join(subcategory.category, category).fetchJoin()
+			.where(product.name.contains(partialName))
+			.fetch();
+
+		return products.stream()
+			.map(ProductSimpleResponseDto::from)
+			.toList();
 	}
 
 	private JPAQuery<?> createBaseQuery(final ProductFilterOptionsDto filterOptions) {

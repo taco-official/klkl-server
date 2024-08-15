@@ -126,8 +126,6 @@ VALUES
     -- 주류 -필터
     (368, 315, 350);
 
-/* Notification */
-
 /* Product */
 INSERT INTO Product(product_id, user_id, name, description, address, price, like_count, rating,
                     city_id, subcategory_id, currency_id, created_at)
@@ -140,3 +138,9 @@ INSERT INTO Comment(comment_id, product_id, user_id, content, created_at)
 VALUES (500, 390, 1, '이거 정말 맛있는데 표현할 방법이 읎네.', now()),
        (501, 390, 1, '이거 정말 맛없는데 표현할 방법이 읎네.', now()),
        (502, 390, 1, '이거 정말 좋은데 표현할 방법이 읎네.', now());
+
+/* Notification */
+INSERT INTO Notification(notification_id, is_read, created_at, comment_id)
+VALUES (700, false, now(), 500),
+       (701, false, now(), 501),
+       (702, false, now(), 502);
