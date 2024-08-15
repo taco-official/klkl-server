@@ -21,6 +21,7 @@ import taco.klkl.domain.comment.dto.request.CommentCreateUpdateRequestDto;
 import taco.klkl.domain.comment.dto.response.CommentResponseDto;
 import taco.klkl.domain.comment.exception.CommentNotFoundException;
 import taco.klkl.domain.comment.exception.CommentProductNotMatch;
+import taco.klkl.domain.notification.service.NotificationService;
 import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.product.exception.ProductNotFoundException;
 import taco.klkl.domain.product.service.ProductService;
@@ -40,6 +41,9 @@ public class CommentServiceTest {
 
 	@Mock
 	private ProductService productService;
+
+	@Mock
+	private NotificationService notificationService;
 
 	@InjectMocks
 	private CommentService commentService;
@@ -112,7 +116,7 @@ public class CommentServiceTest {
 
 		//then
 		assertThat(result.commentId()).isEqualTo(comment.getId());
-		assertThat(result.userId()).isEqualTo(user.getId());
+		assertThat(result.user().id()).isEqualTo(user.getId());
 		assertThat(result.content()).isEqualTo(comment.getContent());
 	}
 
@@ -134,7 +138,7 @@ public class CommentServiceTest {
 
 		//then
 		assertThat(result.commentId()).isEqualTo(comment.getId());
-		assertThat(result.userId()).isEqualTo(user.getId());
+		assertThat(result.user().id()).isEqualTo(user.getId());
 		assertThat(result.content()).isEqualTo(commentUpdateRequestDto.content());
 		assertThat(result.createdAt()).isEqualTo(comment.getCreatedAt());
 	}
