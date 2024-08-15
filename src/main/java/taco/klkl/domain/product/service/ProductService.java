@@ -1,16 +1,22 @@
 package taco.klkl.domain.product.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.Order;
+import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.PathBuilder;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
@@ -28,9 +34,11 @@ import taco.klkl.domain.product.domain.QProductFilter;
 import taco.klkl.domain.product.domain.Rating;
 import taco.klkl.domain.product.dto.request.ProductCreateUpdateRequestDto;
 import taco.klkl.domain.product.dto.request.ProductFilterOptionsDto;
+import taco.klkl.domain.product.dto.request.ProductSortOptionsDto;
 import taco.klkl.domain.product.dto.response.ProductDetailResponseDto;
 import taco.klkl.domain.product.dto.response.ProductSimpleResponseDto;
 import taco.klkl.domain.product.exception.InvalidCityIdsException;
+import taco.klkl.domain.product.exception.InvalidSortOptionException;
 import taco.klkl.domain.product.exception.ProductNotFoundException;
 import taco.klkl.domain.region.domain.City;
 import taco.klkl.domain.region.domain.Currency;
@@ -39,6 +47,7 @@ import taco.klkl.domain.region.exception.CurrencyNotFoundException;
 import taco.klkl.domain.region.service.CityService;
 import taco.klkl.domain.region.service.CurrencyService;
 import taco.klkl.domain.user.domain.User;
+import taco.klkl.global.common.constants.ProductConstants;
 import taco.klkl.global.common.response.PagedResponseDto;
 import taco.klkl.global.util.UserUtil;
 
@@ -58,34 +67,16 @@ public class ProductService {
 	private final UserUtil userUtil;
 
 	public PagedResponseDto<ProductSimpleResponseDto> getProductsByFilterOptions(
-		Pageable pageable,
-		ProductFilterOptionsDto filterOptions
+		final Pageable pageable,
+		final ProductFilterOptionsDto filterOptions,
+		final ProductSortOptionsDto sortOptions
 	) {
 		validateFilterOptions(filterOptions);
+		validateSortOptions(sortOptions);
 
-		QProduct product = QProduct.product;
-		QProductFilter productFilter = QProductFilter.productFilter;
-		QFilter filter = QFilter.filter;
-
-		BooleanBuilder builder = buildFilterOptions(filterOptions, product);
-
-		JPAQuery<Product> query = queryFactory
-			.selectDistinct(product)
-			.from(product)
-			.leftJoin(product.productFilters, productFilter)
-			.leftJoin(productFilter.filter, filter)
-			.where(builder);
-
-		List<Product> products = query
-			.offset(pageable.getOffset())
-			.limit(pageable.getPageSize())
-			.fetch();
-
-		long total = queryFactory
-			.select(product.count())
-			.from(product)
-			.where(builder)
-			.fetchOne();
+		JPAQuery<?> baseQuery = createBaseQuery(filterOptions);
+		long total = getCount(baseQuery);
+		List<Product> products = fetchProducts(baseQuery, pageable, sortOptions);
 
 		Page<Product> productPage = new PageImpl<>(products, pageable, total);
 		return PagedResponseDto.of(productPage, ProductSimpleResponseDto::from);
@@ -128,23 +119,75 @@ public class ProductService {
 		productRepository.delete(product);
 	}
 
-	private BooleanBuilder buildFilterOptions(
-		final ProductFilterOptionsDto options,
-		final QProduct product
-	) {
+	private JPAQuery<?> createBaseQuery(final ProductFilterOptionsDto filterOptions) {
+		QProduct product = QProduct.product;
+		QProductFilter productFilter = QProductFilter.productFilter;
+		QFilter filter = QFilter.filter;
+
+		JPAQuery<?> query = queryFactory.from(product);
+
 		BooleanBuilder builder = new BooleanBuilder();
+		builder.and(createCityFilter(filterOptions.cityIds()));
+		builder.and(createSubcategoryFilter(filterOptions.subcategoryIds()));
+		builder.and(createFilterIdsFilter(filterOptions.filterIds()));
 
-		if (options.cityIds() != null && !options.cityIds().isEmpty()) {
-			builder.and(product.city.cityId.in(options.cityIds()));
-		}
-		if (options.subcategoryIds() != null && !options.subcategoryIds().isEmpty()) {
-			builder.and(product.subcategory.id.in(options.subcategoryIds()));
-		}
-		if (options.filterIds() != null && !options.filterIds().isEmpty()) {
-			builder.and(product.productFilters.any().filter.id.in(options.filterIds()));
+		if (filterOptions.filterIds() != null && !filterOptions.filterIds().isEmpty()) {
+			query = query.leftJoin(product.productFilters, productFilter)
+				.leftJoin(productFilter.filter, filter);
 		}
 
-		return builder;
+		return query.where(builder);
+	}
+
+	private long getCount(JPAQuery<?> baseQuery) {
+		return Optional.ofNullable(baseQuery.select(QProduct.product.countDistinct()).fetchOne())
+			.orElse(0L);
+	}
+
+	private List<Product> fetchProducts(
+		final JPAQuery<?> baseQuery,
+		final Pageable pageable,
+		final ProductSortOptionsDto sortOptions
+	) {
+		JPAQuery<Product> productQuery = baseQuery.select(QProduct.product).distinct();
+
+		applySorting(productQuery, sortOptions);
+
+		return productQuery
+			.offset(pageable.getOffset())
+			.limit(pageable.getPageSize())
+			.fetch();
+	}
+
+	private void applySorting(final JPAQuery<Product> query, final ProductSortOptionsDto sortOptions) {
+		PathBuilder<Product> pathBuilder = new PathBuilder<>(Product.class, "product");
+		Sort.Direction sortDirection = Sort.Direction.fromString(sortOptions.sortDirection());
+		OrderSpecifier<?> orderSpecifier = new OrderSpecifier<>(
+			sortDirection == Sort.Direction.ASC ? Order.ASC : Order.DESC,
+			pathBuilder.get(sortOptions.sortBy(), Comparable.class)
+		);
+		query.orderBy(orderSpecifier);
+	}
+
+	private BooleanExpression createCityFilter(final Set<Long> cityIds) {
+		if (cityIds == null || cityIds.isEmpty()) {
+			return null;
+		}
+		return QProduct.product.city.cityId.in(cityIds);
+	}
+
+	private BooleanExpression createSubcategoryFilter(final Set<Long> subcategoryIds) {
+		if (subcategoryIds == null || subcategoryIds.isEmpty()) {
+			return null;
+		}
+		return QProduct.product.subcategory.id.in(subcategoryIds);
+	}
+
+	private BooleanExpression createFilterIdsFilter(final Set<Long> filterIds) {
+		if (filterIds == null || filterIds.isEmpty()) {
+			return null;
+		}
+		return QProductFilter.productFilter.filter.id.in(filterIds);
 	}
 
 	private Set<Filter> getFiltersByFilterIds(final Set<Long> filterIds) {
@@ -212,6 +255,15 @@ public class ProductService {
 		}
 		if (filterOptions.filterIds() != null) {
 			validateFilterIds(filterOptions.filterIds());
+		}
+	}
+
+	private void validateSortOptions(final ProductSortOptionsDto sortOptions) throws InvalidSortOptionException {
+		if (!ProductConstants.ALLOWED_SORT_BY.contains(sortOptions.sortBy())) {
+			throw new InvalidSortOptionException();
+		}
+		if (!ProductConstants.ALLOWED_SORT_DIRECTION.contains(sortOptions.sortDirection())) {
+			throw new InvalidSortOptionException();
 		}
 	}
 

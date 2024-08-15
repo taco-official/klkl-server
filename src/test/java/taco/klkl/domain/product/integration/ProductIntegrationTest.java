@@ -151,12 +151,12 @@ public class ProductIntegrationTest {
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
 			.andExpect(jsonPath("$.code", is("C000")))
-			.andExpect(jsonPath("$.data.content", hasSize(4)))
-			.andExpect(jsonPath("$.data.content[0].name", is(createRequest1.name())))
-			.andExpect(jsonPath("$.data.content[1].name", is(createRequest2.name())))
+			.andExpect(jsonPath("$.data.content", hasSize(5)))
+			.andExpect(jsonPath("$.data.content[0].name", is(createRequest2.name())))
+			.andExpect(jsonPath("$.data.content[1].name", is(createRequest1.name())))
 			.andExpect(jsonPath("$.data.pageNumber", is(0)))
 			.andExpect(jsonPath("$.data.pageSize", is(10)))
-			.andExpect(jsonPath("$.data.totalElements", is(4)))
+			.andExpect(jsonPath("$.data.totalElements", is(5)))
 			.andExpect(jsonPath("$.data.totalPages", is(1)))
 			.andExpect(jsonPath("$.data.last", is(true)))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
@@ -206,6 +206,8 @@ public class ProductIntegrationTest {
 		// when & then
 		mockMvc.perform(get("/v1/products")
 				.param("city_id", "416")  // 도쿄
+				.param("sort_by", "createdAt")
+				.param("sort_direction", "ASC")
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
@@ -264,6 +266,8 @@ public class ProductIntegrationTest {
 		// when & then
 		mockMvc.perform(get("/v1/products")
 				.param("city_id", "415", "416")  // 교토, 도쿄
+				.param("sort_by", "createdAt")
+				.param("sort_direction", "ASC")
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
@@ -336,6 +340,8 @@ public class ProductIntegrationTest {
 		// when & then
 		mockMvc.perform(get("/v1/products")
 				.param("subcategory_id", "310")  // 라면
+				.param("sort_by", "createdAt")
+				.param("sort_direction", "ASC")
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
@@ -407,6 +413,8 @@ public class ProductIntegrationTest {
 		// when & then
 		mockMvc.perform(get("/v1/products")
 				.param("subcategory_id", "310", "324")  // 라면, 신발
+				.param("sort_by", "createdAt")
+				.param("sort_direction", "ASC")
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
@@ -479,6 +487,8 @@ public class ProductIntegrationTest {
 		// when & then
 		mockMvc.perform(get("/v1/products")
 				.param("filter_id", "351")  // 고수
+				.param("sort_by", "createdAt")
+				.param("sort_direction", "ASC")
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
@@ -550,6 +560,8 @@ public class ProductIntegrationTest {
 		// when & then
 		mockMvc.perform(get("/v1/products")
 				.param("filter_id", "351", "350")  // 고수, 편의점
+				.param("sort_by", "createdAt")
+				.param("sort_direction", "ASC")
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
@@ -558,6 +570,352 @@ public class ProductIntegrationTest {
 			.andExpect(jsonPath("$.data.content[0].name", is(createCilantroRequest1.name())))
 			.andExpect(jsonPath("$.data.content[1].name", is(createCilantroRequest2.name())))
 			.andExpect(jsonPath("$.data.content[2].name", is(createConvenienceStoreRequest.name())))
+			.andExpect(jsonPath("$.data.pageNumber", is(0)))
+			.andExpect(jsonPath("$.data.pageSize", is(ProductConstants.DEFAULT_PAGE_SIZE)))
+			.andExpect(jsonPath("$.data.totalElements", is(3)))
+			.andExpect(jsonPath("$.data.totalPages", is(1)))
+			.andExpect(jsonPath("$.data.last", is(true)))
+			.andExpect(jsonPath("$.timestamp", notNullValue()));
+	}
+
+	@Test
+	@DisplayName("생성된 날짜로 오름차순 정렬된 상품 목록 조회 API 테스트")
+	public void testSortProductsByCreatedAtAsc() throws Exception {
+		// given
+		ProductCreateUpdateRequestDto createRequest1 = new ProductCreateUpdateRequestDto(
+			"name1",
+			"description1",
+			"address1",
+			1000,
+			5.0,
+			415L,
+			310L,
+			438L,
+			Set.of(351L)
+		);
+		ProductCreateUpdateRequestDto createRequest2 = new ProductCreateUpdateRequestDto(
+			"name2",
+			"description2",
+			"address2",
+			2000,
+			5.0,
+			431L,
+			310L,
+			442L,
+			Set.of(351L)
+		);
+		ProductCreateUpdateRequestDto createRequest3 = new ProductCreateUpdateRequestDto(
+			"name3",
+			"description3",
+			"address3",
+			3000,
+			5.0,
+			416L,
+			324L,
+			438L,
+			Set.of(350L, 351L)
+		);
+		ProductCreateUpdateRequestDto createRequest4 = new ProductCreateUpdateRequestDto(
+			"name4",
+			"description4",
+			"address4",
+			4000,
+			5.0,
+			423L,
+			315L,
+			439L,
+			Set.of(350L)
+		);
+		productService.createProduct(createRequest1);
+		productService.createProduct(createRequest2);
+		productService.createProduct(createRequest3);
+		productService.createProduct(createRequest4);
+
+		// when & then
+		mockMvc.perform(get("/v1/products")
+				.param("filter_id", "351", "350")
+				.param("sort_by", "createdAt")
+				.param("sort_direction", "ASC")
+				.contentType(MediaType.APPLICATION_JSON))
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.isSuccess", is(true)))
+			.andExpect(jsonPath("$.code", is("C000")))
+			.andExpect(jsonPath("$.data.content", hasSize(4)))
+			.andExpect(jsonPath("$.data.content[0].name", is(createRequest1.name())))
+			.andExpect(jsonPath("$.data.content[1].name", is(createRequest2.name())))
+			.andExpect(jsonPath("$.data.content[2].name", is(createRequest3.name())))
+			.andExpect(jsonPath("$.data.content[3].name", is(createRequest4.name())))
+			.andExpect(jsonPath("$.data.pageNumber", is(0)))
+			.andExpect(jsonPath("$.data.pageSize", is(ProductConstants.DEFAULT_PAGE_SIZE)))
+			.andExpect(jsonPath("$.data.totalElements", is(4)))
+			.andExpect(jsonPath("$.data.totalPages", is(1)))
+			.andExpect(jsonPath("$.data.last", is(true)))
+			.andExpect(jsonPath("$.timestamp", notNullValue()));
+	}
+
+	@Test
+	@DisplayName("생성된 날짜로 내림차순 정렬된 상품 목록 조회 API 테스트")
+	public void testSortProductsByCreatedAtDesc() throws Exception {
+		// given
+		ProductCreateUpdateRequestDto createRequest1 = new ProductCreateUpdateRequestDto(
+			"name1",
+			"description1",
+			"address1",
+			1000,
+			5.0,
+			415L,
+			310L,
+			438L,
+			Set.of(351L)
+		);
+		ProductCreateUpdateRequestDto createRequest2 = new ProductCreateUpdateRequestDto(
+			"name2",
+			"description2",
+			"address2",
+			2000,
+			5.0,
+			431L,
+			310L,
+			442L,
+			Set.of(351L)
+		);
+		ProductCreateUpdateRequestDto createRequest3 = new ProductCreateUpdateRequestDto(
+			"name3",
+			"description3",
+			"address3",
+			3000,
+			5.0,
+			416L,
+			324L,
+			438L,
+			Set.of(350L, 351L)
+		);
+		ProductCreateUpdateRequestDto createRequest4 = new ProductCreateUpdateRequestDto(
+			"name4",
+			"description4",
+			"address4",
+			4000,
+			5.0,
+			423L,
+			315L,
+			439L,
+			Set.of(350L)
+		);
+		productService.createProduct(createRequest4);
+		productService.createProduct(createRequest3);
+		productService.createProduct(createRequest2);
+		productService.createProduct(createRequest1);
+
+		// when & then
+		mockMvc.perform(get("/v1/products")
+				.param("filter_id", "351", "350")
+				.param("sort_by", "createdAt")
+				.param("sort_direction", "DESC")
+				.contentType(MediaType.APPLICATION_JSON))
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.isSuccess", is(true)))
+			.andExpect(jsonPath("$.code", is("C000")))
+			.andExpect(jsonPath("$.data.content", hasSize(4)))
+			.andExpect(jsonPath("$.data.content[0].name", is(createRequest1.name())))
+			.andExpect(jsonPath("$.data.content[1].name", is(createRequest2.name())))
+			.andExpect(jsonPath("$.data.content[2].name", is(createRequest3.name())))
+			.andExpect(jsonPath("$.data.content[3].name", is(createRequest4.name())))
+			.andExpect(jsonPath("$.data.pageNumber", is(0)))
+			.andExpect(jsonPath("$.data.pageSize", is(ProductConstants.DEFAULT_PAGE_SIZE)))
+			.andExpect(jsonPath("$.data.totalElements", is(4)))
+			.andExpect(jsonPath("$.data.totalPages", is(1)))
+			.andExpect(jsonPath("$.data.last", is(true)))
+			.andExpect(jsonPath("$.timestamp", notNullValue()));
+	}
+
+	@Test
+	@DisplayName("평점으로 오름차순 정렬된 상품 목록 조회 API 테스트")
+	public void testSortProductsByRatingAsc() throws Exception {
+		// given
+		ProductCreateUpdateRequestDto createRequest1 = new ProductCreateUpdateRequestDto(
+			"name1",
+			"description1",
+			"address1",
+			1000,
+			0.5,
+			415L,
+			310L,
+			438L,
+			Set.of(351L)
+		);
+		ProductCreateUpdateRequestDto createRequest2 = new ProductCreateUpdateRequestDto(
+			"name2",
+			"description2",
+			"address2",
+			2000,
+			2.0,
+			431L,
+			310L,
+			442L,
+			Set.of(351L)
+		);
+		ProductCreateUpdateRequestDto createRequest3 = new ProductCreateUpdateRequestDto(
+			"name3",
+			"description3",
+			"address3",
+			3000,
+			3.5,
+			416L,
+			324L,
+			438L,
+			Set.of(350L, 351L)
+		);
+		ProductCreateUpdateRequestDto createRequest4 = new ProductCreateUpdateRequestDto(
+			"name4",
+			"description4",
+			"address4",
+			4000,
+			5.0,
+			423L,
+			315L,
+			439L,
+			Set.of(350L)
+		);
+		productService.createProduct(createRequest1);
+		productService.createProduct(createRequest2);
+		productService.createProduct(createRequest3);
+		productService.createProduct(createRequest4);
+
+		// when & then
+		mockMvc.perform(get("/v1/products")
+				.param("filter_id", "351", "350")
+				.param("sort_by", "rating")
+				.param("sort_direction", "ASC")
+				.contentType(MediaType.APPLICATION_JSON))
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.isSuccess", is(true)))
+			.andExpect(jsonPath("$.code", is("C000")))
+			.andExpect(jsonPath("$.data.content", hasSize(4)))
+			.andExpect(jsonPath("$.data.content[0].name", is(createRequest1.name())))
+			.andExpect(jsonPath("$.data.content[1].name", is(createRequest2.name())))
+			.andExpect(jsonPath("$.data.content[2].name", is(createRequest3.name())))
+			.andExpect(jsonPath("$.data.content[3].name", is(createRequest4.name())))
+			.andExpect(jsonPath("$.data.pageNumber", is(0)))
+			.andExpect(jsonPath("$.data.pageSize", is(ProductConstants.DEFAULT_PAGE_SIZE)))
+			.andExpect(jsonPath("$.data.totalElements", is(4)))
+			.andExpect(jsonPath("$.data.totalPages", is(1)))
+			.andExpect(jsonPath("$.data.last", is(true)))
+			.andExpect(jsonPath("$.timestamp", notNullValue()));
+	}
+
+	@Test
+	@DisplayName("평점으로 내림차순 정렬된 상품 목록 조회 API 테스트")
+	public void testSortProductsByRatingDesc() throws Exception {
+		// given
+		ProductCreateUpdateRequestDto createRequest1 = new ProductCreateUpdateRequestDto(
+			"name1",
+			"description1",
+			"address1",
+			1000,
+			0.5,
+			415L,
+			310L,
+			438L,
+			Set.of(351L)
+		);
+		ProductCreateUpdateRequestDto createRequest2 = new ProductCreateUpdateRequestDto(
+			"name2",
+			"description2",
+			"address2",
+			2000,
+			2.0,
+			431L,
+			310L,
+			442L,
+			Set.of(351L)
+		);
+		ProductCreateUpdateRequestDto createRequest3 = new ProductCreateUpdateRequestDto(
+			"name3",
+			"description3",
+			"address3",
+			3000,
+			3.5,
+			416L,
+			324L,
+			438L,
+			Set.of(350L, 351L)
+		);
+		ProductCreateUpdateRequestDto createRequest4 = new ProductCreateUpdateRequestDto(
+			"name4",
+			"description4",
+			"address4",
+			4000,
+			5.0,
+			423L,
+			315L,
+			439L,
+			Set.of(350L)
+		);
+		productService.createProduct(createRequest1);
+		productService.createProduct(createRequest2);
+		productService.createProduct(createRequest3);
+		productService.createProduct(createRequest4);
+
+		// when & then
+		mockMvc.perform(get("/v1/products")
+				.param("filter_id", "351", "350")
+				.param("sort_by", "rating")
+				.param("sort_direction", "DESC")
+				.contentType(MediaType.APPLICATION_JSON))
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.isSuccess", is(true)))
+			.andExpect(jsonPath("$.code", is("C000")))
+			.andExpect(jsonPath("$.data.content", hasSize(4)))
+			.andExpect(jsonPath("$.data.content[0].name", is(createRequest4.name())))
+			.andExpect(jsonPath("$.data.content[1].name", is(createRequest3.name())))
+			.andExpect(jsonPath("$.data.content[2].name", is(createRequest2.name())))
+			.andExpect(jsonPath("$.data.content[3].name", is(createRequest1.name())))
+			.andExpect(jsonPath("$.data.pageNumber", is(0)))
+			.andExpect(jsonPath("$.data.pageSize", is(ProductConstants.DEFAULT_PAGE_SIZE)))
+			.andExpect(jsonPath("$.data.totalElements", is(4)))
+			.andExpect(jsonPath("$.data.totalPages", is(1)))
+			.andExpect(jsonPath("$.data.last", is(true)))
+			.andExpect(jsonPath("$.timestamp", notNullValue()));
+	}
+
+	@Test
+	@DisplayName("좋아요 수로 오름차순 정렬된 상품 목록 조회 API 테스트")
+	public void testSortProductsByLikeCountAsc() throws Exception {
+		// when & then
+		mockMvc.perform(get("/v1/products")
+				.param("sort_by", "likeCount")
+				.param("sort_direction", "ASC")
+				.contentType(MediaType.APPLICATION_JSON))
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.isSuccess", is(true)))
+			.andExpect(jsonPath("$.code", is("C000")))
+			.andExpect(jsonPath("$.data.content", hasSize(3)))
+			.andExpect(jsonPath("$.data.content[0].name", is("왕족발 보쌈 과자")))
+			.andExpect(jsonPath("$.data.content[1].name", is("곤약젤리")))
+			.andExpect(jsonPath("$.data.content[2].name", is("여름 원피스")))
+			.andExpect(jsonPath("$.data.pageNumber", is(0)))
+			.andExpect(jsonPath("$.data.pageSize", is(ProductConstants.DEFAULT_PAGE_SIZE)))
+			.andExpect(jsonPath("$.data.totalElements", is(3)))
+			.andExpect(jsonPath("$.data.totalPages", is(1)))
+			.andExpect(jsonPath("$.data.last", is(true)))
+			.andExpect(jsonPath("$.timestamp", notNullValue()));
+	}
+
+	@Test
+	@DisplayName("좋아요 수로 내림차순 정렬된 상품 목록 조회 API 테스트")
+	public void testSortProductsByLikeCountDesc() throws Exception {
+		// when & then
+		mockMvc.perform(get("/v1/products")
+				.param("sort_by", "likeCount")
+				.param("sort_direction", "DESC")
+				.contentType(MediaType.APPLICATION_JSON))
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.isSuccess", is(true)))
+			.andExpect(jsonPath("$.code", is("C000")))
+			.andExpect(jsonPath("$.data.content", hasSize(3)))
+			.andExpect(jsonPath("$.data.content[0].name", is("여름 원피스")))
+			.andExpect(jsonPath("$.data.content[1].name", is("곤약젤리")))
+			.andExpect(jsonPath("$.data.content[2].name", is("왕족발 보쌈 과자")))
 			.andExpect(jsonPath("$.data.pageNumber", is(0)))
 			.andExpect(jsonPath("$.data.pageSize", is(ProductConstants.DEFAULT_PAGE_SIZE)))
 			.andExpect(jsonPath("$.data.totalElements", is(3)))

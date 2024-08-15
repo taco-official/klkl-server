@@ -1,5 +1,6 @@
 package taco.klkl.domain.product.controller;
 
+import static org.assertj.core.api.Assertions.*;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -14,6 +15,7 @@ import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -29,6 +31,7 @@ import taco.klkl.domain.category.dto.response.SubcategoryResponseDto;
 import taco.klkl.domain.product.domain.Rating;
 import taco.klkl.domain.product.dto.request.ProductCreateUpdateRequestDto;
 import taco.klkl.domain.product.dto.request.ProductFilterOptionsDto;
+import taco.klkl.domain.product.dto.request.ProductSortOptionsDto;
 import taco.klkl.domain.product.dto.response.ProductDetailResponseDto;
 import taco.klkl.domain.product.dto.response.ProductSimpleResponseDto;
 import taco.klkl.domain.product.service.ProductService;
@@ -130,16 +133,21 @@ public class ProductControllerTest {
 		PagedResponseDto<ProductSimpleResponseDto> pagedResponse = new PagedResponseDto<>(
 			products, 0, 10, 1, 1, true
 		);
-		when(productService.getProductsByFilterOptions(any(Pageable.class), any(ProductFilterOptionsDto.class)))
+		when(productService.getProductsByFilterOptions(
+			any(Pageable.class),
+			any(ProductFilterOptionsDto.class),
+			any(ProductSortOptionsDto.class)))
 			.thenReturn(pagedResponse);
 
 		// When & Then
 		mockMvc.perform(get("/v1/products")
 				.param("page", "0")
 				.param("size", "10")
-				.param("country_id", "1", "2", "3")
 				.param("city_id", "4", "5")
-				.param("filter_id", "1"))
+				.param("subcategory_id", "6", "7")
+				.param("filter_id", "1", "2")
+				.param("sort_by", "rating")
+				.param("sort_direction", "DESC"))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
 			.andExpect(jsonPath("$.code", is("C000")))
@@ -160,6 +168,30 @@ public class ProductControllerTest {
 			.andExpect(jsonPath("$.data.totalPages", is(1)))
 			.andExpect(jsonPath("$.data.last", is(true)))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
+
+		// Verify that the service method was called with correct parameters
+		ArgumentCaptor<Pageable> pageableCaptor = ArgumentCaptor.forClass(Pageable.class);
+		ArgumentCaptor<ProductFilterOptionsDto> filterOptionsCaptor =
+			ArgumentCaptor.forClass(ProductFilterOptionsDto.class);
+		ArgumentCaptor<ProductSortOptionsDto> sortOptionsCaptor = ArgumentCaptor.forClass(ProductSortOptionsDto.class);
+
+		verify(productService).getProductsByFilterOptions(
+			pageableCaptor.capture(),
+			filterOptionsCaptor.capture(),
+			sortOptionsCaptor.capture()
+		);
+
+		Pageable capturedPageable = pageableCaptor.getValue();
+		ProductFilterOptionsDto capturedFilterOptions = filterOptionsCaptor.getValue();
+		ProductSortOptionsDto capturedSortOptions = sortOptionsCaptor.getValue();
+
+		assertThat(capturedPageable.getPageNumber()).isEqualTo(0);
+		assertThat(capturedPageable.getPageSize()).isEqualTo(10);
+		assertThat(capturedFilterOptions.cityIds()).containsExactly(4L, 5L);
+		assertThat(capturedFilterOptions.subcategoryIds()).containsExactly(6L, 7L);
+		assertThat(capturedFilterOptions.filterIds()).containsExactly(1L, 2L);
+		assertThat(capturedSortOptions.sortBy()).isEqualTo("rating");
+		assertThat(capturedSortOptions.sortDirection()).isEqualTo("DESC");
 	}
 
 	@Test
