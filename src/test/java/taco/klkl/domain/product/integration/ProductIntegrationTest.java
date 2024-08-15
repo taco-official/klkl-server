@@ -270,7 +270,7 @@ public class ProductIntegrationTest {
 
 	@Test
 	@DisplayName("단일 소분류 ID로 필터링된 상품 목록 조회 API 테스트")
-	public void testGetProductsBySingleSubcategoryIds() throws Exception {
+	public void testGetProductsBySingleSubcategoryId() throws Exception {
 		// given
 		ProductCreateUpdateRequestDto createRamenRequest1 = new ProductCreateUpdateRequestDto(
 			"name1",
@@ -395,6 +395,141 @@ public class ProductIntegrationTest {
 			.andExpect(jsonPath("$.data.content[0].name", is(createRamenRequest1.name())))
 			.andExpect(jsonPath("$.data.content[1].name", is(createRamenRequest2.name())))
 			.andExpect(jsonPath("$.data.content[2].name", is(createShoeRequest.name())))
+			.andExpect(jsonPath("$.data.pageNumber", is(0)))
+			.andExpect(jsonPath("$.data.pageSize", is(ProductConstants.DEFAULT_PAGE_SIZE)))
+			.andExpect(jsonPath("$.data.totalElements", is(3)))
+			.andExpect(jsonPath("$.data.totalPages", is(1)))
+			.andExpect(jsonPath("$.data.last", is(true)))
+			.andExpect(jsonPath("$.timestamp", notNullValue()));
+	}
+
+	@Test
+	@DisplayName("단일 필터 ID로 필터링된 상품 목록 조회 API 테스트")
+	public void testGetProductsBySingleFilterId() throws Exception {
+		// given
+		ProductCreateUpdateRequestDto createCilantroRequest1 = new ProductCreateUpdateRequestDto(
+			"name1",
+			"description1",
+			"address1",
+			1000,
+			415L,
+			310L,
+			438L,
+			Set.of(351L)
+		);
+		ProductCreateUpdateRequestDto createCilantroRequest2 = new ProductCreateUpdateRequestDto(
+			"name2",
+			"description2",
+			"address2",
+			2000,
+			431L,
+			310L,
+			442L,
+			Set.of(351L)
+		);
+		ProductCreateUpdateRequestDto createRequest = new ProductCreateUpdateRequestDto(
+			"name3",
+			"description3",
+			"address3",
+			3000,
+			416L,
+			324L,
+			438L,
+			null
+		);
+		ProductCreateUpdateRequestDto createConvenienceStoreRequest = new ProductCreateUpdateRequestDto(
+			"name4",
+			"description4",
+			"address4",
+			4000,
+			423L,
+			315L,
+			439L,
+			Set.of(350L)
+		);
+		productService.createProduct(createCilantroRequest1);
+		productService.createProduct(createCilantroRequest2);
+		productService.createProduct(createRequest);
+		productService.createProduct(createConvenienceStoreRequest);
+
+		// when & then
+		mockMvc.perform(get("/v1/products")
+				.param("filter_id", "351")  // 고수
+				.contentType(MediaType.APPLICATION_JSON))
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.isSuccess", is(true)))
+			.andExpect(jsonPath("$.code", is("C000")))
+			.andExpect(jsonPath("$.data.content", hasSize(2)))
+			.andExpect(jsonPath("$.data.content[0].name", is(createCilantroRequest1.name())))
+			.andExpect(jsonPath("$.data.content[1].name", is(createCilantroRequest2.name())))
+			.andExpect(jsonPath("$.data.pageNumber", is(0)))
+			.andExpect(jsonPath("$.data.pageSize", is(ProductConstants.DEFAULT_PAGE_SIZE)))
+			.andExpect(jsonPath("$.data.totalElements", is(2)))
+			.andExpect(jsonPath("$.data.totalPages", is(1)))
+			.andExpect(jsonPath("$.data.last", is(true)))
+			.andExpect(jsonPath("$.timestamp", notNullValue()));
+	}
+
+	@Test
+	@DisplayName("다중 필터 ID로 필터링된 상품 목록 조회 API 테스트")
+	public void testGetProductsByMultipleFilterIds() throws Exception {
+		// given
+		ProductCreateUpdateRequestDto createCilantroRequest1 = new ProductCreateUpdateRequestDto(
+			"name1",
+			"description1",
+			"address1",
+			1000,
+			415L,
+			310L,
+			438L,
+			Set.of(351L)
+		);
+		ProductCreateUpdateRequestDto createCilantroRequest2 = new ProductCreateUpdateRequestDto(
+			"name2",
+			"description2",
+			"address2",
+			2000,
+			431L,
+			310L,
+			442L,
+			Set.of(351L)
+		);
+		ProductCreateUpdateRequestDto createRequest = new ProductCreateUpdateRequestDto(
+			"name3",
+			"description3",
+			"address3",
+			3000,
+			416L,
+			324L,
+			438L,
+			null
+		);
+		ProductCreateUpdateRequestDto createConvenienceStoreRequest = new ProductCreateUpdateRequestDto(
+			"name4",
+			"description4",
+			"address4",
+			4000,
+			423L,
+			315L,
+			439L,
+			Set.of(350L)
+		);
+		productService.createProduct(createCilantroRequest1);
+		productService.createProduct(createCilantroRequest2);
+		productService.createProduct(createRequest);
+		productService.createProduct(createConvenienceStoreRequest);
+
+		// when & then
+		mockMvc.perform(get("/v1/products")
+				.param("filter_id", "351", "350")  // 고수, 편의점
+				.contentType(MediaType.APPLICATION_JSON))
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.isSuccess", is(true)))
+			.andExpect(jsonPath("$.code", is("C000")))
+			.andExpect(jsonPath("$.data.content", hasSize(3)))
+			.andExpect(jsonPath("$.data.content[0].name", is(createCilantroRequest1.name())))
+			.andExpect(jsonPath("$.data.content[1].name", is(createCilantroRequest2.name())))
+			.andExpect(jsonPath("$.data.content[2].name", is(createConvenienceStoreRequest.name())))
 			.andExpect(jsonPath("$.data.pageNumber", is(0)))
 			.andExpect(jsonPath("$.data.pageSize", is(ProductConstants.DEFAULT_PAGE_SIZE)))
 			.andExpect(jsonPath("$.data.totalElements", is(3)))

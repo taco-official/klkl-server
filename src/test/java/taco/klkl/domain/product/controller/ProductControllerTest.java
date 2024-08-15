@@ -133,8 +133,9 @@ public class ProductControllerTest {
 		mockMvc.perform(get("/v1/products")
 				.param("page", "0")
 				.param("size", "10")
-				.param("country_id", "1", "2", "3") // Add countryIds as query parameters
-				.param("city_id", "4", "5"))
+				.param("country_id", "1", "2", "3")
+				.param("city_id", "4", "5")
+				.param("filter_id", "1"))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
 			.andExpect(jsonPath("$.code", is("C000")))
@@ -146,6 +147,8 @@ public class ProductControllerTest {
 			.andExpect(jsonPath("$.data.content[0].countryName", is(productSimpleResponseDto.countryName())))
 			.andExpect(jsonPath("$.data.content[0].categoryName",
 				is(productSimpleResponseDto.categoryName())))
+			.andExpect(jsonPath("$.data.content[0].filters",
+				hasSize(productSimpleResponseDto.filters().size())))
 			.andExpect(jsonPath("$.data.pageNumber", is(0)))
 			.andExpect(jsonPath("$.data.pageSize", is(10)))
 			.andExpect(jsonPath("$.data.totalElements", is(1)))
@@ -189,6 +192,7 @@ public class ProductControllerTest {
 				is(productDetailResponseDto.currency().currencyId().intValue())))
 			.andExpect(jsonPath("$.data.currency.code", is(productDetailResponseDto.currency().code())))
 			.andExpect(jsonPath("$.data.currency.flag", is(productDetailResponseDto.currency().flag())))
+			.andExpect(jsonPath("$.data.filters", hasSize(productSimpleResponseDto.filters().size())))
 			.andExpect(jsonPath("$.data.createdAt", notNullValue()))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
 	}
@@ -231,6 +235,7 @@ public class ProductControllerTest {
 				is(productDetailResponseDto.currency().currencyId().intValue())))
 			.andExpect(jsonPath("$.data.currency.code", is(productDetailResponseDto.currency().code())))
 			.andExpect(jsonPath("$.data.currency.flag", is(productDetailResponseDto.currency().flag())))
+			.andExpect(jsonPath("$.data.filters", hasSize(productSimpleResponseDto.filters().size())))
 			.andExpect(jsonPath("$.data.createdAt", notNullValue()))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
 	}
@@ -273,6 +278,7 @@ public class ProductControllerTest {
 				is(productDetailResponseDto.currency().currencyId().intValue())))
 			.andExpect(jsonPath("$.data.currency.code", is(productDetailResponseDto.currency().code())))
 			.andExpect(jsonPath("$.data.currency.flag", is(productDetailResponseDto.currency().flag())))
+			.andExpect(jsonPath("$.data.filters", hasSize(productSimpleResponseDto.filters().size())))
 			.andExpect(jsonPath("$.data.createdAt", notNullValue()))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
 	}
