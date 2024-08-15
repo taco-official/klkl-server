@@ -20,6 +20,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.dsl.PathBuilder;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
@@ -40,6 +42,7 @@ import taco.klkl.domain.product.domain.QProductFilter;
 import taco.klkl.domain.product.domain.Rating;
 import taco.klkl.domain.product.dto.request.ProductCreateUpdateRequestDto;
 import taco.klkl.domain.product.dto.request.ProductFilterOptionsDto;
+import taco.klkl.domain.product.dto.request.ProductSortOptionsDto;
 import taco.klkl.domain.product.dto.response.ProductDetailResponseDto;
 import taco.klkl.domain.product.dto.response.ProductSimpleResponseDto;
 import taco.klkl.domain.product.exception.ProductNotFoundException;
@@ -157,11 +160,16 @@ class ProductServiceTest {
 			subcategoryIds,
 			filterIds
 		);
+		ProductSortOptionsDto sortOptions = new ProductSortOptionsDto(
+			"rating",
+			"DESC"
+		);
 		Pageable pageable = PageRequest.of(0, 10);
 
 		// Mocking QueryDSL behavior
 		List<Product> productList = List.of(testProduct);
 
+		JPAQuery<Product> baseQuery = mock(JPAQuery.class);
 		JPAQuery<Product> productQuery = mock(JPAQuery.class);
 		JPAQuery<Long> countQuery = mock(JPAQuery.class);
 
@@ -169,19 +177,23 @@ class ProductServiceTest {
 		QProductFilter productFilter = QProductFilter.productFilter;
 		QFilter filter = QFilter.filter;
 
-		when(queryFactory.selectDistinct(product)).thenReturn(productQuery);
-		when(productQuery.from(product)).thenReturn(productQuery);
-		when(productQuery.leftJoin(product.productFilters, productFilter)).thenReturn(productQuery);
-		when(productQuery.leftJoin(productFilter.filter, filter)).thenReturn(productQuery);
-		when(productQuery.where(any(BooleanBuilder.class))).thenReturn(productQuery);
+		when(queryFactory.from(product)).thenReturn((JPAQuery)baseQuery);
+		when(baseQuery.leftJoin(product.productFilters, productFilter)).thenReturn(baseQuery);
+		when(baseQuery.leftJoin(productFilter.filter, filter)).thenReturn(baseQuery);
+		when(baseQuery.where(any(BooleanBuilder.class))).thenReturn(baseQuery);
+
+		when(baseQuery.select(QProduct.product.countDistinct())).thenReturn(countQuery);
+		when(countQuery.fetchOne()).thenReturn((long)productList.size());
+
+		when(baseQuery.select(QProduct.product)).thenReturn(productQuery);
+		when(productQuery.distinct()).thenReturn(productQuery);
 		when(productQuery.offset(pageable.getOffset())).thenReturn(productQuery);
 		when(productQuery.limit(pageable.getPageSize())).thenReturn(productQuery);
 		when(productQuery.fetch()).thenReturn(productList);
 
-		when(queryFactory.select(product.count())).thenReturn(countQuery);
-		when(countQuery.from(product)).thenReturn(countQuery);
-		when(countQuery.where(any(BooleanBuilder.class))).thenReturn(countQuery);
-		when(countQuery.fetchOne()).thenReturn((long)productList.size());
+		// Mocking sorting behavior
+		PathBuilder<Product> pathBuilder = new PathBuilder<>(Product.class, "product");
+		when(productQuery.orderBy(any(OrderSpecifier.class))).thenReturn(productQuery);
 
 		// Mocking validation behavior
 		Subcategory mockSubcategory = mock(Subcategory.class);
@@ -192,7 +204,7 @@ class ProductServiceTest {
 
 		// When
 		PagedResponseDto<ProductSimpleResponseDto> result = productService
-			.getProductsByFilterOptions(pageable, filterOptions);
+			.getProductsByFilterOptions(pageable, filterOptions, sortOptions);
 
 		// Then
 		assertThat(result.content()).hasSize(1);
@@ -204,19 +216,20 @@ class ProductServiceTest {
 		assertThat(result.last()).isTrue();
 
 		// Verify that the query methods were called
-		verify(queryFactory).selectDistinct(product);
-		verify(productQuery).from(product);
-		verify(productQuery).leftJoin(product.productFilters, productFilter);
-		verify(productQuery).leftJoin(productFilter.filter, filter);
-		verify(productQuery).where(any(BooleanBuilder.class));
+		verify(queryFactory).from(product);
+		verify(baseQuery).leftJoin(product.productFilters, productFilter);
+		verify(baseQuery).leftJoin(productFilter.filter, filter);
+		verify(baseQuery).where(any(BooleanBuilder.class));
+
+		verify(baseQuery).select(QProduct.product.countDistinct());
+		verify(countQuery).fetchOne();
+
+		verify(baseQuery).select(QProduct.product);
+		verify(productQuery).distinct();
 		verify(productQuery).offset(pageable.getOffset());
 		verify(productQuery).limit(pageable.getPageSize());
+		verify(productQuery).orderBy(any(OrderSpecifier.class));
 		verify(productQuery).fetch();
-
-		verify(queryFactory).select(product.count());
-		verify(countQuery).from(product);
-		verify(countQuery).where(any(BooleanBuilder.class));
-		verify(countQuery).fetchOne();
 
 		// Verify that validation methods were called
 		verify(cityService).isCitiesMappedToSameCountry(cityIds);

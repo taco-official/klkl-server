@@ -151,12 +151,12 @@ public class ProductIntegrationTest {
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
 			.andExpect(jsonPath("$.code", is("C000")))
-			.andExpect(jsonPath("$.data.content", hasSize(4)))
-			.andExpect(jsonPath("$.data.content[0].name", is(createRequest1.name())))
-			.andExpect(jsonPath("$.data.content[1].name", is(createRequest2.name())))
+			.andExpect(jsonPath("$.data.content", hasSize(5)))
+			.andExpect(jsonPath("$.data.content[0].name", is(createRequest2.name())))
+			.andExpect(jsonPath("$.data.content[1].name", is(createRequest1.name())))
 			.andExpect(jsonPath("$.data.pageNumber", is(0)))
 			.andExpect(jsonPath("$.data.pageSize", is(10)))
-			.andExpect(jsonPath("$.data.totalElements", is(4)))
+			.andExpect(jsonPath("$.data.totalElements", is(5)))
 			.andExpect(jsonPath("$.data.totalPages", is(1)))
 			.andExpect(jsonPath("$.data.last", is(true)))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
@@ -206,6 +206,8 @@ public class ProductIntegrationTest {
 		// when & then
 		mockMvc.perform(get("/v1/products")
 				.param("city_id", "416")  // 도쿄
+				.param("sort_by", "createdAt")
+				.param("sort_direction", "ASC")
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
@@ -264,6 +266,8 @@ public class ProductIntegrationTest {
 		// when & then
 		mockMvc.perform(get("/v1/products")
 				.param("city_id", "415", "416")  // 교토, 도쿄
+				.param("sort_by", "createdAt")
+				.param("sort_direction", "ASC")
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
@@ -336,6 +340,8 @@ public class ProductIntegrationTest {
 		// when & then
 		mockMvc.perform(get("/v1/products")
 				.param("subcategory_id", "310")  // 라면
+				.param("sort_by", "createdAt")
+				.param("sort_direction", "ASC")
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
@@ -407,6 +413,8 @@ public class ProductIntegrationTest {
 		// when & then
 		mockMvc.perform(get("/v1/products")
 				.param("subcategory_id", "310", "324")  // 라면, 신발
+				.param("sort_by", "createdAt")
+				.param("sort_direction", "ASC")
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
@@ -479,6 +487,8 @@ public class ProductIntegrationTest {
 		// when & then
 		mockMvc.perform(get("/v1/products")
 				.param("filter_id", "351")  // 고수
+				.param("sort_by", "createdAt")
+				.param("sort_direction", "ASC")
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
@@ -550,6 +560,8 @@ public class ProductIntegrationTest {
 		// when & then
 		mockMvc.perform(get("/v1/products")
 				.param("filter_id", "351", "350")  // 고수, 편의점
+				.param("sort_by", "createdAt")
+				.param("sort_direction", "ASC")
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
