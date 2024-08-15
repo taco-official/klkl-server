@@ -26,6 +26,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import taco.klkl.domain.category.domain.Category;
 import taco.klkl.domain.category.domain.CategoryName;
 import taco.klkl.domain.category.domain.Filter;
+import taco.klkl.domain.category.domain.QFilter;
 import taco.klkl.domain.category.domain.Subcategory;
 import taco.klkl.domain.category.domain.SubcategoryName;
 import taco.klkl.domain.category.dto.response.FilterResponseDto;
@@ -35,6 +36,7 @@ import taco.klkl.domain.product.dao.ProductRepository;
 import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.product.domain.ProductFilter;
 import taco.klkl.domain.product.domain.QProduct;
+import taco.klkl.domain.product.domain.QProductFilter;
 import taco.klkl.domain.product.dto.request.ProductCreateUpdateRequestDto;
 import taco.klkl.domain.product.dto.request.ProductFilterOptionsDto;
 import taco.klkl.domain.product.dto.response.ProductDetailResponseDto;
@@ -161,8 +163,13 @@ class ProductServiceTest {
 		JPAQuery<Long> countQuery = mock(JPAQuery.class);
 
 		QProduct product = QProduct.product;
+		QProductFilter productFilter = QProductFilter.productFilter;
+		QFilter filter = QFilter.filter;
 
-		when(queryFactory.selectFrom(product)).thenReturn(productQuery);
+		when(queryFactory.selectDistinct(product)).thenReturn(productQuery);
+		when(productQuery.from(product)).thenReturn(productQuery);
+		when(productQuery.leftJoin(product.productFilters, productFilter)).thenReturn(productQuery);
+		when(productQuery.leftJoin(productFilter.filter, filter)).thenReturn(productQuery);
 		when(productQuery.where(any(BooleanBuilder.class))).thenReturn(productQuery);
 		when(productQuery.offset(pageable.getOffset())).thenReturn(productQuery);
 		when(productQuery.limit(pageable.getPageSize())).thenReturn(productQuery);
@@ -194,8 +201,19 @@ class ProductServiceTest {
 		assertThat(result.last()).isTrue();
 
 		// Verify that the query methods were called
-		verify(queryFactory).selectFrom(product);
+		verify(queryFactory).selectDistinct(product);
+		verify(productQuery).from(product);
+		verify(productQuery).leftJoin(product.productFilters, productFilter);
+		verify(productQuery).leftJoin(productFilter.filter, filter);
+		verify(productQuery).where(any(BooleanBuilder.class));
+		verify(productQuery).offset(pageable.getOffset());
+		verify(productQuery).limit(pageable.getPageSize());
+		verify(productQuery).fetch();
+
 		verify(queryFactory).select(product.count());
+		verify(countQuery).from(product);
+		verify(countQuery).where(any(BooleanBuilder.class));
+		verify(countQuery).fetchOne();
 
 		// Verify that validation methods were called
 		verify(cityService).isCitiesMappedToSameCountry(cityIds);
@@ -222,14 +240,14 @@ class ProductServiceTest {
 		assertThat(result.price()).isEqualTo(testProduct.getPrice());
 
 		// 필터 검증
-		if (testProduct.getFilters() != null && !testProduct.getFilters().isEmpty()) {
+		if (testProduct.getProductFilters() != null && !testProduct.getProductFilters().isEmpty()) {
 			assertThat(result.filters()).isNotNull();
-			assertThat(result.filters()).hasSize(testProduct.getFilters().size());
+			assertThat(result.filters()).hasSize(testProduct.getProductFilters().size());
 			Set<Long> resultFilterIds = result.filters().stream()
 				.map(FilterResponseDto::id)
 				.collect(Collectors.toSet());
 
-			Set<Long> testProductFilterIds = testProduct.getFilters().stream()
+			Set<Long> testProductFilterIds = testProduct.getProductFilters().stream()
 				.map(ProductFilter::getFilter)
 				.map(Filter::getId)
 				.collect(Collectors.toSet());

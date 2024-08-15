@@ -26,7 +26,7 @@ public record ProductSimpleResponseDto(
 ) {
 
 	public static ProductSimpleResponseDto from(Product product) {
-		Set<FilterResponseDto> filters = product.getFilters().stream()
+		Set<FilterResponseDto> filters = product.getProductFilters().stream()
 			.map(ProductFilter::getFilter)
 			.map(FilterResponseDto::from)
 			.collect(Collectors.toSet());

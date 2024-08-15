@@ -3,11 +3,11 @@ package taco.klkl.domain.product.domain;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -118,9 +118,10 @@ public class Product {
 
 	@OneToMany(
 		mappedBy = "product",
+		cascade = CascadeType.ALL,
 		orphanRemoval = true
 	)
-	private Set<ProductFilter> filters = new HashSet<>();
+	private Set<ProductFilter> productFilters = new HashSet<>();
 
 	@Column(
 		name = "created_at",
@@ -192,19 +193,17 @@ public class Product {
 		this.currency = currency;
 	}
 
-	public void addFilters(
-		final Set<Filter> filters
-	) {
-		filters.stream()
-			.map(filter -> ProductFilter.of(this, filter))
-			.forEach(this.filters::add);
+	public void addFilters(final Set<Filter> filters) {
+		filters.forEach(this::addFilter);
 	}
 
-	public void updateFilters(
-		final Set<Filter> updatedFilters
-	) {
-		this.filters = updatedFilters.stream()
-			.map(filter -> ProductFilter.of(this, filter))
-			.collect(Collectors.toSet());
+	public void updateFilters(final Set<Filter> updatedFilters) {
+		this.productFilters.clear();
+		updatedFilters.forEach(this::addFilter);
+	}
+
+	public void addFilter(final Filter filter) {
+		ProductFilter productFilter = ProductFilter.of(this, filter);
+		this.productFilters.add(productFilter);
 	}
 }

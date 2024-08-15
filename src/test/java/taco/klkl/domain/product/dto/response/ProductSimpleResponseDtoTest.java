@@ -86,7 +86,7 @@ class ProductSimpleResponseDtoTest {
 		when(product.getCity()).thenReturn(city);
 		when(product.getSubcategory()).thenReturn(subcategory);
 		when(product.getCurrency()).thenReturn(currency);
-		when(product.getFilters()).thenReturn(productFilters);
+		when(product.getProductFilters()).thenReturn(productFilters);
 	}
 
 	@Test
@@ -107,7 +107,7 @@ class ProductSimpleResponseDtoTest {
 	@DisplayName("생성자를 통해 ProductSimpleResponseDto 생성 테스트")
 	void testConstructor() {
 		// when
-		Set<FilterResponseDto> filters = product.getFilters().stream()
+		Set<FilterResponseDto> filters = product.getProductFilters().stream()
 			.map(ProductFilter::getFilter)
 			.map(FilterResponseDto::from)
 			.collect(Collectors.toSet());

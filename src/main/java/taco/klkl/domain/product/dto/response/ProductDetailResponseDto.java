@@ -46,7 +46,7 @@ public record ProductDetailResponseDto(
 ) {
 
 	public static ProductDetailResponseDto from(Product product) {
-		Set<FilterResponseDto> filters = Optional.ofNullable(product.getFilters())
+		Set<FilterResponseDto> filters = Optional.ofNullable(product.getProductFilters())
 			.map(productFilters -> productFilters.stream()
 				.map(ProductFilter::getFilter)
 				.filter(Objects::nonNull)

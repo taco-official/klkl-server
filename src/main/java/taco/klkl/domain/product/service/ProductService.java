@@ -11,10 +11,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.RequiredArgsConstructor;
 import taco.klkl.domain.category.domain.Filter;
+import taco.klkl.domain.category.domain.QFilter;
 import taco.klkl.domain.category.domain.Subcategory;
 import taco.klkl.domain.category.exception.SubcategoryNotFoundException;
 import taco.klkl.domain.category.service.FilterService;
@@ -61,15 +63,25 @@ public class ProductService {
 		validateFilterOptions(filterOptions);
 
 		QProduct product = QProduct.product;
+		QProductFilter productFilter = QProductFilter.productFilter;
+		QFilter filter = QFilter.filter;
+
 		BooleanBuilder builder = buildFilterOptions(filterOptions, product);
 
-		List<Product> products = queryFactory.selectFrom(product)
-			.where(builder)
+		JPAQuery<Product> query = queryFactory
+			.selectDistinct(product)
+			.from(product)
+			.leftJoin(product.productFilters, productFilter)
+			.leftJoin(productFilter.filter, filter)
+			.where(builder);
+
+		List<Product> products = query
 			.offset(pageable.getOffset())
 			.limit(pageable.getPageSize())
 			.fetch();
 
-		long total = queryFactory.select(product.count())
+		long total = queryFactory
+			.select(product.count())
 			.from(product)
 			.where(builder)
 			.fetchOne();
@@ -89,9 +101,7 @@ public class ProductService {
 		final Product product = createProductEntity(createRequest);
 		productRepository.save(product);
 		if (createRequest.filterIds() != null) {
-			Set<Filter> filters = createRequest.filterIds().stream()
-				.map(filterService::getFilterEntityById)
-				.collect(Collectors.toSet());
+			Set<Filter> filters = getFiltersByFilterIds(createRequest.filterIds());
 			product.addFilters(filters);
 		}
 		return ProductDetailResponseDto.from(product);
@@ -104,9 +114,7 @@ public class ProductService {
 			.orElseThrow(ProductNotFoundException::new);
 		updateProductEntity(product, updateRequest);
 		if (updateRequest.filterIds() != null) {
-			Set<Filter> updatedFilters = updateRequest.filterIds().stream()
-				.map(filterService::getFilterEntityById)
-				.collect(Collectors.toSet());
+			Set<Filter> updatedFilters = getFiltersByFilterIds(updateRequest.filterIds());
 			product.updateFilters(updatedFilters);
 		}
 		return ProductDetailResponseDto.from(product);
@@ -124,7 +132,6 @@ public class ProductService {
 		final QProduct product
 	) {
 		BooleanBuilder builder = new BooleanBuilder();
-		QProductFilter productFilter = QProductFilter.productFilter;
 
 		if (options.cityIds() != null && !options.cityIds().isEmpty()) {
 			builder.and(product.city.cityId.in(options.cityIds()));
@@ -133,10 +140,16 @@ public class ProductService {
 			builder.and(product.subcategory.id.in(options.subcategoryIds()));
 		}
 		if (options.filterIds() != null && !options.filterIds().isEmpty()) {
-			builder.and(productFilter.filter.id.in(options.filterIds()));
+			builder.and(product.productFilters.any().filter.id.in(options.filterIds()));
 		}
 
 		return builder;
+	}
+
+	private Set<Filter> getFiltersByFilterIds(final Set<Long> filterIds) {
+		return filterIds.stream()
+			.map(filterService::getFilterEntityById)
+			.collect(Collectors.toSet());
 	}
 
 	private Product createProductEntity(final ProductCreateUpdateRequestDto createRequest) {
