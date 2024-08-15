@@ -34,8 +34,8 @@ public class NotificationServiceImpl implements NotificationService {
 	@Override
 	public List<NotificationResponse> getNotifications() {
 
-		User receiver = getReceiver();
-		List<Notification> notifications = notificationRepository.findAllByComment_Product_User(receiver);
+		final User receiver = getReceiver();
+		final List<Notification> notifications = notificationRepository.findAllByComment_Product_User(receiver);
 
 		return notifications.stream()
 			.map(NotificationResponse::from)
@@ -46,8 +46,8 @@ public class NotificationServiceImpl implements NotificationService {
 	@Transactional
 	public List<NotificationResponse> readAllNotifications() {
 
-		User receiver = getReceiver();
-		List<Notification> notifications = notificationRepository.findAllByComment_Product_User(receiver);
+		final User receiver = getReceiver();
+		final List<Notification> notifications = notificationRepository.findAllByComment_Product_User(receiver);
 
 		return notifications.stream()
 			.map(n -> {
@@ -58,9 +58,9 @@ public class NotificationServiceImpl implements NotificationService {
 
 	@Override
 	@Transactional
-	public NotificationResponse readNotificationById(long id) {
+	public NotificationResponse readNotificationById(final Long id) {
 
-		Notification notification = notificationRepository.findById(id)
+		final Notification notification = notificationRepository.findById(id)
 			.orElseThrow(NotificationNotFoundException::new);
 		notification.read();
 		return NotificationResponse.from(notification);
@@ -68,9 +68,9 @@ public class NotificationServiceImpl implements NotificationService {
 
 	@Override
 	@Transactional
-	public void createNotification(Comment comment) {
+	public void createNotification(final Comment comment) {
 
-		Notification notification = Notification.of(comment);
+		final Notification notification = Notification.of(comment);
 		notificationRepository.save(notification);
 	}
 

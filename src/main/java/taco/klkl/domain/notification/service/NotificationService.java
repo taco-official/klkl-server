@@ -13,7 +13,7 @@ public interface NotificationService {
 
 	List<NotificationResponse> readAllNotifications();
 
-	NotificationResponse readNotificationById(long id);
+	NotificationResponse readNotificationById(Long id);
 
 	void createNotification(Comment comment);
 }
