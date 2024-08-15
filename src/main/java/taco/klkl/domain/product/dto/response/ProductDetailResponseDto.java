@@ -24,6 +24,7 @@ import taco.klkl.domain.user.dto.response.UserDetailResponseDto;
  * @param address
  * @param price
  * @param likeCount
+ * @param rating
  * @param user
  * @param city
  * @param subcategory
@@ -35,8 +36,9 @@ public record ProductDetailResponseDto(
 	String name,
 	String description,
 	String address,
-	int price,
-	int likeCount,
+	Integer price,
+	Integer likeCount,
+	Double rating,
 	UserDetailResponseDto user,
 	CityResponseDto city,
 	SubcategoryResponseDto subcategory,
@@ -61,6 +63,7 @@ public record ProductDetailResponseDto(
 			product.getAddress(),
 			product.getPrice(),
 			product.getLikeCount(),
+			product.getRating().getValue(),
 			UserDetailResponseDto.from(product.getUser()),
 			CityResponseDto.from(product.getCity()),
 			SubcategoryResponseDto.from(product.getSubcategory()),

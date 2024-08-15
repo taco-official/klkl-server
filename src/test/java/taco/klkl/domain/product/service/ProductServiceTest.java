@@ -37,6 +37,7 @@ import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.product.domain.ProductFilter;
 import taco.klkl.domain.product.domain.QProduct;
 import taco.klkl.domain.product.domain.QProductFilter;
+import taco.klkl.domain.product.domain.Rating;
 import taco.klkl.domain.product.dto.request.ProductCreateUpdateRequestDto;
 import taco.klkl.domain.product.dto.request.ProductFilterOptionsDto;
 import taco.klkl.domain.product.dto.response.ProductDetailResponseDto;
@@ -124,6 +125,7 @@ class ProductServiceTest {
 			"description",
 			"address",
 			1000,
+			Rating.FIVE,
 			user,
 			city,
 			subcategory,
@@ -135,6 +137,7 @@ class ProductServiceTest {
 			"productDescription",
 			"productAddress",
 			1000,
+			5.0,
 			1L,
 			1L,
 			1L,
@@ -238,6 +241,7 @@ class ProductServiceTest {
 		assertThat(result.description()).isEqualTo(testProduct.getDescription());
 		assertThat(result.address()).isEqualTo(testProduct.getAddress());
 		assertThat(result.price()).isEqualTo(testProduct.getPrice());
+		assertThat(result.rating()).isEqualTo(testProduct.getRating().getValue());
 
 		// 필터 검증
 		if (testProduct.getProductFilters() != null && !testProduct.getProductFilters().isEmpty()) {
@@ -303,6 +307,7 @@ class ProductServiceTest {
 			assertThat(savedProduct.getDescription()).isEqualTo(requestDto.description());
 			assertThat(savedProduct.getAddress()).isEqualTo(requestDto.address());
 			assertThat(savedProduct.getPrice()).isEqualTo(requestDto.price());
+			assertThat(savedProduct.getRating().getValue()).isEqualTo(requestDto.rating());
 			assertThat(savedProduct.getUser()).isEqualTo(user);
 			assertThat(savedProduct.getCity()).isEqualTo(city);
 			assertThat(savedProduct.getSubcategory()).isEqualTo(subcategory);

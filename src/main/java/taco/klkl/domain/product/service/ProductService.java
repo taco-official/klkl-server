@@ -25,6 +25,7 @@ import taco.klkl.domain.product.dao.ProductRepository;
 import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.product.domain.QProduct;
 import taco.klkl.domain.product.domain.QProductFilter;
+import taco.klkl.domain.product.domain.Rating;
 import taco.klkl.domain.product.dto.request.ProductCreateUpdateRequestDto;
 import taco.klkl.domain.product.dto.request.ProductFilterOptionsDto;
 import taco.klkl.domain.product.dto.response.ProductDetailResponseDto;
@@ -153,6 +154,7 @@ public class ProductService {
 	}
 
 	private Product createProductEntity(final ProductCreateUpdateRequestDto createRequest) {
+		final Rating rating = Rating.from(createRequest.rating());
 		final User user = userUtil.findTestUser();
 		final City city = getCityEntity(createRequest.cityId());
 		final Subcategory subcategory = getSubcategoryEntity(createRequest.subcategoryId());
@@ -163,6 +165,7 @@ public class ProductService {
 			createRequest.description(),
 			createRequest.address(),
 			createRequest.price(),
+			rating,
 			user,
 			city,
 			subcategory,
@@ -171,6 +174,7 @@ public class ProductService {
 	}
 
 	private void updateProductEntity(final Product product, final ProductCreateUpdateRequestDto updateRequest) {
+		final Rating rating = Rating.from(updateRequest.rating());
 		final City city = getCityEntity(updateRequest.cityId());
 		final Subcategory subcategory = getSubcategoryEntity(updateRequest.subcategoryId());
 		final Currency currency = getCurrencyEntity(updateRequest.currencyId());
@@ -180,6 +184,7 @@ public class ProductService {
 			updateRequest.description(),
 			updateRequest.address(),
 			updateRequest.price(),
+			rating,
 			city,
 			subcategory,
 			currency

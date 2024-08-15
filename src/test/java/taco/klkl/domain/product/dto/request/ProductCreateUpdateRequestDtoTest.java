@@ -35,6 +35,7 @@ class ProductCreateUpdateRequestDtoTest {
 			"Valid product description",
 			"Valid address",
 			100,
+			5.0,
 			1L,
 			2L,
 			3L,
@@ -53,6 +54,7 @@ class ProductCreateUpdateRequestDtoTest {
 			"Valid product description",
 			"Valid address",
 			100,
+			5.0,
 			1L,
 			2L,
 			3L,
@@ -75,6 +77,7 @@ class ProductCreateUpdateRequestDtoTest {
 			"Valid product description",
 			"Valid address",
 			100,
+			5.0,
 			1L,
 			2L,
 			3L,
@@ -99,6 +102,7 @@ class ProductCreateUpdateRequestDtoTest {
 			"Valid product description",
 			"Valid address",
 			100,
+			5.0,
 			1L,
 			2L,
 			3L,
@@ -118,6 +122,7 @@ class ProductCreateUpdateRequestDtoTest {
 			null,
 			"Valid address",
 			100,
+			5.0,
 			1L,
 			2L,
 			3L,
@@ -140,6 +145,7 @@ class ProductCreateUpdateRequestDtoTest {
 			"",
 			"Valid address",
 			100,
+			5.0,
 			1L,
 			2L,
 			3L,
@@ -164,6 +170,7 @@ class ProductCreateUpdateRequestDtoTest {
 			longDescription,
 			"Valid address",
 			100,
+			5.0,
 			1L,
 			2L,
 			3L,
@@ -183,6 +190,7 @@ class ProductCreateUpdateRequestDtoTest {
 			"Valid product description",
 			null,
 			100,
+			5.0,
 			1L,
 			2L,
 			3L,
@@ -205,6 +213,7 @@ class ProductCreateUpdateRequestDtoTest {
 			"Valid product description",
 			"",
 			100,
+			5.0,
 			1L,
 			2L,
 			3L,
@@ -225,6 +234,7 @@ class ProductCreateUpdateRequestDtoTest {
 			"Valid product description",
 			address,
 			100,
+			5.0,
 			1L,
 			2L,
 			3L,
@@ -245,6 +255,7 @@ class ProductCreateUpdateRequestDtoTest {
 			"Valid product description",
 			longAddress,
 			100,
+			5.0,
 			1L,
 			2L,
 			3L,
@@ -264,6 +275,7 @@ class ProductCreateUpdateRequestDtoTest {
 			"Valid product description",
 			"Valid address",
 			null,
+			5.0,
 			1L,
 			2L,
 			3L,
@@ -287,6 +299,7 @@ class ProductCreateUpdateRequestDtoTest {
 			"Valid product description",
 			"Valid address",
 			0,
+			5.0,
 			1L,
 			2L,
 			3L,
@@ -306,6 +319,7 @@ class ProductCreateUpdateRequestDtoTest {
 			"Valid product description",
 			"Valid address",
 			price,
+			5.0,
 			1L,
 			2L,
 			3L,
@@ -318,6 +332,66 @@ class ProductCreateUpdateRequestDtoTest {
 	}
 
 	@Test
+	@DisplayName("평점이 null일 때 검증 실패")
+	void testNullRating() {
+		ProductCreateUpdateRequestDto requestDto = new ProductCreateUpdateRequestDto(
+			"Valid Product Name",
+			"Valid product description",
+			"Valid address",
+			100,
+			null,
+			1L,
+			2L,
+			3L,
+			Set.of(1L, 2L)
+		);
+
+		Set<ConstraintViolation<ProductCreateUpdateRequestDto>> violations = validator.validate(requestDto);
+		assertFalse(violations.isEmpty());
+		assertEquals(ProductValidationMessages.RATING_NOT_NULL, violations.iterator().next().getMessage());
+	}
+
+	@Test
+	@DisplayName("평점이 최댓값보다 클 때 검증 실패")
+	void testRatingOverMaxValue() {
+		ProductCreateUpdateRequestDto requestDto = new ProductCreateUpdateRequestDto(
+			"Valid Product Name",
+			"Valid product description",
+			"Valid address",
+			100,
+			5.5,
+			1L,
+			2L,
+			3L,
+			Set.of(1L, 2L)
+		);
+
+		Set<ConstraintViolation<ProductCreateUpdateRequestDto>> violations = validator.validate(requestDto);
+		assertFalse(violations.isEmpty());
+		assertEquals(ProductValidationMessages.RATING_OVER_MAX, violations.iterator().next().getMessage());
+	}
+
+	@Test
+	@DisplayName("평점이 최솟값보다 작을 때 검증 실패")
+	void testRatingUnderMinValue() {
+		ProductCreateUpdateRequestDto requestDto = new ProductCreateUpdateRequestDto(
+			"Valid Product Name",
+			"Valid product description",
+			"Valid address",
+			100,
+			0.0,
+			1L,
+			2L,
+			3L,
+			Set.of(1L, 2L)
+		);
+
+		Set<ConstraintViolation<ProductCreateUpdateRequestDto>> violations = validator.validate(requestDto);
+		assertFalse(violations.isEmpty());
+		assertEquals(ProductValidationMessages.RATING_UNDER_MIN, violations.iterator().next().getMessage());
+	}
+
+	@Test
 	@DisplayName("도시 ID가 null일 때 검증 실패")
 	void testNullCityId() {
 		ProductCreateUpdateRequestDto requestDto = new ProductCreateUpdateRequestDto(
@@ -325,6 +399,7 @@ class ProductCreateUpdateRequestDtoTest {
 			"Valid product description",
 			"Valid address",
 			100,
+			5.0,
 			null,
 			2L,
 			3L,
@@ -344,6 +419,7 @@ class ProductCreateUpdateRequestDtoTest {
 			"Valid product description",
 			"Valid address",
 			100,
+			5.0,
 			1L,
 			null,
 			3L,
@@ -363,6 +439,7 @@ class ProductCreateUpdateRequestDtoTest {
 			"Valid product description",
 			"Valid address",
 			100,
+			5.0,
 			1L,
 			2L,
 			null,
@@ -382,6 +459,7 @@ class ProductCreateUpdateRequestDtoTest {
 			"Valid product description",
 			"Valid address",
 			100,
+			5.0,
 			1L,
 			2L,
 			3L,

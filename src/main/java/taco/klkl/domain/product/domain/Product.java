@@ -9,6 +9,7 @@ import org.hibernate.annotations.DynamicInsert;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -23,6 +24,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import taco.klkl.domain.category.domain.Filter;
 import taco.klkl.domain.category.domain.Subcategory;
+import taco.klkl.domain.product.converter.RatingConverter;
 import taco.klkl.domain.region.domain.City;
 import taco.klkl.domain.region.domain.Currency;
 import taco.klkl.domain.user.domain.User;
@@ -75,6 +77,15 @@ public class Product {
 	)
 	@ColumnDefault(DefaultConstants.DEFAULT_INT_STRING)
 	private Integer likeCount;
+
+	@Convert(converter = RatingConverter.class)
+	@Column(
+		name = "rating",
+		precision = 3,
+		scale = 1,
+		nullable = false
+	)
+	private Rating rating;
 
 	@ManyToOne(
 		fetch = FetchType.LAZY,
@@ -145,6 +156,7 @@ public class Product {
 		final String description,
 		final String address,
 		final Integer price,
+		final Rating rating,
 		final User user,
 		final City city,
 		final Subcategory subcategory,
@@ -154,6 +166,7 @@ public class Product {
 		this.description = description;
 		this.address = address;
 		this.price = price;
+		this.rating = rating;
 		this.user = user;
 		this.city = city;
 		this.subcategory = subcategory;
@@ -167,12 +180,13 @@ public class Product {
 		final String description,
 		final String address,
 		final Integer price,
+		final Rating rating,
 		final User user,
 		final City city,
 		final Subcategory subcategory,
 		final Currency currency
 	) {
-		return new Product(name, description, address, price, user, city, subcategory, currency);
+		return new Product(name, description, address, price, rating, user, city, subcategory, currency);
 	}
 
 	public void update(
@@ -180,6 +194,7 @@ public class Product {
 		final String description,
 		final String address,
 		final Integer price,
+		final Rating rating,
 		final City city,
 		final Subcategory subcategory,
 		final Currency currency
@@ -188,6 +203,7 @@ public class Product {
 		this.description = description;
 		this.address = address;
 		this.price = price;
+		this.rating = rating;
 		this.city = city;
 		this.subcategory = subcategory;
 		this.currency = currency;

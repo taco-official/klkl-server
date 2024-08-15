@@ -26,6 +26,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import taco.klkl.domain.category.domain.CategoryName;
 import taco.klkl.domain.category.dto.response.FilterResponseDto;
 import taco.klkl.domain.category.dto.response.SubcategoryResponseDto;
+import taco.klkl.domain.product.domain.Rating;
 import taco.klkl.domain.product.dto.request.ProductCreateUpdateRequestDto;
 import taco.klkl.domain.product.dto.request.ProductFilterOptionsDto;
 import taco.klkl.domain.product.dto.response.ProductDetailResponseDto;
@@ -88,6 +89,7 @@ public class ProductControllerTest {
 			1L,
 			"productName",
 			10,
+			Rating.FIVE.getValue(),
 			CountryType.THAILAND.getKoreanName(),
 			CategoryName.FOOD.getKoreanName(),
 			Set.of(filterResponseDto1, filterResponseDto2)
@@ -99,6 +101,7 @@ public class ProductControllerTest {
 			"123 Street",
 			1000,
 			10,
+			Rating.FIVE.getValue(),
 			userDetailResponseDto,
 			cityResponseDto,
 			subcategoryResponseDto,
@@ -111,6 +114,7 @@ public class ProductControllerTest {
 			"productDescription",
 			"productAddress",
 			1000,
+			Rating.FIVE.getValue(),
 			1L,
 			1L,
 			1L,
@@ -144,6 +148,7 @@ public class ProductControllerTest {
 				is(productSimpleResponseDto.id().intValue())))
 			.andExpect(jsonPath("$.data.content[0].name", is(productSimpleResponseDto.name())))
 			.andExpect(jsonPath("$.data.content[0].likeCount", is(productSimpleResponseDto.likeCount())))
+			.andExpect(jsonPath("$.data.content[0].rating", is(productSimpleResponseDto.rating())))
 			.andExpect(jsonPath("$.data.content[0].countryName", is(productSimpleResponseDto.countryName())))
 			.andExpect(jsonPath("$.data.content[0].categoryName",
 				is(productSimpleResponseDto.categoryName())))
@@ -174,6 +179,7 @@ public class ProductControllerTest {
 			.andExpect(jsonPath("$.data.address", is(productDetailResponseDto.address())))
 			.andExpect(jsonPath("$.data.price", is(productDetailResponseDto.price())))
 			.andExpect(jsonPath("$.data.likeCount", is(productDetailResponseDto.likeCount())))
+			.andExpect(jsonPath("$.data.rating", is(productSimpleResponseDto.rating())))
 			.andExpect(jsonPath("$.data.user.id", is(productDetailResponseDto.user().id().intValue())))
 			.andExpect(jsonPath("$.data.user.profile", is(productDetailResponseDto.user().profile())))
 			.andExpect(jsonPath("$.data.user.name", is(productDetailResponseDto.user().name())))
@@ -217,6 +223,7 @@ public class ProductControllerTest {
 			.andExpect(jsonPath("$.data.address", is(productDetailResponseDto.address())))
 			.andExpect(jsonPath("$.data.price", is(productDetailResponseDto.price())))
 			.andExpect(jsonPath("$.data.likeCount", is(productDetailResponseDto.likeCount())))
+			.andExpect(jsonPath("$.data.rating", is(productSimpleResponseDto.rating())))
 			.andExpect(jsonPath("$.data.user.id", is(productDetailResponseDto.user().id().intValue())))
 			.andExpect(jsonPath("$.data.user.profile", is(productDetailResponseDto.user().profile())))
 			.andExpect(jsonPath("$.data.user.name", is(productDetailResponseDto.user().name())))
@@ -260,6 +267,7 @@ public class ProductControllerTest {
 			.andExpect(jsonPath("$.data.address", is(productDetailResponseDto.address())))
 			.andExpect(jsonPath("$.data.price", is(productDetailResponseDto.price())))
 			.andExpect(jsonPath("$.data.likeCount", is(productDetailResponseDto.likeCount())))
+			.andExpect(jsonPath("$.data.rating", is(productSimpleResponseDto.rating())))
 			.andExpect(jsonPath("$.data.user.id", is(productDetailResponseDto.user().id().intValue())))
 			.andExpect(jsonPath("$.data.user.profile", is(productDetailResponseDto.user().profile())))
 			.andExpect(jsonPath("$.data.user.name", is(productDetailResponseDto.user().name())))
