@@ -12,7 +12,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
-import jakarta.persistence.PrePersist;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -40,14 +39,8 @@ public class Notification {
 	@JoinColumn(name = "comment_id")
 	private Comment comment;
 
-	@PrePersist
-	public void prePersist() {
-		if (isRead == null) {
-			isRead = NotificationConstants.DEFAULT_IS_READ_VALUE;
-		}
-	}
-
-	protected Notification(Comment comment) {
+	private Notification(Comment comment) {
+		this.isRead = NotificationConstants.DEFAULT_IS_READ_VALUE;
 		this.comment = comment;
 		this.createdAt = LocalDateTime.now();
 	}

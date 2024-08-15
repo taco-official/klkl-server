@@ -75,8 +75,6 @@ class NotificationControllerTest {
 	void setUp() {
 		notification1 = Notification.of(comment1);
 		notification2 = Notification.of(comment2);
-		notification1.prePersist();
-		notification2.prePersist();
 	}
 
 	@Test
