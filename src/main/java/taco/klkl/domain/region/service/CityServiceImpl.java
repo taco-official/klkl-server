@@ -47,7 +47,7 @@ public class CityServiceImpl implements CityService {
 	}
 
 	@Override
-	public boolean isCitiesMappedToSameCountry(final List<Long> cityIds) {
+	public boolean isCitiesMappedToSameCountry(final Set<Long> cityIds) {
 		Set<Long> countryIds = cityIds.stream()
 			.map(this::getCityEntityById)
 			.map(City::getCountry)

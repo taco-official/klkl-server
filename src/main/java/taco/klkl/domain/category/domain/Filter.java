@@ -1,7 +1,9 @@
 package taco.klkl.domain.category.domain;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -12,6 +14,7 @@ import jakarta.persistence.OneToMany;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import taco.klkl.domain.product.domain.ProductFilter;
 
 @Getter
 @Entity
@@ -25,6 +28,9 @@ public class Filter {
 
 	@OneToMany(mappedBy = "filter")
 	List<SubcategoryFilter> subcategoryFilters = new ArrayList<>();
+
+	@OneToMany(mappedBy = "filter")
+	Set<ProductFilter> productFilters = new HashSet<>();
 
 	@Column(name = "name")
 	private FilterName name;

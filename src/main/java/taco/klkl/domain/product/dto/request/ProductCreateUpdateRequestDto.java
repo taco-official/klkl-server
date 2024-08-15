@@ -1,5 +1,7 @@
 package taco.klkl.domain.product.dto.request;
 
+import java.util.Set;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
@@ -44,6 +46,8 @@ public record ProductCreateUpdateRequestDto(
 	Long subcategoryId,
 
 	@NotNull(message = ProductValidationMessages.CURRENCY_ID_NOT_NULL)
-	Long currencyId
+	Long currencyId,
+
+	Set<Long> filterIds
 ) {
 }

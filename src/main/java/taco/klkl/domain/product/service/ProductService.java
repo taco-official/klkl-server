@@ -1,6 +1,8 @@
 package taco.klkl.domain.product.service;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -9,15 +11,20 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.RequiredArgsConstructor;
+import taco.klkl.domain.category.domain.Filter;
+import taco.klkl.domain.category.domain.QFilter;
 import taco.klkl.domain.category.domain.Subcategory;
 import taco.klkl.domain.category.exception.SubcategoryNotFoundException;
+import taco.klkl.domain.category.service.FilterService;
 import taco.klkl.domain.category.service.SubcategoryService;
 import taco.klkl.domain.product.dao.ProductRepository;
 import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.product.domain.QProduct;
+import taco.klkl.domain.product.domain.QProductFilter;
 import taco.klkl.domain.product.dto.request.ProductCreateUpdateRequestDto;
 import taco.klkl.domain.product.dto.request.ProductFilterOptionsDto;
 import taco.klkl.domain.product.dto.response.ProductDetailResponseDto;
@@ -45,6 +52,7 @@ public class ProductService {
 	private final CityService cityService;
 	private final CurrencyService currencyService;
 	private final SubcategoryService subcategoryService;
+	private final FilterService filterService;
 
 	private final UserUtil userUtil;
 
@@ -55,15 +63,25 @@ public class ProductService {
 		validateFilterOptions(filterOptions);
 
 		QProduct product = QProduct.product;
+		QProductFilter productFilter = QProductFilter.productFilter;
+		QFilter filter = QFilter.filter;
+
 		BooleanBuilder builder = buildFilterOptions(filterOptions, product);
 
-		List<Product> products = queryFactory.selectFrom(product)
-			.where(builder)
+		JPAQuery<Product> query = queryFactory
+			.selectDistinct(product)
+			.from(product)
+			.leftJoin(product.productFilters, productFilter)
+			.leftJoin(productFilter.filter, filter)
+			.where(builder);
+
+		List<Product> products = query
 			.offset(pageable.getOffset())
 			.limit(pageable.getPageSize())
 			.fetch();
 
-		long total = queryFactory.select(product.count())
+		long total = queryFactory
+			.select(product.count())
 			.from(product)
 			.where(builder)
 			.fetchOne();
@@ -82,6 +100,10 @@ public class ProductService {
 	public ProductDetailResponseDto createProduct(final ProductCreateUpdateRequestDto createRequest) {
 		final Product product = createProductEntity(createRequest);
 		productRepository.save(product);
+		if (createRequest.filterIds() != null) {
+			Set<Filter> filters = getFiltersByFilterIds(createRequest.filterIds());
+			product.addFilters(filters);
+		}
 		return ProductDetailResponseDto.from(product);
 	}
 
@@ -91,6 +113,10 @@ public class ProductService {
 		final Product product = productRepository.findById(id)
 			.orElseThrow(ProductNotFoundException::new);
 		updateProductEntity(product, updateRequest);
+		if (updateRequest.filterIds() != null) {
+			Set<Filter> updatedFilters = getFiltersByFilterIds(updateRequest.filterIds());
+			product.updateFilters(updatedFilters);
+		}
 		return ProductDetailResponseDto.from(product);
 	}
 
@@ -101,16 +127,10 @@ public class ProductService {
 		productRepository.delete(product);
 	}
 
-	public Product getProductEntityById(final Long id) {
-		return productRepository.findById(id)
-			.orElseThrow(ProductNotFoundException::new);
-	}
-
-	public boolean existsProductById(final Long id) {
-		return productRepository.existsById(id);
-	}
-
-	private BooleanBuilder buildFilterOptions(ProductFilterOptionsDto options, QProduct product) {
+	private BooleanBuilder buildFilterOptions(
+		final ProductFilterOptionsDto options,
+		final QProduct product
+	) {
 		BooleanBuilder builder = new BooleanBuilder();
 
 		if (options.cityIds() != null && !options.cityIds().isEmpty()) {
@@ -119,8 +139,17 @@ public class ProductService {
 		if (options.subcategoryIds() != null && !options.subcategoryIds().isEmpty()) {
 			builder.and(product.subcategory.id.in(options.subcategoryIds()));
 		}
+		if (options.filterIds() != null && !options.filterIds().isEmpty()) {
+			builder.and(product.productFilters.any().filter.id.in(options.filterIds()));
+		}
 
 		return builder;
+	}
+
+	private Set<Filter> getFiltersByFilterIds(final Set<Long> filterIds) {
+		return filterIds.stream()
+			.map(filterService::getFilterEntityById)
+			.collect(Collectors.toSet());
 	}
 
 	private Product createProductEntity(final ProductCreateUpdateRequestDto createRequest) {
@@ -176,16 +205,23 @@ public class ProductService {
 		if (filterOptions.subcategoryIds() != null) {
 			validateSubcategoryIds(filterOptions.subcategoryIds());
 		}
+		if (filterOptions.filterIds() != null) {
+			validateFilterIds(filterOptions.filterIds());
+		}
 	}
 
-	private void validateCityIds(final List<Long> cityIds) throws InvalidCityIdsException {
+	private void validateCityIds(final Set<Long> cityIds) throws InvalidCityIdsException {
 		boolean isValidCityIds = cityService.isCitiesMappedToSameCountry(cityIds);
 		if (!isValidCityIds) {
 			throw new InvalidCityIdsException();
 		}
 	}
 
-	private void validateSubcategoryIds(final List<Long> subcategoryIds) {
-		subcategoryService.getSubcategoryList(subcategoryIds);
+	private void validateSubcategoryIds(final Set<Long> subcategoryIds) {
+		subcategoryIds.forEach(subcategoryService::getSubcategoryEntityById);
+	}
+
+	private void validateFilterIds(final Set<Long> filterIds) {
+		filterIds.forEach(filterService::getFilterEntityById);
 	}
 }

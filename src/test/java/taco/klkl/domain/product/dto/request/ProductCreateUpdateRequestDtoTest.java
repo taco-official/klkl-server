@@ -37,7 +37,8 @@ class ProductCreateUpdateRequestDtoTest {
 			100,
 			1L,
 			2L,
-			3L
+			3L,
+			Set.of(1L, 2L)
 		);
 
 		Set<ConstraintViolation<ProductCreateUpdateRequestDto>> violations = validator.validate(requestDto);
@@ -54,7 +55,8 @@ class ProductCreateUpdateRequestDtoTest {
 			100,
 			1L,
 			2L,
-			3L
+			3L,
+			Set.of(1L, 2L)
 		);
 
 		Set<ConstraintViolation<ProductCreateUpdateRequestDto>> violations = validator.validate(requestDto);
@@ -75,7 +77,8 @@ class ProductCreateUpdateRequestDtoTest {
 			100,
 			1L,
 			2L,
-			3L
+			3L,
+			Set.of(1L, 2L)
 		);
 
 		Set<ConstraintViolation<ProductCreateUpdateRequestDto>> violations = validator.validate(requestDto);
@@ -98,7 +101,8 @@ class ProductCreateUpdateRequestDtoTest {
 			100,
 			1L,
 			2L,
-			3L
+			3L,
+			Set.of(1L, 2L)
 		);
 
 		Set<ConstraintViolation<ProductCreateUpdateRequestDto>> violations = validator.validate(requestDto);
@@ -116,7 +120,8 @@ class ProductCreateUpdateRequestDtoTest {
 			100,
 			1L,
 			2L,
-			3L
+			3L,
+			Set.of(1L, 2L)
 		);
 
 		Set<ConstraintViolation<ProductCreateUpdateRequestDto>> violations = validator.validate(requestDto);
@@ -137,7 +142,8 @@ class ProductCreateUpdateRequestDtoTest {
 			100,
 			1L,
 			2L,
-			3L
+			3L,
+			Set.of(1L, 2L)
 		);
 
 		Set<ConstraintViolation<ProductCreateUpdateRequestDto>> violations = validator.validate(requestDto);
@@ -160,7 +166,8 @@ class ProductCreateUpdateRequestDtoTest {
 			100,
 			1L,
 			2L,
-			3L
+			3L,
+			Set.of(1L, 2L)
 		);
 
 		Set<ConstraintViolation<ProductCreateUpdateRequestDto>> violations = validator.validate(requestDto);
@@ -178,7 +185,8 @@ class ProductCreateUpdateRequestDtoTest {
 			100,
 			1L,
 			2L,
-			3L
+			3L,
+			Set.of(1L, 2L)
 		);
 
 		Set<ConstraintViolation<ProductCreateUpdateRequestDto>> violations = validator.validate(requestDto);
@@ -199,7 +207,8 @@ class ProductCreateUpdateRequestDtoTest {
 			100,
 			1L,
 			2L,
-			3L
+			3L,
+			Set.of(1L, 2L)
 		);
 
 		Set<ConstraintViolation<ProductCreateUpdateRequestDto>> violations = validator.validate(requestDto);
@@ -218,7 +227,8 @@ class ProductCreateUpdateRequestDtoTest {
 			100,
 			1L,
 			2L,
-			3L
+			3L,
+			Set.of(1L, 2L)
 		);
 
 		Set<ConstraintViolation<ProductCreateUpdateRequestDto>> violations = validator.validate(requestDto);
@@ -237,7 +247,8 @@ class ProductCreateUpdateRequestDtoTest {
 			100,
 			1L,
 			2L,
-			3L
+			3L,
+			Set.of(1L, 2L)
 		);
 
 		Set<ConstraintViolation<ProductCreateUpdateRequestDto>> violations = validator.validate(requestDto);
@@ -255,7 +266,8 @@ class ProductCreateUpdateRequestDtoTest {
 			null,
 			1L,
 			2L,
-			3L
+			3L,
+			Set.of(1L, 2L)
 		);
 
 		Set<ConstraintViolation<ProductCreateUpdateRequestDto>> violations = validator.validate(requestDto);
@@ -277,7 +289,8 @@ class ProductCreateUpdateRequestDtoTest {
 			0,
 			1L,
 			2L,
-			3L
+			3L,
+			Set.of(1L, 2L)
 		);
 
 		Set<ConstraintViolation<ProductCreateUpdateRequestDto>> violations = validator.validate(requestDto);
@@ -295,7 +308,8 @@ class ProductCreateUpdateRequestDtoTest {
 			price,
 			1L,
 			2L,
-			3L
+			3L,
+			Set.of(1L, 2L)
 		);
 
 		Set<ConstraintViolation<ProductCreateUpdateRequestDto>> violations = validator.validate(requestDto);
@@ -313,7 +327,8 @@ class ProductCreateUpdateRequestDtoTest {
 			100,
 			null,
 			2L,
-			3L
+			3L,
+			Set.of(1L, 2L)
 		);
 
 		Set<ConstraintViolation<ProductCreateUpdateRequestDto>> violations = validator.validate(requestDto);
@@ -331,7 +346,8 @@ class ProductCreateUpdateRequestDtoTest {
 			100,
 			1L,
 			null,
-			3L
+			3L,
+			Set.of(1L, 2L)
 		);
 
 		Set<ConstraintViolation<ProductCreateUpdateRequestDto>> violations = validator.validate(requestDto);
@@ -349,11 +365,30 @@ class ProductCreateUpdateRequestDtoTest {
 			100,
 			1L,
 			2L,
-			null
+			null,
+			Set.of(1L, 2L)
 		);
 
 		Set<ConstraintViolation<ProductCreateUpdateRequestDto>> violations = validator.validate(requestDto);
 		assertFalse(violations.isEmpty());
 		assertEquals(ProductValidationMessages.CURRENCY_ID_NOT_NULL, violations.iterator().next().getMessage());
+	}
+
+	@Test
+	@DisplayName("필터 ID가 null일 때 검증 실패")
+	void testNullFilterIds() {
+		ProductCreateUpdateRequestDto requestDto = new ProductCreateUpdateRequestDto(
+			"Valid Product Name",
+			"Valid product description",
+			"Valid address",
+			100,
+			1L,
+			2L,
+			3L,
+			null
+		);
+
+		Set<ConstraintViolation<ProductCreateUpdateRequestDto>> violations = validator.validate(requestDto);
+		assertTrue(violations.isEmpty());
 	}
 }
