@@ -15,7 +15,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
-import taco.klkl.domain.like.dto.response.LikeResponseDto;
+import taco.klkl.domain.like.dto.response.LikeResponse;
 import taco.klkl.domain.like.exception.LikeCountBelowMinimumException;
 import taco.klkl.domain.like.exception.LikeCountOverMaximumException;
 import taco.klkl.domain.like.service.LikeService;
@@ -42,8 +42,8 @@ class LikeControllerTest {
 	void testPostLike() throws Exception {
 		// given
 		Long productId = 1L;
-		LikeResponseDto likeResponseDto = LikeResponseDto.of(true, 1);
-		when(likeService.createLike(productId)).thenReturn(likeResponseDto);
+		LikeResponse likeResponse = LikeResponse.of(true, 1);
+		when(likeService.createLike(productId)).thenReturn(likeResponse);
 
 		// when & then
 		mockMvc.perform(post("/v1/products/{productId}/likes", productId))
@@ -59,8 +59,8 @@ class LikeControllerTest {
 	void testDeleteLike() throws Exception {
 		// given
 		Long productId = 1L;
-		LikeResponseDto likeResponseDto = LikeResponseDto.of(false, 1);
-		when(likeService.deleteLike(productId)).thenReturn(likeResponseDto);
+		LikeResponse likeResponse = LikeResponse.of(false, 1);
+		when(likeService.deleteLike(productId)).thenReturn(likeResponse);
 
 		// when & then
 		mockMvc.perform(delete("/v1/products/{productId}/likes", productId))
