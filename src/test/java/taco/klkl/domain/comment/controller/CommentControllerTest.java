@@ -30,6 +30,7 @@ import taco.klkl.domain.comment.exception.CommentNotFoundException;
 import taco.klkl.domain.comment.exception.CommentProductNotMatch;
 import taco.klkl.domain.comment.service.CommentService;
 import taco.klkl.domain.product.domain.Product;
+import taco.klkl.domain.product.domain.Rating;
 import taco.klkl.domain.product.exception.ProductNotFoundException;
 import taco.klkl.domain.product.service.ProductService;
 import taco.klkl.domain.region.domain.City;
@@ -105,6 +106,7 @@ public class CommentControllerTest {
 		"description",
 		"address",
 		1000,
+		Rating.FIVE,
 		user,
 		city,
 		subcategory,

@@ -1,11 +1,15 @@
 package taco.klkl.domain.product.domain;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -13,13 +17,16 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import taco.klkl.domain.category.domain.Filter;
 import taco.klkl.domain.category.domain.Subcategory;
 import taco.klkl.domain.like.exception.LikeCountBelowMinimumException;
 import taco.klkl.domain.like.exception.LikeCountOverMaximumException;
+import taco.klkl.domain.product.converter.RatingConverter;
 import taco.klkl.domain.region.domain.City;
 import taco.klkl.domain.region.domain.Currency;
 import taco.klkl.domain.user.domain.User;
@@ -73,6 +80,15 @@ public class Product {
 	@ColumnDefault(DefaultConstants.DEFAULT_INT_STRING)
 	private Integer likeCount;
 
+	@Convert(converter = RatingConverter.class)
+	@Column(
+		name = "rating",
+		precision = 3,
+		scale = 1,
+		nullable = false
+	)
+	private Rating rating;
+
 	@ManyToOne(
 		fetch = FetchType.LAZY,
 		optional = false
@@ -113,6 +129,13 @@ public class Product {
 	)
 	private Currency currency;
 
+	@OneToMany(
+		mappedBy = "product",
+		cascade = CascadeType.ALL,
+		orphanRemoval = true
+	)
+	private Set<ProductFilter> productFilters = new HashSet<>();
+
 	@Column(
 		name = "created_at",
 		nullable = false,
@@ -135,6 +158,7 @@ public class Product {
 		final String description,
 		final String address,
 		final Integer price,
+		final Rating rating,
 		final User user,
 		final City city,
 		final Subcategory subcategory,
@@ -144,6 +168,7 @@ public class Product {
 		this.description = description;
 		this.address = address;
 		this.price = price;
+		this.rating = rating;
 		this.user = user;
 		this.city = city;
 		this.subcategory = subcategory;
@@ -157,12 +182,13 @@ public class Product {
 		final String description,
 		final String address,
 		final Integer price,
+		final Rating rating,
 		final User user,
 		final City city,
 		final Subcategory subcategory,
 		final Currency currency
 	) {
-		return new Product(name, description, address, price, user, city, subcategory, currency);
+		return new Product(name, description, address, price, rating, user, city, subcategory, currency);
 	}
 
 	public void update(
@@ -170,6 +196,7 @@ public class Product {
 		final String description,
 		final String address,
 		final Integer price,
+		final Rating rating,
 		final City city,
 		final Subcategory subcategory,
 		final Currency currency
@@ -178,9 +205,24 @@ public class Product {
 		this.description = description;
 		this.address = address;
 		this.price = price;
+		this.rating = rating;
 		this.city = city;
 		this.subcategory = subcategory;
 		this.currency = currency;
+	}
+
+	public void addFilters(final Set<Filter> filters) {
+		filters.forEach(this::addFilter);
+	}
+
+	public void updateFilters(final Set<Filter> updatedFilters) {
+		this.productFilters.clear();
+		updatedFilters.forEach(this::addFilter);
+	}
+
+	public void addFilter(final Filter filter) {
+		ProductFilter productFilter = ProductFilter.of(this, filter);
+		this.productFilters.add(productFilter);
 	}
 
 	public int increaseLikeCount() throws LikeCountOverMaximumException {

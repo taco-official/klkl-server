@@ -13,6 +13,7 @@ import taco.klkl.domain.like.dto.response.LikeResponseDto;
 import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.product.service.ProductService;
 import taco.klkl.domain.user.domain.User;
+import taco.klkl.global.util.ProductUtil;
 import taco.klkl.global.util.UserUtil;
 
 @Slf4j
@@ -25,6 +26,7 @@ public class LikeServiceImpl implements LikeService {
 	private final LikeRepository likeRepository;
 	private final ProductService productService;
 	private final UserUtil userUtil;
+	private final ProductUtil productUtil;
 
 	@Override
 	public LikeResponseDto createLike(Long productId) {
@@ -57,7 +59,7 @@ public class LikeServiceImpl implements LikeService {
 	}
 
 	private Product getProductById(Long productId) {
-		return productService.getProductEntityById(productId);
+		return productUtil.getProductEntityById(productId);
 	}
 
 	private User getCurrentUser() {

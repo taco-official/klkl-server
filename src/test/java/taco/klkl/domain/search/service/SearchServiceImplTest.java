@@ -22,6 +22,7 @@ import taco.klkl.domain.category.dto.response.SubcategoryResponseDto;
 import taco.klkl.domain.category.service.CategoryService;
 import taco.klkl.domain.category.service.SubcategoryService;
 import taco.klkl.domain.product.domain.Product;
+import taco.klkl.domain.product.domain.Rating;
 import taco.klkl.domain.product.dto.response.ProductSimpleResponseDto;
 import taco.klkl.domain.product.service.ProductService;
 import taco.klkl.domain.region.domain.City;
@@ -75,6 +76,7 @@ class SearchServiceImplTest {
 		"description",
 		"address",
 		1000,
+		Rating.FIVE,
 		user,
 		city,
 		subcategory,

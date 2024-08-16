@@ -28,6 +28,7 @@ import taco.klkl.domain.notification.domain.Notification;
 import taco.klkl.domain.notification.dto.response.NotificationResponse;
 import taco.klkl.domain.notification.exception.NotificationNotFoundException;
 import taco.klkl.domain.product.domain.Product;
+import taco.klkl.domain.product.domain.Rating;
 import taco.klkl.domain.region.domain.City;
 import taco.klkl.domain.region.domain.Country;
 import taco.klkl.domain.region.domain.Currency;
@@ -99,6 +100,7 @@ public class NotificationServiceTest {
 			"description",
 			"address",
 			1000,
+			Rating.FIVE,
 			mockUser,
 			city,
 			subcategory,
