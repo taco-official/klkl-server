@@ -99,10 +99,7 @@ public class CommentService {
 	}
 
 	private void validateProductId(final Long productId) {
-		boolean isValidProductId = productUtil.existsProductById(productId);
-		if (!isValidProductId) {
-			throw new ProductNotFoundException();
-		}
+		productUtil.validateProductId(productId);
 	}
 
 	private void validateSameProductId(final Comment comment, final Long productId) {

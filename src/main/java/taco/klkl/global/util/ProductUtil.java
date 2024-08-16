@@ -26,8 +26,11 @@ public class ProductUtil {
 			.orElseThrow(ProductNotFoundException::new);
 	}
 
-	public boolean existsProductById(final Long id) {
-		return productRepository.existsById(id);
+	public void validateProductId(final Long id) {
+		boolean existsById = productRepository.existsById(id);
+		if (!existsById) {
+			throw new ProductNotFoundException();
+		}
 	}
 
 	public static Set<TagResponse> createTagsByProduct(final Product product) {
