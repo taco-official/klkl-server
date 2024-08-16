@@ -9,7 +9,7 @@ public record NotificationInfo(
 	boolean isRead,
 	LocalDateTime createdAt
 ) {
-	public static NotificationInfo from(Notification notification) {
+	public static NotificationInfo from(final Notification notification) {
 		return new NotificationInfo(
 			notification.getId(),
 			notification.getIsRead(),

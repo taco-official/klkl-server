@@ -111,7 +111,7 @@ public class NotificationServiceTest {
 
 	@Test
 	@DisplayName("댓글 알림이 비어있지 않을경우 조회 성공")
-	public void testGetNotifications() {
+	public void testFindAllNotifications() {
 		//given
 		when(userUtil.findTestUser()).thenReturn(mockUser);
 		when(mockNotification.getId()).thenReturn(1L);
@@ -123,7 +123,7 @@ public class NotificationServiceTest {
 		when(notificationRepository.findAllByComment_Product_User(mockUser)).thenReturn(notificationList);
 
 		//when
-		List<NotificationResponse> response = notificationService.getNotifications();
+		List<NotificationResponse> response = notificationService.findAllNotifications();
 
 		//then
 		assertThat(response).hasSize(1);
@@ -141,7 +141,7 @@ public class NotificationServiceTest {
 		when(notificationRepository.findAllByComment_Product_User(mockUser)).thenReturn(notificationList);
 
 		//when
-		List<NotificationResponse> response = notificationService.getNotifications();
+		List<NotificationResponse> response = notificationService.findAllNotifications();
 
 		//then
 		assertThat(response).hasSize(0);

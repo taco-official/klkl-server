@@ -45,7 +45,7 @@ public class CommentService {
 	) {
 		final Comment comment = createCommentEntity(productId, commentCreateRequestDto);
 		commentRepository.save(comment);
-		notificationService.createNotification(comment);
+		notificationService.createNotificationByComment(comment);
 		return CommentResponse.from(comment);
 	}
 

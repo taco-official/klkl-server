@@ -9,11 +9,11 @@ import taco.klkl.domain.notification.dto.response.NotificationResponse;
 
 @Service
 public interface NotificationService {
-	List<NotificationResponse> getNotifications();
+	List<NotificationResponse> findAllNotifications();
 
 	List<NotificationResponse> readAllNotifications();
 
-	NotificationResponse readNotificationById(Long id);
+	NotificationResponse readNotificationById(final Long id);
 
-	void createNotification(Comment comment);
+	void createNotificationByComment(final Comment comment);
 }

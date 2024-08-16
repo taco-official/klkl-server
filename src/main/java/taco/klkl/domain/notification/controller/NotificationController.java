@@ -26,8 +26,8 @@ public class NotificationController {
 
 	@GetMapping
 	@Operation(summary = "알림 목록 조회", description = "알림 전체 목록을 조회합니다.")
-	public List<NotificationResponse> getAllNotifications() {
-		return notificationService.getNotifications();
+	public List<NotificationResponse> findAllNotifications() {
+		return notificationService.findAllNotifications();
 	}
 
 	@PutMapping("/all")
@@ -38,7 +38,7 @@ public class NotificationController {
 
 	@PutMapping("/{notificationId}")
 	@Operation(summary = "단일 알림 읽음", description = "단일 알림을 읽음으로 처리합니다.")
-	public NotificationResponse readNotification(@PathVariable Long notificationId) {
+	public NotificationResponse readOneNotification(@PathVariable final Long notificationId) {
 		return notificationService.readNotificationById(notificationId);
 	}
 }

@@ -81,13 +81,13 @@ class NotificationControllerTest {
 
 	@Test
 	@DisplayName("모든 알림 조회")
-	void testGetAllNotifications() throws Exception {
+	void testFindAllNotifications() throws Exception {
 
 		// given
 		NotificationResponse notificationResponse = NotificationResponse.from(notification1);
 		NotificationResponse notificationResponse2 = NotificationResponse.from(notification2);
 		List<NotificationResponse> notificationResponses = List.of(notificationResponse, notificationResponse2);
-		when(notificationService.getNotifications()).thenReturn(notificationResponses);
+		when(notificationService.findAllNotifications()).thenReturn(notificationResponses);
 
 		// when & then
 		mockMvc.perform(get("/v1/notifications"))

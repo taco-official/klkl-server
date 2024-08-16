@@ -33,7 +33,7 @@ public class NotificationIntegrationTest {
 	@DisplayName("모든 알림 조회 테스트")
 	public void testGetAllNotifications() throws Exception {
 		//given
-		List<NotificationResponse> responses = notificationService.getNotifications();
+		List<NotificationResponse> responses = notificationService.findAllNotifications();
 
 		//when & then
 		mockMvc.perform(get("/v1/notifications")

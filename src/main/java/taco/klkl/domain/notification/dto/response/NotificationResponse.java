@@ -9,9 +9,7 @@ public record NotificationResponse(
 	ProductSimpleResponse product,
 	CommentResponse comment
 ) {
-	public static NotificationResponse from(
-		Notification notification
-	) {
+	public static NotificationResponse from(final Notification notification) {
 		return new NotificationResponse(
 			NotificationInfo.from(notification),
 			ProductSimpleResponse.from(notification.getComment().getProduct()),

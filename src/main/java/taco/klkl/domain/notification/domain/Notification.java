@@ -39,13 +39,13 @@ public class Notification {
 	@JoinColumn(name = "comment_id")
 	private Comment comment;
 
-	private Notification(Comment comment) {
+	private Notification(final Comment comment) {
 		this.isRead = NotificationConstants.DEFAULT_IS_READ_VALUE;
 		this.comment = comment;
 		this.createdAt = LocalDateTime.now();
 	}
 
-	public static Notification of(Comment comment) {
+	public static Notification of(final Comment comment) {
 		return new Notification(comment);
 	}
 
