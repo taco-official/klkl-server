@@ -34,14 +34,15 @@ import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.product.domain.QProduct;
 import taco.klkl.domain.product.domain.QProductTag;
 import taco.klkl.domain.product.domain.Rating;
+import taco.klkl.domain.product.domain.SortCriteria;
 import taco.klkl.domain.product.dto.request.ProductCreateUpdateRequest;
 import taco.klkl.domain.product.dto.request.ProductFilterOptions;
 import taco.klkl.domain.product.dto.request.ProductSortOptions;
 import taco.klkl.domain.product.dto.response.ProductDetailResponse;
 import taco.klkl.domain.product.dto.response.ProductSimpleResponse;
 import taco.klkl.domain.product.exception.InvalidCityIdsException;
-import taco.klkl.domain.product.exception.InvalidSortOptionException;
 import taco.klkl.domain.product.exception.ProductNotFoundException;
+import taco.klkl.domain.product.exception.SortDirectionNotFoundException;
 import taco.klkl.domain.region.domain.City;
 import taco.klkl.domain.region.domain.Currency;
 import taco.klkl.domain.region.domain.QCity;
@@ -49,7 +50,6 @@ import taco.klkl.domain.region.domain.QCountry;
 import taco.klkl.domain.region.exception.CityNotFoundException;
 import taco.klkl.domain.region.exception.CurrencyNotFoundException;
 import taco.klkl.domain.user.domain.User;
-import taco.klkl.global.common.constants.ProductConstants;
 import taco.klkl.global.common.response.PagedResponseDto;
 import taco.klkl.global.util.CityUtil;
 import taco.klkl.global.util.CurrencyUtil;
@@ -80,7 +80,6 @@ public class ProductServiceImpl implements ProductService {
 		final ProductSortOptions sortOptions
 	) {
 		validateFilterOptions(filterOptions);
-		validateSortOptions(sortOptions);
 
 		final JPAQuery<?> baseQuery = createBaseQuery(filterOptions);
 		final long total = getCount(baseQuery);
@@ -103,7 +102,7 @@ public class ProductServiceImpl implements ProductService {
 		final Product product = createProductEntity(createRequest);
 		productRepository.save(product);
 		if (createRequest.tagIds() != null) {
-			Set<Tag> tags = getTagsByTagIds(createRequest.tagIds());
+			Set<Tag> tags = createTagsByTagIds(createRequest.tagIds());
 			product.addTags(tags);
 		}
 		return taco.klkl.domain.product.dto.response.ProductDetailResponse.from(product);
@@ -129,7 +128,7 @@ public class ProductServiceImpl implements ProductService {
 			.orElseThrow(ProductNotFoundException::new);
 		updateProductEntity(product, updateRequest);
 		if (updateRequest.tagIds() != null) {
-			Set<Tag> updatedTags = getTagsByTagIds(updateRequest.tagIds());
+			Set<Tag> updatedTags = createTagsByTagIds(updateRequest.tagIds());
 			product.updateTags(updatedTags);
 		}
 		return ProductDetailResponse.from(product);
@@ -207,10 +206,11 @@ public class ProductServiceImpl implements ProductService {
 
 	private void applySorting(final JPAQuery<Product> query, final ProductSortOptions sortOptions) {
 		final PathBuilder<Product> pathBuilder = new PathBuilder<>(Product.class, "product");
-		final Sort.Direction sortDirection = Sort.Direction.fromString(sortOptions.sortDirection());
+		final Sort.Direction sortDirection = createSortDirectionByQuery(sortOptions.sortDirection());
+		final SortCriteria sortBy = SortCriteria.fromQuery(sortOptions.sortBy());
 		final OrderSpecifier<?> orderSpecifier = new OrderSpecifier<>(
 			sortDirection == Sort.Direction.ASC ? Order.ASC : Order.DESC,
-			pathBuilder.get(sortOptions.sortBy(), Comparable.class)
+			pathBuilder.get(sortBy.getValue(), Comparable.class)
 		);
 		query.orderBy(orderSpecifier);
 	}
@@ -236,7 +236,7 @@ public class ProductServiceImpl implements ProductService {
 		return QProductTag.productTag.tag.id.in(filterIds);
 	}
 
-	private Set<Tag> getTagsByTagIds(final Set<Long> filterIds) {
+	private Set<Tag> createTagsByTagIds(final Set<Long> filterIds) {
 		return filterIds.stream()
 			.map(tagUtil::findTagEntityById)
 			.collect(Collectors.toSet());
@@ -245,9 +245,9 @@ public class ProductServiceImpl implements ProductService {
 	private Product createProductEntity(final ProductCreateUpdateRequest createRequest) {
 		final Rating rating = Rating.from(createRequest.rating());
 		final User user = userUtil.findTestUser();
-		final City city = getCityEntity(createRequest.cityId());
-		final Subcategory subcategory = getSubcategoryEntity(createRequest.subcategoryId());
-		final Currency currency = getCurrencyEntity(createRequest.currencyId());
+		final City city = findCityById(createRequest.cityId());
+		final Subcategory subcategory = findSubcategoryById(createRequest.subcategoryId());
+		final Currency currency = findCurrencyById(createRequest.currencyId());
 
 		return Product.of(
 			createRequest.name(),
@@ -264,9 +264,9 @@ public class ProductServiceImpl implements ProductService {
 
 	private void updateProductEntity(final Product product, final ProductCreateUpdateRequest updateRequest) {
 		final Rating rating = Rating.from(updateRequest.rating());
-		final City city = getCityEntity(updateRequest.cityId());
-		final Subcategory subcategory = getSubcategoryEntity(updateRequest.subcategoryId());
-		final Currency currency = getCurrencyEntity(updateRequest.currencyId());
+		final City city = findCityById(updateRequest.cityId());
+		final Subcategory subcategory = findSubcategoryById(updateRequest.subcategoryId());
+		final Currency currency = findCurrencyById(updateRequest.currencyId());
 
 		product.update(
 			updateRequest.name(),
@@ -280,15 +280,23 @@ public class ProductServiceImpl implements ProductService {
 		);
 	}
 
-	private City getCityEntity(final Long cityId) throws CityNotFoundException {
+	private Sort.Direction createSortDirectionByQuery(final String query) throws SortDirectionNotFoundException {
+		try {
+			return Sort.Direction.fromString(query);
+		} catch (IllegalArgumentException e) {
+			throw new SortDirectionNotFoundException();
+		}
+	}
+
+	private City findCityById(final Long cityId) throws CityNotFoundException {
 		return cityUtil.findCityEntityById(cityId);
 	}
 
-	private Subcategory getSubcategoryEntity(final Long subcategoryId) throws SubcategoryNotFoundException {
+	private Subcategory findSubcategoryById(final Long subcategoryId) throws SubcategoryNotFoundException {
 		return subcategoryUtil.findSubcategoryEntityById(subcategoryId);
 	}
 
-	private Currency getCurrencyEntity(final Long currencyId) throws CurrencyNotFoundException {
+	private Currency findCurrencyById(final Long currencyId) throws CurrencyNotFoundException {
 		return currencyUtil.findCurrencyEntityById(currencyId);
 	}
 
@@ -301,15 +309,6 @@ public class ProductServiceImpl implements ProductService {
 		}
 		if (filterOptions.tagIds() != null) {
 			validateTagIds(filterOptions.tagIds());
-		}
-	}
-
-	private void validateSortOptions(final ProductSortOptions sortOptions) throws InvalidSortOptionException {
-		if (!ProductConstants.ALLOWED_SORT_BY.contains(sortOptions.sortBy())) {
-			throw new InvalidSortOptionException();
-		}
-		if (!ProductConstants.ALLOWED_SORT_DIRECTION.contains(sortOptions.sortDirection())) {
-			throw new InvalidSortOptionException();
 		}
 	}
 

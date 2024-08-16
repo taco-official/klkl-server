@@ -23,7 +23,8 @@ public enum ErrorCode {
 	PRODUCT_NOT_FOUND(HttpStatus.NOT_FOUND, "C020", "존재하지 않는 상품입니다."),
 	RATING_NOT_FOUND(HttpStatus.NOT_FOUND, "C021", "존재하지 않는 평점입니다."),
 	INVALID_CITY_IDS(HttpStatus.BAD_REQUEST, "C022", "선택한 도시들은 동일한 국가에 속하지 않습니다."),
-	INVALID_SORT_OPTION(HttpStatus.BAD_REQUEST, "C023", "유효하지 않은 정렬 옵션입니다."),
+	SORT_CRITERIA_NOT_FOUND(HttpStatus.NOT_FOUND, "C024", "존재하지 않는 정렬 기준입니다."),
+	SORT_DIRECTION_NOT_FOUND(HttpStatus.NOT_FOUND, "C025", "존재하지 않는 정렬 방향입니다."),
 
 	// Like
 	LIKE_COUNT_OVER_MAXIMUM(HttpStatus.BAD_REQUEST, "C030", "상품의 좋아요수가 최대값입니다. 2147483647"),

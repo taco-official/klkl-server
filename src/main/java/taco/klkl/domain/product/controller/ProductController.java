@@ -3,6 +3,7 @@ package taco.klkl.domain.product.controller;
 import java.util.Set;
 
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -45,7 +46,7 @@ public class ProductController {
 		@RequestParam(name = "city_id", required = false) Set<Long> cityIds,
 		@RequestParam(name = "subcategory_id", required = false) Set<Long> subcategoryIds,
 		@RequestParam(name = "tag_id", required = false) Set<Long> tagIds,
-		@RequestParam(name = "sort_by", required = false, defaultValue = "createdAt") String sortBy,
+		@RequestParam(name = "sort_by", required = false, defaultValue = "created_at") String sortBy,
 		@RequestParam(name = "sort_direction", required = false, defaultValue = "DESC") String sortDirection
 	) {
 		ProductFilterOptions filterOptions = new ProductFilterOptions(

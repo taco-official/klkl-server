@@ -206,7 +206,7 @@ public class ProductIntegrationTest {
 		// when & then
 		mockMvc.perform(get("/v1/products")
 				.param("city_id", "416")  // 도쿄
-				.param("sort_by", "createdAt")
+				.param("sort_by", "created_at")
 				.param("sort_direction", "ASC")
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
@@ -266,7 +266,7 @@ public class ProductIntegrationTest {
 		// when & then
 		mockMvc.perform(get("/v1/products")
 				.param("city_id", "415", "416")  // 교토, 도쿄
-				.param("sort_by", "createdAt")
+				.param("sort_by", "created_at")
 				.param("sort_direction", "ASC")
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
@@ -340,7 +340,7 @@ public class ProductIntegrationTest {
 		// when & then
 		mockMvc.perform(get("/v1/products")
 				.param("subcategory_id", "310")  // 라면
-				.param("sort_by", "createdAt")
+				.param("sort_by", "created_at")
 				.param("sort_direction", "ASC")
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
@@ -413,7 +413,7 @@ public class ProductIntegrationTest {
 		// when & then
 		mockMvc.perform(get("/v1/products")
 				.param("subcategory_id", "310", "324")  // 라면, 신발
-				.param("sort_by", "createdAt")
+				.param("sort_by", "created_at")
 				.param("sort_direction", "ASC")
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
@@ -487,7 +487,7 @@ public class ProductIntegrationTest {
 		// when & then
 		mockMvc.perform(get("/v1/products")
 				.param("tag_id", "351")  // 고수
-				.param("sort_by", "createdAt")
+				.param("sort_by", "created_at")
 				.param("sort_direction", "ASC")
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
@@ -560,7 +560,7 @@ public class ProductIntegrationTest {
 		// when & then
 		mockMvc.perform(get("/v1/products")
 				.param("tag_id", "351", "350")  // 고수, 편의점
-				.param("sort_by", "createdAt")
+				.param("sort_by", "created_at")
 				.param("sort_direction", "ASC")
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
@@ -634,7 +634,7 @@ public class ProductIntegrationTest {
 		// when & then
 		mockMvc.perform(get("/v1/products")
 				.param("tag_id", "351", "350")
-				.param("sort_by", "createdAt")
+				.param("sort_by", "created_at")
 				.param("sort_direction", "ASC")
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
@@ -709,7 +709,7 @@ public class ProductIntegrationTest {
 		// when & then
 		mockMvc.perform(get("/v1/products")
 				.param("tag_id", "351", "350")
-				.param("sort_by", "createdAt")
+				.param("sort_by", "created_at")
 				.param("sort_direction", "DESC")
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
@@ -883,7 +883,7 @@ public class ProductIntegrationTest {
 	public void testSortProductsByLikeCountAsc() throws Exception {
 		// when & then
 		mockMvc.perform(get("/v1/products")
-				.param("sort_by", "likeCount")
+				.param("sort_by", "like_count")
 				.param("sort_direction", "ASC")
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
@@ -906,7 +906,7 @@ public class ProductIntegrationTest {
 	public void testSortProductsByLikeCountDesc() throws Exception {
 		// when & then
 		mockMvc.perform(get("/v1/products")
-				.param("sort_by", "likeCount")
+				.param("sort_by", "like_count")
 				.param("sort_direction", "DESC")
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())

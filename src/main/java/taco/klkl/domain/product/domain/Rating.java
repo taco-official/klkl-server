@@ -3,9 +3,11 @@ package taco.klkl.domain.product.domain;
 import java.util.Arrays;
 
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import taco.klkl.domain.product.exception.RatingNotFoundException;
 
 @Getter
+@RequiredArgsConstructor
 public enum Rating {
 	ZERO_FIVE(0.5),
 	ONE(1.0),
@@ -20,10 +22,6 @@ public enum Rating {
 	;
 
 	private final double value;
-
-	Rating(final double value) {
-		this.value = value;
-	}
 
 	public static Rating from(final double value) {
 		return Arrays.stream(Rating.values())
