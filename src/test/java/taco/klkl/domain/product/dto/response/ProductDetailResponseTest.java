@@ -20,7 +20,7 @@ import taco.klkl.domain.region.dto.response.CurrencyResponse;
 import taco.klkl.domain.region.enums.CityType;
 import taco.klkl.domain.region.enums.CurrencyType;
 import taco.klkl.domain.user.domain.User;
-import taco.klkl.domain.user.dto.response.UserDetailResponseDto;
+import taco.klkl.domain.user.dto.response.UserDetailResponse;
 
 class ProductDetailResponseTest {
 
@@ -79,7 +79,7 @@ class ProductDetailResponseTest {
 		assertThat(dto.price()).isEqualTo(mockProduct.getPrice());
 		assertThat(dto.likeCount()).isEqualTo(mockProduct.getLikeCount());
 		assertThat(dto.rating()).isEqualTo(mockProduct.getRating().getValue());
-		assertThat(dto.user()).isEqualTo(UserDetailResponseDto.from(mockUser));
+		assertThat(dto.user()).isEqualTo(UserDetailResponse.from(mockUser));
 		assertThat(dto.city()).isEqualTo(CityResponse.from(mockCity));
 		assertThat(dto.subcategory()).isEqualTo(SubcategoryResponse.from(mockSubcategory));
 		assertThat(dto.currency()).isEqualTo(CurrencyResponse.from(mockCurrency));
@@ -99,7 +99,7 @@ class ProductDetailResponseTest {
 		assertThat(dto.price()).isEqualTo(mockProduct.getPrice());
 		assertThat(dto.likeCount()).isEqualTo(mockProduct.getLikeCount());
 		assertThat(dto.rating()).isEqualTo(mockProduct.getRating().getValue());
-		assertThat(dto.user()).isEqualTo(UserDetailResponseDto.from(mockUser));
+		assertThat(dto.user()).isEqualTo(UserDetailResponse.from(mockUser));
 		assertThat(dto.city()).isEqualTo(CityResponse.from(mockCity));
 		assertThat(dto.subcategory()).isEqualTo(SubcategoryResponse.from(mockSubcategory));
 		assertThat(dto.currency()).isEqualTo(CurrencyResponse.from(mockCurrency));

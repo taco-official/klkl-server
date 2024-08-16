@@ -12,7 +12,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
 import taco.klkl.domain.user.dao.UserRepository;
-import taco.klkl.domain.user.dto.response.UserDetailResponseDto;
+import taco.klkl.domain.user.dto.response.UserDetailResponse;
 import taco.klkl.domain.user.service.UserService;
 
 @SpringBootTest
@@ -31,7 +31,7 @@ public class UserIntegrationTest {
 	@Test
 	public void testUserMe() throws Exception {
 		// given, when
-		UserDetailResponseDto userDto = userService.getMyInfo();
+		UserDetailResponse userDto = userService.getMyInfo();
 
 		// then
 		mockMvc.perform(get("/v1/users/me"))

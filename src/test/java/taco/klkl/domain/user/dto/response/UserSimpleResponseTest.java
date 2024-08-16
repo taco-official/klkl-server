@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import taco.klkl.domain.user.domain.Gender;
 import taco.klkl.domain.user.domain.User;
 
-class UserSimpleResponseDtoTest {
+class UserSimpleResponseTest {
 	@Test
 	@DisplayName("유저 간단 정보를 반환하는 DTO 테스트")
 	public void testUserSimpleResponseDto() {
@@ -18,7 +18,7 @@ class UserSimpleResponseDtoTest {
 		String name = "이름";
 
 		// when
-		UserSimpleResponseDto userSimple = new UserSimpleResponseDto(id, profile, name);
+		UserSimpleResponse userSimple = new UserSimpleResponse(id, profile, name);
 
 		// then
 		assertThat(userSimple.id()).isEqualTo(id);
@@ -27,7 +27,7 @@ class UserSimpleResponseDtoTest {
 	}
 
 	@Test
-	@DisplayName("User 객체로부터 UserSimpleResponseDto 생성 테스트")
+	@DisplayName("User 객체로부터 UserSimpleResponse 생성 테스트")
 	public void testFrom() {
 		// given
 		String profile = "image/profile.png";
@@ -38,7 +38,7 @@ class UserSimpleResponseDtoTest {
 
 		// when
 		User user = User.of(profile, name, gender, age, description);
-		UserSimpleResponseDto userSimple = UserSimpleResponseDto.from(user);
+		UserSimpleResponse userSimple = UserSimpleResponse.from(user);
 
 		// then
 		assertThat(userSimple.profile()).isEqualTo(profile);

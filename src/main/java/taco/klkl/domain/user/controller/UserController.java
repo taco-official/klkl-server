@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
-import taco.klkl.domain.user.dto.response.UserDetailResponseDto;
+import taco.klkl.domain.user.dto.response.UserDetailResponse;
 import taco.klkl.domain.user.service.UserService;
 
 @Slf4j
@@ -24,8 +24,8 @@ public class UserController {
 
 	@Operation(summary = "내 정보 조회", description = "내 정보를 조회합니다. (테스트용)")
 	@GetMapping("/me")
-	public ResponseEntity<UserDetailResponseDto> getMe() {
-		UserDetailResponseDto userDto = userService.getMyInfo();
+	public ResponseEntity<UserDetailResponse> getMe() {
+		UserDetailResponse userDto = userService.getMyInfo();
 		return ResponseEntity.ok().body(userDto);
 	}
 }

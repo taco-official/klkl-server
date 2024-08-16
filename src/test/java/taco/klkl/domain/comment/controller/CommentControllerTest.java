@@ -43,7 +43,7 @@ import taco.klkl.domain.region.enums.CurrencyType;
 import taco.klkl.domain.region.enums.RegionType;
 import taco.klkl.domain.user.domain.Gender;
 import taco.klkl.domain.user.domain.User;
-import taco.klkl.domain.user.dto.request.UserCreateRequestDto;
+import taco.klkl.domain.user.dto.request.UserCreateRequest;
 import taco.klkl.global.error.exception.ErrorCode;
 
 @WebMvcTest(CommentController.class)
@@ -64,7 +64,7 @@ public class CommentControllerTest {
 	private final Long productId = 1L;
 	private final Long commentId = 1L;
 
-	private final UserCreateRequestDto requestDto = new UserCreateRequestDto(
+	private final UserCreateRequest requestDto = new UserCreateRequest(
 		"이상화",
 		"남",
 		19,

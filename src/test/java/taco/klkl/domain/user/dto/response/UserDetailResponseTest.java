@@ -9,7 +9,7 @@ import taco.klkl.domain.user.domain.Gender;
 import taco.klkl.domain.user.domain.User;
 import taco.klkl.global.common.constants.UserConstants;
 
-public class UserDetailResponseDtoTest {
+public class UserDetailResponseTest {
 	@Test
 	@DisplayName("유저 상세 정보를 반환하는 DTO 테스트")
 	public void testUserDetailResponseDto() {
@@ -21,7 +21,7 @@ public class UserDetailResponseDtoTest {
 		int totalLikeCount = 100;
 
 		// when
-		UserDetailResponseDto userDetail = new UserDetailResponseDto(id, profile, name, description, totalLikeCount);
+		UserDetailResponse userDetail = new UserDetailResponse(id, profile, name, description, totalLikeCount);
 
 		// then
 		assertThat(userDetail.id()).isEqualTo(id);
@@ -32,7 +32,7 @@ public class UserDetailResponseDtoTest {
 	}
 
 	@Test
-	@DisplayName("User 객체로부터 UserDetailResponseDto 생성 테스트")
+	@DisplayName("User 객체로부터 UserDetailResponse 생성 테스트")
 	public void testFrom() {
 		// given
 		String profile = "image/profile.png";
@@ -43,7 +43,7 @@ public class UserDetailResponseDtoTest {
 
 		// when
 		User user = User.of(profile, name, gender, age, description);
-		UserDetailResponseDto userDetail = UserDetailResponseDto.from(user);
+		UserDetailResponse userDetail = UserDetailResponse.from(user);
 
 		// then
 		assertThat(userDetail.profile()).isEqualTo(profile);

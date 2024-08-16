@@ -2,13 +2,13 @@ package taco.klkl.domain.user.dto.response;
 
 import taco.klkl.domain.user.domain.User;
 
-public record UserSimpleResponseDto(
+public record UserSimpleResponse(
 	Long id,
 	String profile,
 	String name
 ) {
-	public static UserSimpleResponseDto from(User user) {
-		return new UserSimpleResponseDto(
+	public static UserSimpleResponse from(User user) {
+		return new UserSimpleResponse(
 			user.getId(),
 			user.getProfile(),
 			user.getName()

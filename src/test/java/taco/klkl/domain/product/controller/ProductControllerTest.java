@@ -38,7 +38,7 @@ import taco.klkl.domain.product.service.ProductService;
 import taco.klkl.domain.region.dto.response.CityResponse;
 import taco.klkl.domain.region.dto.response.CurrencyResponse;
 import taco.klkl.domain.region.enums.CountryType;
-import taco.klkl.domain.user.dto.response.UserDetailResponseDto;
+import taco.klkl.domain.user.dto.response.UserDetailResponse;
 import taco.klkl.global.common.response.PagedResponseDto;
 
 @WebMvcTest(ProductController.class)
@@ -59,7 +59,7 @@ public class ProductControllerTest {
 
 	@BeforeEach
 	void setUp() {
-		UserDetailResponseDto userDetailResponseDto = new UserDetailResponseDto(
+		UserDetailResponse userDetailResponse = new UserDetailResponse(
 			1L,
 			"image/profile.jpg",
 			"userName",
@@ -105,7 +105,7 @@ public class ProductControllerTest {
 			1000,
 			10,
 			Rating.FIVE.getValue(),
-			userDetailResponseDto,
+			userDetailResponse,
 			cityResponse,
 			subcategoryResponse,
 			currencyResponse,

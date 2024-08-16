@@ -8,7 +8,7 @@ import taco.klkl.domain.category.dto.response.SubcategoryResponse;
 import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.region.dto.response.CityResponse;
 import taco.klkl.domain.region.dto.response.CurrencyResponse;
-import taco.klkl.domain.user.dto.response.UserDetailResponseDto;
+import taco.klkl.domain.user.dto.response.UserDetailResponse;
 import taco.klkl.global.util.ProductUtil;
 
 /**
@@ -35,7 +35,7 @@ public record ProductDetailResponse(
 	Integer price,
 	Integer likeCount,
 	Double rating,
-	UserDetailResponseDto user,
+	UserDetailResponse user,
 	CityResponse city,
 	SubcategoryResponse subcategory,
 	CurrencyResponse currency,
@@ -52,7 +52,7 @@ public record ProductDetailResponse(
 			product.getPrice(),
 			product.getLikeCount(),
 			product.getRating().getValue(),
-			UserDetailResponseDto.from(product.getUser()),
+			UserDetailResponse.from(product.getUser()),
 			CityResponse.from(product.getCity()),
 			SubcategoryResponse.from(product.getSubcategory()),
 			CurrencyResponse.from(product.getCurrency()),
