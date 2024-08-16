@@ -24,7 +24,7 @@ public class Country {
 	@Id
 	@Column(name = "country_id")
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long countryId;
+	private Long id;
 
 	@ManyToOne(
 		fetch = FetchType.LAZY,
@@ -78,13 +78,13 @@ public class Country {
 		final Region region,
 		final String flag,
 		final String photo,
-		final Currency currencyId
+		final Currency currency
 	) {
 		this.region = region;
 		this.name = countryType;
 		this.flag = flag;
 		this.photo = photo;
-		this.currency = currencyId;
+		this.currency = currency;
 	}
 
 	public static Country of(

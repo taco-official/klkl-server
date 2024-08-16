@@ -4,18 +4,18 @@ import taco.klkl.domain.region.domain.Currency;
 
 /**
  *
- * @param currencyId
+ * @param id
  * @param code
  * @param flag
  */
 public record CurrencyResponse(
-	Long currencyId,
+	Long id,
 	String code,
 	String flag
 ) {
 	public static CurrencyResponse from(Currency currency) {
 		return new CurrencyResponse(
-			currency.getCurrencyId(),
+			currency.getId(),
 			currency.getCode().getCodeName(),
 			currency.getFlag()
 		);

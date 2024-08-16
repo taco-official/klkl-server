@@ -219,15 +219,15 @@ public class ProductControllerTest {
 				is(productDetailResponse.user().description())))
 			.andExpect(jsonPath("$.data.user.totalLikeCount",
 				is(productDetailResponse.user().totalLikeCount())))
-			.andExpect(jsonPath("$.data.city.cityId",
-				is(productDetailResponse.city().cityId().intValue())))
+			.andExpect(jsonPath("$.data.city.id",
+				is(productDetailResponse.city().id().intValue())))
 			.andExpect(jsonPath("$.data.city.name", is(productDetailResponse.city().name())))
 			.andExpect(jsonPath("$.data.subcategory.id",
 				is(productDetailResponse.subcategory().id().intValue())))
 			.andExpect(jsonPath("$.data.subcategory.name",
 				is(productDetailResponse.subcategory().name())))
-			.andExpect(jsonPath("$.data.currency.currencyId",
-				is(productDetailResponse.currency().currencyId().intValue())))
+			.andExpect(jsonPath("$.data.currency.id",
+				is(productDetailResponse.currency().id().intValue())))
 			.andExpect(jsonPath("$.data.currency.code", is(productDetailResponse.currency().code())))
 			.andExpect(jsonPath("$.data.currency.flag", is(productDetailResponse.currency().flag())))
 			.andExpect(jsonPath("$.data.tags", hasSize(productSimpleResponse.tags().size())))
@@ -263,15 +263,15 @@ public class ProductControllerTest {
 				is(productDetailResponse.user().description())))
 			.andExpect(jsonPath("$.data.user.totalLikeCount",
 				is(productDetailResponse.user().totalLikeCount())))
-			.andExpect(jsonPath("$.data.city.cityId",
-				is(productDetailResponse.city().cityId().intValue())))
+			.andExpect(jsonPath("$.data.city.id",
+				is(productDetailResponse.city().id().intValue())))
 			.andExpect(jsonPath("$.data.city.name", is(productDetailResponse.city().name())))
 			.andExpect(jsonPath("$.data.subcategory.id",
 				is(productDetailResponse.subcategory().id().intValue())))
 			.andExpect(jsonPath("$.data.subcategory.name",
 				is(productDetailResponse.subcategory().name())))
-			.andExpect(jsonPath("$.data.currency.currencyId",
-				is(productDetailResponse.currency().currencyId().intValue())))
+			.andExpect(jsonPath("$.data.currency.id",
+				is(productDetailResponse.currency().id().intValue())))
 			.andExpect(jsonPath("$.data.currency.code", is(productDetailResponse.currency().code())))
 			.andExpect(jsonPath("$.data.currency.flag", is(productDetailResponse.currency().flag())))
 			.andExpect(jsonPath("$.data.tags", hasSize(productSimpleResponse.tags().size())))
@@ -307,15 +307,15 @@ public class ProductControllerTest {
 				is(productDetailResponse.user().description())))
 			.andExpect(jsonPath("$.data.user.totalLikeCount",
 				is(productDetailResponse.user().totalLikeCount())))
-			.andExpect(jsonPath("$.data.city.cityId",
-				is(productDetailResponse.city().cityId().intValue())))
+			.andExpect(jsonPath("$.data.city.id",
+				is(productDetailResponse.city().id().intValue())))
 			.andExpect(jsonPath("$.data.city.name", is(productDetailResponse.city().name())))
 			.andExpect(jsonPath("$.data.subcategory.id",
 				is(productDetailResponse.subcategory().id().intValue())))
 			.andExpect(jsonPath("$.data.subcategory.name",
 				is(productDetailResponse.subcategory().name())))
-			.andExpect(jsonPath("$.data.currency.currencyId",
-				is(productDetailResponse.currency().currencyId().intValue())))
+			.andExpect(jsonPath("$.data.currency.id",
+				is(productDetailResponse.currency().id().intValue())))
 			.andExpect(jsonPath("$.data.currency.code", is(productDetailResponse.currency().code())))
 			.andExpect(jsonPath("$.data.currency.flag", is(productDetailResponse.currency().flag())))
 			.andExpect(jsonPath("$.data.tags", hasSize(productSimpleResponse.tags().size())))

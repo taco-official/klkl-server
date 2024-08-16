@@ -286,9 +286,9 @@ class ProductServiceImplTest {
 		}
 
 		// City, Subcategory, Currency 검증
-		assertThat(result.city().cityId()).isEqualTo(testProduct.getCity().getCityId());
+		assertThat(result.city().id()).isEqualTo(testProduct.getCity().getId());
 		assertThat(result.subcategory().id()).isEqualTo(testProduct.getSubcategory().getId());
-		assertThat(result.currency().currencyId()).isEqualTo(testProduct.getCurrency().getCurrencyId());
+		assertThat(result.currency().id()).isEqualTo(testProduct.getCurrency().getId());
 		verify(productRepository).findById(productId);
 	}
 

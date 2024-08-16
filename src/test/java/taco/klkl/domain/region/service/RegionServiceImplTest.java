@@ -61,7 +61,7 @@ class RegionServiceImplTest {
 		// given
 		List<Region> mockRegions = Arrays.asList(region1, region2, region3);
 
-		when(regionRepository.findAllByOrderByRegionIdAsc()).thenReturn(mockRegions);
+		when(regionRepository.findAllByOrderByIdAsc()).thenReturn(mockRegions);
 
 		// when
 		List<RegionResponse> regionResponses = regionService.getAllRegions();
@@ -77,7 +77,7 @@ class RegionServiceImplTest {
 	@DisplayName("모든 지역 조회 실패 테스트")
 	void testGetAllRegionFail() {
 		// given
-		when(regionRepository.findAllByOrderByRegionIdAsc()).thenReturn(Collections.emptyList());
+		when(regionRepository.findAllByOrderByIdAsc()).thenReturn(Collections.emptyList());
 
 		// when
 		List<RegionResponse> regionResponses = regionService.getAllRegions();

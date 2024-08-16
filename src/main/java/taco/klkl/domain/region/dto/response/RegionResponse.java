@@ -4,16 +4,16 @@ import taco.klkl.domain.region.domain.Region;
 
 /**
  *
- * @param regionId
+ * @param id
  * @param name
  */
 public record RegionResponse(
-	Long regionId,
+	Long id,
 	String name
 ) {
 
 	public static RegionResponse from(Region region) {
-		return new RegionResponse(region.getRegionId(), region.getName().getKoreanName());
+		return new RegionResponse(region.getId(), region.getName().getKoreanName());
 	}
 
 }

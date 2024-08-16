@@ -26,7 +26,7 @@ public class CityUtil {
 		Set<Long> countryIds = cityIds.stream()
 			.map(this::getCityEntityById)
 			.map(City::getCountry)
-			.map(Country::getCountryId)
+			.map(Country::getId)
 			.collect(Collectors.toSet());
 
 		if (countryIds.size() != 1) {

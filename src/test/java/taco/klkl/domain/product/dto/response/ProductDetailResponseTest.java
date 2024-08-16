@@ -39,7 +39,7 @@ class ProductDetailResponseTest {
 		when(mockUser.getName()).thenReturn("Test User");
 
 		mockCity = mock(City.class);
-		when(mockCity.getCityId()).thenReturn(1L);
+		when(mockCity.getId()).thenReturn(1L);
 		when(mockCity.getName()).thenReturn(CityType.BANGKOK);
 
 		mockSubcategory = mock(Subcategory.class);
@@ -47,7 +47,7 @@ class ProductDetailResponseTest {
 		when(mockSubcategory.getName()).thenReturn(SubcategoryName.INSTANT_FOOD);
 
 		mockCurrency = mock(Currency.class);
-		when(mockCurrency.getCurrencyId()).thenReturn(1L);
+		when(mockCurrency.getId()).thenReturn(1L);
 		when(mockCurrency.getCode()).thenReturn(CurrencyType.THAI_BAHT);
 		when(mockCurrency.getFlag()).thenReturn("image/flag.jpg");
 

@@ -21,7 +21,7 @@ public class City {
 	@Id
 	@Column(name = "city_id")
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long cityId;
+	private Long id;
 
 	@ManyToOne(
 		fetch = FetchType.LAZY,

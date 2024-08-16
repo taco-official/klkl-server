@@ -69,9 +69,9 @@ public class ProductIntegrationTest {
 			.andExpect(jsonPath("$.data.likeCount", is(ProductConstants.DEFAULT_LIKE_COUNT)))
 			.andExpect(jsonPath("$.data.rating", is(createRequest.rating())))
 			.andExpect(jsonPath("$.data.user.id", notNullValue()))
-			.andExpect(jsonPath("$.data.city.cityId", is(createRequest.cityId().intValue())))
+			.andExpect(jsonPath("$.data.city.id", is(createRequest.cityId().intValue())))
 			.andExpect(jsonPath("$.data.subcategory.id", is(createRequest.subcategoryId().intValue())))
-			.andExpect(jsonPath("$.data.currency.currencyId", is(createRequest.currencyId().intValue())))
+			.andExpect(jsonPath("$.data.currency.id", is(createRequest.currencyId().intValue())))
 			.andExpect(jsonPath("$.data.createdAt", notNullValue()))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
 	}
@@ -107,9 +107,9 @@ public class ProductIntegrationTest {
 			.andExpect(jsonPath("$.data.likeCount", is(ProductConstants.DEFAULT_LIKE_COUNT)))
 			.andExpect(jsonPath("$.data.rating", is(createRequest.rating())))
 			.andExpect(jsonPath("$.data.user.id", notNullValue()))
-			.andExpect(jsonPath("$.data.city.cityId", is(createRequest.cityId().intValue())))
+			.andExpect(jsonPath("$.data.city.id", is(createRequest.cityId().intValue())))
 			.andExpect(jsonPath("$.data.subcategory.id", is(createRequest.subcategoryId().intValue())))
-			.andExpect(jsonPath("$.data.currency.currencyId", is(createRequest.currencyId().intValue())))
+			.andExpect(jsonPath("$.data.currency.id", is(createRequest.currencyId().intValue())))
 			.andExpect(jsonPath("$.data.createdAt", notNullValue()))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
 	}
@@ -164,7 +164,7 @@ public class ProductIntegrationTest {
 
 	@Test
 	@DisplayName("단일 도시 ID로 필터링된 상품 목록 조회 API 테스트")
-	public void testGetProductsBySingleCityId() throws Exception {
+	public void testGetProductsBySingleid() throws Exception {
 		// given
 		ProductCreateUpdateRequest createOsakaRequest1 = new ProductCreateUpdateRequest(
 			"name1",
@@ -224,7 +224,7 @@ public class ProductIntegrationTest {
 
 	@Test
 	@DisplayName("여러 도시 ID로 필터링된 상품 목록 조회 API 테스트")
-	public void testGetProductsByMultipleCityIds() throws Exception {
+	public void testGetProductsByMultipleIds() throws Exception {
 		// given
 		ProductCreateUpdateRequest createKyotoRequest1 = new ProductCreateUpdateRequest(
 			"name1",
@@ -968,10 +968,10 @@ public class ProductIntegrationTest {
 			.andExpect(jsonPath("$.data.likeCount", is(ProductConstants.DEFAULT_LIKE_COUNT)))
 			.andExpect(jsonPath("$.data.rating", is(updateRequest.rating())))
 			.andExpect(jsonPath("$.data.user.id", is(productDto.user().id().intValue())))
-			.andExpect(jsonPath("$.data.city.cityId", is(updateRequest.cityId().intValue())))
+			.andExpect(jsonPath("$.data.city.id", is(updateRequest.cityId().intValue())))
 			.andExpect(jsonPath("$.data.subcategory.id",
 				is(updateRequest.subcategoryId().intValue())))
-			.andExpect(jsonPath("$.data.currency.currencyId", is(updateRequest.currencyId().intValue())))
+			.andExpect(jsonPath("$.data.currency.id", is(updateRequest.currencyId().intValue())))
 			.andExpect(jsonPath("$.data.createdAt", notNullValue()))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
 	}

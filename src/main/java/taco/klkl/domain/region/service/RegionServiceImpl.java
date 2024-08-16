@@ -29,7 +29,7 @@ public class RegionServiceImpl implements RegionService {
 	@Override
 	public List<RegionResponse> getAllRegions() {
 
-		final List<Region> regions = regionRepository.findAllByOrderByRegionIdAsc();
+		final List<Region> regions = regionRepository.findAllByOrderByIdAsc();
 
 		if (regions == null) {
 			return Collections.emptyList();

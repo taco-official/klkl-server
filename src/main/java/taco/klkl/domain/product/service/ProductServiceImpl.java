@@ -220,7 +220,7 @@ public class ProductServiceImpl implements ProductService {
 		if (cityIds == null || cityIds.isEmpty()) {
 			return null;
 		}
-		return QProduct.product.city.cityId.in(cityIds);
+		return QProduct.product.city.id.in(cityIds);
 	}
 
 	private BooleanExpression createSubcategoryFilter(final Set<Long> subcategoryIds) {

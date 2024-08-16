@@ -22,7 +22,7 @@ public class Region {
 	@Id
 	@Column(name = "region_id")
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long regionId;
+	private Long id;
 
 	@Column(
 		name = "name",
