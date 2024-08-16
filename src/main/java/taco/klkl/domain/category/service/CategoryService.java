@@ -10,8 +10,8 @@ import lombok.extern.slf4j.Slf4j;
 import taco.klkl.domain.category.dao.CategoryRepository;
 import taco.klkl.domain.category.domain.Category;
 import taco.klkl.domain.category.domain.CategoryName;
-import taco.klkl.domain.category.dto.response.CategoryResponseDto;
-import taco.klkl.domain.category.dto.response.CategoryWithSubcategoryDto;
+import taco.klkl.domain.category.dto.response.CategoryResponse;
+import taco.klkl.domain.category.dto.response.CategoryWithSubcategoryResponse;
 import taco.klkl.domain.category.exception.CategoryNotFoundException;
 
 @Slf4j
@@ -21,20 +21,20 @@ import taco.klkl.domain.category.exception.CategoryNotFoundException;
 public class CategoryService {
 	private final CategoryRepository categoryRepository;
 
-	public List<CategoryResponseDto> getCategories() {
+	public List<CategoryResponse> getCategories() {
 		List<Category> categories = categoryRepository.findAll();
 		return categories.stream()
-			.map(category -> CategoryResponseDto.from(category))
+			.map(category -> CategoryResponse.from(category))
 			.toList();
 	}
 
-	public CategoryWithSubcategoryDto getSubcategories(Long id) {
+	public CategoryWithSubcategoryResponse getSubcategories(Long id) {
 		Category category = categoryRepository.findById(id)
 			.orElseThrow(CategoryNotFoundException::new);
-		return CategoryWithSubcategoryDto.from(category);
+		return CategoryWithSubcategoryResponse.from(category);
 	}
 
-	public List<CategoryResponseDto> getCategoriesByCategoryNames(List<CategoryName> categoryNames) {
+	public List<CategoryResponse> getCategoriesByCategoryNames(List<CategoryName> categoryNames) {
 
 		if (categoryNames == null || categoryNames.isEmpty()) {
 			return List.of();
@@ -43,7 +43,7 @@ public class CategoryService {
 		List<Category> categories = categoryRepository.findAllByNameIn(categoryNames);
 
 		return categories.stream()
-			.map(CategoryResponseDto::from)
+			.map(CategoryResponse::from)
 			.toList();
 	}
 }

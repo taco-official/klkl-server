@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import taco.klkl.domain.category.dao.SubcategoryFilterRepository;
 import taco.klkl.domain.category.domain.Subcategory;
-import taco.klkl.domain.category.dto.response.FilterWithSubcategoryResponseDto;
+import taco.klkl.domain.category.dto.response.FilterWithSubcategoryResponse;
 import taco.klkl.domain.category.service.SubcategoryFilterService;
 import taco.klkl.domain.category.service.SubcategoryService;
 import taco.klkl.global.error.exception.ErrorCode;
@@ -52,7 +52,7 @@ public class FilterIntegrationTest {
 				.map(Long::parseLong)
 				.toList()
 		);
-		List<FilterWithSubcategoryResponseDto> response = subcategoryFilterService.getFilters(subcategoryList);
+		List<FilterWithSubcategoryResponse> response = subcategoryFilterService.getFilters(subcategoryList);
 
 		//then
 		mockMvc.perform(get("/v1/filters")
@@ -77,7 +77,7 @@ public class FilterIntegrationTest {
 				.map(Long::parseLong)
 				.toList()
 		);
-		List<FilterWithSubcategoryResponseDto> response = subcategoryFilterService.getFilters(subcategoryList);
+		List<FilterWithSubcategoryResponse> response = subcategoryFilterService.getFilters(subcategoryList);
 
 		//then
 		mockMvc.perform(get("/v1/filters")

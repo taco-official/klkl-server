@@ -17,7 +17,7 @@ import taco.klkl.domain.category.domain.Filter;
 import taco.klkl.domain.category.domain.FilterName;
 import taco.klkl.domain.category.domain.Subcategory;
 import taco.klkl.domain.category.domain.SubcategoryName;
-import taco.klkl.domain.category.dto.response.FilterResponseDto;
+import taco.klkl.domain.category.dto.response.FilterResponse;
 import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.product.domain.ProductFilter;
 import taco.klkl.domain.product.domain.Rating;
@@ -110,9 +110,9 @@ class ProductSimpleResponseDtoTest {
 	@DisplayName("생성자를 통해 ProductSimpleResponseDto 생성 테스트")
 	void testConstructor() {
 		// when
-		Set<FilterResponseDto> filters = product.getProductFilters().stream()
+		Set<FilterResponse> filters = product.getProductFilters().stream()
 			.map(ProductFilter::getFilter)
-			.map(FilterResponseDto::from)
+			.map(FilterResponse::from)
 			.collect(Collectors.toSet());
 
 		ProductSimpleResponseDto dto = new ProductSimpleResponseDto(

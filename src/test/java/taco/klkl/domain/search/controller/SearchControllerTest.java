@@ -18,8 +18,8 @@ import taco.klkl.domain.category.domain.Category;
 import taco.klkl.domain.category.domain.CategoryName;
 import taco.klkl.domain.category.domain.Subcategory;
 import taco.klkl.domain.category.domain.SubcategoryName;
-import taco.klkl.domain.category.dto.response.CategoryResponseDto;
-import taco.klkl.domain.category.dto.response.SubcategoryResponseDto;
+import taco.klkl.domain.category.dto.response.CategoryResponse;
+import taco.klkl.domain.category.dto.response.SubcategoryResponse;
 import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.product.domain.Rating;
 import taco.klkl.domain.product.dto.response.ProductSimpleResponseDto;
@@ -76,8 +76,8 @@ public class SearchControllerTest {
 		mockResponse = SearchResponseDto.of(
 			Collections.singletonList(CountrySimpleResponseDto.from(country)),
 			Collections.singletonList(CityResponseDto.from(city)),
-			Collections.singletonList(CategoryResponseDto.from(category)),
-			Collections.singletonList(SubcategoryResponseDto.from(subcategory)),
+			Collections.singletonList(CategoryResponse.from(category)),
+			Collections.singletonList(SubcategoryResponse.from(subcategory)),
 			Collections.singletonList(ProductSimpleResponseDto.from(product))
 		);
 	}

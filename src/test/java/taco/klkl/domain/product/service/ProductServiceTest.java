@@ -35,7 +35,7 @@ import taco.klkl.domain.category.domain.QFilter;
 import taco.klkl.domain.category.domain.QSubcategory;
 import taco.klkl.domain.category.domain.Subcategory;
 import taco.klkl.domain.category.domain.SubcategoryName;
-import taco.klkl.domain.category.dto.response.FilterResponseDto;
+import taco.klkl.domain.category.dto.response.FilterResponse;
 import taco.klkl.domain.category.service.FilterService;
 import taco.klkl.domain.category.service.SubcategoryService;
 import taco.klkl.domain.like.exception.LikeCountBelowMinimumException;
@@ -272,7 +272,7 @@ class ProductServiceTest {
 			assertThat(result.filters()).isNotNull();
 			assertThat(result.filters()).hasSize(testProduct.getProductFilters().size());
 			Set<Long> resultFilterIds = result.filters().stream()
-				.map(FilterResponseDto::id)
+				.map(FilterResponse::id)
 				.collect(Collectors.toSet());
 
 			Set<Long> testProductFilterIds = testProduct.getProductFilters().stream()

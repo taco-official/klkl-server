@@ -17,8 +17,8 @@ import taco.klkl.domain.category.domain.Category;
 import taco.klkl.domain.category.domain.CategoryName;
 import taco.klkl.domain.category.domain.Subcategory;
 import taco.klkl.domain.category.domain.SubcategoryName;
-import taco.klkl.domain.category.dto.response.CategoryResponseDto;
-import taco.klkl.domain.category.dto.response.SubcategoryResponseDto;
+import taco.klkl.domain.category.dto.response.CategoryResponse;
+import taco.klkl.domain.category.dto.response.SubcategoryResponse;
 import taco.klkl.domain.category.service.CategoryService;
 import taco.klkl.domain.category.service.SubcategoryService;
 import taco.klkl.domain.product.domain.Product;
@@ -92,9 +92,9 @@ class SearchServiceImplTest {
 		List<CountrySimpleResponseDto> mockCountries = Collections.singletonList(
 			CountrySimpleResponseDto.from(country));
 		List<CityResponseDto> mockCities = Collections.singletonList(CityResponseDto.from(city));
-		List<CategoryResponseDto> mockCategories = Collections.singletonList(CategoryResponseDto.from(category));
-		List<SubcategoryResponseDto> mockSubcategories = Collections.singletonList(
-			SubcategoryResponseDto.from(subcategory));
+		List<CategoryResponse> mockCategories = Collections.singletonList(CategoryResponse.from(category));
+		List<SubcategoryResponse> mockSubcategories = Collections.singletonList(
+			SubcategoryResponse.from(subcategory));
 		List<ProductSimpleResponseDto> mockProducts = Collections.singletonList(ProductSimpleResponseDto.from(product));
 
 		when(countryService.getAllCountriesByCountryTypes(any(List.class))).thenReturn(mockCountries);

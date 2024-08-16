@@ -19,7 +19,7 @@ import taco.klkl.domain.category.domain.FilterName;
 import taco.klkl.domain.category.domain.Subcategory;
 import taco.klkl.domain.category.domain.SubcategoryFilter;
 import taco.klkl.domain.category.domain.SubcategoryName;
-import taco.klkl.domain.category.dto.response.FilterWithSubcategoryResponseDto;
+import taco.klkl.domain.category.dto.response.FilterWithSubcategoryResponse;
 
 @ExtendWith(MockitoExtension.class)
 public class SubcategoryFilterServiceTest {
@@ -60,7 +60,7 @@ public class SubcategoryFilterServiceTest {
 		final List<Subcategory> subcategoryList = Arrays.asList(subcategory1);
 
 		// when
-		final List<FilterWithSubcategoryResponseDto> result = subcategoryFilterService.getFilters(subcategoryList);
+		final List<FilterWithSubcategoryResponse> result = subcategoryFilterService.getFilters(subcategoryList);
 
 		// then
 		assertNotNull(result);

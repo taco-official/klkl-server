@@ -2,7 +2,7 @@ package taco.klkl.domain.product.dto.response;
 
 import java.util.Set;
 
-import taco.klkl.domain.category.dto.response.FilterResponseDto;
+import taco.klkl.domain.category.dto.response.FilterResponse;
 import taco.klkl.domain.product.domain.Product;
 import taco.klkl.global.util.ProductUtil;
 
@@ -23,7 +23,7 @@ public record ProductSimpleResponseDto(
 	Double rating,
 	String countryName,
 	String categoryName,
-	Set<FilterResponseDto> filters
+	Set<FilterResponse> filters
 ) {
 
 	public static ProductSimpleResponseDto from(final Product product) {

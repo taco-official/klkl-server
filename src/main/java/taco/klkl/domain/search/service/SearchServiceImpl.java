@@ -10,8 +10,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import taco.klkl.domain.category.domain.CategoryName;
 import taco.klkl.domain.category.domain.SubcategoryName;
-import taco.klkl.domain.category.dto.response.CategoryResponseDto;
-import taco.klkl.domain.category.dto.response.SubcategoryResponseDto;
+import taco.klkl.domain.category.dto.response.CategoryResponse;
+import taco.klkl.domain.category.dto.response.SubcategoryResponse;
 import taco.klkl.domain.category.service.CategoryService;
 import taco.klkl.domain.category.service.SubcategoryService;
 import taco.klkl.domain.product.dto.response.ProductSimpleResponseDto;
@@ -42,8 +42,8 @@ public class SearchServiceImpl implements SearchService {
 
 		final List<CountrySimpleResponseDto> findCountries = getCountriesByQueryParam(queryParam);
 		final List<CityResponseDto> findCities = getCitiesByQueryParam(queryParam);
-		final List<CategoryResponseDto> findCategories = getCategoriesByQueryParam(queryParam);
-		final List<SubcategoryResponseDto> findSubcategories = getSubcategoriesByQueryParam(queryParam);
+		final List<CategoryResponse> findCategories = getCategoriesByQueryParam(queryParam);
+		final List<SubcategoryResponse> findSubcategories = getSubcategoriesByQueryParam(queryParam);
 		List<ProductSimpleResponseDto> findProducts = getProductsByQueryParam(queryParam);
 
 		return SearchResponseDto.of(findCountries, findCities, findCategories, findSubcategories, findProducts);
@@ -61,13 +61,13 @@ public class SearchServiceImpl implements SearchService {
 		return cityService.getAllCitiesByCityTypes(cityTypes);
 	}
 
-	private List<CategoryResponseDto> getCategoriesByQueryParam(final String queryParam) {
+	private List<CategoryResponse> getCategoriesByQueryParam(final String queryParam) {
 		final List<CategoryName> categoryNames = CategoryName.getCategoryNamesByPartialString(queryParam);
 
 		return categoryService.getCategoriesByCategoryNames(categoryNames);
 	}
 
-	private List<SubcategoryResponseDto> getSubcategoriesByQueryParam(final String queryParam) {
+	private List<SubcategoryResponse> getSubcategoriesByQueryParam(final String queryParam) {
 		final List<SubcategoryName> subcategoryNames = SubcategoryName.getSubcategoryNamesByPartialString(queryParam);
 
 		return subcategoryService.getSubcategoriesBySubcategoryNames(subcategoryNames);

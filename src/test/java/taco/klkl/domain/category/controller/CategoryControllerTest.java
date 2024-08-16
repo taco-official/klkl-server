@@ -22,8 +22,8 @@ import taco.klkl.domain.category.domain.Category;
 import taco.klkl.domain.category.domain.CategoryName;
 import taco.klkl.domain.category.domain.Subcategory;
 import taco.klkl.domain.category.domain.SubcategoryName;
-import taco.klkl.domain.category.dto.response.CategoryResponseDto;
-import taco.klkl.domain.category.dto.response.CategoryWithSubcategoryDto;
+import taco.klkl.domain.category.dto.response.CategoryResponse;
+import taco.klkl.domain.category.dto.response.CategoryWithSubcategoryResponse;
 import taco.klkl.domain.category.exception.CategoryNotFoundException;
 import taco.klkl.domain.category.service.CategoryService;
 import taco.klkl.global.error.exception.ErrorCode;
@@ -46,13 +46,13 @@ public class CategoryControllerTest {
 	@DisplayName("카테고리 컨트롤러 GlobalResponse로 Wrapping되어 나오는지 Test")
 	public void testGetCategory() throws Exception {
 		// given
-		List<CategoryResponseDto> categoryResponseDto = Arrays.asList(
-			new CategoryResponseDto(1L, "Category1"),
-			new CategoryResponseDto(2L, "Category2")
+		List<CategoryResponse> categoryResponse = Arrays.asList(
+			new CategoryResponse(1L, "Category1"),
+			new CategoryResponse(2L, "Category2")
 		);
 
 		// when
-		when(categoryService.getCategories()).thenReturn(categoryResponseDto);
+		when(categoryService.getCategories()).thenReturn(categoryResponse);
 
 		// then
 		mockMvc.perform(get("/v1/categories")
@@ -82,7 +82,7 @@ public class CategoryControllerTest {
 
 		when(mockCategoryRepository.findById(categoryId)).thenReturn(Optional.of(mockCategory));
 		when(mockCategory.getSubcategories()).thenReturn(subcategories);
-		CategoryWithSubcategoryDto response = CategoryWithSubcategoryDto.from(mockCategory);
+		CategoryWithSubcategoryResponse response = CategoryWithSubcategoryResponse.from(mockCategory);
 
 		// when
 		when(categoryService.getSubcategories(categoryId)).thenReturn(response);

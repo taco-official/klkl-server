@@ -15,8 +15,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import jakarta.transaction.Transactional;
-import taco.klkl.domain.category.dto.response.CategoryResponseDto;
-import taco.klkl.domain.category.dto.response.CategoryWithSubcategoryDto;
+import taco.klkl.domain.category.dto.response.CategoryResponse;
+import taco.klkl.domain.category.dto.response.CategoryWithSubcategoryResponse;
 import taco.klkl.domain.category.service.CategoryService;
 import taco.klkl.global.error.exception.ErrorCode;
 
@@ -35,13 +35,13 @@ class CategoryIntegrationTest {
 	@DisplayName("카테고리 목록 반환 API 통합 Test")
 	void testGetAllCategories() throws Exception {
 		// given
-		List<CategoryResponseDto> categoryResponseDto = categoryService.getCategories();
+		List<CategoryResponse> categoryResponse = categoryService.getCategories();
 
 		//then
 		mockMvc.perform(get("/v1/categories")
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
-			.andExpect(jsonPath("$.data", hasSize(categoryResponseDto.size())))
+			.andExpect(jsonPath("$.data", hasSize(categoryResponse.size())))
 			.andExpect(jsonPath("$.isSuccess", is(true)))
 			.andExpect(jsonPath("$.code", is("C000")));
 	}
@@ -50,22 +50,22 @@ class CategoryIntegrationTest {
 	@DisplayName("valid한 id값이 들어왔을 때 반환값이 제대로 전달되는지 테스트")
 	public void testGetCategoriesWithValidId() throws Exception {
 		//given
-		CategoryWithSubcategoryDto categoryWithSubcategoryDto = categoryService.getSubcategories(300L);
+		CategoryWithSubcategoryResponse categoryWithSubcategoryResponse = categoryService.getSubcategories(300L);
 
 		//when, then
 		mockMvc.perform(get("/v1/categories/300/subcategories")
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
-			.andExpect(jsonPath("$.data.categoryId", is(categoryWithSubcategoryDto.categoryId().intValue())))
-			.andExpect(jsonPath("$.data.category", is(categoryWithSubcategoryDto.category())))
+			.andExpect(jsonPath("$.data.categoryId", is(categoryWithSubcategoryResponse.categoryId().intValue())))
+			.andExpect(jsonPath("$.data.category", is(categoryWithSubcategoryResponse.category())))
 			.andExpect(jsonPath("$.data.subcategories[0].subcategoryId",
-				is(categoryWithSubcategoryDto.subcategories().get(0).subcategoryId().intValue())))
+				is(categoryWithSubcategoryResponse.subcategories().get(0).subcategoryId().intValue())))
 			.andExpect(jsonPath("$.data.subcategories[0].subcategory",
-				is(categoryWithSubcategoryDto.subcategories().get(0).subcategory())))
+				is(categoryWithSubcategoryResponse.subcategories().get(0).subcategory())))
 			.andExpect(jsonPath("$.data.subcategories[1].subcategoryId",
-				is(categoryWithSubcategoryDto.subcategories().get(1).subcategoryId().intValue())))
+				is(categoryWithSubcategoryResponse.subcategories().get(1).subcategoryId().intValue())))
 			.andExpect(jsonPath("$.data.subcategories[1].subcategory",
-				is(categoryWithSubcategoryDto.subcategories().get(1).subcategory())))
+				is(categoryWithSubcategoryResponse.subcategories().get(1).subcategory())))
 			.andExpect(jsonPath("$.isSuccess", is(true)))
 			.andExpect(jsonPath("$.code", is("C000")));
 	}

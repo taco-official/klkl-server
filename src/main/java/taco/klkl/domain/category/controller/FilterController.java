@@ -12,7 +12,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import taco.klkl.domain.category.domain.Subcategory;
-import taco.klkl.domain.category.dto.response.FilterWithSubcategoryResponseDto;
+import taco.klkl.domain.category.dto.response.FilterWithSubcategoryResponse;
 import taco.klkl.domain.category.service.SubcategoryFilterService;
 import taco.klkl.domain.category.service.SubcategoryService;
 
@@ -27,11 +27,11 @@ public class FilterController {
 
 	@GetMapping
 	@Operation(description = "Subcategory 포함된 Filter 반환")
-	public List<FilterWithSubcategoryResponseDto> getFilter(
+	public List<FilterWithSubcategoryResponse> getFilter(
 		@RequestParam("subcategories") List<Long> subcategoryIds) {
 		List<Subcategory> subcategoryList = subcategoryService.getSubcategoryList(subcategoryIds);
-		List<FilterWithSubcategoryResponseDto> filterWithSubcategoryResponseDto = subcategoryFilterService.getFilters(
+		List<FilterWithSubcategoryResponse> filterWithSubcategoryResponse = subcategoryFilterService.getFilters(
 			subcategoryList);
-		return filterWithSubcategoryResponseDto;
+		return filterWithSubcategoryResponse;
 	}
 }

@@ -3,7 +3,7 @@ package taco.klkl.domain.product.controller;
 import static org.assertj.core.api.Assertions.*;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -26,8 +26,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import taco.klkl.domain.category.domain.CategoryName;
-import taco.klkl.domain.category.dto.response.FilterResponseDto;
-import taco.klkl.domain.category.dto.response.SubcategoryResponseDto;
+import taco.klkl.domain.category.dto.response.FilterResponse;
+import taco.klkl.domain.category.dto.response.SubcategoryResponse;
 import taco.klkl.domain.product.domain.Rating;
 import taco.klkl.domain.product.dto.request.ProductCreateUpdateRequestDto;
 import taco.klkl.domain.product.dto.request.ProductFilterOptionsDto;
@@ -70,7 +70,7 @@ public class ProductControllerTest {
 			1L,
 			"cityName"
 		);
-		SubcategoryResponseDto subcategoryResponseDto = new SubcategoryResponseDto(
+		SubcategoryResponse subcategoryResponse = new SubcategoryResponse(
 			1L,
 			"subcategoryName"
 		);
@@ -79,11 +79,11 @@ public class ProductControllerTest {
 			"currencyCode",
 			"image/flag.jpg"
 		);
-		FilterResponseDto filterResponseDto1 = new FilterResponseDto(
+		FilterResponse filterResponse1 = new FilterResponse(
 			1L,
 			"filterName1"
 		);
-		FilterResponseDto filterResponseDto2 = new FilterResponseDto(
+		FilterResponse filterResponse2 = new FilterResponse(
 			2L,
 			"filterName2"
 		);
@@ -95,7 +95,7 @@ public class ProductControllerTest {
 			Rating.FIVE.getValue(),
 			CountryType.THAILAND.getKoreanName(),
 			CategoryName.FOOD.getKoreanName(),
-			Set.of(filterResponseDto1, filterResponseDto2)
+			Set.of(filterResponse1, filterResponse2)
 		);
 		productDetailResponseDto = new ProductDetailResponseDto(
 			1L,
@@ -107,9 +107,9 @@ public class ProductControllerTest {
 			Rating.FIVE.getValue(),
 			userDetailResponseDto,
 			cityResponseDto,
-			subcategoryResponseDto,
+			subcategoryResponse,
 			currencyResponseDto,
-			Set.of(filterResponseDto1, filterResponseDto2),
+			Set.of(filterResponse1, filterResponse2),
 			LocalDateTime.now()
 		);
 		productCreateUpdateRequestDto = new ProductCreateUpdateRequestDto(

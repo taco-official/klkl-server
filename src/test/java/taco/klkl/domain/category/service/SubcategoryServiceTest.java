@@ -20,7 +20,7 @@ import taco.klkl.domain.category.domain.Category;
 import taco.klkl.domain.category.domain.CategoryName;
 import taco.klkl.domain.category.domain.Subcategory;
 import taco.klkl.domain.category.domain.SubcategoryName;
-import taco.klkl.domain.category.dto.response.SubcategoryResponseDto;
+import taco.klkl.domain.category.dto.response.SubcategoryResponse;
 import taco.klkl.domain.category.exception.SubcategoryNotFoundException;
 
 @ExtendWith(MockitoExtension.class)
@@ -83,19 +83,19 @@ public class SubcategoryServiceTest {
 		List<SubcategoryName> subcategoryNames = Arrays.asList(subcategory1.getName(), subcategory2.getName(),
 			subcategory3.getName());
 		List<Subcategory> subcategories = Arrays.asList(subcategory1, subcategory2, subcategory3);
-		SubcategoryResponseDto subcategory1ResponseDto = SubcategoryResponseDto.from(subcategory1);
-		SubcategoryResponseDto subcategory2ResponseDto = SubcategoryResponseDto.from(subcategory2);
-		SubcategoryResponseDto subcategory3ResponseDto = SubcategoryResponseDto.from(subcategory3);
+		SubcategoryResponse subcategory1ResponseDto = SubcategoryResponse.from(subcategory1);
+		SubcategoryResponse subcategory2ResponseDto = SubcategoryResponse.from(subcategory2);
+		SubcategoryResponse subcategory3ResponseDto = SubcategoryResponse.from(subcategory3);
 
 		when(subcategoryRepository.findAllByNameIn(subcategoryNames)).thenReturn(subcategories);
 
 		// when
-		List<SubcategoryResponseDto> subcategoryResponseDtoList = subcategoryService
+		List<SubcategoryResponse> subcategoryResponseList = subcategoryService
 			.getSubcategoriesBySubcategoryNames(subcategoryNames);
 
 		// then
-		Assertions.assertThat(subcategoryResponseDtoList.size()).isEqualTo(subcategoryNames.size());
-		Assertions.assertThat(subcategoryResponseDtoList)
+		Assertions.assertThat(subcategoryResponseList.size()).isEqualTo(subcategoryNames.size());
+		Assertions.assertThat(subcategoryResponseList)
 			.containsExactly(subcategory1ResponseDto, subcategory2ResponseDto, subcategory3ResponseDto);
 	}
 }

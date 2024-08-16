@@ -21,8 +21,8 @@ import taco.klkl.domain.category.domain.Category;
 import taco.klkl.domain.category.domain.CategoryName;
 import taco.klkl.domain.category.domain.Subcategory;
 import taco.klkl.domain.category.domain.SubcategoryName;
-import taco.klkl.domain.category.dto.response.CategoryResponseDto;
-import taco.klkl.domain.category.dto.response.CategoryWithSubcategoryDto;
+import taco.klkl.domain.category.dto.response.CategoryResponse;
+import taco.klkl.domain.category.dto.response.CategoryWithSubcategoryResponse;
 import taco.klkl.domain.category.exception.CategoryNotFoundException;
 
 @ExtendWith(MockitoExtension.class)
@@ -52,7 +52,7 @@ class CategoryServiceTest {
 		when(categoryRepository.findAll()).thenReturn(categories);
 
 		// when
-		List<CategoryResponseDto> result = categoryService.getCategories();
+		List<CategoryResponse> result = categoryService.getCategories();
 
 		// then
 		assertNotNull(result);
@@ -75,7 +75,7 @@ class CategoryServiceTest {
 		when(mockCategory.getSubcategories()).thenReturn(subcategories);
 		when(mockCategory.getName()).thenReturn(CategoryName.FOOD);
 		when(categoryRepository.findById(categoryId)).thenReturn(Optional.of(mockCategory));
-		CategoryWithSubcategoryDto response = categoryService.getSubcategories(categoryId);
+		CategoryWithSubcategoryResponse response = categoryService.getSubcategories(categoryId);
 
 		//then
 		assertNotNull(response);
@@ -108,16 +108,16 @@ class CategoryServiceTest {
 		// given
 		List<CategoryName> categoryNames = Arrays.asList(CategoryName.CLOTHES, CategoryName.FOOD);
 		List<Category> categories = Arrays.asList(category, category2);
-		CategoryResponseDto category1ResponseDto = CategoryResponseDto.from(category);
-		CategoryResponseDto category2ResponseDto = CategoryResponseDto.from(category2);
+		CategoryResponse category1ResponseDto = CategoryResponse.from(category);
+		CategoryResponse category2ResponseDto = CategoryResponse.from(category2);
 
 		when(categoryRepository.findAllByNameIn(categoryNames)).thenReturn(categories);
 
 		// when
-		List<CategoryResponseDto> categoryResponseDtos = categoryService.getCategoriesByCategoryNames(categoryNames);
+		List<CategoryResponse> categoryResponses = categoryService.getCategoriesByCategoryNames(categoryNames);
 
 		// then
-		Assertions.assertThat(categoryResponseDtos.size()).isEqualTo(categoryNames.size());
-		Assertions.assertThat(categoryResponseDtos).containsExactly(category1ResponseDto, category2ResponseDto);
+		Assertions.assertThat(categoryResponses.size()).isEqualTo(categoryNames.size());
+		Assertions.assertThat(categoryResponses).containsExactly(category1ResponseDto, category2ResponseDto);
 	}
 }

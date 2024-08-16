@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
-import taco.klkl.domain.category.dto.response.FilterResponseDto;
+import taco.klkl.domain.category.dto.response.FilterResponse;
 import taco.klkl.domain.product.dao.ProductRepository;
 import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.product.domain.ProductFilter;
@@ -30,12 +30,12 @@ public class ProductUtil {
 		return productRepository.existsById(id);
 	}
 
-	public static Set<FilterResponseDto> createFiltersByProduct(final Product product) {
+	public static Set<FilterResponse> createFiltersByProduct(final Product product) {
 		return Optional.ofNullable(product.getProductFilters())
 			.map(productFilters -> productFilters.stream()
 				.map(ProductFilter::getFilter)
 				.filter(Objects::nonNull)
-				.map(FilterResponseDto::from)
+				.map(FilterResponse::from)
 				.collect(Collectors.toSet()))
 			.orElse(Collections.emptySet());
 	}
