@@ -19,15 +19,15 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import taco.klkl.domain.region.dao.CountryRepository;
 import taco.klkl.domain.region.domain.City;
+import taco.klkl.domain.region.domain.CityType;
 import taco.klkl.domain.region.domain.Country;
+import taco.klkl.domain.region.domain.CountryType;
 import taco.klkl.domain.region.domain.Currency;
+import taco.klkl.domain.region.domain.CurrencyType;
 import taco.klkl.domain.region.domain.Region;
+import taco.klkl.domain.region.domain.RegionType;
 import taco.klkl.domain.region.dto.response.CityResponse;
 import taco.klkl.domain.region.dto.response.CountryResponse;
-import taco.klkl.domain.region.domain.CityType;
-import taco.klkl.domain.region.domain.CountryType;
-import taco.klkl.domain.region.domain.CurrencyType;
-import taco.klkl.domain.region.domain.RegionType;
 import taco.klkl.domain.region.service.CountryService;
 
 @WebMvcTest(CountryController.class)

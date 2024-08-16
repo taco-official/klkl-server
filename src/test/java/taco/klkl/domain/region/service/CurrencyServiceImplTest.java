@@ -15,8 +15,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import taco.klkl.domain.region.dao.CurrencyRepository;
 import taco.klkl.domain.region.domain.Currency;
-import taco.klkl.domain.region.dto.response.CurrencyResponse;
 import taco.klkl.domain.region.domain.CurrencyType;
+import taco.klkl.domain.region.dto.response.CurrencyResponse;
 
 @ExtendWith(MockitoExtension.class)
 public class CurrencyServiceImplTest {

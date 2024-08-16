@@ -6,5 +6,5 @@ import taco.klkl.domain.search.dto.response.SearchResponse;
 
 @Service
 public interface SearchService {
-	SearchResponse getSearchResult(String queryParam);
+	SearchResponse findSearchResult(final String queryParam);
 }

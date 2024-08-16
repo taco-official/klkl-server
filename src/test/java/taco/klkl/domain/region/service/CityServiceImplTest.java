@@ -15,9 +15,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import taco.klkl.domain.region.dao.CityRepository;
 import taco.klkl.domain.region.domain.City;
+import taco.klkl.domain.region.domain.CityType;
 import taco.klkl.domain.region.domain.Country;
 import taco.klkl.domain.region.dto.response.CityResponse;
-import taco.klkl.domain.region.domain.CityType;
 
 @ExtendWith(MockitoExtension.class)
 public class CityServiceImplTest {

@@ -1,4 +1,4 @@
-package taco.klkl.domain.region.enums;
+package taco.klkl.domain.region.domain;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -6,8 +6,6 @@ import java.util.List;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
-import taco.klkl.domain.region.domain.CityType;
 
 class CityTypeTest {
 

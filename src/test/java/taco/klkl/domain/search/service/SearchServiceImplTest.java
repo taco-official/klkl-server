@@ -26,13 +26,13 @@ import taco.klkl.domain.product.domain.Rating;
 import taco.klkl.domain.product.dto.response.ProductSimpleResponse;
 import taco.klkl.domain.product.service.ProductService;
 import taco.klkl.domain.region.domain.City;
+import taco.klkl.domain.region.domain.CityType;
 import taco.klkl.domain.region.domain.Country;
+import taco.klkl.domain.region.domain.CountryType;
 import taco.klkl.domain.region.domain.Currency;
 import taco.klkl.domain.region.domain.Region;
 import taco.klkl.domain.region.dto.response.CityResponse;
 import taco.klkl.domain.region.dto.response.CountrySimpleResponse;
-import taco.klkl.domain.region.domain.CityType;
-import taco.klkl.domain.region.domain.CountryType;
 import taco.klkl.domain.region.service.CityService;
 import taco.klkl.domain.region.service.CountryService;
 import taco.klkl.domain.search.dto.response.SearchResponse;
@@ -85,7 +85,7 @@ class SearchServiceImplTest {
 
 	@Test
 	@DisplayName("SearchService 테스트")
-	void testGetSearchResult() {
+	void testFindSearchResult() {
 		// given
 		String queryParam = "Test";
 
@@ -104,7 +104,7 @@ class SearchServiceImplTest {
 		when(productService.getProductsByPartialName(queryParam)).thenReturn(mockProducts);
 
 		// when
-		SearchResponse result = searchService.getSearchResult(queryParam);
+		SearchResponse result = searchService.findSearchResult(queryParam);
 
 		// then
 		assertThat(result).isNotNull();

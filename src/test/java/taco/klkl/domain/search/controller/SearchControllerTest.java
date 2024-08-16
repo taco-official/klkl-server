@@ -24,13 +24,13 @@ import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.product.domain.Rating;
 import taco.klkl.domain.product.dto.response.ProductSimpleResponse;
 import taco.klkl.domain.region.domain.City;
+import taco.klkl.domain.region.domain.CityType;
 import taco.klkl.domain.region.domain.Country;
+import taco.klkl.domain.region.domain.CountryType;
 import taco.klkl.domain.region.domain.Currency;
 import taco.klkl.domain.region.domain.Region;
 import taco.klkl.domain.region.dto.response.CityResponse;
 import taco.klkl.domain.region.dto.response.CountrySimpleResponse;
-import taco.klkl.domain.region.domain.CityType;
-import taco.klkl.domain.region.domain.CountryType;
 import taco.klkl.domain.search.dto.response.SearchResponse;
 import taco.klkl.domain.search.service.SearchService;
 import taco.klkl.domain.user.domain.User;
@@ -83,11 +83,11 @@ public class SearchControllerTest {
 	}
 
 	@Test
-	void testGetSearchByQuery() throws Exception {
+	void testFindSearchByQuery() throws Exception {
 		// given
 		String query = "test";
 
-		when(searchService.getSearchResult(query)).thenReturn(mockResponse);
+		when(searchService.findSearchResult(query)).thenReturn(mockResponse);
 
 		// when & then
 		mockMvc.perform(get("/v1/search")

@@ -10,8 +10,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import taco.klkl.domain.region.dao.CityRepository;
 import taco.klkl.domain.region.domain.City;
-import taco.klkl.domain.region.dto.response.CityResponse;
 import taco.klkl.domain.region.domain.CityType;
+import taco.klkl.domain.region.dto.response.CityResponse;
 
 @Slf4j
 @Primary

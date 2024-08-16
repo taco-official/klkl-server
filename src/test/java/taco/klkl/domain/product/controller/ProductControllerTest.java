@@ -35,9 +35,9 @@ import taco.klkl.domain.product.dto.request.ProductSortOptions;
 import taco.klkl.domain.product.dto.response.ProductDetailResponse;
 import taco.klkl.domain.product.dto.response.ProductSimpleResponse;
 import taco.klkl.domain.product.service.ProductService;
+import taco.klkl.domain.region.domain.CountryType;
 import taco.klkl.domain.region.dto.response.CityResponse;
 import taco.klkl.domain.region.dto.response.CurrencyResponse;
-import taco.klkl.domain.region.domain.CountryType;
 import taco.klkl.domain.user.dto.response.UserDetailResponse;
 import taco.klkl.global.common.response.PagedResponseDto;
 

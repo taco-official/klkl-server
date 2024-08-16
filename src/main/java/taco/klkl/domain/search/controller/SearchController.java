@@ -22,12 +22,9 @@ public class SearchController {
 	private final SearchService searchService;
 
 	@GetMapping()
-	public SearchResponse getSearchByQuery(
-		@RequestParam(value = "q")
-		@NotBlank
-		String query
+	public SearchResponse findSearchByQuery(
+		@RequestParam(value = "q") @NotBlank String query
 	) {
-
-		return searchService.getSearchResult(query);
+		return searchService.findSearchResult(query);
 	}
 }

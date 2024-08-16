@@ -18,8 +18,8 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import taco.klkl.domain.region.dao.CurrencyRepository;
 import taco.klkl.domain.region.domain.Currency;
-import taco.klkl.domain.region.dto.response.CurrencyResponse;
 import taco.klkl.domain.region.domain.CurrencyType;
+import taco.klkl.domain.region.dto.response.CurrencyResponse;
 import taco.klkl.domain.region.service.CurrencyService;
 
 @WebMvcTest(CurrencyController.class)

@@ -11,10 +11,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import taco.klkl.domain.region.dao.CountryRepository;
 import taco.klkl.domain.region.domain.Country;
+import taco.klkl.domain.region.domain.CountryType;
 import taco.klkl.domain.region.dto.response.CityResponse;
 import taco.klkl.domain.region.dto.response.CountryResponse;
 import taco.klkl.domain.region.dto.response.CountrySimpleResponse;
-import taco.klkl.domain.region.domain.CountryType;
 import taco.klkl.domain.region.exception.CountryNotFoundException;
 
 @Slf4j

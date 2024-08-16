@@ -16,11 +16,11 @@ public record SearchResponse(
 	List<ProductSimpleResponse> products
 ) {
 	public static SearchResponse of(
-		List<CountrySimpleResponse> countries,
-		List<CityResponse> cities,
-		List<CategoryResponse> categories,
-		List<SubcategoryResponse> subcategories,
-		List<ProductSimpleResponse> products
+		final List<CountrySimpleResponse> countries,
+		final List<CityResponse> cities,
+		final List<CategoryResponse> categories,
+		final List<SubcategoryResponse> subcategories,
+		final List<ProductSimpleResponse> products
 	) {
 		return new SearchResponse(countries, cities, categories, subcategories, products);
 	}

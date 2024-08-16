@@ -29,7 +29,7 @@ public class SearchIntegrationTest {
 	void getSearchTest() throws Exception {
 		// given
 		String query = "리";
-		SearchResponse searchResponse = searchService.getSearchResult(query);
+		SearchResponse searchResponse = searchService.findSearchResult(query);
 
 		// when & then
 		mockMvc.perform(get("/v1/search")

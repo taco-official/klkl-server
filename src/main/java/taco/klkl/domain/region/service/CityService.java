@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import taco.klkl.domain.region.dto.response.CityResponse;
 import taco.klkl.domain.region.domain.CityType;
+import taco.klkl.domain.region.dto.response.CityResponse;
 
 @Service
 public interface CityService {

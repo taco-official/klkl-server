@@ -12,9 +12,9 @@ import lombok.extern.slf4j.Slf4j;
 import taco.klkl.domain.region.dao.RegionRepository;
 import taco.klkl.domain.region.domain.Country;
 import taco.klkl.domain.region.domain.Region;
+import taco.klkl.domain.region.domain.RegionType;
 import taco.klkl.domain.region.dto.response.CountryResponse;
 import taco.klkl.domain.region.dto.response.RegionResponse;
-import taco.klkl.domain.region.domain.RegionType;
 import taco.klkl.domain.region.exception.RegionNotFoundException;
 
 @Slf4j
