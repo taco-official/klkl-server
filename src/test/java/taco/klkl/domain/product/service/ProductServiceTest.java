@@ -62,11 +62,13 @@ import taco.klkl.domain.region.enums.CountryType;
 import taco.klkl.domain.region.enums.CurrencyType;
 import taco.klkl.domain.region.enums.RegionType;
 import taco.klkl.domain.region.service.CityService;
+import taco.klkl.domain.region.service.CountryService;
 import taco.klkl.domain.region.service.CurrencyService;
 import taco.klkl.domain.user.domain.User;
 import taco.klkl.global.common.constants.UserConstants;
 import taco.klkl.global.common.response.PagedResponseDto;
 import taco.klkl.global.util.CityUtil;
+import taco.klkl.global.util.CurrencyUtil;
 import taco.klkl.global.util.FilterUtil;
 import taco.klkl.global.util.SubcategoryUtil;
 import taco.klkl.global.util.UserUtil;
@@ -99,6 +101,9 @@ class ProductServiceTest {
 
 	@Mock
 	private CityUtil cityUtil;
+
+	@Mock
+	private CurrencyUtil currencyUtil;
 
 	@InjectMocks
 	private ProductService productService;
@@ -318,7 +323,7 @@ class ProductServiceTest {
 		when(userUtil.findTestUser()).thenReturn(user);
 		when(cityUtil.getCityEntityById(1L)).thenReturn(city);
 		when(subcategoryUtil.getSubcategoryEntityById(1L)).thenReturn(subcategory);
-		when(currencyService.getCurrencyEntityById(1L)).thenReturn(currency);
+		when(currencyUtil.getCurrencyEntityById(1L)).thenReturn(currency);
 
 		// save 메서드 호출 시 ID를 설정하고 저장된 객체를 반환하도록 설정
 		when(productRepository.save(any(Product.class))).thenAnswer(invocation -> {
@@ -355,7 +360,7 @@ class ProductServiceTest {
 		when(productRepository.findById(1L)).thenReturn(Optional.of(testProduct));
 		when(cityUtil.getCityEntityById(1L)).thenReturn(city);
 		when(subcategoryUtil.getSubcategoryEntityById(1L)).thenReturn(subcategory);
-		when(currencyService.getCurrencyEntityById(1L)).thenReturn(currency);
+		when(currencyUtil.getCurrencyEntityById(1L)).thenReturn(currency);
 
 		// When
 		ProductDetailResponse result = productService.updateProduct(1L, requestDto);

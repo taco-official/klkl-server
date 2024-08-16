@@ -9,7 +9,7 @@ import taco.klkl.domain.region.dto.response.CurrencyResponse;
 
 @Service
 public interface CurrencyService {
+
 	List<CurrencyResponse> getAllCurrencies();
 
-	Currency getCurrencyEntityById(final Long id);
 }

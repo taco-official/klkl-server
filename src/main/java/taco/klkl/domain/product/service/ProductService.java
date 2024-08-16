@@ -52,6 +52,7 @@ import taco.klkl.domain.user.domain.User;
 import taco.klkl.global.common.constants.ProductConstants;
 import taco.klkl.global.common.response.PagedResponseDto;
 import taco.klkl.global.util.CityUtil;
+import taco.klkl.global.util.CurrencyUtil;
 import taco.klkl.global.util.FilterUtil;
 import taco.klkl.global.util.SubcategoryUtil;
 import taco.klkl.global.util.UserUtil;
@@ -71,6 +72,7 @@ public class ProductService {
 	private final FilterUtil filterUtil;
 	private final SubcategoryUtil subcategoryUtil;
 	private final CityUtil cityUtil;
+	private final CurrencyUtil currencyUtil;
 
 	public PagedResponseDto<ProductSimpleResponse> getProductsByFilterOptions(
 		final Pageable pageable,
@@ -281,7 +283,7 @@ public class ProductService {
 	}
 
 	private Currency getCurrencyEntity(final Long currencyId) throws CurrencyNotFoundException {
-		return currencyService.getCurrencyEntityById(currencyId);
+		return currencyUtil.getCurrencyEntityById(currencyId);
 	}
 
 	private void validateFilterOptions(final ProductFilterOptions filterOptions) {

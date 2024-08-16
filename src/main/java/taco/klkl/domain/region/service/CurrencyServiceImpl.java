@@ -36,11 +36,4 @@ public class CurrencyServiceImpl implements CurrencyService {
 			.map(CurrencyResponse::from)
 			.toList();
 	}
-
-	@Override
-	public Currency getCurrencyEntityById(final Long id) {
-
-		return currencyRepository.findById(id)
-			.orElseThrow(CurrencyNotFoundException::new);
-	}
 }
