@@ -8,8 +8,8 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import taco.klkl.domain.comment.dao.CommentRepository;
 import taco.klkl.domain.comment.domain.Comment;
-import taco.klkl.domain.comment.dto.request.CommentCreateUpdateRequestDto;
-import taco.klkl.domain.comment.dto.response.CommentResponseDto;
+import taco.klkl.domain.comment.dto.request.CommentCreateUpdateRequest;
+import taco.klkl.domain.comment.dto.response.CommentResponse;
 import taco.klkl.domain.comment.exception.CommentNotFoundException;
 import taco.klkl.domain.comment.exception.CommentProductNotMatch;
 import taco.klkl.domain.notification.service.NotificationService;
@@ -30,30 +30,30 @@ public class CommentService {
 	private final UserUtil userUtil;
 	private final ProductUtil productUtil;
 
-	public List<CommentResponseDto> getComments(final Long productId) {
+	public List<CommentResponse> getComments(final Long productId) {
 		validateProductId(productId);
 		final List<Comment> comments = commentRepository.findAllByProduct_Id(productId);
 		return comments.stream()
-			.map(CommentResponseDto::from)
+			.map(CommentResponse::from)
 			.toList();
 	}
 
 	@Transactional
-	public CommentResponseDto createComment(
+	public CommentResponse createComment(
 		final Long productId,
-		final CommentCreateUpdateRequestDto commentCreateRequestDto
+		final CommentCreateUpdateRequest commentCreateRequestDto
 	) {
 		final Comment comment = createCommentEntity(productId, commentCreateRequestDto);
 		commentRepository.save(comment);
 		notificationService.createNotification(comment);
-		return CommentResponseDto.from(comment);
+		return CommentResponse.from(comment);
 	}
 
 	@Transactional
-	public CommentResponseDto updateComment(
+	public CommentResponse updateComment(
 		final Long productId,
 		final Long commentId,
-		final CommentCreateUpdateRequestDto commentUpdateRequestDto
+		final CommentCreateUpdateRequest commentUpdateRequestDto
 	) {
 		validateProductId(productId);
 		final Comment comment = commentRepository.findById(commentId)
@@ -61,7 +61,7 @@ public class CommentService {
 		validateSameProductId(comment, productId);
 		updateCommentEntity(comment, commentUpdateRequestDto);
 
-		return CommentResponseDto.from(comment);
+		return CommentResponse.from(comment);
 	}
 
 	@Transactional
@@ -78,7 +78,7 @@ public class CommentService {
 
 	private Comment createCommentEntity(
 		final Long productId,
-		final CommentCreateUpdateRequestDto commentCreateUpdateRequestDto
+		final CommentCreateUpdateRequest commentCreateUpdateRequest
 	) {
 		//TODO: getCurrentUser() 함수로 교채
 		final User user = userUtil.findTestUser();
@@ -86,15 +86,15 @@ public class CommentService {
 		return Comment.of(
 			product,
 			user,
-			commentCreateUpdateRequestDto.content()
+			commentCreateUpdateRequest.content()
 		);
 	}
 
 	private void updateCommentEntity(
 		final Comment comment,
-		final CommentCreateUpdateRequestDto commentCreateUpdateRequestDto
+		final CommentCreateUpdateRequest commentCreateUpdateRequest
 	) {
-		comment.update(commentCreateUpdateRequestDto.content());
+		comment.update(commentCreateUpdateRequest.content());
 	}
 
 	private void validateProductId(final Long productId) {

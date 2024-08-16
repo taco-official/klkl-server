@@ -18,8 +18,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import taco.klkl.domain.comment.dto.request.CommentCreateUpdateRequestDto;
-import taco.klkl.domain.comment.dto.response.CommentResponseDto;
+import taco.klkl.domain.comment.dto.request.CommentCreateUpdateRequest;
+import taco.klkl.domain.comment.dto.response.CommentResponse;
 import taco.klkl.domain.comment.service.CommentService;
 import taco.klkl.domain.product.service.ProductService;
 
@@ -33,16 +33,16 @@ public class CommentController {
 
 	@GetMapping
 	@Operation(summary = "댓글 목록 조회", description = "상품 목록에 대한 댓글 목록을 반환합니다.")
-	public List<CommentResponseDto> getComments(@PathVariable final Long productId) {
+	public List<CommentResponse> getComments(@PathVariable final Long productId) {
 		return commentService.getComments(productId);
 	}
 
 	@PostMapping
 	@Operation(summary = "댓글 등록", description = "작성한 댓글을 저장합니다.")
 	@ResponseStatus(HttpStatus.CREATED)
-	public CommentResponseDto addComment(
+	public CommentResponse addComment(
 		@PathVariable final Long productId,
-		@RequestBody @Valid final CommentCreateUpdateRequestDto commentCreateRequestDto
+		@RequestBody @Valid final CommentCreateUpdateRequest commentCreateRequestDto
 	) {
 		return commentService.createComment(
 			productId,
@@ -53,10 +53,10 @@ public class CommentController {
 	@PutMapping("/{commentId}")
 	@Operation(summary = "댓글 수정", description = "작성한 댓글을 수정합니다.")
 	@ResponseStatus(HttpStatus.OK)
-	public CommentResponseDto updateComment(
+	public CommentResponse updateComment(
 		@PathVariable final Long productId,
 		@PathVariable final Long commentId,
-		@RequestBody @Valid CommentCreateUpdateRequestDto commentUpdateRequestDto
+		@RequestBody @Valid CommentCreateUpdateRequest commentUpdateRequestDto
 	) {
 		return commentService.updateComment(
 			productId,

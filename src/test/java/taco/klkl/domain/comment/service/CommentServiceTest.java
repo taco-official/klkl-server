@@ -17,8 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import taco.klkl.domain.comment.dao.CommentRepository;
 import taco.klkl.domain.comment.domain.Comment;
-import taco.klkl.domain.comment.dto.request.CommentCreateUpdateRequestDto;
-import taco.klkl.domain.comment.dto.response.CommentResponseDto;
+import taco.klkl.domain.comment.dto.request.CommentCreateUpdateRequest;
+import taco.klkl.domain.comment.dto.response.CommentResponse;
 import taco.klkl.domain.comment.exception.CommentNotFoundException;
 import taco.klkl.domain.comment.exception.CommentProductNotMatch;
 import taco.klkl.domain.notification.service.NotificationService;
@@ -66,11 +66,11 @@ public class CommentServiceTest {
 
 	private final Product product = mock(Product.class);
 
-	private final CommentCreateUpdateRequestDto commentCreateRequestDto = new CommentCreateUpdateRequestDto(
+	private final CommentCreateUpdateRequest commentCreateRequestDto = new CommentCreateUpdateRequest(
 		"이거 진짜에요?"
 	);
 
-	private final CommentCreateUpdateRequestDto commentUpdateRequestDto = new CommentCreateUpdateRequestDto(
+	private final CommentCreateUpdateRequest commentUpdateRequestDto = new CommentCreateUpdateRequest(
 		"윤상정은 바보다, 반박시 님 말이 틀림."
 	);
 
@@ -88,7 +88,7 @@ public class CommentServiceTest {
 		when(commentRepository.findAllByProduct_Id(productId)).thenReturn(comments);
 
 		//when
-		List<CommentResponseDto> result = commentService.getComments(productId);
+		List<CommentResponse> result = commentService.getComments(productId);
 
 		//then
 		assertThat(result.get(0).commentId()).isEqualTo(comment1.getId());
@@ -112,7 +112,7 @@ public class CommentServiceTest {
 		when(commentRepository.save(any(Comment.class))).thenReturn(comment);
 
 		//when
-		CommentResponseDto result = commentService.createComment(productId, commentCreateRequestDto);
+		CommentResponse result = commentService.createComment(productId, commentCreateRequestDto);
 
 		//then
 		assertThat(result.commentId()).isEqualTo(comment.getId());
@@ -134,7 +134,7 @@ public class CommentServiceTest {
 		when(commentRepository.findById(commentId)).thenReturn(Optional.of(comment));
 
 		//when
-		CommentResponseDto result = commentService.updateComment(productId, commentId, commentUpdateRequestDto);
+		CommentResponse result = commentService.updateComment(productId, commentId, commentUpdateRequestDto);
 
 		//then
 		assertThat(result.commentId()).isEqualTo(comment.getId());

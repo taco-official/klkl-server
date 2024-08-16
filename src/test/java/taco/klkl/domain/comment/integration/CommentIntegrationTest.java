@@ -17,8 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import taco.klkl.domain.comment.dto.request.CommentCreateUpdateRequestDto;
-import taco.klkl.domain.comment.dto.response.CommentResponseDto;
+import taco.klkl.domain.comment.dto.request.CommentCreateUpdateRequest;
+import taco.klkl.domain.comment.dto.response.CommentResponse;
 import taco.klkl.domain.comment.service.CommentService;
 import taco.klkl.global.error.exception.ErrorCode;
 
@@ -38,11 +38,11 @@ public class CommentIntegrationTest {
 	private final Long productId = 390L;
 	private final Long commentId = 500L;
 
-	private final CommentCreateUpdateRequestDto commentCreateRequestDto = new CommentCreateUpdateRequestDto(
+	private final CommentCreateUpdateRequest commentCreateRequestDto = new CommentCreateUpdateRequest(
 		"개추 ^^"
 	);
 
-	private final CommentCreateUpdateRequestDto commentUpdateRequestDto = new CommentCreateUpdateRequestDto(
+	private final CommentCreateUpdateRequest commentUpdateRequestDto = new CommentCreateUpdateRequest(
 		"윤상정은 바보다, 반박시 님 말이 틀림."
 	);
 
@@ -50,7 +50,7 @@ public class CommentIntegrationTest {
 	@DisplayName("상품에 있는 모든 댓글 반환 통합 테스트")
 	public void testGetComment() throws Exception {
 		//given
-		List<CommentResponseDto> commentResponseDtos = commentService.getComments(productId);
+		List<CommentResponse> commentResponses = commentService.getComments(productId);
 
 		//when & then
 		mockMvc.perform(get("/v1/products/{productId}/comments", productId)
@@ -58,7 +58,7 @@ public class CommentIntegrationTest {
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
 			.andExpect(jsonPath("$.code", is("C000")))
-			.andExpect(jsonPath("$.data", hasSize(commentResponseDtos.size())));
+			.andExpect(jsonPath("$.data", hasSize(commentResponses.size())));
 	}
 
 	@Test

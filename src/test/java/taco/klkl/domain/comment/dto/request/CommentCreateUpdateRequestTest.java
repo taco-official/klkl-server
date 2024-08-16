@@ -16,7 +16,7 @@ import jakarta.validation.Validator;
 import jakarta.validation.ValidatorFactory;
 import taco.klkl.global.common.constants.CommentValidationMessages;
 
-public class CommentCreateUpdateRequestDtoTest {
+public class CommentCreateUpdateRequestTest {
 
 	private Validator validator;
 
@@ -30,12 +30,12 @@ public class CommentCreateUpdateRequestDtoTest {
 	@DisplayName("내용이 널값일 경우")
 	public void testNullContent() {
 		//given
-		final CommentCreateUpdateRequestDto requestDto = new CommentCreateUpdateRequestDto(
+		final CommentCreateUpdateRequest requestDto = new CommentCreateUpdateRequest(
 			null
 		);
 
 		//when & then
-		Set<ConstraintViolation<CommentCreateUpdateRequestDto>> violations = validator.validate(requestDto);
+		Set<ConstraintViolation<CommentCreateUpdateRequest>> violations = validator.validate(requestDto);
 		boolean foundNotNullMessage = violations.stream()
 			.anyMatch(violation -> violation.getMessage().equals(CommentValidationMessages.CONTENT_NOT_NULL));
 
@@ -46,12 +46,12 @@ public class CommentCreateUpdateRequestDtoTest {
 	@DisplayName("내용이 빈칸일 경우")
 	public void testBlankContent() {
 		//given
-		final CommentCreateUpdateRequestDto requestDto = new CommentCreateUpdateRequestDto(
+		final CommentCreateUpdateRequest requestDto = new CommentCreateUpdateRequest(
 			" "
 		);
 
 		//when & then
-		Set<ConstraintViolation<CommentCreateUpdateRequestDto>> violations = validator.validate(requestDto);
+		Set<ConstraintViolation<CommentCreateUpdateRequest>> violations = validator.validate(requestDto);
 		boolean foundNotNullMessage = violations.stream()
 			.anyMatch(violation -> violation.getMessage().equals(CommentValidationMessages.CONTENT_NOT_BLANK));
 
@@ -64,12 +64,12 @@ public class CommentCreateUpdateRequestDtoTest {
 	public void testBigContent(int length) {
 		//given
 		String longContent = "hello".repeat(length);
-		final CommentCreateUpdateRequestDto requestDto = new CommentCreateUpdateRequestDto(
+		final CommentCreateUpdateRequest requestDto = new CommentCreateUpdateRequest(
 			longContent
 		);
 
 		//when & then
-		Set<ConstraintViolation<CommentCreateUpdateRequestDto>> violations = validator.validate(requestDto);
+		Set<ConstraintViolation<CommentCreateUpdateRequest>> violations = validator.validate(requestDto);
 		boolean foundNotNullMessage = violations.stream()
 			.anyMatch(violation -> violation.getMessage().equals(CommentValidationMessages.CONTENT_SIZE));
 

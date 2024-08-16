@@ -24,8 +24,8 @@ import taco.klkl.domain.category.domain.CategoryName;
 import taco.klkl.domain.category.domain.Subcategory;
 import taco.klkl.domain.category.domain.SubcategoryName;
 import taco.klkl.domain.comment.domain.Comment;
-import taco.klkl.domain.comment.dto.request.CommentCreateUpdateRequestDto;
-import taco.klkl.domain.comment.dto.response.CommentResponseDto;
+import taco.klkl.domain.comment.dto.request.CommentCreateUpdateRequest;
+import taco.klkl.domain.comment.dto.response.CommentResponse;
 import taco.klkl.domain.comment.exception.CommentNotFoundException;
 import taco.klkl.domain.comment.exception.CommentProductNotMatch;
 import taco.klkl.domain.comment.service.CommentService;
@@ -116,11 +116,11 @@ public class CommentControllerTest {
 	private final Comment comment1 = Comment.of(product, user, "개추 ^^");
 	private final Comment comment2 = Comment.of(product, user, "안녕하세요");
 
-	private final CommentCreateUpdateRequestDto commentCreateRequestDto = new CommentCreateUpdateRequestDto(
+	private final CommentCreateUpdateRequest commentCreateRequestDto = new CommentCreateUpdateRequest(
 		"개추 ^^"
 	);
 
-	private final CommentCreateUpdateRequestDto commentUpdateRequestDto = new CommentCreateUpdateRequestDto(
+	private final CommentCreateUpdateRequest commentUpdateRequestDto = new CommentCreateUpdateRequest(
 		"윤상정은 바보다, 반박시 님 말이 틀림."
 	);
 
@@ -128,8 +128,8 @@ public class CommentControllerTest {
 	@DisplayName("상품에 있는 모든 댓글 반환 테스트")
 	public void testGetComment() throws Exception {
 		//given
-		List<CommentResponseDto> responseDtos = Arrays.asList(CommentResponseDto.from(comment1),
-			CommentResponseDto.from(comment2));
+		List<CommentResponse> responseDtos = Arrays.asList(CommentResponse.from(comment1),
+			CommentResponse.from(comment2));
 
 		when(commentService.getComments(productId)).thenReturn(responseDtos);
 
@@ -153,9 +153,9 @@ public class CommentControllerTest {
 	@DisplayName("댓글 등록 성공 테스트")
 	public void testCreateComment() throws Exception {
 		//given
-		CommentResponseDto responseDto = CommentResponseDto.from(comment1);
+		CommentResponse responseDto = CommentResponse.from(comment1);
 
-		when(commentService.createComment(any(Long.class), any(CommentCreateUpdateRequestDto.class))).thenReturn(
+		when(commentService.createComment(any(Long.class), any(CommentCreateUpdateRequest.class))).thenReturn(
 			responseDto);
 
 		//when & then
@@ -181,7 +181,7 @@ public class CommentControllerTest {
 
 		doThrow(new ProductNotFoundException())
 			.when(commentService)
-			.createComment(any(Long.class), any(CommentCreateUpdateRequestDto.class));
+			.createComment(any(Long.class), any(CommentCreateUpdateRequest.class));
 
 		//when & then
 		mockMvc.perform(post("/v1/products/{wrongProductId}/comments", wrongProductId)
@@ -197,12 +197,12 @@ public class CommentControllerTest {
 	@DisplayName("댓글 수정 성공 테스트")
 	public void testUpdateComment() throws Exception {
 		///given
-		CommentResponseDto responseDto = CommentResponseDto.from(comment1);
+		CommentResponse responseDto = CommentResponse.from(comment1);
 
 		when(commentService.updateComment(
 			any(Long.class),
 			any(Long.class),
-			any(CommentCreateUpdateRequestDto.class)))
+			any(CommentCreateUpdateRequest.class)))
 			.thenReturn(responseDto);
 
 		//when & then
@@ -226,7 +226,7 @@ public class CommentControllerTest {
 		///given
 		Long wrongCommentId = 2L;
 
-		when(commentService.updateComment(any(Long.class), any(Long.class), any(CommentCreateUpdateRequestDto.class)))
+		when(commentService.updateComment(any(Long.class), any(Long.class), any(CommentCreateUpdateRequest.class)))
 			.thenThrow(new CommentNotFoundException());
 
 		//when & then
@@ -248,7 +248,7 @@ public class CommentControllerTest {
 		//given
 		Long wrongProductId = 2L;
 
-		when(commentService.updateComment(any(Long.class), any(Long.class), any(CommentCreateUpdateRequestDto.class)))
+		when(commentService.updateComment(any(Long.class), any(Long.class), any(CommentCreateUpdateRequest.class)))
 			.thenThrow(new ProductNotFoundException());
 
 		//when & then
@@ -269,7 +269,7 @@ public class CommentControllerTest {
 	public void testUpdateCommentWhenExistProductButNotMatchWithComment() throws Exception {
 		//given
 
-		when(commentService.updateComment(any(Long.class), any(Long.class), any(CommentCreateUpdateRequestDto.class)))
+		when(commentService.updateComment(any(Long.class), any(Long.class), any(CommentCreateUpdateRequest.class)))
 			.thenThrow(new CommentProductNotMatch());
 
 		//when & then
