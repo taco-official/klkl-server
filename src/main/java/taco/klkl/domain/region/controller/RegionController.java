@@ -24,19 +24,20 @@ public class RegionController {
 
 	private final RegionService regionService;
 
-	@Operation(summary = "모든 지역 조회", description = "모든 지역을 조회합니다.")
 	@GetMapping()
+	@Operation(summary = "모든 지역 조회", description = "모든 지역을 조회합니다.")
 	public List<RegionResponse> findAllRegions() {
 		return regionService.findAllRegions();
 	}
 
-	@Operation(summary = "지역 하나 조회", description = "regionId로 특정 지역을 조회합니다.")
 	@GetMapping("/{regionId}")
+	@Operation(summary = "지역 하나 조회", description = "regionId로 특정 지역을 조회합니다.")
 	public RegionResponse findRegionById(@PathVariable final Long regionId) {
 		return regionService.findRegionById(regionId);
 	}
 
 	@GetMapping("/{regionId}/countries")
+	@Operation(summary = "지역의 국가 목록 조회", description = "특정 지역의 국가 목록을 조회합니다.")
 	public List<CountryResponse> findCountriesByRegionId(@PathVariable final Long regionId) {
 		return regionService.findCountriesByRegionId(regionId);
 	}

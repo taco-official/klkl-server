@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,11 +23,13 @@ public class LikeController {
 	private final LikeService likeService;
 
 	@PostMapping
+	@Operation(summary = "좋아요 누르기", description = "상품에 좋아요를 누릅니다.")
 	public LikeResponse addLike(@PathVariable final Long productId) {
 		return likeService.createLike(productId);
 	}
 
 	@DeleteMapping
+	@Operation(summary = "좋아요 취소", description = "상품에 누른 좋아요를 취소합니다.")
 	public LikeResponse removeLike(@PathVariable final Long productId) {
 		return likeService.deleteLike(productId);
 	}

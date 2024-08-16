@@ -26,7 +26,7 @@ public class TagController {
 	private final SubcategoryTagService subcategoryTagService;
 
 	@GetMapping
-	@Operation(description = "Subcategory 포함된 Tag 반환")
+	@Operation(summary = "선택된 소분류의 태그 목록 조회", description = "Subcategory 포함된 Tag 반환")
 	public List<SubcategoryWithTagsResponse> findAllTagsBySubcategoryIds(
 		@RequestParam(value = "subcategory_id") List<Long> subcategoryIds) {
 		final List<Subcategory> subcategoryList = subcategoryService.findSubcategoriesBySubcategoryIds(subcategoryIds);
