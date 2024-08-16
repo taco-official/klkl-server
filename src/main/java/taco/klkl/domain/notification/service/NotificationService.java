@@ -9,6 +9,7 @@ import taco.klkl.domain.notification.dto.response.NotificationResponse;
 
 @Service
 public interface NotificationService {
+
 	List<NotificationResponse> findAllNotifications();
 
 	List<NotificationResponse> readAllNotifications();

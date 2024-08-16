@@ -23,6 +23,7 @@ import taco.klkl.global.common.constants.NotificationConstants;
 @DynamicInsert
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Notification {
+
 	@Id
 	@Column(name = "notification_id")
 	@GeneratedValue(strategy = GenerationType.AUTO)
