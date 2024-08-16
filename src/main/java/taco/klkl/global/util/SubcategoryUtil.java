@@ -13,7 +13,7 @@ public class SubcategoryUtil {
 
 	private final SubcategoryRepository subcategoryRepository;
 
-	public Subcategory getSubcategoryEntityById(Long id) {
+	public Subcategory getSubcategoryEntityById(final Long id) {
 		return subcategoryRepository.findById(id)
 			.orElseThrow(SubcategoryNotFoundException::new);
 	}

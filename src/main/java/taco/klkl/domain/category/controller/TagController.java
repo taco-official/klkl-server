@@ -12,7 +12,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import taco.klkl.domain.category.domain.Subcategory;
-import taco.klkl.domain.category.dto.response.TagWithSubcategoryResponse;
+import taco.klkl.domain.category.dto.response.SubcategoryWithTagsResponse;
 import taco.klkl.domain.category.service.SubcategoryService;
 import taco.klkl.domain.category.service.SubcategoryTagService;
 
@@ -27,9 +27,9 @@ public class TagController {
 
 	@GetMapping
 	@Operation(description = "Subcategory 포함된 Tag 반환")
-	public List<TagWithSubcategoryResponse> getTagsBySubcategoryIds(
+	public List<SubcategoryWithTagsResponse> findAllTagsBySubcategoryIds(
 		@RequestParam("subcategories") List<Long> subcategoryIds) {
-		List<Subcategory> subcategoryList = subcategoryService.getSubcategoryList(subcategoryIds);
-		return subcategoryTagService.getTagsBySubcategoryList(subcategoryList);
+		List<Subcategory> subcategoryList = subcategoryService.findSubcategoriesBySubcategoryIds(subcategoryIds);
+		return subcategoryTagService.findSubcategoryTagsBySubcategoryList(subcategoryList);
 	}
 }

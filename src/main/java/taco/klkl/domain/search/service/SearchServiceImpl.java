@@ -62,15 +62,15 @@ public class SearchServiceImpl implements SearchService {
 	}
 
 	private List<CategoryResponse> getCategoriesByQueryParam(final String queryParam) {
-		final List<CategoryName> categoryNames = CategoryName.getCategoryNamesByPartialString(queryParam);
+		final List<CategoryName> categoryNames = CategoryName.findByPartialString(queryParam);
 
-		return categoryService.getCategoriesByCategoryNames(categoryNames);
+		return categoryService.findCategoriesByCategoryNames(categoryNames);
 	}
 
 	private List<SubcategoryResponse> getSubcategoriesByQueryParam(final String queryParam) {
-		final List<SubcategoryName> subcategoryNames = SubcategoryName.getSubcategoryNamesByPartialString(queryParam);
+		final List<SubcategoryName> subcategoryNames = SubcategoryName.findByPartialString(queryParam);
 
-		return subcategoryService.getSubcategoriesBySubcategoryNames(subcategoryNames);
+		return subcategoryService.findSubcategoriesBySubcategoryNames(subcategoryNames);
 	}
 
 	private List<ProductSimpleResponse> getProductsByQueryParam(final String queryParam) {

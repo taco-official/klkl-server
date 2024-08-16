@@ -35,7 +35,7 @@ class CategoryIntegrationTest {
 	@DisplayName("카테고리 목록 반환 API 통합 Test")
 	void testGetAllCategories() throws Exception {
 		// given
-		List<CategoryResponse> categoryResponse = categoryService.getCategories();
+		List<CategoryResponse> categoryResponse = categoryService.findAllCategories();
 
 		//then
 		mockMvc.perform(get("/v1/categories")
@@ -50,7 +50,8 @@ class CategoryIntegrationTest {
 	@DisplayName("valid한 id값이 들어왔을 때 반환값이 제대로 전달되는지 테스트")
 	public void testGetCategoriesWithValidId() throws Exception {
 		//given
-		CategoryWithSubcategoryResponse categoryWithSubcategoryResponse = categoryService.getSubcategories(300L);
+		CategoryWithSubcategoryResponse categoryWithSubcategoryResponse =
+			categoryService.findSubCategoriesByCategoryId(300L);
 
 		//when, then
 		mockMvc.perform(get("/v1/categories/300/subcategories")

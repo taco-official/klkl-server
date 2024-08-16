@@ -26,15 +26,13 @@ public class CategoryController {
 
 	@GetMapping
 	@Operation(description = "전체 Category 반환")
-	public List<CategoryResponse> getCategory() {
-		List<CategoryResponse> categoryResponse = categoryService.getCategories();
-		return categoryResponse;
+	public List<CategoryResponse> findAllCategories() {
+		return categoryService.findAllCategories();
 	}
 
-	@GetMapping("/{id}/subcategories")
+	@GetMapping("/{categoryId}/subcategories")
 	@Operation(description = "Category에 포함된 Subcategory 반환")
-	public CategoryWithSubcategoryResponse getSubCategory(@PathVariable Long id) {
-		CategoryWithSubcategoryResponse categoryWithSubcategoryResponse = categoryService.getSubcategories(id);
-		return categoryWithSubcategoryResponse;
+	public CategoryWithSubcategoryResponse findSubCategoriesByCategoryId(@PathVariable Long categoryId) {
+		return categoryService.findSubCategoriesByCategoryId(categoryId);
 	}
 }

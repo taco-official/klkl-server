@@ -8,7 +8,7 @@ import taco.klkl.domain.category.domain.SubcategoryName;
 public class SubcategoryNameConverter implements AttributeConverter<SubcategoryName, String> {
 
 	@Override
-	public String convertToDatabaseColumn(SubcategoryName subcategoryName) {
+	public String convertToDatabaseColumn(final SubcategoryName subcategoryName) {
 		if (subcategoryName == null) {
 			return null;
 		}
@@ -16,10 +16,10 @@ public class SubcategoryNameConverter implements AttributeConverter<SubcategoryN
 	}
 
 	@Override
-	public SubcategoryName convertToEntityAttribute(String name) {
+	public SubcategoryName convertToEntityAttribute(final String name) {
 		if (name == null) {
 			return null;
 		}
-		return SubcategoryName.getByName(name);
+		return SubcategoryName.fromKoreanName(name);
 	}
 }

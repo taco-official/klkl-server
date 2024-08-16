@@ -24,7 +24,7 @@ public class SubcategoryServiceImpl implements SubcategoryService {
 	private final SubcategoryRepository subcategoryRepository;
 
 	@Override
-	public List<SubcategoryResponse> getSubcategoriesBySubcategoryNames(List<SubcategoryName> subcategoryNames) {
+	public List<SubcategoryResponse> findSubcategoriesBySubcategoryNames(List<SubcategoryName> subcategoryNames) {
 
 		if (subcategoryNames == null || subcategoryNames.isEmpty()) {
 			return List.of();
@@ -38,7 +38,7 @@ public class SubcategoryServiceImpl implements SubcategoryService {
 	}
 
 	@Override
-	public List<Subcategory> getSubcategoryList(List<Long> subcategoryIds) {
+	public List<Subcategory> findSubcategoriesBySubcategoryIds(final List<Long> subcategoryIds) {
 		List<Subcategory> subcategories = subcategoryRepository.findAllById(subcategoryIds);
 		validateSubcategories(subcategoryIds.size(), subcategories.size());
 		return subcategories;

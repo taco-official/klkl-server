@@ -99,8 +99,8 @@ class SearchServiceImplTest {
 
 		when(countryService.getAllCountriesByCountryTypes(any(List.class))).thenReturn(mockCountries);
 		when(cityService.getAllCitiesByCityTypes(any(List.class))).thenReturn(mockCities);
-		when(categoryService.getCategoriesByCategoryNames(any(List.class))).thenReturn(mockCategories);
-		when(subcategoryService.getSubcategoriesBySubcategoryNames(any(List.class))).thenReturn(mockSubcategories);
+		when(categoryService.findCategoriesByCategoryNames(any(List.class))).thenReturn(mockCategories);
+		when(subcategoryService.findSubcategoriesBySubcategoryNames(any(List.class))).thenReturn(mockSubcategories);
 		when(productService.getProductsByPartialName(queryParam)).thenReturn(mockProducts);
 
 		// when

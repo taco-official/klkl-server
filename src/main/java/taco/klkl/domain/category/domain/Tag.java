@@ -35,11 +35,11 @@ public class Tag {
 	@Column(name = "name")
 	private TagName name;
 
-	private Tag(TagName tagName) {
+	private Tag(final TagName tagName) {
 		this.name = tagName;
 	}
 
-	public static Tag of(TagName tagName) {
+	public static Tag of(final TagName tagName) {
 		return new Tag(tagName);
 	}
 }

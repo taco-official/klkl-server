@@ -43,7 +43,7 @@ class CategoryServiceImplTest {
 
 	@Test
 	@DisplayName("카테고리 Service CategoryResponse(DTO)에 담겨 나오는지 Test")
-	void testGetCategories() {
+	void testFindAllCategories() {
 		// given
 		Category category1 = Category.of(CategoryName.CLOTHES);
 		Category category2 = Category.of(CategoryName.FOOD);
@@ -52,7 +52,7 @@ class CategoryServiceImplTest {
 		when(categoryRepository.findAll()).thenReturn(categories);
 
 		// when
-		List<CategoryResponse> result = categoryService.getCategories();
+		List<CategoryResponse> result = categoryService.findAllCategories();
 
 		// then
 		assertNotNull(result);
@@ -66,7 +66,7 @@ class CategoryServiceImplTest {
 
 	@Test
 	@DisplayName("Valid한 카테고리ID 입력시 해당하는 서브카테고리를 반환하는지 테스트")
-	void testGetSubcategoriesWithValidCategoryId() {
+	void testFindSubCategoriesByCategoryIdWithValidCategoryId() {
 		//given
 		Long categoryId = 1L;
 		Category mockCategory = mock(Category.class);
@@ -75,7 +75,7 @@ class CategoryServiceImplTest {
 		when(mockCategory.getSubcategories()).thenReturn(subcategories);
 		when(mockCategory.getName()).thenReturn(CategoryName.FOOD);
 		when(categoryRepository.findById(categoryId)).thenReturn(Optional.of(mockCategory));
-		CategoryWithSubcategoryResponse response = categoryService.getSubcategories(categoryId);
+		CategoryWithSubcategoryResponse response = categoryService.findSubCategoriesByCategoryId(categoryId);
 
 		//then
 		assertNotNull(response);
@@ -87,7 +87,7 @@ class CategoryServiceImplTest {
 
 	@Test
 	@DisplayName("Invalid한 카테고리 ID 입력시 CategoryNotFoundException을 반환하는지 테스트")
-	void testGetSubcategoriesWithInvalidCategoryId() {
+	void testFindSubCategoriesByCategoryIdWithInvalidCategoryId() {
 		//given
 		Long categoryId = 1L;
 
@@ -96,7 +96,7 @@ class CategoryServiceImplTest {
 
 		//then
 		assertThrows(CategoryNotFoundException.class, () -> {
-			categoryService.getSubcategories(categoryId);
+			categoryService.findSubCategoriesByCategoryId(categoryId);
 		});
 
 		verify(categoryRepository, times(1)).findById(categoryId);
@@ -104,7 +104,7 @@ class CategoryServiceImplTest {
 
 	@Test
 	@DisplayName("CategoryName리스트로 Category 조회")
-	void testGetCategoriesByCategoryNames() {
+	void testFindAllCategoriesByCategoryNames() {
 		// given
 		List<CategoryName> categoryNames = Arrays.asList(CategoryName.CLOTHES, CategoryName.FOOD);
 		List<Category> categories = Arrays.asList(category, category2);
@@ -114,7 +114,7 @@ class CategoryServiceImplTest {
 		when(categoryRepository.findAllByNameIn(categoryNames)).thenReturn(categories);
 
 		// when
-		List<CategoryResponse> categoryResponses = categoryService.getCategoriesByCategoryNames(categoryNames);
+		List<CategoryResponse> categoryResponses = categoryService.findCategoriesByCategoryNames(categoryNames);
 
 		// then
 		Assertions.assertThat(categoryResponses.size()).isEqualTo(categoryNames.size());

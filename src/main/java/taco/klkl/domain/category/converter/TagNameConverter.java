@@ -20,6 +20,6 @@ public class TagNameConverter implements AttributeConverter<TagName, String> {
 		if (name == null) {
 			return null;
 		}
-		return TagName.getByName(name);
+		return TagName.fromKoreanName(name);
 	}
 }

@@ -17,7 +17,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
 import taco.klkl.domain.category.domain.Subcategory;
-import taco.klkl.domain.category.dto.response.TagWithSubcategoryResponse;
+import taco.klkl.domain.category.dto.response.SubcategoryWithTagsResponse;
 import taco.klkl.domain.category.service.SubcategoryService;
 import taco.klkl.domain.category.service.SubcategoryTagService;
 import taco.klkl.global.error.exception.ErrorCode;
@@ -43,12 +43,13 @@ public class TagIntegrationTest {
 		String subcategoryIdsParam = String.join(",", subcategoryIds);
 
 		//when
-		List<Subcategory> subcategoryList = subcategoryService.getSubcategoryList(
+		List<Subcategory> subcategoryList = subcategoryService.findSubcategoriesBySubcategoryIds(
 			subcategoryIds.stream()
 				.map(Long::parseLong)
 				.toList()
 		);
-		List<TagWithSubcategoryResponse> response = subcategoryTagService.getTagsBySubcategoryList(subcategoryList);
+		List<SubcategoryWithTagsResponse> response =
+			subcategoryTagService.findSubcategoryTagsBySubcategoryList(subcategoryList);
 
 		//then
 		mockMvc.perform(get("/v1/tags")
@@ -68,12 +69,13 @@ public class TagIntegrationTest {
 		String subcategoryIdsParam = String.join(",", subcategoryIds);
 
 		//when
-		List<Subcategory> subcategoryList = subcategoryService.getSubcategoryList(
+		List<Subcategory> subcategoryList = subcategoryService.findSubcategoriesBySubcategoryIds(
 			subcategoryIds.stream()
 				.map(Long::parseLong)
 				.toList()
 		);
-		List<TagWithSubcategoryResponse> response = subcategoryTagService.getTagsBySubcategoryList(subcategoryList);
+		List<SubcategoryWithTagsResponse> response =
+			subcategoryTagService.findSubcategoryTagsBySubcategoryList(subcategoryList);
 
 		//then
 		mockMvc.perform(get("/v1/tags")

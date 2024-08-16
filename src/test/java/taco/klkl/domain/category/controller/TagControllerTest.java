@@ -25,7 +25,7 @@ import taco.klkl.domain.category.domain.SubcategoryName;
 import taco.klkl.domain.category.domain.SubcategoryTag;
 import taco.klkl.domain.category.domain.Tag;
 import taco.klkl.domain.category.domain.TagName;
-import taco.klkl.domain.category.dto.response.TagWithSubcategoryResponse;
+import taco.klkl.domain.category.dto.response.SubcategoryWithTagsResponse;
 import taco.klkl.domain.category.exception.SubcategoryNotFoundException;
 import taco.klkl.domain.category.service.SubcategoryService;
 import taco.klkl.domain.category.service.SubcategoryTagService;
@@ -75,12 +75,12 @@ public class TagControllerTest {
 		when(mockTag2.getId()).thenReturn(2L);
 		when(mockTag2.getName()).thenReturn(TagName.CILANTRO);
 
-		List<TagWithSubcategoryResponse> mockResponse = mockSubcategoryList.stream()
-			.map(TagWithSubcategoryResponse::from)
+		List<SubcategoryWithTagsResponse> mockResponse = mockSubcategoryList.stream()
+			.map(SubcategoryWithTagsResponse::from)
 			.toList();
 
-		when(subcategoryService.getSubcategoryList(ids)).thenReturn(mockSubcategoryList);
-		when(subcategoryTagService.getTagsBySubcategoryList(anyList())).thenReturn(mockResponse);
+		when(subcategoryService.findSubcategoriesBySubcategoryIds(ids)).thenReturn(mockSubcategoryList);
+		when(subcategoryTagService.findSubcategoryTagsBySubcategoryList(anyList())).thenReturn(mockResponse);
 
 		// when & then
 		mockMvc.perform(get("/v1/tags")
@@ -101,7 +101,7 @@ public class TagControllerTest {
 			.andExpect(jsonPath("$.data[1].tags[0].name", is(TagName.CONVENIENCE_STORE.getKoreanName())))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
 
-		verify(subcategoryService, times(1)).getSubcategoryList(ids);
+		verify(subcategoryService, times(1)).findSubcategoriesBySubcategoryIds(ids);
 	}
 
 	@Test
@@ -135,12 +135,12 @@ public class TagControllerTest {
 		when(mockTag2.getId()).thenReturn(2L);
 		when(mockTag2.getName()).thenReturn(TagName.CILANTRO);
 
-		List<TagWithSubcategoryResponse> mockResponse = mockSubcategoryList.stream()
-			.map(TagWithSubcategoryResponse::from)
+		List<SubcategoryWithTagsResponse> mockResponse = mockSubcategoryList.stream()
+			.map(SubcategoryWithTagsResponse::from)
 			.toList();
 
-		when(subcategoryService.getSubcategoryList(ids)).thenReturn(mockSubcategoryList);
-		when(subcategoryTagService.getTagsBySubcategoryList(anyList())).thenReturn(mockResponse);
+		when(subcategoryService.findSubcategoriesBySubcategoryIds(ids)).thenReturn(mockSubcategoryList);
+		when(subcategoryTagService.findSubcategoryTagsBySubcategoryList(anyList())).thenReturn(mockResponse);
 
 		// when & then
 		mockMvc.perform(get("/v1/tags")
@@ -160,14 +160,15 @@ public class TagControllerTest {
 			.andExpect(jsonPath("$.data[1].tags.size()", is(0)))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
 
-		verify(subcategoryService, times(1)).getSubcategoryList(ids);
+		verify(subcategoryService, times(1)).findSubcategoriesBySubcategoryIds(ids);
 	}
 
 	@Test
 	@DisplayName("존재하지 않는 Subcategory Id 쿼리가 들어올 경우, SubcategoryNotFound Error Response를 반환하는지 테스트")
 	public void testGetTagsByidsWithValidQueryButNotExist() throws Exception {
 		//given
-		when(subcategoryService.getSubcategoryList(anyList())).thenThrow(new SubcategoryNotFoundException());
+		when(subcategoryService.findSubcategoriesBySubcategoryIds(anyList()))
+			.thenThrow(new SubcategoryNotFoundException());
 
 		//when & then
 		mockMvc.perform(get("/v1/tags")
@@ -184,7 +185,8 @@ public class TagControllerTest {
 	@DisplayName("올바르지 않은 쿼리가 들어올 경우, INVALID_QUERY_FORMAT을 반환하는지 테스트")
 	public void testGetTagsByidsWithInvalidQueryFormat() throws Exception {
 		//given
-		when(subcategoryService.getSubcategoryList(anyList())).thenThrow(MethodArgumentTypeMismatchException.class);
+		when(subcategoryService.findSubcategoriesBySubcategoryIds(anyList()))
+			.thenThrow(MethodArgumentTypeMismatchException.class);
 
 		//when & then
 		mockMvc.perform(get("/v1/tags")

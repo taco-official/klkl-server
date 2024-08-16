@@ -6,6 +6,7 @@ import java.util.regex.Pattern;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import taco.klkl.domain.category.exception.SubcategoryNameNotFoundException;
 
 @Getter
 @AllArgsConstructor
@@ -36,20 +37,18 @@ public enum SubcategoryName {
 	HAIR_CARE("헤어케어"),
 	BODY_CARE("바디케어"),
 	HYGIENE_PRODUCT("위생용품"),
-	//None
-	NONE(""),
 	;
 
 	private final String koreanName;
 
-	public static SubcategoryName getByName(String name) {
+	public static SubcategoryName fromKoreanName(final String koreanName) {
 		return Arrays.stream(values())
-			.filter(subcategoryName -> subcategoryName.koreanName.equals(name))
+			.filter(subcategoryName -> subcategoryName.koreanName.equals(koreanName))
 			.findFirst()
-			.orElse(NONE);
+			.orElseThrow(SubcategoryNameNotFoundException::new);
 	}
 
-	public static List<SubcategoryName> getSubcategoryNamesByPartialString(String partialString) {
+	public static List<SubcategoryName> findByPartialString(final String partialString) {
 
 		if (partialString == null || partialString.isEmpty()) {
 			return List.of();

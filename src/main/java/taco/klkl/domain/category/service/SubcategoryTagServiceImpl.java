@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import taco.klkl.domain.category.domain.Subcategory;
-import taco.klkl.domain.category.dto.response.TagWithSubcategoryResponse;
+import taco.klkl.domain.category.dto.response.SubcategoryWithTagsResponse;
 
 @Slf4j
 @Primary
@@ -19,9 +19,11 @@ import taco.klkl.domain.category.dto.response.TagWithSubcategoryResponse;
 public class SubcategoryTagServiceImpl implements SubcategoryTagService {
 
 	@Override
-	public List<TagWithSubcategoryResponse> getTagsBySubcategoryList(List<Subcategory> subcategoryList) {
+	public List<SubcategoryWithTagsResponse> findSubcategoryTagsBySubcategoryList(
+		final List<Subcategory> subcategoryList
+	) {
 		return subcategoryList.stream()
-			.map(TagWithSubcategoryResponse::from)
+			.map(SubcategoryWithTagsResponse::from)
 			.toList();
 	}
 }

@@ -44,7 +44,7 @@ public class CategoryControllerTest {
 
 	@Test
 	@DisplayName("카테고리 컨트롤러 GlobalResponse로 Wrapping되어 나오는지 Test")
-	public void testGetCategory() throws Exception {
+	public void testFindAllCategories() throws Exception {
 		// given
 		List<CategoryResponse> categoryResponse = Arrays.asList(
 			new CategoryResponse(1L, "Category1"),
@@ -52,7 +52,7 @@ public class CategoryControllerTest {
 		);
 
 		// when
-		when(categoryService.getCategories()).thenReturn(categoryResponse);
+		when(categoryService.findAllCategories()).thenReturn(categoryResponse);
 
 		// then
 		mockMvc.perform(get("/v1/categories")
@@ -67,12 +67,12 @@ public class CategoryControllerTest {
 			.andExpect(jsonPath("$.data[1].name", is("Category2")))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
 
-		verify(categoryService, times(1)).getCategories();
+		verify(categoryService, times(1)).findAllCategories();
 	}
 
 	@Test
 	@DisplayName("valid id가 들어올 경우 Categoy와 Subcategory가 잘 나오는지 Test")
-	public void testGetSubcategoryWithValidId() throws Exception {
+	public void testFindSubcategoryWithValidIdById() throws Exception {
 		// given
 		Long id = 1L;
 		Category mockCategory = mock(Category.class);
@@ -85,7 +85,7 @@ public class CategoryControllerTest {
 		CategoryWithSubcategoryResponse response = CategoryWithSubcategoryResponse.from(mockCategory);
 
 		// when
-		when(categoryService.getSubcategories(id)).thenReturn(response);
+		when(categoryService.findSubCategoriesByCategoryId(id)).thenReturn(response);
 
 		// then
 		mockMvc.perform(get("/v1/categories/1/subcategories")
@@ -101,14 +101,14 @@ public class CategoryControllerTest {
 			.andExpect(jsonPath("$.data.subcategories[1].name", is(SubcategoryName.HAIR_CARE.getKoreanName())))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
 
-		verify(categoryService, times(1)).getSubcategories(id);
+		verify(categoryService, times(1)).findSubCategoriesByCategoryId(id);
 	}
 
 	@Test
 	@DisplayName("invalid한 id가 들어올 경우 GlobalException으로 Wrapping되어 나오는지 Test")
-	public void testGetSubcategoryWithInvalidId() throws Exception {
+	public void testFindSubcategoryWithInvalidIdById() throws Exception {
 		// given
-		when(categoryService.getSubcategories(anyLong())).thenThrow(new CategoryNotFoundException());
+		when(categoryService.findSubCategoriesByCategoryId(anyLong())).thenThrow(new CategoryNotFoundException());
 
 		// when & then
 		mockMvc.perform(get("/v1/categories/999/subcategories")
@@ -119,6 +119,6 @@ public class CategoryControllerTest {
 			.andExpect(jsonPath("$.data.message", is(ErrorCode.CATEGORY_ID_NOT_FOUND.getMessage())))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
 
-		verify(categoryService, times(1)).getSubcategories(anyLong());
+		verify(categoryService, times(1)).findSubCategoriesByCategoryId(anyLong());
 	}
 }

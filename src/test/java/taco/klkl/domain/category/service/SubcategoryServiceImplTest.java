@@ -40,7 +40,7 @@ public class SubcategoryServiceImplTest {
 
 	@Test
 	@DisplayName("Query id가 Long type으로 입력되고 subcategory가 존재하는 경우")
-	public void testGetSubcategoryListWithExistIds() {
+	public void testFindSubcategoriesBySubcategoryIdsWithExistIds() {
 		//given
 		final List<Long> subcategoriesIds = Arrays.asList(1L, 2L, 3L);
 		final List<Subcategory> subcategoriesList = Arrays.asList(subcategory1, subcategory2, subcategory3);
@@ -48,7 +48,7 @@ public class SubcategoryServiceImplTest {
 		when(subcategoryRepository.findAllById(subcategoriesIds)).thenReturn(subcategoriesList);
 
 		//when
-		List<Subcategory> result = subcategoryService.getSubcategoryList(subcategoriesIds);
+		List<Subcategory> result = subcategoryService.findSubcategoriesBySubcategoryIds(subcategoriesIds);
 
 		//then
 		assertNotNull(result);
@@ -63,7 +63,7 @@ public class SubcategoryServiceImplTest {
 
 	@Test
 	@DisplayName("Query id가 Long type으로 입력되고 subcategory가 존재하지 않는 경우")
-	public void testGetSubcategoryListWithNotExistIds() {
+	public void testFindSubcategoriesBySubcategoryIdsWithNotExistIds() {
 		//given
 		final List<Long> subcategoriesIds = Arrays.asList(1L, 2L, 3L);
 
@@ -72,14 +72,14 @@ public class SubcategoryServiceImplTest {
 
 		//then
 		assertThrows(SubcategoryNotFoundException.class, () -> {
-			subcategoryService.getSubcategoryList(subcategoriesIds);
+			subcategoryService.findSubcategoriesBySubcategoryIds(subcategoriesIds);
 		});
 		verify(subcategoryRepository, times(1)).findAllById(subcategoriesIds);
 	}
 
 	@Test
 	@DisplayName("SubcategoryName리스트로 Subcategory 조회")
-	void testGetSubcategoriesBySubcategoryNames() {
+	void testFindSubcategoriesBySubcategoryNames() {
 		// given
 		List<SubcategoryName> subcategoryNames = Arrays.asList(subcategory1.getName(), subcategory2.getName(),
 			subcategory3.getName());
@@ -92,7 +92,7 @@ public class SubcategoryServiceImplTest {
 
 		// when
 		List<SubcategoryResponse> subcategoryResponseList = subcategoryService
-			.getSubcategoriesBySubcategoryNames(subcategoryNames);
+			.findSubcategoriesBySubcategoryNames(subcategoryNames);
 
 		// then
 		Assertions.assertThat(subcategoryResponseList.size()).isEqualTo(subcategoryNames.size());

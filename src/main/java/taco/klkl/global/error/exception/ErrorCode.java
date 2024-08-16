@@ -28,6 +28,7 @@ public enum ErrorCode {
 	// Like
 	LIKE_COUNT_OVER_MAXIMUM(HttpStatus.BAD_REQUEST, "C030", "상품의 좋아요수가 최대값입니다. 2147483647"),
 	LIKE_COUNT_BELOW_MINIMUM(HttpStatus.BAD_REQUEST, "C031", "상품의 좋아요수가 최소값입니다. 0"),
+
 	// Comment
 	COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "C040", "존재하지 않는 댓글입니다."),
 	COMMENT_PRODUCT_NOT_MATCH(HttpStatus.BAD_REQUEST, "C041", "다른 상품에 있는 댓글입니다."),
@@ -42,6 +43,9 @@ public enum ErrorCode {
 	CATEGORY_ID_NOT_FOUND(HttpStatus.NOT_FOUND, "C060", "존재하지 않는 카테고리 ID 입니다."),
 	SUBCATEGORY_ID_NOT_FOUND(HttpStatus.NOT_FOUND, "C061", "존재하지 않는 서브카테고리 ID 입니다."),
 	TAG_NOT_FOUND(HttpStatus.NOT_FOUND, "C062", "존재하지 않는 태그입니다."),
+	CATEGORY_NAME_NOT_FOUND(HttpStatus.NOT_FOUND, "C063", "존재하지 않는 카테코리 이름입니다."),
+	SUBCATEGORY_NAME_NOT_FOUND(HttpStatus.NOT_FOUND, "C064", "존재하지 않는 서브카테코리 이름입니다."),
+	TAG_NAME_NOT_FOUND(HttpStatus.NOT_FOUND, "C065", "존재하지 않는 태그 이름입니다."),
 
 	// Notification
 	NOTIFICATION_NOT_FOUND(HttpStatus.NOT_FOUND, "C070", "존재하지 않는 알림 입니다."),
