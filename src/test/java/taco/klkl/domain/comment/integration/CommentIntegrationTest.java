@@ -50,7 +50,7 @@ public class CommentIntegrationTest {
 	@DisplayName("상품에 있는 모든 댓글 반환 통합 테스트")
 	public void testGetComment() throws Exception {
 		//given
-		List<CommentResponse> commentResponses = commentService.getComments(productId);
+		List<CommentResponse> commentResponses = commentService.findCommentsByProductId(productId);
 
 		//when & then
 		mockMvc.perform(get("/v1/products/{productId}/comments", productId)

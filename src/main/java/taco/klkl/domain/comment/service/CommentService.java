@@ -23,6 +23,7 @@ import taco.klkl.global.util.UserUtil;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class CommentService {
+
 	private final CommentRepository commentRepository;
 
 	private final NotificationService notificationService;
@@ -30,7 +31,7 @@ public class CommentService {
 	private final UserUtil userUtil;
 	private final ProductUtil productUtil;
 
-	public List<CommentResponse> getComments(final Long productId) {
+	public List<CommentResponse> findCommentsByProductId(final Long productId) {
 		validateProductId(productId);
 		final List<Comment> comments = commentRepository.findAllByProduct_Id(productId);
 		return comments.stream()

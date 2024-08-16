@@ -131,7 +131,7 @@ public class CommentControllerTest {
 		List<CommentResponse> responseDtos = Arrays.asList(CommentResponse.from(comment1),
 			CommentResponse.from(comment2));
 
-		when(commentService.getComments(productId)).thenReturn(responseDtos);
+		when(commentService.findCommentsByProductId(productId)).thenReturn(responseDtos);
 
 		//when & then
 		mockMvc.perform(get("/v1/products/{productId}/comments", productId)
@@ -146,7 +146,7 @@ public class CommentControllerTest {
 			.andExpect(jsonPath("$.data[1].content", is(comment2.getContent())));
 
 		verify(commentService, times(1))
-			.getComments(productId);
+			.findCommentsByProductId(productId);
 	}
 
 	@Test

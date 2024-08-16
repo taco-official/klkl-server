@@ -21,20 +21,19 @@ import lombok.RequiredArgsConstructor;
 import taco.klkl.domain.comment.dto.request.CommentCreateUpdateRequest;
 import taco.klkl.domain.comment.dto.response.CommentResponse;
 import taco.klkl.domain.comment.service.CommentService;
-import taco.klkl.domain.product.service.ProductService;
 
 @RestController
 @RequestMapping("/v1/products/{productId}/comments")
 @Tag(name = "4. 댓글", description = "댓글 관련 API")
 @RequiredArgsConstructor
 public class CommentController {
+
 	private final CommentService commentService;
-	private final ProductService productService;
 
 	@GetMapping
 	@Operation(summary = "댓글 목록 조회", description = "상품 목록에 대한 댓글 목록을 반환합니다.")
-	public List<CommentResponse> getComments(@PathVariable final Long productId) {
-		return commentService.getComments(productId);
+	public List<CommentResponse> findCommentsByProductId(@PathVariable final Long productId) {
+		return commentService.findCommentsByProductId(productId);
 	}
 
 	@PostMapping
@@ -56,7 +55,7 @@ public class CommentController {
 	public CommentResponse updateComment(
 		@PathVariable final Long productId,
 		@PathVariable final Long commentId,
-		@RequestBody @Valid CommentCreateUpdateRequest commentUpdateRequestDto
+		@RequestBody @Valid final CommentCreateUpdateRequest commentUpdateRequestDto
 	) {
 		return commentService.updateComment(
 			productId,

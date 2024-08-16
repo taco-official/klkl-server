@@ -76,7 +76,7 @@ public class CommentServiceTest {
 
 	@Test
 	@DisplayName("상품에 있는 모든 댓글 반환 테스트")
-	public void testGetComments() {
+	public void testFindCommentsByProductId() {
 		//given
 		Long productId = 1L;
 		Comment comment1 = Comment.of(product, user, "쎄마 네이이이이이암 마");
@@ -88,7 +88,7 @@ public class CommentServiceTest {
 		when(commentRepository.findAllByProduct_Id(productId)).thenReturn(comments);
 
 		//when
-		List<CommentResponse> result = commentService.getComments(productId);
+		List<CommentResponse> result = commentService.findCommentsByProductId(productId);
 
 		//then
 		assertThat(result.get(0).id()).isEqualTo(comment1.getId());
