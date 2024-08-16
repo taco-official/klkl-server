@@ -31,7 +31,7 @@ import taco.klkl.domain.region.dto.response.CityResponse;
 import taco.klkl.domain.region.dto.response.CountrySimpleResponse;
 import taco.klkl.domain.region.enums.CityType;
 import taco.klkl.domain.region.enums.CountryType;
-import taco.klkl.domain.search.dto.response.SearchResponseDto;
+import taco.klkl.domain.search.dto.response.SearchResponse;
 import taco.klkl.domain.search.service.SearchService;
 import taco.klkl.domain.user.domain.User;
 import taco.klkl.global.common.constants.UserConstants;
@@ -45,7 +45,7 @@ public class SearchControllerTest {
 	@MockBean
 	private SearchService searchService;
 
-	private SearchResponseDto mockResponse;
+	private SearchResponse mockResponse;
 
 	@Mock
 	Region region;
@@ -73,7 +73,7 @@ public class SearchControllerTest {
 	@BeforeEach
 	void setUp() {
 		// Mock 데이터 생성
-		mockResponse = SearchResponseDto.of(
+		mockResponse = SearchResponse.of(
 			Collections.singletonList(CountrySimpleResponse.from(country)),
 			Collections.singletonList(CityResponse.from(city)),
 			Collections.singletonList(CategoryResponse.from(category)),

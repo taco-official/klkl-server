@@ -22,7 +22,7 @@ import taco.klkl.domain.region.enums.CityType;
 import taco.klkl.domain.region.enums.CountryType;
 import taco.klkl.domain.region.service.CityService;
 import taco.klkl.domain.region.service.CountryService;
-import taco.klkl.domain.search.dto.response.SearchResponseDto;
+import taco.klkl.domain.search.dto.response.SearchResponse;
 
 @Slf4j
 @Primary
@@ -38,7 +38,7 @@ public class SearchServiceImpl implements SearchService {
 	private final ProductService productService;
 
 	@Override
-	public SearchResponseDto getSearchResult(final String queryParam) {
+	public SearchResponse getSearchResult(final String queryParam) {
 
 		final List<CountrySimpleResponse> findCountries = getCountriesByQueryParam(queryParam);
 		final List<CityResponse> findCities = getCitiesByQueryParam(queryParam);
@@ -46,7 +46,7 @@ public class SearchServiceImpl implements SearchService {
 		final List<SubcategoryResponse> findSubcategories = getSubcategoriesByQueryParam(queryParam);
 		List<ProductSimpleResponse> findProducts = getProductsByQueryParam(queryParam);
 
-		return SearchResponseDto.of(findCountries, findCities, findCategories, findSubcategories, findProducts);
+		return SearchResponse.of(findCountries, findCities, findCategories, findSubcategories, findProducts);
 	}
 
 	private List<CountrySimpleResponse> getCountriesByQueryParam(final String queryParam) {

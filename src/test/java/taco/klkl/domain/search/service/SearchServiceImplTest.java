@@ -35,7 +35,7 @@ import taco.klkl.domain.region.enums.CityType;
 import taco.klkl.domain.region.enums.CountryType;
 import taco.klkl.domain.region.service.CityService;
 import taco.klkl.domain.region.service.CountryService;
-import taco.klkl.domain.search.dto.response.SearchResponseDto;
+import taco.klkl.domain.search.dto.response.SearchResponse;
 import taco.klkl.domain.user.domain.User;
 import taco.klkl.global.common.constants.UserConstants;
 
@@ -104,7 +104,7 @@ class SearchServiceImplTest {
 		when(productService.getProductsByPartialName(queryParam)).thenReturn(mockProducts);
 
 		// when
-		SearchResponseDto result = searchService.getSearchResult(queryParam);
+		SearchResponse result = searchService.getSearchResult(queryParam);
 
 		// then
 		assertThat(result).isNotNull();

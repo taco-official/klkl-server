@@ -9,7 +9,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import taco.klkl.domain.search.dto.response.SearchResponseDto;
+import taco.klkl.domain.search.dto.response.SearchResponse;
 import taco.klkl.domain.search.service.SearchService;
 
 @Slf4j
@@ -22,7 +22,7 @@ public class SearchController {
 	private final SearchService searchService;
 
 	@GetMapping()
-	public SearchResponseDto getSearchByQuery(
+	public SearchResponse getSearchByQuery(
 		@RequestParam(value = "q")
 		@NotBlank
 		String query

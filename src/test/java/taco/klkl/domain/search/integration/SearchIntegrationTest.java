@@ -11,7 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 
 import jakarta.transaction.Transactional;
-import taco.klkl.domain.search.dto.response.SearchResponseDto;
+import taco.klkl.domain.search.dto.response.SearchResponse;
 import taco.klkl.domain.search.service.SearchService;
 
 @SpringBootTest
@@ -29,7 +29,7 @@ public class SearchIntegrationTest {
 	void getSearchTest() throws Exception {
 		// given
 		String query = "리";
-		SearchResponseDto searchResponseDto = searchService.getSearchResult(query);
+		SearchResponse searchResponse = searchService.getSearchResult(query);
 
 		// when & then
 		mockMvc.perform(get("/v1/search")
@@ -37,10 +37,10 @@ public class SearchIntegrationTest {
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.code", is("C000")))
 			.andExpect(jsonPath("$.isSuccess", is(true)))
-			.andExpect(jsonPath("$.data.countries", hasSize(searchResponseDto.countries().size())))
-			.andExpect(jsonPath("$.data.cities", hasSize(searchResponseDto.cities().size())))
-			.andExpect(jsonPath("$.data.categories", hasSize(searchResponseDto.categories().size())))
-			.andExpect(jsonPath("$.data.subcategories", hasSize(searchResponseDto.subcategories().size())))
-			.andExpect(jsonPath("$.data.products", hasSize(searchResponseDto.products().size())));
+			.andExpect(jsonPath("$.data.countries", hasSize(searchResponse.countries().size())))
+			.andExpect(jsonPath("$.data.cities", hasSize(searchResponse.cities().size())))
+			.andExpect(jsonPath("$.data.categories", hasSize(searchResponse.categories().size())))
+			.andExpect(jsonPath("$.data.subcategories", hasSize(searchResponse.subcategories().size())))
+			.andExpect(jsonPath("$.data.products", hasSize(searchResponse.products().size())));
 	}
 }
