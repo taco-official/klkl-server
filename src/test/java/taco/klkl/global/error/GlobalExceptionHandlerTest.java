@@ -43,7 +43,7 @@ class GlobalExceptionHandlerTest {
 			new FieldError("productCreateRequestDto", "name", "상품명은 필수 항목입니다."),
 			new FieldError("productCreateRequestDto", "description", "상품 설명은 필수 항목입니다."),
 			new FieldError("productCreateRequestDto", "cityId", "도시 ID는 필수 항목입니다."),
-			new FieldError("productCreateRequestDto", "subcategoryId", "상품 소분류 ID는 필수 항목입니다."),
+			new FieldError("productCreateRequestDto", "id", "상품 소분류 ID는 필수 항목입니다."),
 			new FieldError("productCreateRequestDto", "currencyId", "통화 ID는 필수 항목입니다.")
 		);
 

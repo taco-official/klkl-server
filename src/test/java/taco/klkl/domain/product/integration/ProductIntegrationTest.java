@@ -70,7 +70,7 @@ public class ProductIntegrationTest {
 			.andExpect(jsonPath("$.data.rating", is(createRequest.rating())))
 			.andExpect(jsonPath("$.data.user.id", notNullValue()))
 			.andExpect(jsonPath("$.data.city.cityId", is(createRequest.cityId().intValue())))
-			.andExpect(jsonPath("$.data.subcategory.subcategoryId", is(createRequest.subcategoryId().intValue())))
+			.andExpect(jsonPath("$.data.subcategory.id", is(createRequest.subcategoryId().intValue())))
 			.andExpect(jsonPath("$.data.currency.currencyId", is(createRequest.currencyId().intValue())))
 			.andExpect(jsonPath("$.data.createdAt", notNullValue()))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
@@ -108,7 +108,7 @@ public class ProductIntegrationTest {
 			.andExpect(jsonPath("$.data.rating", is(createRequest.rating())))
 			.andExpect(jsonPath("$.data.user.id", notNullValue()))
 			.andExpect(jsonPath("$.data.city.cityId", is(createRequest.cityId().intValue())))
-			.andExpect(jsonPath("$.data.subcategory.subcategoryId", is(createRequest.subcategoryId().intValue())))
+			.andExpect(jsonPath("$.data.subcategory.id", is(createRequest.subcategoryId().intValue())))
 			.andExpect(jsonPath("$.data.currency.currencyId", is(createRequest.currencyId().intValue())))
 			.andExpect(jsonPath("$.data.createdAt", notNullValue()))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
@@ -969,7 +969,7 @@ public class ProductIntegrationTest {
 			.andExpect(jsonPath("$.data.rating", is(updateRequest.rating())))
 			.andExpect(jsonPath("$.data.user.id", is(productDto.user().id().intValue())))
 			.andExpect(jsonPath("$.data.city.cityId", is(updateRequest.cityId().intValue())))
-			.andExpect(jsonPath("$.data.subcategory.subcategoryId",
+			.andExpect(jsonPath("$.data.subcategory.id",
 				is(updateRequest.subcategoryId().intValue())))
 			.andExpect(jsonPath("$.data.currency.currencyId", is(updateRequest.currencyId().intValue())))
 			.andExpect(jsonPath("$.data.createdAt", notNullValue()))

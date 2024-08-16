@@ -58,8 +58,8 @@ class CategoryServiceImplTest {
 		assertNotNull(result);
 		assertEquals(2, result.size());
 
-		assertEquals(CategoryName.CLOTHES.getKoreanName(), result.get(0).category());
-		assertEquals(CategoryName.FOOD.getKoreanName(), result.get(1).category());
+		assertEquals(CategoryName.CLOTHES.getKoreanName(), result.get(0).name());
+		assertEquals(CategoryName.FOOD.getKoreanName(), result.get(1).name());
 
 		verify(categoryRepository, times(1)).findAll();
 	}
@@ -79,8 +79,8 @@ class CategoryServiceImplTest {
 
 		//then
 		assertNotNull(response);
-		assertEquals(SubcategoryName.DRESS.getKoreanName(), response.subcategories().get(0).subcategory());
-		assertEquals(SubcategoryName.HAIR_CARE.getKoreanName(), response.subcategories().get(1).subcategory());
+		assertEquals(SubcategoryName.DRESS.getKoreanName(), response.subcategories().get(0).name());
+		assertEquals(SubcategoryName.HAIR_CARE.getKoreanName(), response.subcategories().get(1).name());
 
 		verify(categoryRepository, times(1)).findById(1L);
 	}

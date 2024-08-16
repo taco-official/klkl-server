@@ -56,16 +56,16 @@ class CategoryIntegrationTest {
 		mockMvc.perform(get("/v1/categories/300/subcategories")
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
-			.andExpect(jsonPath("$.data.categoryId", is(categoryWithSubcategoryResponse.categoryId().intValue())))
-			.andExpect(jsonPath("$.data.category", is(categoryWithSubcategoryResponse.category())))
-			.andExpect(jsonPath("$.data.subcategories[0].subcategoryId",
-				is(categoryWithSubcategoryResponse.subcategories().get(0).subcategoryId().intValue())))
-			.andExpect(jsonPath("$.data.subcategories[0].subcategory",
-				is(categoryWithSubcategoryResponse.subcategories().get(0).subcategory())))
-			.andExpect(jsonPath("$.data.subcategories[1].subcategoryId",
-				is(categoryWithSubcategoryResponse.subcategories().get(1).subcategoryId().intValue())))
-			.andExpect(jsonPath("$.data.subcategories[1].subcategory",
-				is(categoryWithSubcategoryResponse.subcategories().get(1).subcategory())))
+			.andExpect(jsonPath("$.data.id", is(categoryWithSubcategoryResponse.id().intValue())))
+			.andExpect(jsonPath("$.data.name", is(categoryWithSubcategoryResponse.name())))
+			.andExpect(jsonPath("$.data.subcategories[0].id",
+				is(categoryWithSubcategoryResponse.subcategories().get(0).id().intValue())))
+			.andExpect(jsonPath("$.data.subcategories[0].name",
+				is(categoryWithSubcategoryResponse.subcategories().get(0).name())))
+			.andExpect(jsonPath("$.data.subcategories[1].id",
+				is(categoryWithSubcategoryResponse.subcategories().get(1).id().intValue())))
+			.andExpect(jsonPath("$.data.subcategories[1].name",
+				is(categoryWithSubcategoryResponse.subcategories().get(1).name())))
 			.andExpect(jsonPath("$.isSuccess", is(true)))
 			.andExpect(jsonPath("$.code", is("C000")));
 	}

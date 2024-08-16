@@ -222,10 +222,10 @@ public class ProductControllerTest {
 			.andExpect(jsonPath("$.data.city.cityId",
 				is(productDetailResponse.city().cityId().intValue())))
 			.andExpect(jsonPath("$.data.city.name", is(productDetailResponse.city().name())))
-			.andExpect(jsonPath("$.data.subcategory.subcategoryId",
-				is(productDetailResponse.subcategory().subcategoryId().intValue())))
-			.andExpect(jsonPath("$.data.subcategory.subcategory",
-				is(productDetailResponse.subcategory().subcategory())))
+			.andExpect(jsonPath("$.data.subcategory.id",
+				is(productDetailResponse.subcategory().id().intValue())))
+			.andExpect(jsonPath("$.data.subcategory.name",
+				is(productDetailResponse.subcategory().name())))
 			.andExpect(jsonPath("$.data.currency.currencyId",
 				is(productDetailResponse.currency().currencyId().intValue())))
 			.andExpect(jsonPath("$.data.currency.code", is(productDetailResponse.currency().code())))
@@ -266,10 +266,10 @@ public class ProductControllerTest {
 			.andExpect(jsonPath("$.data.city.cityId",
 				is(productDetailResponse.city().cityId().intValue())))
 			.andExpect(jsonPath("$.data.city.name", is(productDetailResponse.city().name())))
-			.andExpect(jsonPath("$.data.subcategory.subcategoryId",
-				is(productDetailResponse.subcategory().subcategoryId().intValue())))
-			.andExpect(jsonPath("$.data.subcategory.subcategory",
-				is(productDetailResponse.subcategory().subcategory())))
+			.andExpect(jsonPath("$.data.subcategory.id",
+				is(productDetailResponse.subcategory().id().intValue())))
+			.andExpect(jsonPath("$.data.subcategory.name",
+				is(productDetailResponse.subcategory().name())))
 			.andExpect(jsonPath("$.data.currency.currencyId",
 				is(productDetailResponse.currency().currencyId().intValue())))
 			.andExpect(jsonPath("$.data.currency.code", is(productDetailResponse.currency().code())))
@@ -310,10 +310,10 @@ public class ProductControllerTest {
 			.andExpect(jsonPath("$.data.city.cityId",
 				is(productDetailResponse.city().cityId().intValue())))
 			.andExpect(jsonPath("$.data.city.name", is(productDetailResponse.city().name())))
-			.andExpect(jsonPath("$.data.subcategory.subcategoryId",
-				is(productDetailResponse.subcategory().subcategoryId().intValue())))
-			.andExpect(jsonPath("$.data.subcategory.subcategory",
-				is(productDetailResponse.subcategory().subcategory())))
+			.andExpect(jsonPath("$.data.subcategory.id",
+				is(productDetailResponse.subcategory().id().intValue())))
+			.andExpect(jsonPath("$.data.subcategory.name",
+				is(productDetailResponse.subcategory().name())))
 			.andExpect(jsonPath("$.data.currency.currencyId",
 				is(productDetailResponse.currency().currencyId().intValue())))
 			.andExpect(jsonPath("$.data.currency.code", is(productDetailResponse.currency().code())))

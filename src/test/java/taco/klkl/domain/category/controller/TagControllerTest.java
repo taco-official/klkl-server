@@ -45,11 +45,10 @@ public class TagControllerTest {
 
 	@Test
 	@DisplayName("존재하는 Subcategory Id 쿼리가 들어왔을 경우, Subcategory와 Filter가 잘 나오는지 테스트")
-	public void testGetTagsBySubcategoryIdsWithValidQuery() throws Exception {
+	public void testGetTagsByidsWithValidQuery() throws Exception {
 		// given
-		List<Long> subcategoryIds = Arrays.asList(1L, 2L);
+		List<Long> ids = Arrays.asList(1L, 2L);
 
-		Category mockCategory = Category.of(CategoryName.FOOD);
 		Subcategory mockSubcategory1 = mock(Subcategory.class);
 		Subcategory mockSubcategory2 = mock(Subcategory.class);
 		Tag mockTag1 = mock(Tag.class);
@@ -80,7 +79,7 @@ public class TagControllerTest {
 			.map(TagWithSubcategoryResponse::from)
 			.toList();
 
-		when(subcategoryService.getSubcategoryList(subcategoryIds)).thenReturn(mockSubcategoryList);
+		when(subcategoryService.getSubcategoryList(ids)).thenReturn(mockSubcategoryList);
 		when(subcategoryTagService.getTagsBySubcategoryList(anyList())).thenReturn(mockResponse);
 
 		// when & then
@@ -90,26 +89,26 @@ public class TagControllerTest {
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
 			.andExpect(jsonPath("$.code", is("C000")))
-			.andExpect(jsonPath("$.data[0].subcategoryId", is(1)))
-			.andExpect(jsonPath("$.data[0].subcategory", is(SubcategoryName.INSTANT_FOOD.getKoreanName())))
+			.andExpect(jsonPath("$.data[0].id", is(1)))
+			.andExpect(jsonPath("$.data[0].name", is(SubcategoryName.INSTANT_FOOD.getKoreanName())))
 			.andExpect(jsonPath("$.data[0].tags[0].id", is(1)))
 			.andExpect(jsonPath("$.data[0].tags[0].name", is(TagName.CONVENIENCE_STORE.getKoreanName())))
 			.andExpect(jsonPath("$.data[0].tags[1].id", is(2)))
 			.andExpect(jsonPath("$.data[0].tags[1].name", is(TagName.CILANTRO.getKoreanName())))
-			.andExpect(jsonPath("$.data[1].subcategoryId", is(2)))
-			.andExpect(jsonPath("$.data[1].subcategory", is(SubcategoryName.SNACK.getKoreanName())))
+			.andExpect(jsonPath("$.data[1].id", is(2)))
+			.andExpect(jsonPath("$.data[1].name", is(SubcategoryName.SNACK.getKoreanName())))
 			.andExpect(jsonPath("$.data[1].tags[0].id", is(1)))
 			.andExpect(jsonPath("$.data[1].tags[0].name", is(TagName.CONVENIENCE_STORE.getKoreanName())))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
 
-		verify(subcategoryService, times(1)).getSubcategoryList(subcategoryIds);
+		verify(subcategoryService, times(1)).getSubcategoryList(ids);
 	}
 
 	@Test
 	@DisplayName("존재하는 Subcategory Id 쿼리가 들어왔지만 Filter가 없는 Subcategory일 경우, Subcategory와 Filter가 잘 나오는지 테스트")
-	public void testGetTagsBySubcategoryIdsWithValidQueryButEmptyOne() throws Exception {
+	public void testGetTagsByidsWithValidQueryButEmptyOne() throws Exception {
 		// given
-		List<Long> subcategoryIds = Arrays.asList(1L, 2L);
+		List<Long> ids = Arrays.asList(1L, 2L);
 
 		Category mockCategory = Category.of(CategoryName.FOOD);
 		Subcategory mockSubcategory1 = mock(Subcategory.class);
@@ -140,7 +139,7 @@ public class TagControllerTest {
 			.map(TagWithSubcategoryResponse::from)
 			.toList();
 
-		when(subcategoryService.getSubcategoryList(subcategoryIds)).thenReturn(mockSubcategoryList);
+		when(subcategoryService.getSubcategoryList(ids)).thenReturn(mockSubcategoryList);
 		when(subcategoryTagService.getTagsBySubcategoryList(anyList())).thenReturn(mockResponse);
 
 		// when & then
@@ -150,23 +149,23 @@ public class TagControllerTest {
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
 			.andExpect(jsonPath("$.code", is("C000")))
-			.andExpect(jsonPath("$.data[0].subcategoryId", is(1)))
-			.andExpect(jsonPath("$.data[0].subcategory", is(SubcategoryName.INSTANT_FOOD.getKoreanName())))
+			.andExpect(jsonPath("$.data[0].id", is(1)))
+			.andExpect(jsonPath("$.data[0].name", is(SubcategoryName.INSTANT_FOOD.getKoreanName())))
 			.andExpect(jsonPath("$.data[0].tags[0].id", is(1)))
 			.andExpect(jsonPath("$.data[0].tags[0].name", is(TagName.CONVENIENCE_STORE.getKoreanName())))
 			.andExpect(jsonPath("$.data[0].tags[1].id", is(2)))
 			.andExpect(jsonPath("$.data[0].tags[1].name", is(TagName.CILANTRO.getKoreanName())))
-			.andExpect(jsonPath("$.data[1].subcategoryId", is(2)))
-			.andExpect(jsonPath("$.data[1].subcategory", is(SubcategoryName.SNACK.getKoreanName())))
+			.andExpect(jsonPath("$.data[1].id", is(2)))
+			.andExpect(jsonPath("$.data[1].name", is(SubcategoryName.SNACK.getKoreanName())))
 			.andExpect(jsonPath("$.data[1].tags.size()", is(0)))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
 
-		verify(subcategoryService, times(1)).getSubcategoryList(subcategoryIds);
+		verify(subcategoryService, times(1)).getSubcategoryList(ids);
 	}
 
 	@Test
 	@DisplayName("존재하지 않는 Subcategory Id 쿼리가 들어올 경우, SubcategoryNotFound Error Response를 반환하는지 테스트")
-	public void testGetTagsBySubcategoryIdsWithValidQueryButNotExist() throws Exception {
+	public void testGetTagsByidsWithValidQueryButNotExist() throws Exception {
 		//given
 		when(subcategoryService.getSubcategoryList(anyList())).thenThrow(new SubcategoryNotFoundException());
 
@@ -183,7 +182,7 @@ public class TagControllerTest {
 
 	@Test
 	@DisplayName("올바르지 않은 쿼리가 들어올 경우, INVALID_QUERY_FORMAT을 반환하는지 테스트")
-	public void testGetTagsBySubcategoryIdsWithInvalidQueryFormat() throws Exception {
+	public void testGetTagsByidsWithInvalidQueryFormat() throws Exception {
 		//given
 		when(subcategoryService.getSubcategoryList(anyList())).thenThrow(MethodArgumentTypeMismatchException.class);
 

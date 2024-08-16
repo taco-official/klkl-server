@@ -61,10 +61,10 @@ public class CategoryControllerTest {
 			.andExpect(jsonPath("$.isSuccess", is(true)))
 			.andExpect(jsonPath("$.code", is("C000")))
 			.andExpect(jsonPath("$.data", hasSize(2)))
-			.andExpect(jsonPath("$.data[0].categoryId", is(1)))
-			.andExpect(jsonPath("$.data[0].category", is("Category1")))
-			.andExpect(jsonPath("$.data[1].categoryId", is(2)))
-			.andExpect(jsonPath("$.data[1].category", is("Category2")))
+			.andExpect(jsonPath("$.data[0].id", is(1)))
+			.andExpect(jsonPath("$.data[0].name", is("Category1")))
+			.andExpect(jsonPath("$.data[1].id", is(2)))
+			.andExpect(jsonPath("$.data[1].name", is("Category2")))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
 
 		verify(categoryService, times(1)).getCategories();
@@ -74,18 +74,18 @@ public class CategoryControllerTest {
 	@DisplayName("valid id가 들어올 경우 Categoy와 Subcategory가 잘 나오는지 Test")
 	public void testGetSubcategoryWithValidId() throws Exception {
 		// given
-		Long categoryId = 1L;
+		Long id = 1L;
 		Category mockCategory = mock(Category.class);
 		CategoryRepository mockCategoryRepository = mock(CategoryRepository.class);
-		when(mockCategory.getId()).thenReturn(categoryId);
+		when(mockCategory.getId()).thenReturn(id);
 		when(mockCategory.getName()).thenReturn(CategoryName.FOOD);
 
-		when(mockCategoryRepository.findById(categoryId)).thenReturn(Optional.of(mockCategory));
+		when(mockCategoryRepository.findById(id)).thenReturn(Optional.of(mockCategory));
 		when(mockCategory.getSubcategories()).thenReturn(subcategories);
 		CategoryWithSubcategoryResponse response = CategoryWithSubcategoryResponse.from(mockCategory);
 
 		// when
-		when(categoryService.getSubcategories(categoryId)).thenReturn(response);
+		when(categoryService.getSubcategories(id)).thenReturn(response);
 
 		// then
 		mockMvc.perform(get("/v1/categories/1/subcategories")
@@ -93,15 +93,15 @@ public class CategoryControllerTest {
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
 			.andExpect(jsonPath("$.code", is("C000")))
-			.andExpect(jsonPath("$.data.categoryId", is(1)))
-			.andExpect(jsonPath("$.data.category", is(CategoryName.FOOD.getKoreanName())))
-			.andExpect(jsonPath("$.data.subcategories[0].subcategoryId", is(subcategory1.getId())))
-			.andExpect(jsonPath("$.data.subcategories[0].subcategory", is(SubcategoryName.DRESS.getKoreanName())))
-			.andExpect(jsonPath("$.data.subcategories[1].subcategoryId", is(subcategory2.getId())))
-			.andExpect(jsonPath("$.data.subcategories[1].subcategory", is(SubcategoryName.HAIR_CARE.getKoreanName())))
+			.andExpect(jsonPath("$.data.id", is(1)))
+			.andExpect(jsonPath("$.data.name", is(CategoryName.FOOD.getKoreanName())))
+			.andExpect(jsonPath("$.data.subcategories[0].id", is(subcategory1.getId())))
+			.andExpect(jsonPath("$.data.subcategories[0].name", is(SubcategoryName.DRESS.getKoreanName())))
+			.andExpect(jsonPath("$.data.subcategories[1].id", is(subcategory2.getId())))
+			.andExpect(jsonPath("$.data.subcategories[1].name", is(SubcategoryName.HAIR_CARE.getKoreanName())))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
 
-		verify(categoryService, times(1)).getSubcategories(categoryId);
+		verify(categoryService, times(1)).getSubcategories(id);
 	}
 
 	@Test

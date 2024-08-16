@@ -6,16 +6,22 @@ import taco.klkl.domain.category.domain.Subcategory;
 import taco.klkl.domain.category.domain.SubcategoryTag;
 
 public record TagWithSubcategoryResponse(
-	Long subcategoryId,
-	String subcategory,
+	Long id,
+	String name,
 	List<TagResponse> tags
 ) {
-	public static TagWithSubcategoryResponse from(Subcategory subcategory) {
-		return new TagWithSubcategoryResponse(subcategory.getId(), subcategory.getName().getKoreanName(),
-			subcategory.getSubcategoryTags()
-				.stream()
-				.map(SubcategoryTag::getTag)
-				.map(TagResponse::from)
-				.toList());
+	public static TagWithSubcategoryResponse from(final Subcategory subcategory) {
+		return new TagWithSubcategoryResponse(
+			subcategory.getId(),
+			subcategory.getName().getKoreanName(),
+			createTagsBySubcategory(subcategory)
+		);
+	}
+
+	private static List<TagResponse> createTagsBySubcategory(final Subcategory subcategory) {
+		return subcategory.getSubcategoryTags().stream()
+			.map(SubcategoryTag::getTag)
+			.map(TagResponse::from)
+			.toList();
 	}
 }

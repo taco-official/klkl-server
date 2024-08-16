@@ -66,7 +66,7 @@ public class SubcategoryTagServiceImplTest {
 		// then
 		assertNotNull(result);
 		assertEquals(1, result.size());
-		assertEquals(SubcategoryName.INSTANT_FOOD.getKoreanName(), result.get(0).subcategory());
+		assertEquals(SubcategoryName.INSTANT_FOOD.getKoreanName(), result.get(0).name());
 		assertEquals(2, result.get(0).tags().size());
 		assertEquals(TagName.CONVENIENCE_STORE.getKoreanName(), result.get(0).tags().get(0).name());
 		assertEquals(TagName.CILANTRO.getKoreanName(), result.get(0).tags().get(1).name());
