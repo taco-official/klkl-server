@@ -53,6 +53,7 @@ import taco.klkl.domain.user.domain.User;
 import taco.klkl.global.common.constants.ProductConstants;
 import taco.klkl.global.common.response.PagedResponseDto;
 import taco.klkl.global.util.FilterUtil;
+import taco.klkl.global.util.SubcategoryUtil;
 import taco.klkl.global.util.UserUtil;
 
 @Service
@@ -69,6 +70,7 @@ public class ProductService {
 
 	private final UserUtil userUtil;
 	private final FilterUtil filterUtil;
+	private final SubcategoryUtil subcategoryUtil;
 
 	public PagedResponseDto<ProductSimpleResponse> getProductsByFilterOptions(
 		final Pageable pageable,
@@ -275,7 +277,7 @@ public class ProductService {
 	}
 
 	private Subcategory getSubcategoryEntity(final Long subcategoryId) throws SubcategoryNotFoundException {
-		return subcategoryService.getSubcategoryEntityById(subcategoryId);
+		return subcategoryUtil.getSubcategoryEntityById(subcategoryId);
 	}
 
 	private Currency getCurrencyEntity(final Long currencyId) throws CurrencyNotFoundException {
@@ -311,7 +313,7 @@ public class ProductService {
 	}
 
 	private void validateSubcategoryIds(final Set<Long> subcategoryIds) {
-		subcategoryIds.forEach(subcategoryService::getSubcategoryEntityById);
+		subcategoryIds.forEach(subcategoryUtil::getSubcategoryEntityById);
 	}
 
 	private void validateFilterIds(final Set<Long> filterIds) {

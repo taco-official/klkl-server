@@ -67,6 +67,7 @@ import taco.klkl.domain.user.domain.User;
 import taco.klkl.global.common.constants.UserConstants;
 import taco.klkl.global.common.response.PagedResponseDto;
 import taco.klkl.global.util.FilterUtil;
+import taco.klkl.global.util.SubcategoryUtil;
 import taco.klkl.global.util.UserUtil;
 
 class ProductServiceTest {
@@ -91,6 +92,9 @@ class ProductServiceTest {
 
 	@Mock
 	private FilterUtil filterUtil;
+
+	@Mock
+	private SubcategoryUtil subcategoryUtil;
 
 	@InjectMocks
 	private ProductService productService;
@@ -210,7 +214,7 @@ class ProductServiceTest {
 		Subcategory mockSubcategory = mock(Subcategory.class);
 		Filter mockFilter = mock(Filter.class);
 		when(cityService.isCitiesMappedToSameCountry(anySet())).thenReturn(true);
-		when(subcategoryService.getSubcategoryEntityById(anyLong())).thenReturn(mockSubcategory);
+		when(subcategoryUtil.getSubcategoryEntityById(anyLong())).thenReturn(mockSubcategory);
 		when(filterUtil.getFilterEntityById(anyLong())).thenReturn(mockFilter);
 
 		// When
@@ -244,7 +248,7 @@ class ProductServiceTest {
 
 		// Verify that validation methods were called
 		verify(cityService).isCitiesMappedToSameCountry(cityIds);
-		verify(subcategoryService, times(3)).getSubcategoryEntityById(anyLong());
+		verify(subcategoryUtil, times(3)).getSubcategoryEntityById(anyLong());
 		verify(filterUtil, times(2)).getFilterEntityById(anyLong());
 	}
 
@@ -309,7 +313,7 @@ class ProductServiceTest {
 		// Given
 		when(userUtil.findTestUser()).thenReturn(user);
 		when(cityService.getCityEntityById(1L)).thenReturn(city);
-		when(subcategoryService.getSubcategoryEntityById(1L)).thenReturn(subcategory);
+		when(subcategoryUtil.getSubcategoryEntityById(1L)).thenReturn(subcategory);
 		when(currencyService.getCurrencyEntityById(1L)).thenReturn(currency);
 
 		// save 메서드 호출 시 ID를 설정하고 저장된 객체를 반환하도록 설정
@@ -346,7 +350,7 @@ class ProductServiceTest {
 		// Given
 		when(productRepository.findById(1L)).thenReturn(Optional.of(testProduct));
 		when(cityService.getCityEntityById(1L)).thenReturn(city);
-		when(subcategoryService.getSubcategoryEntityById(1L)).thenReturn(subcategory);
+		when(subcategoryUtil.getSubcategoryEntityById(1L)).thenReturn(subcategory);
 		when(currencyService.getCurrencyEntityById(1L)).thenReturn(currency);
 
 		// When
