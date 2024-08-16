@@ -1,11 +1,10 @@
 package taco.klkl.domain.product.dto.response;
 
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import taco.klkl.domain.category.dto.response.FilterResponseDto;
 import taco.klkl.domain.product.domain.Product;
-import taco.klkl.domain.product.domain.ProductFilter;
+import taco.klkl.global.util.ProductUtil;
 
 /**
  * TODO: 상품필터속성 추가 해야함 (상품필터속성 테이블 개발 후)
@@ -27,12 +26,7 @@ public record ProductSimpleResponseDto(
 	Set<FilterResponseDto> filters
 ) {
 
-	public static ProductSimpleResponseDto from(Product product) {
-		Set<FilterResponseDto> filters = product.getProductFilters().stream()
-			.map(ProductFilter::getFilter)
-			.map(FilterResponseDto::from)
-			.collect(Collectors.toSet());
-
+	public static ProductSimpleResponseDto from(final Product product) {
 		return new ProductSimpleResponseDto(
 			product.getId(),
 			product.getName(),
@@ -40,7 +34,7 @@ public record ProductSimpleResponseDto(
 			product.getRating().getValue(),
 			product.getCity().getCountry().getName().getKoreanName(),
 			product.getSubcategory().getCategory().getName().getKoreanName(),
-			filters
+			ProductUtil.createFiltersByProduct(product)
 		);
 	}
 }

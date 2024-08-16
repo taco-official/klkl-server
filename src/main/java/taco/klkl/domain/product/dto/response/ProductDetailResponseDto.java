@@ -1,19 +1,15 @@
 package taco.klkl.domain.product.dto.response;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.Objects;
-import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import taco.klkl.domain.category.dto.response.FilterResponseDto;
 import taco.klkl.domain.category.dto.response.SubcategoryResponseDto;
 import taco.klkl.domain.product.domain.Product;
-import taco.klkl.domain.product.domain.ProductFilter;
 import taco.klkl.domain.region.dto.response.CityResponseDto;
 import taco.klkl.domain.region.dto.response.CurrencyResponseDto;
 import taco.klkl.domain.user.dto.response.UserDetailResponseDto;
+import taco.klkl.global.util.ProductUtil;
 
 /**
  * TODO: 상품필터속성 추가 해야함 (상품필터속성 테이블 개발 후)
@@ -47,15 +43,7 @@ public record ProductDetailResponseDto(
 	LocalDateTime createdAt
 ) {
 
-	public static ProductDetailResponseDto from(Product product) {
-		Set<FilterResponseDto> filters = Optional.ofNullable(product.getProductFilters())
-			.map(productFilters -> productFilters.stream()
-				.map(ProductFilter::getFilter)
-				.filter(Objects::nonNull)
-				.map(FilterResponseDto::from)
-				.collect(Collectors.toSet()))
-			.orElse(Collections.emptySet());
-
+	public static ProductDetailResponseDto from(final Product product) {
 		return new ProductDetailResponseDto(
 			product.getId(),
 			product.getName(),
@@ -68,9 +56,8 @@ public record ProductDetailResponseDto(
 			CityResponseDto.from(product.getCity()),
 			SubcategoryResponseDto.from(product.getSubcategory()),
 			CurrencyResponseDto.from(product.getCurrency()),
-			filters,
+			ProductUtil.createFiltersByProduct(product),
 			product.getCreatedAt()
 		);
 	}
-
 }
