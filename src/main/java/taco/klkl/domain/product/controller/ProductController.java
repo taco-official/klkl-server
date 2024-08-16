@@ -40,7 +40,7 @@ public class ProductController {
 
 	@GetMapping
 	@Operation(summary = "상품 목록 조회", description = "상품 목록을 조회합니다.")
-	public PagedResponseDto<ProductSimpleResponse> getProducts(
+	public PagedResponseDto<ProductSimpleResponse> findProductsByFilteringAndSorting(
 		@PageableDefault(size = ProductConstants.DEFAULT_PAGE_SIZE) Pageable pageable,
 		@RequestParam(name = "city_id", required = false) Set<Long> cityIds,
 		@RequestParam(name = "subcategory_id", required = false) Set<Long> subcategoryIds,
@@ -57,15 +57,15 @@ public class ProductController {
 			sortBy,
 			sortDirection
 		);
-		return productService.getProductsByFilterOptions(pageable, filterOptions, sortOptions);
+		return productService.findProductsByFilterOptionsAndSortOptions(pageable, filterOptions, sortOptions);
 	}
 
-	@GetMapping("/{id}")
+	@GetMapping("/{productId}")
 	@Operation(summary = "상품 상세 조회", description = "상품 상세 정보를 조회합니다.")
-	public ProductDetailResponse getProductById(
-		@PathVariable Long id
+	public ProductDetailResponse findProductById(
+		@PathVariable Long productId
 	) {
-		return productService.getProductById(id);
+		return productService.findProductById(productId);
 	}
 
 	@PostMapping
@@ -77,21 +77,21 @@ public class ProductController {
 		return productService.createProduct(createRequest);
 	}
 
-	@PutMapping("/{id}")
+	@PutMapping("/{productId}")
 	@Operation(summary = "상품 정보 수정", description = "상품 정보를 수정합니다.")
 	public ProductDetailResponse updateProduct(
-		@PathVariable Long id,
+		@PathVariable Long productId,
 		@Valid @RequestBody ProductCreateUpdateRequest updateRequest
 	) {
-		return productService.updateProduct(id, updateRequest);
+		return productService.updateProduct(productId, updateRequest);
 	}
 
-	@DeleteMapping("/{id}")
+	@DeleteMapping("/{productId}")
 	@Operation(summary = "상품 삭제", description = "상품을 삭제합니다.")
 	public ResponseEntity<Void> deleteProduct(
-		@PathVariable Long id
+		@PathVariable Long productId
 	) {
-		productService.deleteProduct(id);
+		productService.deleteProduct(productId);
 		return ResponseEntity.noContent().build();
 	}
 }

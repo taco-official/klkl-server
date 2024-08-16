@@ -21,13 +21,13 @@ public enum Rating {
 
 	private final double value;
 
-	Rating(double value) {
+	Rating(final double value) {
 		this.value = value;
 	}
 
 	public static Rating from(final double value) {
 		return Arrays.stream(Rating.values())
-			.filter(r -> r.value == value)
+			.filter(rating -> rating.value == value)
 			.findFirst()
 			.orElseThrow(RatingNotFoundException::new);
 	}

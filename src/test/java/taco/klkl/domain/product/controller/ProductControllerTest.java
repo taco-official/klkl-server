@@ -127,13 +127,13 @@ public class ProductControllerTest {
 
 	@Test
 	@DisplayName("상품 목록 조회 - 성공")
-	void testGetProducts_ShouldReturnPagedProducts() throws Exception {
+	void testFindProducts_ShouldReturnPagedProductsByFilteringAndSorting() throws Exception {
 		// Given
 		List<ProductSimpleResponse> products = List.of(productSimpleResponse);
 		PagedResponseDto<ProductSimpleResponse> pagedResponse = new PagedResponseDto<>(
 			products, 0, 10, 1, 1, true
 		);
-		when(productService.getProductsByFilterOptions(
+		when(productService.findProductsByFilterOptionsAndSortOptions(
 			any(Pageable.class),
 			any(ProductFilterOptions.class),
 			any(ProductSortOptions.class)))
@@ -175,7 +175,7 @@ public class ProductControllerTest {
 			ArgumentCaptor.forClass(ProductFilterOptions.class);
 		ArgumentCaptor<ProductSortOptions> sortOptionsCaptor = ArgumentCaptor.forClass(ProductSortOptions.class);
 
-		verify(productService).getProductsByFilterOptions(
+		verify(productService).findProductsByFilterOptionsAndSortOptions(
 			pageableCaptor.capture(),
 			filterOptionsCaptor.capture(),
 			sortOptionsCaptor.capture()
@@ -196,9 +196,9 @@ public class ProductControllerTest {
 
 	@Test
 	@DisplayName("상품 상세 조회 - 성공")
-	void testGetProductById_ShouldReturnProduct() throws Exception {
+	void testFindProductById_ShouldReturnProduct() throws Exception {
 		// Given
-		when(productService.getProductById(1L)).thenReturn(productDetailResponse);
+		when(productService.findProductById(1L)).thenReturn(productDetailResponse);
 
 		// When & Then
 		mockMvc.perform(get("/v1/products/1"))

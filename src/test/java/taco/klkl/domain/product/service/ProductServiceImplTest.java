@@ -161,7 +161,7 @@ class ProductServiceImplTest {
 
 	@Test
 	@DisplayName("상품 목록 조회 - 성공")
-	void testGetProductsByFilterOptions() {
+	void testFindProductsByFilterOptionsAndSortOptions() {
 		// Given
 		Set<Long> cityIds = Set.of(4L, 5L);
 		Set<Long> subcategoryIds = Set.of(1L, 2L, 3L);
@@ -210,12 +210,12 @@ class ProductServiceImplTest {
 		Subcategory mockSubcategory = mock(Subcategory.class);
 		Tag mockTag = mock(Tag.class);
 		when(cityUtil.isCitiesMappedToSameCountry(anySet())).thenReturn(true);
-		when(subcategoryUtil.getSubcategoryEntityById(anyLong())).thenReturn(mockSubcategory);
-		when(tagUtil.getTagEntityById(anyLong())).thenReturn(mockTag);
+		when(subcategoryUtil.findSubcategoryEntityById(anyLong())).thenReturn(mockSubcategory);
+		when(tagUtil.findTagEntityById(anyLong())).thenReturn(mockTag);
 
 		// When
 		PagedResponseDto<ProductSimpleResponse> result = productService
-			.getProductsByFilterOptions(pageable, filterOptions, sortOptions);
+			.findProductsByFilterOptionsAndSortOptions(pageable, filterOptions, sortOptions);
 
 		// Then
 		assertThat(result.content()).hasSize(1);
@@ -244,19 +244,19 @@ class ProductServiceImplTest {
 
 		// Verify that validation methods were called
 		verify(cityUtil).isCitiesMappedToSameCountry(cityIds);
-		verify(subcategoryUtil, times(3)).getSubcategoryEntityById(anyLong());
-		verify(tagUtil, times(2)).getTagEntityById(anyLong());
+		verify(subcategoryUtil, times(3)).findSubcategoryEntityById(anyLong());
+		verify(tagUtil, times(2)).findTagEntityById(anyLong());
 	}
 
 	@Test
 	@DisplayName("상품 상세 조회 - 성공")
-	void testGetProductById() {
+	void testFindProductById() {
 		// Given
 		Long productId = 1L;
 		when(productRepository.findById(productId)).thenReturn(Optional.of(testProduct));
 
 		// When
-		ProductDetailResponse result = productService.getProductById(productId);
+		ProductDetailResponse result = productService.findProductById(productId);
 
 		// Then
 		assertThat(result).isNotNull();
@@ -294,12 +294,12 @@ class ProductServiceImplTest {
 
 	@Test
 	@DisplayName("상품 상세 조회 - 실패 (상품 없음)")
-	void testGetProductById_NotFound() {
+	void testFindProductById_NotFound() {
 		// Given
 		when(productRepository.findById(1L)).thenReturn(Optional.empty());
 
 		// When & Then
-		assertThrows(ProductNotFoundException.class, () -> productService.getProductById(1L));
+		assertThrows(ProductNotFoundException.class, () -> productService.findProductById(1L));
 		verify(productRepository).findById(1L);
 	}
 
@@ -308,9 +308,9 @@ class ProductServiceImplTest {
 	void testCreateProduct() {
 		// Given
 		when(userUtil.findTestUser()).thenReturn(user);
-		when(cityUtil.getCityEntityById(1L)).thenReturn(city);
-		when(subcategoryUtil.getSubcategoryEntityById(1L)).thenReturn(subcategory);
-		when(currencyUtil.getCurrencyEntityById(1L)).thenReturn(currency);
+		when(cityUtil.findCityEntityById(1L)).thenReturn(city);
+		when(subcategoryUtil.findSubcategoryEntityById(1L)).thenReturn(subcategory);
+		when(currencyUtil.findCurrencyEntityById(1L)).thenReturn(currency);
 
 		// save 메서드 호출 시 ID를 설정하고 저장된 객체를 반환하도록 설정
 		when(productRepository.save(any(Product.class))).thenAnswer(invocation -> {
@@ -345,9 +345,9 @@ class ProductServiceImplTest {
 	void testUpdateProduct() {
 		// Given
 		when(productRepository.findById(1L)).thenReturn(Optional.of(testProduct));
-		when(cityUtil.getCityEntityById(1L)).thenReturn(city);
-		when(subcategoryUtil.getSubcategoryEntityById(1L)).thenReturn(subcategory);
-		when(currencyUtil.getCurrencyEntityById(1L)).thenReturn(currency);
+		when(cityUtil.findCityEntityById(1L)).thenReturn(city);
+		when(subcategoryUtil.findSubcategoryEntityById(1L)).thenReturn(subcategory);
+		when(currencyUtil.findCurrencyEntityById(1L)).thenReturn(currency);
 
 		// When
 		ProductDetailResponse result = productService.updateProduct(1L, requestDto);

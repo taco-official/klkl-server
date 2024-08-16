@@ -17,13 +17,13 @@ import taco.klkl.global.common.response.PagedResponseDto;
 @Service
 public interface ProductService {
 
-	PagedResponseDto<ProductSimpleResponse> getProductsByFilterOptions(
+	PagedResponseDto<ProductSimpleResponse> findProductsByFilterOptionsAndSortOptions(
 		final Pageable pageable,
 		final ProductFilterOptions filterOptions,
 		final ProductSortOptions sortOptions
 	);
 
-	ProductDetailResponse getProductById(final Long id) throws ProductNotFoundException;
+	ProductDetailResponse findProductById(final Long id) throws ProductNotFoundException;
 
 	ProductDetailResponse createProduct(final ProductCreateUpdateRequest createRequest);
 

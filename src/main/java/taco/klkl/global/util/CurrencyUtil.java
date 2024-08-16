@@ -13,8 +13,7 @@ public class CurrencyUtil {
 
 	private final CurrencyRepository currencyRepository;
 
-	public Currency getCurrencyEntityById(final Long id) {
-
+	public Currency findCurrencyEntityById(final Long id) {
 		return currencyRepository.findById(id)
 			.orElseThrow(CurrencyNotFoundException::new);
 	}

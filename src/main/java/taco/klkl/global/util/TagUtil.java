@@ -13,7 +13,7 @@ public class TagUtil {
 
 	private final TagRepository tagRepository;
 
-	public Tag getTagEntityById(final Long id) {
+	public Tag findTagEntityById(final Long id) {
 		return tagRepository.findById(id)
 			.orElseThrow(TagNotFoundException::new);
 	}

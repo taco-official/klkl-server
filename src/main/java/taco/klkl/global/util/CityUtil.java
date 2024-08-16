@@ -17,14 +17,14 @@ public class CityUtil {
 
 	private final CityRepository cityRepository;
 
-	public City getCityEntityById(final Long id) {
+	public City findCityEntityById(final Long id) {
 		return cityRepository.findById(id)
 			.orElseThrow(CityNotFoundException::new);
 	}
 
 	public boolean isCitiesMappedToSameCountry(final Set<Long> cityIds) {
-		Set<Long> countryIds = cityIds.stream()
-			.map(this::getCityEntityById)
+		final Set<Long> countryIds = cityIds.stream()
+			.map(this::findCityEntityById)
 			.map(City::getCountry)
 			.map(Country::getId)
 			.collect(Collectors.toSet());

@@ -74,7 +74,7 @@ public class ProductServiceImpl implements ProductService {
 	private final CurrencyUtil currencyUtil;
 
 	@Override
-	public PagedResponseDto<ProductSimpleResponse> getProductsByFilterOptions(
+	public PagedResponseDto<ProductSimpleResponse> findProductsByFilterOptionsAndSortOptions(
 		final Pageable pageable,
 		final ProductFilterOptions filterOptions,
 		final ProductSortOptions sortOptions
@@ -82,16 +82,16 @@ public class ProductServiceImpl implements ProductService {
 		validateFilterOptions(filterOptions);
 		validateSortOptions(sortOptions);
 
-		JPAQuery<?> baseQuery = createBaseQuery(filterOptions);
-		long total = getCount(baseQuery);
-		List<Product> products = fetchProducts(baseQuery, pageable, sortOptions);
+		final JPAQuery<?> baseQuery = createBaseQuery(filterOptions);
+		final long total = getCount(baseQuery);
+		final List<Product> products = fetchProducts(baseQuery, pageable, sortOptions);
+		final Page<Product> productPage = new PageImpl<>(products, pageable, total);
 
-		Page<Product> productPage = new PageImpl<>(products, pageable, total);
 		return PagedResponseDto.of(productPage, ProductSimpleResponse::from);
 	}
 
 	@Override
-	public ProductDetailResponse getProductById(final Long id) throws ProductNotFoundException {
+	public ProductDetailResponse findProductById(final Long id) throws ProductNotFoundException {
 		final Product product = productRepository.findById(id)
 			.orElseThrow(ProductNotFoundException::new);
 		return taco.klkl.domain.product.dto.response.ProductDetailResponse.from(product);
@@ -144,15 +144,14 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public List<ProductSimpleResponse> getProductsByPartialName(String partialName) {
+	public List<ProductSimpleResponse> getProductsByPartialName(final String partialName) {
+		final QProduct product = QProduct.product;
+		final QCity city = QCity.city;
+		final QCountry country = QCountry.country;
+		final QSubcategory subcategory = QSubcategory.subcategory;
+		final QCategory category = QCategory.category;
 
-		QProduct product = QProduct.product;
-		QCity city = QCity.city;
-		QCountry country = QCountry.country;
-		QSubcategory subcategory = QSubcategory.subcategory;
-		QCategory category = QCategory.category;
-
-		List<Product> products = queryFactory
+		final List<Product> products = queryFactory
 			.selectFrom(product)
 			.join(product.city, city).fetchJoin()
 			.join(city.country, country).fetchJoin()
@@ -167,13 +166,13 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	private JPAQuery<?> createBaseQuery(final ProductFilterOptions filterOptions) {
-		QProduct product = QProduct.product;
-		QProductTag productTag = QProductTag.productTag;
-		QTag tag = QTag.tag;
+		final QProduct product = QProduct.product;
+		final QProductTag productTag = QProductTag.productTag;
+		final QTag tag = QTag.tag;
 
 		JPAQuery<?> query = queryFactory.from(product);
 
-		BooleanBuilder builder = new BooleanBuilder();
+		final BooleanBuilder builder = new BooleanBuilder();
 		builder.and(createCityFilter(filterOptions.cityIds()));
 		builder.and(createSubcategoryFilter(filterOptions.subcategoryIds()));
 		builder.and(createTagFilter(filterOptions.tagIds()));
@@ -196,7 +195,7 @@ public class ProductServiceImpl implements ProductService {
 		final Pageable pageable,
 		final ProductSortOptions sortOptions
 	) {
-		JPAQuery<Product> productQuery = baseQuery.select(QProduct.product).distinct();
+		final JPAQuery<Product> productQuery = baseQuery.select(QProduct.product).distinct();
 
 		applySorting(productQuery, sortOptions);
 
@@ -207,9 +206,9 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	private void applySorting(final JPAQuery<Product> query, final ProductSortOptions sortOptions) {
-		PathBuilder<Product> pathBuilder = new PathBuilder<>(Product.class, "product");
-		Sort.Direction sortDirection = Sort.Direction.fromString(sortOptions.sortDirection());
-		OrderSpecifier<?> orderSpecifier = new OrderSpecifier<>(
+		final PathBuilder<Product> pathBuilder = new PathBuilder<>(Product.class, "product");
+		final Sort.Direction sortDirection = Sort.Direction.fromString(sortOptions.sortDirection());
+		final OrderSpecifier<?> orderSpecifier = new OrderSpecifier<>(
 			sortDirection == Sort.Direction.ASC ? Order.ASC : Order.DESC,
 			pathBuilder.get(sortOptions.sortBy(), Comparable.class)
 		);
@@ -239,7 +238,7 @@ public class ProductServiceImpl implements ProductService {
 
 	private Set<Tag> getTagsByTagIds(final Set<Long> filterIds) {
 		return filterIds.stream()
-			.map(tagUtil::getTagEntityById)
+			.map(tagUtil::findTagEntityById)
 			.collect(Collectors.toSet());
 	}
 
@@ -282,15 +281,15 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	private City getCityEntity(final Long cityId) throws CityNotFoundException {
-		return cityUtil.getCityEntityById(cityId);
+		return cityUtil.findCityEntityById(cityId);
 	}
 
 	private Subcategory getSubcategoryEntity(final Long subcategoryId) throws SubcategoryNotFoundException {
-		return subcategoryUtil.getSubcategoryEntityById(subcategoryId);
+		return subcategoryUtil.findSubcategoryEntityById(subcategoryId);
 	}
 
 	private Currency getCurrencyEntity(final Long currencyId) throws CurrencyNotFoundException {
-		return currencyUtil.getCurrencyEntityById(currencyId);
+		return currencyUtil.findCurrencyEntityById(currencyId);
 	}
 
 	private void validateFilterOptions(final ProductFilterOptions filterOptions) {
@@ -322,10 +321,10 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	private void validateSubcategoryIds(final Set<Long> subcategoryIds) {
-		subcategoryIds.forEach(subcategoryUtil::getSubcategoryEntityById);
+		subcategoryIds.forEach(subcategoryUtil::findSubcategoryEntityById);
 	}
 
 	private void validateTagIds(final Set<Long> tagIds) {
-		tagIds.forEach(tagUtil::getTagEntityById);
+		tagIds.forEach(tagUtil::findTagEntityById);
 	}
 }

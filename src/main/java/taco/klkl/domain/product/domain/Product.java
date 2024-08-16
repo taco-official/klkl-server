@@ -221,7 +221,7 @@ public class Product {
 	}
 
 	public void addTag(final Tag tag) {
-		ProductTag productTag = ProductTag.of(this, tag);
+		final ProductTag productTag = ProductTag.of(this, tag);
 		this.productTags.add(productTag);
 	}
 
