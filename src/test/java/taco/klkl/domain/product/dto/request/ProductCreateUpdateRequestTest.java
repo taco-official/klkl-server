@@ -452,8 +452,8 @@ class ProductCreateUpdateRequestTest {
 	}
 
 	@Test
-	@DisplayName("필터 ID가 null일 때 검증 실패")
-	void testNullFilterIds() {
+	@DisplayName("태그 ID가 null일 때 검증 실패")
+	void testNullTagIds() {
 		ProductCreateUpdateRequest requestDto = new ProductCreateUpdateRequest(
 			"Valid Product Name",
 			"Valid product description",

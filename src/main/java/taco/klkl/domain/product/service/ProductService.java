@@ -21,16 +21,16 @@ import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.RequiredArgsConstructor;
-import taco.klkl.domain.category.domain.Filter;
 import taco.klkl.domain.category.domain.QCategory;
-import taco.klkl.domain.category.domain.QFilter;
 import taco.klkl.domain.category.domain.QSubcategory;
+import taco.klkl.domain.category.domain.QTag;
 import taco.klkl.domain.category.domain.Subcategory;
+import taco.klkl.domain.category.domain.Tag;
 import taco.klkl.domain.category.exception.SubcategoryNotFoundException;
 import taco.klkl.domain.product.dao.ProductRepository;
 import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.product.domain.QProduct;
-import taco.klkl.domain.product.domain.QProductFilter;
+import taco.klkl.domain.product.domain.QProductTag;
 import taco.klkl.domain.product.domain.Rating;
 import taco.klkl.domain.product.dto.request.ProductCreateUpdateRequest;
 import taco.klkl.domain.product.dto.request.ProductFilterOptions;
@@ -46,15 +46,13 @@ import taco.klkl.domain.region.domain.QCity;
 import taco.klkl.domain.region.domain.QCountry;
 import taco.klkl.domain.region.exception.CityNotFoundException;
 import taco.klkl.domain.region.exception.CurrencyNotFoundException;
-import taco.klkl.domain.region.service.CityService;
-import taco.klkl.domain.region.service.CurrencyService;
 import taco.klkl.domain.user.domain.User;
 import taco.klkl.global.common.constants.ProductConstants;
 import taco.klkl.global.common.response.PagedResponseDto;
 import taco.klkl.global.util.CityUtil;
 import taco.klkl.global.util.CurrencyUtil;
-import taco.klkl.global.util.FilterUtil;
 import taco.klkl.global.util.SubcategoryUtil;
+import taco.klkl.global.util.TagUtil;
 import taco.klkl.global.util.UserUtil;
 
 @Service
@@ -65,11 +63,8 @@ public class ProductService {
 	private final JPAQueryFactory queryFactory;
 	private final ProductRepository productRepository;
 
-	private final CityService cityService;
-	private final CurrencyService currencyService;
-
 	private final UserUtil userUtil;
-	private final FilterUtil filterUtil;
+	private final TagUtil tagUtil;
 	private final SubcategoryUtil subcategoryUtil;
 	private final CityUtil cityUtil;
 	private final CurrencyUtil currencyUtil;
@@ -100,9 +95,9 @@ public class ProductService {
 	public ProductDetailResponse createProduct(final ProductCreateUpdateRequest createRequest) {
 		final Product product = createProductEntity(createRequest);
 		productRepository.save(product);
-		if (createRequest.filterIds() != null) {
-			Set<Filter> filters = getFiltersByFilterIds(createRequest.filterIds());
-			product.addFilters(filters);
+		if (createRequest.tagIds() != null) {
+			Set<Tag> tags = getTagsByTagIds(createRequest.tagIds());
+			product.addTags(tags);
 		}
 		return taco.klkl.domain.product.dto.response.ProductDetailResponse.from(product);
 	}
@@ -123,9 +118,9 @@ public class ProductService {
 		final Product product = productRepository.findById(id)
 			.orElseThrow(ProductNotFoundException::new);
 		updateProductEntity(product, updateRequest);
-		if (updateRequest.filterIds() != null) {
-			Set<Filter> updatedFilters = getFiltersByFilterIds(updateRequest.filterIds());
-			product.updateFilters(updatedFilters);
+		if (updateRequest.tagIds() != null) {
+			Set<Tag> updatedTags = getTagsByTagIds(updateRequest.tagIds());
+			product.updateTags(updatedTags);
 		}
 		return ProductDetailResponse.from(product);
 	}
@@ -161,19 +156,19 @@ public class ProductService {
 
 	private JPAQuery<?> createBaseQuery(final ProductFilterOptions filterOptions) {
 		QProduct product = QProduct.product;
-		QProductFilter productFilter = QProductFilter.productFilter;
-		QFilter filter = QFilter.filter;
+		QProductTag productTag = QProductTag.productTag;
+		QTag tag = QTag.tag;
 
 		JPAQuery<?> query = queryFactory.from(product);
 
 		BooleanBuilder builder = new BooleanBuilder();
 		builder.and(createCityFilter(filterOptions.cityIds()));
 		builder.and(createSubcategoryFilter(filterOptions.subcategoryIds()));
-		builder.and(createFilterIdsFilter(filterOptions.filterIds()));
+		builder.and(createTagFilter(filterOptions.tagIds()));
 
-		if (filterOptions.filterIds() != null && !filterOptions.filterIds().isEmpty()) {
-			query = query.leftJoin(product.productFilters, productFilter)
-				.leftJoin(productFilter.filter, filter);
+		if (filterOptions.tagIds() != null && !filterOptions.tagIds().isEmpty()) {
+			query = query.leftJoin(product.productTags, productTag)
+				.leftJoin(productTag.tag, tag);
 		}
 
 		return query.where(builder);
@@ -223,16 +218,16 @@ public class ProductService {
 		return QProduct.product.subcategory.id.in(subcategoryIds);
 	}
 
-	private BooleanExpression createFilterIdsFilter(final Set<Long> filterIds) {
+	private BooleanExpression createTagFilter(final Set<Long> filterIds) {
 		if (filterIds == null || filterIds.isEmpty()) {
 			return null;
 		}
-		return QProductFilter.productFilter.filter.id.in(filterIds);
+		return QProductTag.productTag.tag.id.in(filterIds);
 	}
 
-	private Set<Filter> getFiltersByFilterIds(final Set<Long> filterIds) {
+	private Set<Tag> getTagsByTagIds(final Set<Long> filterIds) {
 		return filterIds.stream()
-			.map(filterUtil::getFilterEntityById)
+			.map(tagUtil::getTagEntityById)
 			.collect(Collectors.toSet());
 	}
 
@@ -293,8 +288,8 @@ public class ProductService {
 		if (filterOptions.subcategoryIds() != null) {
 			validateSubcategoryIds(filterOptions.subcategoryIds());
 		}
-		if (filterOptions.filterIds() != null) {
-			validateFilterIds(filterOptions.filterIds());
+		if (filterOptions.tagIds() != null) {
+			validateTagIds(filterOptions.tagIds());
 		}
 	}
 
@@ -318,7 +313,7 @@ public class ProductService {
 		subcategoryIds.forEach(subcategoryUtil::getSubcategoryEntityById);
 	}
 
-	private void validateFilterIds(final Set<Long> filterIds) {
-		filterIds.forEach(filterUtil::getFilterEntityById);
+	private void validateTagIds(final Set<Long> tagIds) {
+		tagIds.forEach(tagUtil::getTagEntityById);
 	}
 }

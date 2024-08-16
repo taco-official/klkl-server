@@ -14,32 +14,32 @@ import jakarta.persistence.OneToMany;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import taco.klkl.domain.product.domain.ProductFilter;
+import taco.klkl.domain.product.domain.ProductTag;
 
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Filter {
+public class Tag {
 
 	@Id
-	@Column(name = "filter_id")
+	@Column(name = "tag_id")
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
-	@OneToMany(mappedBy = "filter")
-	List<SubcategoryFilter> subcategoryFilters = new ArrayList<>();
+	@OneToMany(mappedBy = "tag")
+	List<SubcategoryTag> subcategoryTags = new ArrayList<>();
 
-	@OneToMany(mappedBy = "filter")
-	Set<ProductFilter> productFilters = new HashSet<>();
+	@OneToMany(mappedBy = "tag")
+	Set<ProductTag> productTags = new HashSet<>();
 
 	@Column(name = "name")
-	private FilterName name;
+	private TagName name;
 
-	private Filter(FilterName filterName) {
-		this.name = filterName;
+	private Tag(TagName tagName) {
+		this.name = tagName;
 	}
 
-	public static Filter of(FilterName filterName) {
-		return new Filter(filterName);
+	public static Tag of(TagName tagName) {
+		return new Tag(tagName);
 	}
 }

@@ -13,17 +13,17 @@ import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import taco.klkl.domain.category.domain.Filter;
+import taco.klkl.domain.category.domain.Tag;
 
 @Getter
 @Entity(name = "product_filter")
 @DynamicInsert
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ProductFilter {
+public class ProductTag {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "product_filter_id")
+	@Column(name = "product_tag_id")
 	private Long id;
 
 	@ManyToOne(
@@ -41,17 +41,17 @@ public class ProductFilter {
 		optional = false
 	)
 	@JoinColumn(
-		name = "filter_id",
+		name = "tag_id",
 		nullable = false
 	)
-	private Filter filter;
+	private Tag tag;
 
-	private ProductFilter(Product product, Filter filter) {
+	private ProductTag(Product product, Tag tag) {
 		this.product = product;
-		this.filter = filter;
+		this.tag = tag;
 	}
 
-	public static ProductFilter of(Product product, Filter filter) {
-		return new ProductFilter(product, filter);
+	public static ProductTag of(Product product, Tag tag) {
+		return new ProductTag(product, tag);
 	}
 }

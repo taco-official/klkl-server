@@ -7,7 +7,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum FilterName {
+public enum TagName {
 
 	CONVENIENCE_STORE("편의점"),
 	CILANTRO("고수"),
@@ -16,9 +16,9 @@ public enum FilterName {
 
 	private final String koreanName;
 
-	public static FilterName getByName(String name) {
+	public static TagName getByName(String name) {
 		return Arrays.stream(values())
-			.filter(filterName -> filterName.getKoreanName().equals(name))
+			.filter(tagName -> tagName.getKoreanName().equals(name))
 			.findFirst()
 			.orElse(NONE);
 	}

@@ -41,7 +41,7 @@ public enum ErrorCode {
 	// Category
 	CATEGORY_ID_NOT_FOUND(HttpStatus.NOT_FOUND, "C060", "존재하지 않는 카테고리 ID 입니다."),
 	SUBCATEGORY_ID_NOT_FOUND(HttpStatus.NOT_FOUND, "C061", "존재하지 않는 서브카테고리 ID 입니다."),
-	FILTER_NOT_FOUND(HttpStatus.NOT_FOUND, "C062", "존재하지 않는 필터입니다."),
+	TAG_NOT_FOUND(HttpStatus.NOT_FOUND, "C062", "존재하지 않는 태그입니다."),
 
 	// Notification
 	NOTIFICATION_NOT_FOUND(HttpStatus.NOT_FOUND, "C070", "존재하지 않는 알림 입니다."),

@@ -2,7 +2,7 @@ package taco.klkl.domain.product.dto.response;
 
 import java.util.Set;
 
-import taco.klkl.domain.category.dto.response.FilterResponse;
+import taco.klkl.domain.category.dto.response.TagResponse;
 import taco.klkl.domain.product.domain.Product;
 import taco.klkl.global.util.ProductUtil;
 
@@ -23,7 +23,7 @@ public record ProductSimpleResponse(
 	Double rating,
 	String countryName,
 	String categoryName,
-	Set<FilterResponse> filters
+	Set<TagResponse> tags
 ) {
 
 	public static ProductSimpleResponse from(final Product product) {
@@ -34,7 +34,7 @@ public record ProductSimpleResponse(
 			product.getRating().getValue(),
 			product.getCity().getCountry().getName().getKoreanName(),
 			product.getSubcategory().getCategory().getName().getKoreanName(),
-			ProductUtil.createFiltersByProduct(product)
+			ProductUtil.createTagsByProduct(product)
 		);
 	}
 }

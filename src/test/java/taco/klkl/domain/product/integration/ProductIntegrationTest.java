@@ -432,8 +432,8 @@ public class ProductIntegrationTest {
 	}
 
 	@Test
-	@DisplayName("단일 필터 ID로 필터링된 상품 목록 조회 API 테스트")
-	public void testGetProductsBySingleFilterId() throws Exception {
+	@DisplayName("단일 태그 ID로 필터링된 상품 목록 조회 API 테스트")
+	public void testGetProductsBySingleTagId() throws Exception {
 		// given
 		ProductCreateUpdateRequest createCilantroRequest1 = new ProductCreateUpdateRequest(
 			"name1",
@@ -486,7 +486,7 @@ public class ProductIntegrationTest {
 
 		// when & then
 		mockMvc.perform(get("/v1/products")
-				.param("filter_id", "351")  // 고수
+				.param("tag_id", "351")  // 고수
 				.param("sort_by", "createdAt")
 				.param("sort_direction", "ASC")
 				.contentType(MediaType.APPLICATION_JSON))
@@ -505,8 +505,8 @@ public class ProductIntegrationTest {
 	}
 
 	@Test
-	@DisplayName("다중 필터 ID로 필터링된 상품 목록 조회 API 테스트")
-	public void testGetProductsByMultipleFilterIds() throws Exception {
+	@DisplayName("다중 태그 ID로 필터링된 상품 목록 조회 API 테스트")
+	public void testGetProductsByMultipleTagIds() throws Exception {
 		// given
 		ProductCreateUpdateRequest createCilantroRequest1 = new ProductCreateUpdateRequest(
 			"name1",
@@ -559,7 +559,7 @@ public class ProductIntegrationTest {
 
 		// when & then
 		mockMvc.perform(get("/v1/products")
-				.param("filter_id", "351", "350")  // 고수, 편의점
+				.param("tag_id", "351", "350")  // 고수, 편의점
 				.param("sort_by", "createdAt")
 				.param("sort_direction", "ASC")
 				.contentType(MediaType.APPLICATION_JSON))
@@ -633,7 +633,7 @@ public class ProductIntegrationTest {
 
 		// when & then
 		mockMvc.perform(get("/v1/products")
-				.param("filter_id", "351", "350")
+				.param("tag_id", "351", "350")
 				.param("sort_by", "createdAt")
 				.param("sort_direction", "ASC")
 				.contentType(MediaType.APPLICATION_JSON))
@@ -708,7 +708,7 @@ public class ProductIntegrationTest {
 
 		// when & then
 		mockMvc.perform(get("/v1/products")
-				.param("filter_id", "351", "350")
+				.param("tag_id", "351", "350")
 				.param("sort_by", "createdAt")
 				.param("sort_direction", "DESC")
 				.contentType(MediaType.APPLICATION_JSON))
@@ -783,7 +783,7 @@ public class ProductIntegrationTest {
 
 		// when & then
 		mockMvc.perform(get("/v1/products")
-				.param("filter_id", "351", "350")
+				.param("tag_id", "351", "350")
 				.param("sort_by", "rating")
 				.param("sort_direction", "ASC")
 				.contentType(MediaType.APPLICATION_JSON))
@@ -858,7 +858,7 @@ public class ProductIntegrationTest {
 
 		// when & then
 		mockMvc.perform(get("/v1/products")
-				.param("filter_id", "351", "350")
+				.param("tag_id", "351", "350")
 				.param("sort_by", "rating")
 				.param("sort_direction", "DESC")
 				.contentType(MediaType.APPLICATION_JSON))

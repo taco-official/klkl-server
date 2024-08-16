@@ -9,10 +9,10 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
-import taco.klkl.domain.category.dto.response.FilterResponse;
+import taco.klkl.domain.category.dto.response.TagResponse;
 import taco.klkl.domain.product.dao.ProductRepository;
 import taco.klkl.domain.product.domain.Product;
-import taco.klkl.domain.product.domain.ProductFilter;
+import taco.klkl.domain.product.domain.ProductTag;
 import taco.klkl.domain.product.exception.ProductNotFoundException;
 
 @Component
@@ -30,12 +30,12 @@ public class ProductUtil {
 		return productRepository.existsById(id);
 	}
 
-	public static Set<FilterResponse> createFiltersByProduct(final Product product) {
-		return Optional.ofNullable(product.getProductFilters())
-			.map(productFilters -> productFilters.stream()
-				.map(ProductFilter::getFilter)
+	public static Set<TagResponse> createTagsByProduct(final Product product) {
+		return Optional.ofNullable(product.getProductTags())
+			.map(productTag -> productTag.stream()
+				.map(ProductTag::getTag)
 				.filter(Objects::nonNull)
-				.map(FilterResponse::from)
+				.map(TagResponse::from)
 				.collect(Collectors.toSet()))
 			.orElse(Collections.emptySet());
 	}

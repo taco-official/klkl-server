@@ -26,8 +26,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import taco.klkl.domain.category.domain.CategoryName;
-import taco.klkl.domain.category.dto.response.FilterResponse;
 import taco.klkl.domain.category.dto.response.SubcategoryResponse;
+import taco.klkl.domain.category.dto.response.TagResponse;
 import taco.klkl.domain.product.domain.Rating;
 import taco.klkl.domain.product.dto.request.ProductCreateUpdateRequest;
 import taco.klkl.domain.product.dto.request.ProductFilterOptions;
@@ -79,13 +79,13 @@ public class ProductControllerTest {
 			"currencyCode",
 			"image/flag.jpg"
 		);
-		FilterResponse filterResponse1 = new FilterResponse(
+		TagResponse tagResponse1 = new TagResponse(
 			1L,
-			"filterName1"
+			"tagName1"
 		);
-		FilterResponse filterResponse2 = new FilterResponse(
+		TagResponse tagResponse2 = new TagResponse(
 			2L,
-			"filterName2"
+			"tagName2"
 		);
 
 		productSimpleResponse = new ProductSimpleResponse(
@@ -95,7 +95,7 @@ public class ProductControllerTest {
 			Rating.FIVE.getValue(),
 			CountryType.THAILAND.getKoreanName(),
 			CategoryName.FOOD.getKoreanName(),
-			Set.of(filterResponse1, filterResponse2)
+			Set.of(tagResponse1, tagResponse2)
 		);
 		productDetailResponse = new ProductDetailResponse(
 			1L,
@@ -109,7 +109,7 @@ public class ProductControllerTest {
 			cityResponse,
 			subcategoryResponse,
 			currencyResponse,
-			Set.of(filterResponse1, filterResponse2),
+			Set.of(tagResponse1, tagResponse2),
 			LocalDateTime.now()
 		);
 		productCreateUpdateRequest = new ProductCreateUpdateRequest(
@@ -145,7 +145,7 @@ public class ProductControllerTest {
 				.param("size", "10")
 				.param("city_id", "4", "5")
 				.param("subcategory_id", "6", "7")
-				.param("filter_id", "1", "2")
+				.param("tag_id", "1", "2")
 				.param("sort_by", "rating")
 				.param("sort_direction", "DESC"))
 			.andExpect(status().isOk())
@@ -160,8 +160,8 @@ public class ProductControllerTest {
 			.andExpect(jsonPath("$.data.content[0].countryName", is(productSimpleResponse.countryName())))
 			.andExpect(jsonPath("$.data.content[0].categoryName",
 				is(productSimpleResponse.categoryName())))
-			.andExpect(jsonPath("$.data.content[0].filters",
-				hasSize(productSimpleResponse.filters().size())))
+			.andExpect(jsonPath("$.data.content[0].tags",
+				hasSize(productSimpleResponse.tags().size())))
 			.andExpect(jsonPath("$.data.pageNumber", is(0)))
 			.andExpect(jsonPath("$.data.pageSize", is(10)))
 			.andExpect(jsonPath("$.data.totalElements", is(1)))
@@ -189,7 +189,7 @@ public class ProductControllerTest {
 		assertThat(capturedPageable.getPageSize()).isEqualTo(10);
 		assertThat(capturedFilterOptions.cityIds()).containsExactly(4L, 5L);
 		assertThat(capturedFilterOptions.subcategoryIds()).containsExactly(6L, 7L);
-		assertThat(capturedFilterOptions.filterIds()).containsExactly(1L, 2L);
+		assertThat(capturedFilterOptions.tagIds()).containsExactly(1L, 2L);
 		assertThat(capturedSortOptions.sortBy()).isEqualTo("rating");
 		assertThat(capturedSortOptions.sortDirection()).isEqualTo("DESC");
 	}
@@ -230,7 +230,7 @@ public class ProductControllerTest {
 				is(productDetailResponse.currency().currencyId().intValue())))
 			.andExpect(jsonPath("$.data.currency.code", is(productDetailResponse.currency().code())))
 			.andExpect(jsonPath("$.data.currency.flag", is(productDetailResponse.currency().flag())))
-			.andExpect(jsonPath("$.data.filters", hasSize(productSimpleResponse.filters().size())))
+			.andExpect(jsonPath("$.data.tags", hasSize(productSimpleResponse.tags().size())))
 			.andExpect(jsonPath("$.data.createdAt", notNullValue()))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
 	}
@@ -274,7 +274,7 @@ public class ProductControllerTest {
 				is(productDetailResponse.currency().currencyId().intValue())))
 			.andExpect(jsonPath("$.data.currency.code", is(productDetailResponse.currency().code())))
 			.andExpect(jsonPath("$.data.currency.flag", is(productDetailResponse.currency().flag())))
-			.andExpect(jsonPath("$.data.filters", hasSize(productSimpleResponse.filters().size())))
+			.andExpect(jsonPath("$.data.tags", hasSize(productSimpleResponse.tags().size())))
 			.andExpect(jsonPath("$.data.createdAt", notNullValue()))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
 	}
@@ -318,7 +318,7 @@ public class ProductControllerTest {
 				is(productDetailResponse.currency().currencyId().intValue())))
 			.andExpect(jsonPath("$.data.currency.code", is(productDetailResponse.currency().code())))
 			.andExpect(jsonPath("$.data.currency.flag", is(productDetailResponse.currency().flag())))
-			.andExpect(jsonPath("$.data.filters", hasSize(productSimpleResponse.filters().size())))
+			.andExpect(jsonPath("$.data.tags", hasSize(productSimpleResponse.tags().size())))
 			.andExpect(jsonPath("$.data.createdAt", notNullValue()))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
 	}

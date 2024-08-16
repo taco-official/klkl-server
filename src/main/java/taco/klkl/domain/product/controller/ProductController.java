@@ -44,14 +44,14 @@ public class ProductController {
 		@PageableDefault(size = ProductConstants.DEFAULT_PAGE_SIZE) Pageable pageable,
 		@RequestParam(name = "city_id", required = false) Set<Long> cityIds,
 		@RequestParam(name = "subcategory_id", required = false) Set<Long> subcategoryIds,
-		@RequestParam(name = "filter_id", required = false) Set<Long> filterIds,
+		@RequestParam(name = "tag_id", required = false) Set<Long> tagIds,
 		@RequestParam(name = "sort_by", required = false, defaultValue = "createdAt") String sortBy,
 		@RequestParam(name = "sort_direction", required = false, defaultValue = "DESC") String sortDirection
 	) {
 		ProductFilterOptions filterOptions = new ProductFilterOptions(
 			cityIds,
 			subcategoryIds,
-			filterIds
+			tagIds
 		);
 		ProductSortOptions sortOptions = new ProductSortOptions(
 			sortBy,

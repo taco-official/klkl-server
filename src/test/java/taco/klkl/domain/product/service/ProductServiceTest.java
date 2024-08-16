@@ -29,21 +29,20 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import taco.klkl.domain.category.domain.Category;
 import taco.klkl.domain.category.domain.CategoryName;
-import taco.klkl.domain.category.domain.Filter;
 import taco.klkl.domain.category.domain.QCategory;
-import taco.klkl.domain.category.domain.QFilter;
 import taco.klkl.domain.category.domain.QSubcategory;
+import taco.klkl.domain.category.domain.QTag;
 import taco.klkl.domain.category.domain.Subcategory;
 import taco.klkl.domain.category.domain.SubcategoryName;
-import taco.klkl.domain.category.dto.response.FilterResponse;
-import taco.klkl.domain.category.service.SubcategoryService;
+import taco.klkl.domain.category.domain.Tag;
+import taco.klkl.domain.category.dto.response.TagResponse;
 import taco.klkl.domain.like.exception.LikeCountBelowMinimumException;
 import taco.klkl.domain.like.exception.LikeCountOverMaximumException;
 import taco.klkl.domain.product.dao.ProductRepository;
 import taco.klkl.domain.product.domain.Product;
-import taco.klkl.domain.product.domain.ProductFilter;
+import taco.klkl.domain.product.domain.ProductTag;
 import taco.klkl.domain.product.domain.QProduct;
-import taco.klkl.domain.product.domain.QProductFilter;
+import taco.klkl.domain.product.domain.QProductTag;
 import taco.klkl.domain.product.domain.Rating;
 import taco.klkl.domain.product.dto.request.ProductCreateUpdateRequest;
 import taco.klkl.domain.product.dto.request.ProductFilterOptions;
@@ -61,16 +60,13 @@ import taco.klkl.domain.region.enums.CityType;
 import taco.klkl.domain.region.enums.CountryType;
 import taco.klkl.domain.region.enums.CurrencyType;
 import taco.klkl.domain.region.enums.RegionType;
-import taco.klkl.domain.region.service.CityService;
-import taco.klkl.domain.region.service.CountryService;
-import taco.klkl.domain.region.service.CurrencyService;
 import taco.klkl.domain.user.domain.User;
 import taco.klkl.global.common.constants.UserConstants;
 import taco.klkl.global.common.response.PagedResponseDto;
 import taco.klkl.global.util.CityUtil;
 import taco.klkl.global.util.CurrencyUtil;
-import taco.klkl.global.util.FilterUtil;
 import taco.klkl.global.util.SubcategoryUtil;
+import taco.klkl.global.util.TagUtil;
 import taco.klkl.global.util.UserUtil;
 
 class ProductServiceTest {
@@ -82,19 +78,10 @@ class ProductServiceTest {
 	private ProductRepository productRepository;
 
 	@Mock
-	private CityService cityService;
-
-	@Mock
-	private CurrencyService currencyService;
-
-	@Mock
-	private SubcategoryService subcategoryService;
-
-	@Mock
 	private UserUtil userUtil;
 
 	@Mock
-	private FilterUtil filterUtil;
+	private TagUtil tagUtil;
 
 	@Mock
 	private SubcategoryUtil subcategoryUtil;
@@ -178,11 +165,11 @@ class ProductServiceTest {
 		// Given
 		Set<Long> cityIds = Set.of(4L, 5L);
 		Set<Long> subcategoryIds = Set.of(1L, 2L, 3L);
-		Set<Long> filterIds = Set.of(6L, 7L);
+		Set<Long> tagIds = Set.of(6L, 7L);
 		ProductFilterOptions filterOptions = new ProductFilterOptions(
 			cityIds,
 			subcategoryIds,
-			filterIds
+			tagIds
 		);
 		ProductSortOptions sortOptions = new ProductSortOptions(
 			"rating",
@@ -198,12 +185,12 @@ class ProductServiceTest {
 		JPAQuery<Long> countQuery = mock(JPAQuery.class);
 
 		QProduct product = QProduct.product;
-		QProductFilter productFilter = QProductFilter.productFilter;
-		QFilter filter = QFilter.filter;
+		QProductTag productTag = QProductTag.productTag;
+		QTag tag = QTag.tag;
 
 		when(queryFactory.from(product)).thenReturn((JPAQuery)baseQuery);
-		when(baseQuery.leftJoin(product.productFilters, productFilter)).thenReturn(baseQuery);
-		when(baseQuery.leftJoin(productFilter.filter, filter)).thenReturn(baseQuery);
+		when(baseQuery.leftJoin(product.productTags, productTag)).thenReturn(baseQuery);
+		when(baseQuery.leftJoin(productTag.tag, tag)).thenReturn(baseQuery);
 		when(baseQuery.where(any(BooleanBuilder.class))).thenReturn(baseQuery);
 
 		when(baseQuery.select(QProduct.product.countDistinct())).thenReturn(countQuery);
@@ -221,10 +208,10 @@ class ProductServiceTest {
 
 		// Mocking validation behavior
 		Subcategory mockSubcategory = mock(Subcategory.class);
-		Filter mockFilter = mock(Filter.class);
+		Tag mockTag = mock(Tag.class);
 		when(cityUtil.isCitiesMappedToSameCountry(anySet())).thenReturn(true);
 		when(subcategoryUtil.getSubcategoryEntityById(anyLong())).thenReturn(mockSubcategory);
-		when(filterUtil.getFilterEntityById(anyLong())).thenReturn(mockFilter);
+		when(tagUtil.getTagEntityById(anyLong())).thenReturn(mockTag);
 
 		// When
 		PagedResponseDto<ProductSimpleResponse> result = productService
@@ -241,8 +228,8 @@ class ProductServiceTest {
 
 		// Verify that the query methods were called
 		verify(queryFactory).from(product);
-		verify(baseQuery).leftJoin(product.productFilters, productFilter);
-		verify(baseQuery).leftJoin(productFilter.filter, filter);
+		verify(baseQuery).leftJoin(product.productTags, productTag);
+		verify(baseQuery).leftJoin(productTag.tag, tag);
 		verify(baseQuery).where(any(BooleanBuilder.class));
 
 		verify(baseQuery).select(QProduct.product.countDistinct());
@@ -258,7 +245,7 @@ class ProductServiceTest {
 		// Verify that validation methods were called
 		verify(cityUtil).isCitiesMappedToSameCountry(cityIds);
 		verify(subcategoryUtil, times(3)).getSubcategoryEntityById(anyLong());
-		verify(filterUtil, times(2)).getFilterEntityById(anyLong());
+		verify(tagUtil, times(2)).getTagEntityById(anyLong());
 	}
 
 	@Test
@@ -281,21 +268,21 @@ class ProductServiceTest {
 		assertThat(result.rating()).isEqualTo(testProduct.getRating().getValue());
 
 		// 필터 검증
-		if (testProduct.getProductFilters() != null && !testProduct.getProductFilters().isEmpty()) {
-			assertThat(result.filters()).isNotNull();
-			assertThat(result.filters()).hasSize(testProduct.getProductFilters().size());
-			Set<Long> resultFilterIds = result.filters().stream()
-				.map(FilterResponse::id)
+		if (testProduct.getProductTags() != null && !testProduct.getProductTags().isEmpty()) {
+			assertThat(result.tags()).isNotNull();
+			assertThat(result.tags()).hasSize(testProduct.getProductTags().size());
+			Set<Long> resultTagIds = result.tags().stream()
+				.map(TagResponse::id)
 				.collect(Collectors.toSet());
 
-			Set<Long> testProductFilterIds = testProduct.getProductFilters().stream()
-				.map(ProductFilter::getFilter)
-				.map(Filter::getId)
+			Set<Long> testProductTagIds = testProduct.getProductTags().stream()
+				.map(ProductTag::getTag)
+				.map(Tag::getId)
 				.collect(Collectors.toSet());
 
-			assertThat(resultFilterIds).containsExactlyInAnyOrderElementsOf(testProductFilterIds);
+			assertThat(resultTagIds).containsExactlyInAnyOrderElementsOf(testProductTagIds);
 		} else {
-			assertThat(result.filters()).isEmpty();
+			assertThat(result.tags()).isEmpty();
 		}
 
 		// City, Subcategory, Currency 검증

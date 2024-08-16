@@ -57,6 +57,6 @@ public record ProductCreateUpdateRequest(
 	@NotNull(message = CURRENCY_ID_NOT_NULL)
 	Long currencyId,
 
-	Set<Long> filterIds
+	Set<Long> tagIds
 ) {
 }

@@ -15,9 +15,9 @@ import lombok.NoArgsConstructor;
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class SubcategoryFilter {
+public class SubcategoryTag {
 	@Id
-	@Column(name = "subcategory_filter_id")
+	@Column(name = "subcategory_tag_id")
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
@@ -26,15 +26,15 @@ public class SubcategoryFilter {
 	private Subcategory subcategory;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "filter_id")
-	private Filter filter;
+	@JoinColumn(name = "tag_id")
+	private Tag tag;
 
-	private SubcategoryFilter(final Subcategory subcategory, final Filter filter) {
+	private SubcategoryTag(final Subcategory subcategory, final Tag tag) {
 		this.subcategory = subcategory;
-		this.filter = filter;
+		this.tag = tag;
 	}
 
-	public static SubcategoryFilter of(final Subcategory subcategory, final Filter filter) {
-		return new SubcategoryFilter(subcategory, filter);
+	public static SubcategoryTag of(final Subcategory subcategory, final Tag tag) {
+		return new SubcategoryTag(subcategory, tag);
 	}
 }

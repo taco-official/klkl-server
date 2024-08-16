@@ -5,6 +5,6 @@ import java.util.Set;
 public record ProductFilterOptions(
 	Set<Long> cityIds,
 	Set<Long> subcategoryIds,
-	Set<Long> filterIds
+	Set<Long> tagIds
 ) {
 }

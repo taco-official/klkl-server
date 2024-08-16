@@ -3,8 +3,8 @@ package taco.klkl.domain.product.dto.response;
 import java.time.LocalDateTime;
 import java.util.Set;
 
-import taco.klkl.domain.category.dto.response.FilterResponse;
 import taco.klkl.domain.category.dto.response.SubcategoryResponse;
+import taco.klkl.domain.category.dto.response.TagResponse;
 import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.region.dto.response.CityResponse;
 import taco.klkl.domain.region.dto.response.CurrencyResponse;
@@ -39,7 +39,7 @@ public record ProductDetailResponse(
 	CityResponse city,
 	SubcategoryResponse subcategory,
 	CurrencyResponse currency,
-	Set<FilterResponse> filters,
+	Set<TagResponse> tags,
 	LocalDateTime createdAt
 ) {
 
@@ -56,7 +56,7 @@ public record ProductDetailResponse(
 			CityResponse.from(product.getCity()),
 			SubcategoryResponse.from(product.getSubcategory()),
 			CurrencyResponse.from(product.getCurrency()),
-			ProductUtil.createFiltersByProduct(product),
+			ProductUtil.createTagsByProduct(product),
 			product.getCreatedAt()
 		);
 	}

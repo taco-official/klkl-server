@@ -13,13 +13,13 @@ import org.mockito.MockitoAnnotations;
 
 import taco.klkl.domain.category.domain.Category;
 import taco.klkl.domain.category.domain.CategoryName;
-import taco.klkl.domain.category.domain.Filter;
-import taco.klkl.domain.category.domain.FilterName;
 import taco.klkl.domain.category.domain.Subcategory;
 import taco.klkl.domain.category.domain.SubcategoryName;
-import taco.klkl.domain.category.dto.response.FilterResponse;
+import taco.klkl.domain.category.domain.Tag;
+import taco.klkl.domain.category.domain.TagName;
+import taco.klkl.domain.category.dto.response.TagResponse;
 import taco.klkl.domain.product.domain.Product;
-import taco.klkl.domain.product.domain.ProductFilter;
+import taco.klkl.domain.product.domain.ProductTag;
 import taco.klkl.domain.product.domain.Rating;
 import taco.klkl.domain.region.domain.City;
 import taco.klkl.domain.region.domain.Country;
@@ -70,10 +70,10 @@ class ProductSimpleResponseTest {
 			SubcategoryName.INSTANT_FOOD
 		);
 
-		Filter filter1 = Filter.of(FilterName.CILANTRO);
-		Filter filter2 = Filter.of(FilterName.CONVENIENCE_STORE);
-		Set<ProductFilter> productFilters = Set.of(filter1, filter2).stream()
-			.map(filter -> ProductFilter.of(product, filter))
+		Tag tag1 = Tag.of(TagName.CILANTRO);
+		Tag tag2 = Tag.of(TagName.CONVENIENCE_STORE);
+		Set<ProductTag> productTags = Set.of(tag1, tag2).stream()
+			.map(tag -> ProductTag.of(product, tag))
 			.collect(Collectors.toSet());
 
 		product = mock(Product.class);
@@ -88,7 +88,7 @@ class ProductSimpleResponseTest {
 		when(product.getCity()).thenReturn(city);
 		when(product.getSubcategory()).thenReturn(subcategory);
 		when(product.getCurrency()).thenReturn(currency);
-		when(product.getProductFilters()).thenReturn(productFilters);
+		when(product.getProductTags()).thenReturn(productTags);
 	}
 
 	@Test
@@ -110,9 +110,9 @@ class ProductSimpleResponseTest {
 	@DisplayName("생성자를 통해 ProductSimpleResponse 생성 테스트")
 	void testConstructor() {
 		// when
-		Set<FilterResponse> filters = product.getProductFilters().stream()
-			.map(ProductFilter::getFilter)
-			.map(FilterResponse::from)
+		Set<TagResponse> filters = product.getProductTags().stream()
+			.map(ProductTag::getTag)
+			.map(TagResponse::from)
 			.collect(Collectors.toSet());
 
 		ProductSimpleResponse dto = new ProductSimpleResponse(

@@ -16,17 +16,16 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
-import taco.klkl.domain.category.dao.SubcategoryFilterRepository;
 import taco.klkl.domain.category.domain.Subcategory;
-import taco.klkl.domain.category.dto.response.FilterWithSubcategoryResponse;
-import taco.klkl.domain.category.service.SubcategoryFilterService;
+import taco.klkl.domain.category.dto.response.TagWithSubcategoryResponse;
 import taco.klkl.domain.category.service.SubcategoryService;
+import taco.klkl.domain.category.service.SubcategoryTagService;
 import taco.klkl.global.error.exception.ErrorCode;
 
 @SpringBootTest
 @AutoConfigureMockMvc
 @Transactional
-public class FilterIntegrationTest {
+public class TagIntegrationTest {
 	@Autowired
 	private MockMvc mockMvc;
 
@@ -34,10 +33,7 @@ public class FilterIntegrationTest {
 	private SubcategoryService subcategoryService;
 
 	@Autowired
-	private SubcategoryFilterService subcategoryFilterService;
-
-	@Autowired
-	private SubcategoryFilterRepository subcategoryFilterRepository;
+	private SubcategoryTagService subcategoryTagService;
 
 	@Test
 	@DisplayName("존재하는 Subcategory Id 쿼리가 들어왔을 경우, API 테스트")
@@ -52,10 +48,10 @@ public class FilterIntegrationTest {
 				.map(Long::parseLong)
 				.toList()
 		);
-		List<FilterWithSubcategoryResponse> response = subcategoryFilterService.getFilters(subcategoryList);
+		List<TagWithSubcategoryResponse> response = subcategoryTagService.getTags(subcategoryList);
 
 		//then
-		mockMvc.perform(get("/v1/filters")
+		mockMvc.perform(get("/v1/tags")
 				.param("subcategories", subcategoryIdsParam)
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
@@ -77,10 +73,10 @@ public class FilterIntegrationTest {
 				.map(Long::parseLong)
 				.toList()
 		);
-		List<FilterWithSubcategoryResponse> response = subcategoryFilterService.getFilters(subcategoryList);
+		List<TagWithSubcategoryResponse> response = subcategoryTagService.getTags(subcategoryList);
 
 		//then
-		mockMvc.perform(get("/v1/filters")
+		mockMvc.perform(get("/v1/tags")
 				.param("subcategories", subcategoryIdsParam)
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
@@ -97,7 +93,7 @@ public class FilterIntegrationTest {
 		String subcategoryIdsParam = String.join(",", subcategoryIds);
 
 		//then
-		mockMvc.perform(get("/v1/filters")
+		mockMvc.perform(get("/v1/tags")
 				.param("subcategories", subcategoryIdsParam)
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isNotFound())
@@ -114,7 +110,7 @@ public class FilterIntegrationTest {
 		String subcategoryIdsParam = String.join(",", subcategoryIds);
 
 		//then
-		mockMvc.perform(get("/v1/filters")
+		mockMvc.perform(get("/v1/tags")
 				.param("subcategories", subcategoryIdsParam)
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isBadRequest())
