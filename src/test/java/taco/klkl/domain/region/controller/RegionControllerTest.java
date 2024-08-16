@@ -75,7 +75,6 @@ class RegionControllerTest {
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
-			.andExpect(jsonPath("$.code", is("C000")))
 			.andExpect(jsonPath("$.data", hasSize(3)))
 			.andExpect(jsonPath("$.data[0].name", is(region1.getName().getKoreanName())))
 			.andExpect(jsonPath("$.data[1].name", is(region2.getName().getKoreanName())))
@@ -96,7 +95,6 @@ class RegionControllerTest {
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
-			.andExpect(jsonPath("$.code", is("C000")))
 			.andExpect(jsonPath("$.data", hasSize(0)))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
 
@@ -114,9 +112,8 @@ class RegionControllerTest {
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().is5xxServerError())
 			.andExpect(jsonPath("$.isSuccess", is(false)))
-			.andExpect(jsonPath("$.code", is(ErrorCode.INTERNAL_SERVER_ERROR.getCode())))
-			.andExpect(jsonPath("$.data.message", is(ErrorCode.INTERNAL_SERVER_ERROR.getMessage())))
-			.andExpect(jsonPath("$.timestamp", notNullValue()));
+			.andExpect(jsonPath("$.status", is(ErrorCode.INTERNAL_SERVER_ERROR.getHttpStatus().value())))
+			.andExpect(jsonPath("$.data.message", is(ErrorCode.INTERNAL_SERVER_ERROR.getMessage())));
 
 		verify(regionService, times(1)).findAllRegions();
 	}
@@ -138,7 +135,6 @@ class RegionControllerTest {
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
-			.andExpect(jsonPath("$.code", is("C000")))
 			.andExpect(jsonPath("$.data[0].name", is(countryList.get(0).getName().getKoreanName())))
 			.andExpect(jsonPath("$.data[1].name", is(countryList.get(1).getName().getKoreanName())))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));

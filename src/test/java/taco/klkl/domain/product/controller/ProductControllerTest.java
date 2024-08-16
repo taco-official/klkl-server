@@ -150,7 +150,6 @@ public class ProductControllerTest {
 				.param("sort_direction", "DESC"))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
-			.andExpect(jsonPath("$.code", is("C000")))
 			.andExpect(jsonPath("$.data.content", hasSize(1)))
 			.andExpect(jsonPath("$.data.content[0].id",
 				is(productSimpleResponse.id().intValue())))
@@ -204,7 +203,6 @@ public class ProductControllerTest {
 		mockMvc.perform(get("/v1/products/1"))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
-			.andExpect(jsonPath("$.code", is("C000")))
 			.andExpect(jsonPath("$.data.id", is(productDetailResponse.id().intValue())))
 			.andExpect(jsonPath("$.data.name", is(productDetailResponse.name())))
 			.andExpect(jsonPath("$.data.description", is(productDetailResponse.description())))
@@ -248,7 +246,6 @@ public class ProductControllerTest {
 				.content(objectMapper.writeValueAsString(productCreateUpdateRequest)))
 			.andExpect(status().isCreated())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
-			.andExpect(jsonPath("$.code", is("C000")))
 			.andExpect(jsonPath("$.data.id", is(productDetailResponse.id().intValue())))
 			.andExpect(jsonPath("$.data.name", is(productDetailResponse.name())))
 			.andExpect(jsonPath("$.data.description", is(productDetailResponse.description())))
@@ -292,7 +289,6 @@ public class ProductControllerTest {
 				.content(objectMapper.writeValueAsString(productCreateUpdateRequest)))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
-			.andExpect(jsonPath("$.code", is("C000")))
 			.andExpect(jsonPath("$.data.id", is(productDetailResponse.id().intValue())))
 			.andExpect(jsonPath("$.data.name", is(productDetailResponse.name())))
 			.andExpect(jsonPath("$.data.description", is(productDetailResponse.description())))
@@ -333,7 +329,6 @@ public class ProductControllerTest {
 		mockMvc.perform(delete("/v1/products/1"))
 			.andExpect(status().isNoContent())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
-			.andExpect(jsonPath("$.code", is("C000")))
 			.andExpect(jsonPath("$.data", nullValue()))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
 	}

@@ -40,7 +40,6 @@ public class CountryIntegrationTest {
 		mockMvc.perform(get("/v1/countries")
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
-			.andExpect(jsonPath("$.code", is("C000")))
 			.andExpect(jsonPath("$.isSuccess", is(true)))
 			.andExpect(jsonPath("$.data", hasSize(countryResponses.size())));
 	}
@@ -55,7 +54,6 @@ public class CountryIntegrationTest {
 		mockMvc.perform(get("/v1/countries/403")
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
-			.andExpect(jsonPath("$.code", is("C000")))
 			.andExpect(jsonPath("$.isSuccess", is(true)))
 			.andExpect(jsonPath("$.data.name", is(countryResponse.name())));
 	}
@@ -69,7 +67,7 @@ public class CountryIntegrationTest {
 		// when & then
 		mockMvc.perform(get("/v1/countries/403/cities")
 				.contentType(MediaType.APPLICATION_JSON))
-			.andExpect(jsonPath("$.code", is("C000")))
+			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
 			.andExpect(jsonPath("$.data", hasSize(responseDto.size())));
 	}

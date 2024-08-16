@@ -59,7 +59,6 @@ public class CategoryControllerTest {
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
-			.andExpect(jsonPath("$.code", is("C000")))
 			.andExpect(jsonPath("$.data", hasSize(2)))
 			.andExpect(jsonPath("$.data[0].id", is(1)))
 			.andExpect(jsonPath("$.data[0].name", is("Category1")))
@@ -92,7 +91,6 @@ public class CategoryControllerTest {
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
-			.andExpect(jsonPath("$.code", is("C000")))
 			.andExpect(jsonPath("$.data.id", is(1)))
 			.andExpect(jsonPath("$.data.name", is(CategoryName.FOOD.getKoreanName())))
 			.andExpect(jsonPath("$.data.subcategories[0].id", is(subcategory1.getId())))
@@ -115,9 +113,8 @@ public class CategoryControllerTest {
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isNotFound())
 			.andExpect(jsonPath("$.isSuccess", is(false)))
-			.andExpect(jsonPath("$.code", is(ErrorCode.CATEGORY_ID_NOT_FOUND.getCode())))
-			.andExpect(jsonPath("$.data.message", is(ErrorCode.CATEGORY_ID_NOT_FOUND.getMessage())))
-			.andExpect(jsonPath("$.timestamp", notNullValue()));
+			.andExpect(jsonPath("$.status", is(ErrorCode.CATEGORY_NOT_FOUND.getHttpStatus().value())))
+			.andExpect(jsonPath("$.data.message", is(ErrorCode.CATEGORY_NOT_FOUND.getMessage())));
 
 		verify(categoryService, times(1)).findSubCategoriesByCategoryId(anyLong());
 	}

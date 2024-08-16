@@ -37,7 +37,6 @@ public class UserIntegrationTest {
 		mockMvc.perform(get("/v1/users/me"))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
-			.andExpect(jsonPath("$.code", is("C000")))
 			.andExpect(jsonPath("$.data.id", is(userDto.id().intValue())))
 			.andExpect(jsonPath("$.data.profile", is(userDto.profile())))
 			.andExpect(jsonPath("$.data.name", is(userDto.name())))

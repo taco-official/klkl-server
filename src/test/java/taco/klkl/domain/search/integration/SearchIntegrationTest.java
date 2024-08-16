@@ -35,7 +35,6 @@ public class SearchIntegrationTest {
 		mockMvc.perform(get("/v1/search")
 				.param("q", query))
 			.andExpect(status().isOk())
-			.andExpect(jsonPath("$.code", is("C000")))
 			.andExpect(jsonPath("$.isSuccess", is(true)))
 			.andExpect(jsonPath("$.data.countries", hasSize(searchResponse.countries().size())))
 			.andExpect(jsonPath("$.data.cities", hasSize(searchResponse.cities().size())))

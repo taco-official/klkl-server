@@ -76,7 +76,6 @@ public class CountryControllerTest {
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
-			.andExpect(jsonPath("$.code", is("C000")))
 			.andExpect(jsonPath("$.data", hasSize(2)))
 			.andExpect(jsonPath("$.data[0].name", is(country1.getName().getKoreanName())))
 			.andExpect(jsonPath("$.data[1].name", is(country2.getName().getKoreanName())))
@@ -99,7 +98,6 @@ public class CountryControllerTest {
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
-			.andExpect(jsonPath("$.code", is("C000")))
 			.andExpect(jsonPath("$.data.name", is(country1.getName().getKoreanName())))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
 
@@ -111,7 +109,6 @@ public class CountryControllerTest {
 	void testGetCountryWithCities() throws Exception {
 		// given
 		Country mockCountry = mock(Country.class);
-		CountryRepository mockCountryRepository = mock(CountryRepository.class);
 		when(mockCountry.getName()).thenReturn(CountryType.JAPAN);
 		when(countryRepository.findById(400L)).thenReturn(Optional.of(mockCountry));
 		when(mockCountry.getCities()).thenReturn(cities);
@@ -122,7 +119,6 @@ public class CountryControllerTest {
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
-			.andExpect(jsonPath("$.code", is("C000")))
 			.andExpect(jsonPath("$.data[0].name", is(cities.get(0).getName().getKoreanName())))
 			.andExpect(jsonPath("$.data[1].name", is(cities.get(1).getName().getKoreanName())))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));

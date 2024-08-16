@@ -47,7 +47,6 @@ class UserControllerTest {
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
-			.andExpect(jsonPath("$.code", is("C000")))
 			.andExpect(jsonPath("$.data.id", is(nullValue())))
 			.andExpect(jsonPath("$.data.profile", is(notNullValue())))
 			.andExpect(jsonPath("$.data.name", is(responseDto.name())))

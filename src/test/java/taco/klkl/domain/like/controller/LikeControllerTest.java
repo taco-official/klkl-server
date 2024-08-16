@@ -19,6 +19,7 @@ import taco.klkl.domain.like.dto.response.LikeResponse;
 import taco.klkl.domain.like.exception.LikeCountBelowMinimumException;
 import taco.klkl.domain.like.exception.LikeCountOverMaximumException;
 import taco.klkl.domain.like.service.LikeService;
+import taco.klkl.global.error.exception.ErrorCode;
 
 @WebMvcTest(LikeController.class)
 class LikeControllerTest {
@@ -48,6 +49,7 @@ class LikeControllerTest {
 		// when & then
 		mockMvc.perform(post("/v1/products/{productId}/likes", productId))
 			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.isSuccess", is(true)))
 			.andExpect(jsonPath("$.data.isLiked", is(true)))
 			.andExpect(jsonPath("$.data.likeCount", is(1)));
 
@@ -65,6 +67,7 @@ class LikeControllerTest {
 		// when & then
 		mockMvc.perform(delete("/v1/products/{productId}/likes", productId))
 			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.isSuccess", is(true)))
 			.andExpect(jsonPath("$.data.isLiked", is(false)))
 			.andExpect(jsonPath("$.data.likeCount", is(1)));
 
@@ -82,9 +85,9 @@ class LikeControllerTest {
 		// when & then
 		mockMvc.perform(post("/v1/products/{productId}/likes", productId))
 			.andExpect(status().isBadRequest())
-			.andExpect(jsonPath("$.code", is(exception.getErrorCode().getCode())))
-			.andExpect(jsonPath("$.data.message", is(exception.getMessage())))
-			.andExpect(jsonPath("$.timestamp", notNullValue()));
+			.andExpect(jsonPath("$.isSuccess", is(false)))
+			.andExpect(jsonPath("$.status", is(ErrorCode.LIKE_COUNT_OVER_MAXIMUM.getHttpStatus().value())))
+			.andExpect(jsonPath("$.data.message", is(ErrorCode.LIKE_COUNT_OVER_MAXIMUM.getMessage())));
 
 		verify(likeService).createLike(productId);
 	}
@@ -100,9 +103,9 @@ class LikeControllerTest {
 		// when & then
 		mockMvc.perform(delete("/v1/products/{productId}/likes", productId))
 			.andExpect(status().isBadRequest())
-			.andExpect(jsonPath("$.code", is(exception.getErrorCode().getCode())))
-			.andExpect(jsonPath("$.data.message", is(exception.getMessage())))
-			.andExpect(jsonPath("$.timestamp", notNullValue()));
+			.andExpect(jsonPath("$.isSuccess", is(false)))
+			.andExpect(jsonPath("$.status", is(ErrorCode.LIKE_COUNT_BELOW_MINIMUM.getHttpStatus().value())))
+			.andExpect(jsonPath("$.data.message", is(ErrorCode.LIKE_COUNT_BELOW_MINIMUM.getMessage())));
 
 		verify(likeService).deleteLike(productId);
 	}

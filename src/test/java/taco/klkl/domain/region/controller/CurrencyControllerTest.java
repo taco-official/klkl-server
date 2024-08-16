@@ -53,7 +53,6 @@ public class CurrencyControllerTest {
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
-			.andExpect(jsonPath("$.code", is("C000")))
 			.andExpect(jsonPath("$.data", hasSize(2)))
 			.andExpect(jsonPath("$.data[0].code", is(currency1.getCode().getCodeName())))
 			.andExpect(jsonPath("$.data[1].code", is(currency2.getCode().getCodeName())))

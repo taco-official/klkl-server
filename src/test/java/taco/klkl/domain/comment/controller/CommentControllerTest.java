@@ -138,7 +138,6 @@ public class CommentControllerTest {
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
-			.andExpect(jsonPath("$.code", is("C000")))
 			.andExpect(jsonPath("$.data", hasSize(2)))
 			.andExpect(jsonPath("$.data[0].id", is(comment1.getId())))
 			.andExpect(jsonPath("$.data[0].content", is(comment1.getContent())))
@@ -164,7 +163,6 @@ public class CommentControllerTest {
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isCreated())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
-			.andExpect(jsonPath("$.code", is("C000")))
 			.andExpect(jsonPath("$.data.id", is(comment1.getId())))
 			.andExpect(jsonPath("$.data.user.id", is(comment1.getUser().getId())))
 			.andExpect(jsonPath("$.data.content", is(comment1.getContent())));
@@ -189,7 +187,7 @@ public class CommentControllerTest {
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isNotFound())
 			.andExpect(jsonPath("$.isSuccess", is(false)))
-			.andExpect(jsonPath("$.code", is(ErrorCode.PRODUCT_NOT_FOUND.getCode())))
+			.andExpect(jsonPath("$.status", is(ErrorCode.PRODUCT_NOT_FOUND.getHttpStatus().value())))
 			.andExpect(jsonPath("$.data.message", is(ErrorCode.PRODUCT_NOT_FOUND.getMessage())));
 	}
 
@@ -211,7 +209,6 @@ public class CommentControllerTest {
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
-			.andExpect(jsonPath("$.code", is("C000")))
 			.andExpect(jsonPath("$.data.id", is(comment1.getId())))
 			.andExpect(jsonPath("$.data.user.id", is(comment1.getUser().getId())))
 			.andExpect(jsonPath("$.data.content", is(comment1.getContent())));
@@ -235,7 +232,7 @@ public class CommentControllerTest {
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isNotFound())
 			.andExpect(jsonPath("$.isSuccess", is(false)))
-			.andExpect(jsonPath("$.code", is(ErrorCode.COMMENT_NOT_FOUND.getCode())))
+			.andExpect(jsonPath("$.status", is(ErrorCode.COMMENT_NOT_FOUND.getHttpStatus().value())))
 			.andExpect(jsonPath("$.data.message", is(ErrorCode.COMMENT_NOT_FOUND.getMessage())));
 
 		verify(commentService, times(1))
@@ -257,7 +254,7 @@ public class CommentControllerTest {
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isNotFound())
 			.andExpect(jsonPath("$.isSuccess", is(false)))
-			.andExpect(jsonPath("$.code", is(ErrorCode.PRODUCT_NOT_FOUND.getCode())))
+			.andExpect(jsonPath("$.status", is(ErrorCode.PRODUCT_NOT_FOUND.getHttpStatus().value())))
 			.andExpect(jsonPath("$.data.message", is(ErrorCode.PRODUCT_NOT_FOUND.getMessage())));
 
 		verify(commentService, times(1))
@@ -278,7 +275,7 @@ public class CommentControllerTest {
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isBadRequest())
 			.andExpect(jsonPath("$.isSuccess", is(false)))
-			.andExpect(jsonPath("$.code", is(ErrorCode.COMMENT_PRODUCT_NOT_MATCH.getCode())))
+			.andExpect(jsonPath("$.status", is(ErrorCode.COMMENT_PRODUCT_NOT_MATCH.getHttpStatus().value())))
 			.andExpect(jsonPath("$.data.message", is(ErrorCode.COMMENT_PRODUCT_NOT_MATCH.getMessage())));
 
 		verify(commentService, times(1))
@@ -294,7 +291,6 @@ public class CommentControllerTest {
 		mockMvc.perform(delete("/v1/products/{productId}/comments/{commentId}", productId, commentId))
 			.andExpect(status().isNoContent())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
-			.andExpect(jsonPath("$.code", is("C000")))
 			.andExpect(jsonPath("$.data", nullValue()));
 
 		verify(commentService, times(1)).deleteComment(productId, commentId);
@@ -313,7 +309,7 @@ public class CommentControllerTest {
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isNotFound())
 			.andExpect(jsonPath("$.isSuccess", is(false)))
-			.andExpect(jsonPath("$.code", is(ErrorCode.COMMENT_NOT_FOUND.getCode())))
+			.andExpect(jsonPath("$.status", is(ErrorCode.COMMENT_NOT_FOUND.getHttpStatus().value())))
 			.andExpect(jsonPath("$.data.message", is(ErrorCode.COMMENT_NOT_FOUND.getMessage())));
 
 		verify(commentService, times(1)).deleteComment(productId, wrongCommentId);
@@ -332,7 +328,7 @@ public class CommentControllerTest {
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isNotFound())
 			.andExpect(jsonPath("$.isSuccess", is(false)))
-			.andExpect(jsonPath("$.code", is(ErrorCode.PRODUCT_NOT_FOUND.getCode())))
+			.andExpect(jsonPath("$.status", is(ErrorCode.PRODUCT_NOT_FOUND.getHttpStatus().value())))
 			.andExpect(jsonPath("$.data.message", is(ErrorCode.PRODUCT_NOT_FOUND.getMessage())));
 
 		verify(commentService, times(1)).deleteComment(wrongProductId, commentId);
@@ -351,7 +347,7 @@ public class CommentControllerTest {
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isBadRequest())
 			.andExpect(jsonPath("$.isSuccess", is(false)))
-			.andExpect(jsonPath("$.code", is(ErrorCode.COMMENT_PRODUCT_NOT_MATCH.getCode())))
+			.andExpect(jsonPath("$.status", is(ErrorCode.COMMENT_PRODUCT_NOT_MATCH.getHttpStatus().value())))
 			.andExpect(jsonPath("$.data.message", is(ErrorCode.COMMENT_PRODUCT_NOT_MATCH.getMessage())));
 
 		verify(commentService, times(1))

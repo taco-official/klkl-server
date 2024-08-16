@@ -42,8 +42,7 @@ class CategoryIntegrationTest {
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.data", hasSize(categoryResponse.size())))
-			.andExpect(jsonPath("$.isSuccess", is(true)))
-			.andExpect(jsonPath("$.code", is("C000")));
+			.andExpect(jsonPath("$.isSuccess", is(true)));
 	}
 
 	@Test
@@ -57,6 +56,7 @@ class CategoryIntegrationTest {
 		mockMvc.perform(get("/v1/categories/300/subcategories")
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.isSuccess", is(true)))
 			.andExpect(jsonPath("$.data.id", is(categoryWithSubcategoryResponse.id().intValue())))
 			.andExpect(jsonPath("$.data.name", is(categoryWithSubcategoryResponse.name())))
 			.andExpect(jsonPath("$.data.subcategories[0].id",
@@ -66,9 +66,7 @@ class CategoryIntegrationTest {
 			.andExpect(jsonPath("$.data.subcategories[1].id",
 				is(categoryWithSubcategoryResponse.subcategories().get(1).id().intValue())))
 			.andExpect(jsonPath("$.data.subcategories[1].name",
-				is(categoryWithSubcategoryResponse.subcategories().get(1).name())))
-			.andExpect(jsonPath("$.isSuccess", is(true)))
-			.andExpect(jsonPath("$.code", is("C000")));
+				is(categoryWithSubcategoryResponse.subcategories().get(1).name())));
 	}
 
 	@Test
@@ -81,7 +79,7 @@ class CategoryIntegrationTest {
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isNotFound())
 			.andExpect(jsonPath("$.isSuccess", is(false)))
-			.andExpect(jsonPath("$.code", is(ErrorCode.CATEGORY_ID_NOT_FOUND.getCode())))
-			.andExpect(jsonPath("$.data.message", is(ErrorCode.CATEGORY_ID_NOT_FOUND.getMessage())));
+			.andExpect(jsonPath("$.status", is(ErrorCode.CATEGORY_NOT_FOUND.getHttpStatus().value())))
+			.andExpect(jsonPath("$.data.message", is(ErrorCode.CATEGORY_NOT_FOUND.getMessage())));
 	}
 }

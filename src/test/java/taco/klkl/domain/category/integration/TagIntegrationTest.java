@@ -57,7 +57,6 @@ public class TagIntegrationTest {
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
-			.andExpect(jsonPath("$.code", is("C000")))
 			.andExpect(jsonPath("$.data", hasSize(response.size())));
 	}
 
@@ -83,7 +82,6 @@ public class TagIntegrationTest {
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
-			.andExpect(jsonPath("$.code", is("C000")))
 			.andExpect(jsonPath("$.data", hasSize(response.size())));
 	}
 
@@ -100,8 +98,8 @@ public class TagIntegrationTest {
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isNotFound())
 			.andExpect(jsonPath("$.isSuccess", is(false)))
-			.andExpect(jsonPath("$.code", is(ErrorCode.SUBCATEGORY_ID_NOT_FOUND.getCode())))
-			.andExpect(jsonPath("$.data.message", is(ErrorCode.SUBCATEGORY_ID_NOT_FOUND.getMessage())));
+			.andExpect(jsonPath("$.status", is(ErrorCode.SUBCATEGORY_NOT_FOUND.getHttpStatus().value())))
+			.andExpect(jsonPath("$.data.message", is(ErrorCode.SUBCATEGORY_NOT_FOUND.getMessage())));
 	}
 
 	@Test
@@ -117,7 +115,7 @@ public class TagIntegrationTest {
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isBadRequest())
 			.andExpect(jsonPath("$.isSuccess", is(false)))
-			.andExpect(jsonPath("$.code", is(ErrorCode.QUERY_TYPE_MISMATCH.getCode())))
+			.andExpect(jsonPath("$.status", is(ErrorCode.QUERY_TYPE_MISMATCH.getHttpStatus().value())))
 			.andExpect(jsonPath("$.data.message", is(ErrorCode.QUERY_TYPE_MISMATCH.getMessage())));
 	}
 }

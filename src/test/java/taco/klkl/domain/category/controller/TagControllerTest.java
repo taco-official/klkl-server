@@ -88,7 +88,6 @@ public class TagControllerTest {
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
-			.andExpect(jsonPath("$.code", is("C000")))
 			.andExpect(jsonPath("$.data[0].id", is(1)))
 			.andExpect(jsonPath("$.data[0].name", is(SubcategoryName.INSTANT_FOOD.getKoreanName())))
 			.andExpect(jsonPath("$.data[0].tags[0].id", is(1)))
@@ -110,7 +109,6 @@ public class TagControllerTest {
 		// given
 		List<Long> ids = Arrays.asList(1L, 2L);
 
-		Category mockCategory = Category.of(CategoryName.FOOD);
 		Subcategory mockSubcategory1 = mock(Subcategory.class);
 		Subcategory mockSubcategory2 = mock(Subcategory.class);
 		Tag mockTag1 = mock(Tag.class);
@@ -148,7 +146,6 @@ public class TagControllerTest {
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
-			.andExpect(jsonPath("$.code", is("C000")))
 			.andExpect(jsonPath("$.data[0].id", is(1)))
 			.andExpect(jsonPath("$.data[0].name", is(SubcategoryName.INSTANT_FOOD.getKoreanName())))
 			.andExpect(jsonPath("$.data[0].tags[0].id", is(1)))
@@ -176,9 +173,8 @@ public class TagControllerTest {
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isNotFound())
 			.andExpect(jsonPath("$.isSuccess", is(false)))
-			.andExpect(jsonPath("$.code", is(ErrorCode.SUBCATEGORY_ID_NOT_FOUND.getCode())))
-			.andExpect(jsonPath("$.data.message", is(ErrorCode.SUBCATEGORY_ID_NOT_FOUND.getMessage())))
-			.andExpect(jsonPath("$.timestamp", notNullValue()));
+			.andExpect(jsonPath("$.status", is(ErrorCode.SUBCATEGORY_NOT_FOUND.getHttpStatus().value())))
+			.andExpect(jsonPath("$.data.message", is(ErrorCode.SUBCATEGORY_NOT_FOUND.getMessage())));
 	}
 
 	@Test
@@ -194,8 +190,7 @@ public class TagControllerTest {
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isBadRequest())
 			.andExpect(jsonPath("$.isSuccess", is(false)))
-			.andExpect(jsonPath("$.code", is(ErrorCode.QUERY_TYPE_MISMATCH.getCode())))
-			.andExpect(jsonPath("$.data.message", is(ErrorCode.QUERY_TYPE_MISMATCH.getMessage())))
-			.andExpect(jsonPath("$.timestamp", notNullValue()));
+			.andExpect(jsonPath("$.status", is(ErrorCode.QUERY_TYPE_MISMATCH.getHttpStatus().value())))
+			.andExpect(jsonPath("$.data.message", is(ErrorCode.QUERY_TYPE_MISMATCH.getMessage())));
 	}
 }
