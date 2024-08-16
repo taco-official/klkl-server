@@ -53,7 +53,7 @@ public class TagIntegrationTest {
 
 		//then
 		mockMvc.perform(get("/v1/tags")
-				.param("subcategories", subcategoryIdsParam)
+				.param("subcategory_id", subcategoryIdsParam)
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
@@ -79,7 +79,7 @@ public class TagIntegrationTest {
 
 		//then
 		mockMvc.perform(get("/v1/tags")
-				.param("subcategories", subcategoryIdsParam)
+				.param("subcategory_id", subcategoryIdsParam)
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
@@ -96,7 +96,7 @@ public class TagIntegrationTest {
 
 		//then
 		mockMvc.perform(get("/v1/tags")
-				.param("subcategories", subcategoryIdsParam)
+				.param("subcategory_id", subcategoryIdsParam)
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isNotFound())
 			.andExpect(jsonPath("$.isSuccess", is(false)))
@@ -113,7 +113,7 @@ public class TagIntegrationTest {
 
 		//then
 		mockMvc.perform(get("/v1/tags")
-				.param("subcategories", subcategoryIdsParam)
+				.param("subcategory_id", subcategoryIdsParam)
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isBadRequest())
 			.andExpect(jsonPath("$.isSuccess", is(false)))

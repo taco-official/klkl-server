@@ -84,7 +84,7 @@ public class TagControllerTest {
 
 		// when & then
 		mockMvc.perform(get("/v1/tags")
-				.param("subcategories", "1,2")
+				.param("subcategory_id", "1,2")
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
@@ -144,7 +144,7 @@ public class TagControllerTest {
 
 		// when & then
 		mockMvc.perform(get("/v1/tags")
-				.param("subcategories", "1,2")
+				.param("subcategory_id", "1,2")
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
@@ -172,7 +172,7 @@ public class TagControllerTest {
 
 		//when & then
 		mockMvc.perform(get("/v1/tags")
-				.param("subcategories", "999")
+				.param("subcategory_id", "999")
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isNotFound())
 			.andExpect(jsonPath("$.isSuccess", is(false)))
@@ -190,7 +190,7 @@ public class TagControllerTest {
 
 		//when & then
 		mockMvc.perform(get("/v1/tags")
-				.param("subcategories", "1,2")
+				.param("subcategory_id", "1,2")
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isBadRequest())
 			.andExpect(jsonPath("$.isSuccess", is(false)))
