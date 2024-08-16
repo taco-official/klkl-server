@@ -73,7 +73,7 @@ public class CommentIntegrationTest {
 			.andExpect(status().isCreated())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
 			.andExpect(jsonPath("$.code", is("C000")))
-			.andExpect(jsonPath("$.data.commentId", is(1)))
+			.andExpect(jsonPath("$.data.id", is(1)))
 			.andExpect(jsonPath("$.data.content", is(commentCreateRequestDto.content())));
 	}
 
@@ -105,7 +105,7 @@ public class CommentIntegrationTest {
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
 			.andExpect(jsonPath("$.code", is("C000")))
-			.andExpect(jsonPath("$.data.commentId", is(commentId.intValue())))
+			.andExpect(jsonPath("$.data.id", is(commentId.intValue())))
 			.andExpect(jsonPath("$.data.content", is(commentUpdateRequestDto.content())));
 	}
 

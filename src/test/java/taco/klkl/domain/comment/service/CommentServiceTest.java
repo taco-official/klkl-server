@@ -91,8 +91,8 @@ public class CommentServiceTest {
 		List<CommentResponse> result = commentService.getComments(productId);
 
 		//then
-		assertThat(result.get(0).commentId()).isEqualTo(comment1.getId());
-		assertThat(result.get(1).commentId()).isEqualTo(comment2.getId());
+		assertThat(result.get(0).id()).isEqualTo(comment1.getId());
+		assertThat(result.get(1).id()).isEqualTo(comment2.getId());
 		assertThat(result.get(0).content()).isEqualTo(comment1.getContent());
 		assertThat(result.get(1).content()).isEqualTo(comment2.getContent());
 		assertThat(result.get(0).createdAt()).isEqualTo(comment1.getCreatedAt());
@@ -115,7 +115,7 @@ public class CommentServiceTest {
 		CommentResponse result = commentService.createComment(productId, commentCreateRequestDto);
 
 		//then
-		assertThat(result.commentId()).isEqualTo(comment.getId());
+		assertThat(result.id()).isEqualTo(comment.getId());
 		assertThat(result.user().id()).isEqualTo(user.getId());
 		assertThat(result.content()).isEqualTo(comment.getContent());
 	}
@@ -137,7 +137,7 @@ public class CommentServiceTest {
 		CommentResponse result = commentService.updateComment(productId, commentId, commentUpdateRequestDto);
 
 		//then
-		assertThat(result.commentId()).isEqualTo(comment.getId());
+		assertThat(result.id()).isEqualTo(comment.getId());
 		assertThat(result.user().id()).isEqualTo(user.getId());
 		assertThat(result.content()).isEqualTo(commentUpdateRequestDto.content());
 		assertThat(result.createdAt()).isEqualTo(comment.getCreatedAt());

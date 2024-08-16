@@ -6,7 +6,7 @@ import taco.klkl.domain.comment.domain.Comment;
 import taco.klkl.domain.user.dto.response.UserSimpleResponse;
 
 public record CommentResponse(
-	Long commentId,
+	Long id,
 	UserSimpleResponse user,
 	String content,
 	LocalDateTime createdAt
