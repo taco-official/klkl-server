@@ -69,7 +69,10 @@ import taco.klkl.global.util.SubcategoryUtil;
 import taco.klkl.global.util.TagUtil;
 import taco.klkl.global.util.UserUtil;
 
-class ProductServiceTest {
+class ProductServiceImplTest {
+
+	@InjectMocks
+	private ProductServiceImpl productService;
 
 	@Mock
 	private JPAQueryFactory queryFactory;
@@ -91,9 +94,6 @@ class ProductServiceTest {
 
 	@Mock
 	private CurrencyUtil currencyUtil;
-
-	@InjectMocks
-	private ProductService productService;
 
 	private Product testProduct;
 	private User user;
