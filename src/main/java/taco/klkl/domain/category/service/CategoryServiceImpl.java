@@ -26,7 +26,7 @@ public class CategoryServiceImpl implements CategoryService {
 
 	@Override
 	public List<CategoryResponse> findAllCategories() {
-		List<Category> categories = categoryRepository.findAll();
+		final List<Category> categories = categoryRepository.findAll();
 		return categories.stream()
 			.map(CategoryResponse::from)
 			.toList();
@@ -34,20 +34,17 @@ public class CategoryServiceImpl implements CategoryService {
 
 	@Override
 	public CategoryWithSubcategoryResponse findSubCategoriesByCategoryId(final Long categoryId) {
-		Category category = categoryRepository.findById(categoryId)
+		final Category category = categoryRepository.findById(categoryId)
 			.orElseThrow(CategoryNotFoundException::new);
 		return CategoryWithSubcategoryResponse.from(category);
 	}
 
 	@Override
 	public List<CategoryResponse> findCategoriesByCategoryNames(final List<CategoryName> categoryNames) {
-
 		if (categoryNames == null || categoryNames.isEmpty()) {
 			return List.of();
 		}
-
-		List<Category> categories = categoryRepository.findAllByNameIn(categoryNames);
-
+		final List<Category> categories = categoryRepository.findAllByNameIn(categoryNames);
 		return categories.stream()
 			.map(CategoryResponse::from)
 			.toList();

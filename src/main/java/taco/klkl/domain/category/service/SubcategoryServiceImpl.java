@@ -24,14 +24,11 @@ public class SubcategoryServiceImpl implements SubcategoryService {
 	private final SubcategoryRepository subcategoryRepository;
 
 	@Override
-	public List<SubcategoryResponse> findSubcategoriesBySubcategoryNames(List<SubcategoryName> subcategoryNames) {
-
+	public List<SubcategoryResponse> findSubcategoriesBySubcategoryNames(final List<SubcategoryName> subcategoryNames) {
 		if (subcategoryNames == null || subcategoryNames.isEmpty()) {
 			return List.of();
 		}
-
-		List<Subcategory> subcategories = subcategoryRepository.findAllByNameIn(subcategoryNames);
-
+		final List<Subcategory> subcategories = subcategoryRepository.findAllByNameIn(subcategoryNames);
 		return subcategories.stream()
 			.map(SubcategoryResponse::from)
 			.toList();
@@ -39,7 +36,7 @@ public class SubcategoryServiceImpl implements SubcategoryService {
 
 	@Override
 	public List<Subcategory> findSubcategoriesBySubcategoryIds(final List<Long> subcategoryIds) {
-		List<Subcategory> subcategories = subcategoryRepository.findAllById(subcategoryIds);
+		final List<Subcategory> subcategories = subcategoryRepository.findAllById(subcategoryIds);
 		validateSubcategories(subcategoryIds.size(), subcategories.size());
 		return subcategories;
 	}
