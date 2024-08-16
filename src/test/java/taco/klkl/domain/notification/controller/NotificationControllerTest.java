@@ -27,11 +27,11 @@ import taco.klkl.domain.notification.service.NotificationService;
 import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.product.domain.Rating;
 import taco.klkl.domain.region.domain.City;
+import taco.klkl.domain.region.domain.CityType;
 import taco.klkl.domain.region.domain.Country;
+import taco.klkl.domain.region.domain.CountryType;
 import taco.klkl.domain.region.domain.Currency;
 import taco.klkl.domain.region.domain.Region;
-import taco.klkl.domain.region.enums.CityType;
-import taco.klkl.domain.region.enums.CountryType;
 import taco.klkl.domain.user.domain.User;
 import taco.klkl.global.common.constants.UserConstants;
 
@@ -81,13 +81,13 @@ class NotificationControllerTest {
 
 	@Test
 	@DisplayName("모든 알림 조회")
-	void testGetAllNotifications() throws Exception {
+	void testFindAllNotifications() throws Exception {
 
 		// given
 		NotificationResponse notificationResponse = NotificationResponse.from(notification1);
 		NotificationResponse notificationResponse2 = NotificationResponse.from(notification2);
 		List<NotificationResponse> notificationResponses = List.of(notificationResponse, notificationResponse2);
-		when(notificationService.getNotifications()).thenReturn(notificationResponses);
+		when(notificationService.findAllNotifications()).thenReturn(notificationResponses);
 
 		// when & then
 		mockMvc.perform(get("/v1/notifications"))

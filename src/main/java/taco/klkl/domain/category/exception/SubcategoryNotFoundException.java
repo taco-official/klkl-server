@@ -5,6 +5,6 @@ import taco.klkl.global.error.exception.ErrorCode;
 
 public class SubcategoryNotFoundException extends CustomException {
 	public SubcategoryNotFoundException() {
-		super(ErrorCode.SUBCATEGORY_ID_NOT_FOUND);
+		super(ErrorCode.SUBCATEGORY_NOT_FOUND);
 	}
 }

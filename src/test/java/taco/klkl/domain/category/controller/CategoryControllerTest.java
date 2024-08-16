@@ -22,8 +22,8 @@ import taco.klkl.domain.category.domain.Category;
 import taco.klkl.domain.category.domain.CategoryName;
 import taco.klkl.domain.category.domain.Subcategory;
 import taco.klkl.domain.category.domain.SubcategoryName;
-import taco.klkl.domain.category.dto.response.CategoryResponseDto;
-import taco.klkl.domain.category.dto.response.CategoryWithSubcategoryDto;
+import taco.klkl.domain.category.dto.response.CategoryResponse;
+import taco.klkl.domain.category.dto.response.CategoryWithSubcategoryResponse;
 import taco.klkl.domain.category.exception.CategoryNotFoundException;
 import taco.klkl.domain.category.service.CategoryService;
 import taco.klkl.global.error.exception.ErrorCode;
@@ -44,81 +44,78 @@ public class CategoryControllerTest {
 
 	@Test
 	@DisplayName("카테고리 컨트롤러 GlobalResponse로 Wrapping되어 나오는지 Test")
-	public void testGetCategory() throws Exception {
+	public void testFindAllCategories() throws Exception {
 		// given
-		List<CategoryResponseDto> categoryResponseDto = Arrays.asList(
-			new CategoryResponseDto(1L, "Category1"),
-			new CategoryResponseDto(2L, "Category2")
+		List<CategoryResponse> categoryResponse = Arrays.asList(
+			new CategoryResponse(1L, "Category1"),
+			new CategoryResponse(2L, "Category2")
 		);
 
 		// when
-		when(categoryService.getCategories()).thenReturn(categoryResponseDto);
+		when(categoryService.findAllCategories()).thenReturn(categoryResponse);
 
 		// then
 		mockMvc.perform(get("/v1/categories")
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
-			.andExpect(jsonPath("$.code", is("C000")))
 			.andExpect(jsonPath("$.data", hasSize(2)))
-			.andExpect(jsonPath("$.data[0].categoryId", is(1)))
-			.andExpect(jsonPath("$.data[0].category", is("Category1")))
-			.andExpect(jsonPath("$.data[1].categoryId", is(2)))
-			.andExpect(jsonPath("$.data[1].category", is("Category2")))
+			.andExpect(jsonPath("$.data[0].id", is(1)))
+			.andExpect(jsonPath("$.data[0].name", is("Category1")))
+			.andExpect(jsonPath("$.data[1].id", is(2)))
+			.andExpect(jsonPath("$.data[1].name", is("Category2")))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
 
-		verify(categoryService, times(1)).getCategories();
+		verify(categoryService, times(1)).findAllCategories();
 	}
 
 	@Test
 	@DisplayName("valid id가 들어올 경우 Categoy와 Subcategory가 잘 나오는지 Test")
-	public void testGetSubcategoryWithValidId() throws Exception {
+	public void testFindSubcategoryWithValidIdById() throws Exception {
 		// given
-		Long categoryId = 1L;
+		Long id = 1L;
 		Category mockCategory = mock(Category.class);
 		CategoryRepository mockCategoryRepository = mock(CategoryRepository.class);
-		when(mockCategory.getId()).thenReturn(categoryId);
+		when(mockCategory.getId()).thenReturn(id);
 		when(mockCategory.getName()).thenReturn(CategoryName.FOOD);
 
-		when(mockCategoryRepository.findById(categoryId)).thenReturn(Optional.of(mockCategory));
+		when(mockCategoryRepository.findById(id)).thenReturn(Optional.of(mockCategory));
 		when(mockCategory.getSubcategories()).thenReturn(subcategories);
-		CategoryWithSubcategoryDto response = CategoryWithSubcategoryDto.from(mockCategory);
+		CategoryWithSubcategoryResponse response = CategoryWithSubcategoryResponse.from(mockCategory);
 
 		// when
-		when(categoryService.getSubcategories(categoryId)).thenReturn(response);
+		when(categoryService.findSubCategoriesByCategoryId(id)).thenReturn(response);
 
 		// then
 		mockMvc.perform(get("/v1/categories/1/subcategories")
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
-			.andExpect(jsonPath("$.code", is("C000")))
-			.andExpect(jsonPath("$.data.categoryId", is(1)))
-			.andExpect(jsonPath("$.data.category", is(CategoryName.FOOD.getKoreanName())))
-			.andExpect(jsonPath("$.data.subcategories[0].subcategoryId", is(subcategory1.getId())))
-			.andExpect(jsonPath("$.data.subcategories[0].subcategory", is(SubcategoryName.DRESS.getKoreanName())))
-			.andExpect(jsonPath("$.data.subcategories[1].subcategoryId", is(subcategory2.getId())))
-			.andExpect(jsonPath("$.data.subcategories[1].subcategory", is(SubcategoryName.HAIR_CARE.getKoreanName())))
+			.andExpect(jsonPath("$.data.id", is(1)))
+			.andExpect(jsonPath("$.data.name", is(CategoryName.FOOD.getKoreanName())))
+			.andExpect(jsonPath("$.data.subcategories[0].id", is(subcategory1.getId())))
+			.andExpect(jsonPath("$.data.subcategories[0].name", is(SubcategoryName.DRESS.getKoreanName())))
+			.andExpect(jsonPath("$.data.subcategories[1].id", is(subcategory2.getId())))
+			.andExpect(jsonPath("$.data.subcategories[1].name", is(SubcategoryName.HAIR_CARE.getKoreanName())))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
 
-		verify(categoryService, times(1)).getSubcategories(categoryId);
+		verify(categoryService, times(1)).findSubCategoriesByCategoryId(id);
 	}
 
 	@Test
 	@DisplayName("invalid한 id가 들어올 경우 GlobalException으로 Wrapping되어 나오는지 Test")
-	public void testGetSubcategoryWithInvalidId() throws Exception {
+	public void testFindSubcategoryWithInvalidIdById() throws Exception {
 		// given
-		when(categoryService.getSubcategories(anyLong())).thenThrow(new CategoryNotFoundException());
+		when(categoryService.findSubCategoriesByCategoryId(anyLong())).thenThrow(new CategoryNotFoundException());
 
 		// when & then
 		mockMvc.perform(get("/v1/categories/999/subcategories")
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isNotFound())
 			.andExpect(jsonPath("$.isSuccess", is(false)))
-			.andExpect(jsonPath("$.code", is(ErrorCode.CATEGORY_ID_NOT_FOUND.getCode())))
-			.andExpect(jsonPath("$.data.message", is(ErrorCode.CATEGORY_ID_NOT_FOUND.getMessage())))
-			.andExpect(jsonPath("$.timestamp", notNullValue()));
+			.andExpect(jsonPath("$.status", is(ErrorCode.CATEGORY_NOT_FOUND.getHttpStatus().value())))
+			.andExpect(jsonPath("$.data.message", is(ErrorCode.CATEGORY_NOT_FOUND.getMessage())));
 
-		verify(categoryService, times(1)).getSubcategories(anyLong());
+		verify(categoryService, times(1)).findSubCategoriesByCategoryId(anyLong());
 	}
 }

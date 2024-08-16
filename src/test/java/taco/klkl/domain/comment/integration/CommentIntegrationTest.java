@@ -17,8 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import taco.klkl.domain.comment.dto.request.CommentCreateUpdateRequestDto;
-import taco.klkl.domain.comment.dto.response.CommentResponseDto;
+import taco.klkl.domain.comment.dto.request.CommentCreateUpdateRequest;
+import taco.klkl.domain.comment.dto.response.CommentResponse;
 import taco.klkl.domain.comment.service.CommentService;
 import taco.klkl.global.error.exception.ErrorCode;
 
@@ -38,11 +38,11 @@ public class CommentIntegrationTest {
 	private final Long productId = 390L;
 	private final Long commentId = 500L;
 
-	private final CommentCreateUpdateRequestDto commentCreateRequestDto = new CommentCreateUpdateRequestDto(
+	private final CommentCreateUpdateRequest commentCreateRequestDto = new CommentCreateUpdateRequest(
 		"개추 ^^"
 	);
 
-	private final CommentCreateUpdateRequestDto commentUpdateRequestDto = new CommentCreateUpdateRequestDto(
+	private final CommentCreateUpdateRequest commentUpdateRequestDto = new CommentCreateUpdateRequest(
 		"윤상정은 바보다, 반박시 님 말이 틀림."
 	);
 
@@ -50,15 +50,14 @@ public class CommentIntegrationTest {
 	@DisplayName("상품에 있는 모든 댓글 반환 통합 테스트")
 	public void testGetComment() throws Exception {
 		//given
-		List<CommentResponseDto> commentResponseDtos = commentService.getComments(productId);
+		List<CommentResponse> commentResponses = commentService.findCommentsByProductId(productId);
 
 		//when & then
 		mockMvc.perform(get("/v1/products/{productId}/comments", productId)
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
-			.andExpect(jsonPath("$.code", is("C000")))
-			.andExpect(jsonPath("$.data", hasSize(commentResponseDtos.size())));
+			.andExpect(jsonPath("$.data", hasSize(commentResponses.size())));
 	}
 
 	@Test
@@ -72,8 +71,7 @@ public class CommentIntegrationTest {
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isCreated())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
-			.andExpect(jsonPath("$.code", is("C000")))
-			.andExpect(jsonPath("$.data.commentId", is(1)))
+			.andExpect(jsonPath("$.data.id", is(1)))
 			.andExpect(jsonPath("$.data.content", is(commentCreateRequestDto.content())));
 	}
 
@@ -89,7 +87,7 @@ public class CommentIntegrationTest {
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isNotFound())
 			.andExpect(jsonPath("$.isSuccess", is(false)))
-			.andExpect(jsonPath("$.code", is(ErrorCode.PRODUCT_NOT_FOUND.getCode())))
+			.andExpect(jsonPath("$.status", is(ErrorCode.PRODUCT_NOT_FOUND.getHttpStatus().value())))
 			.andExpect(jsonPath("$.data.message", is(ErrorCode.PRODUCT_NOT_FOUND.getMessage())));
 	}
 
@@ -104,8 +102,7 @@ public class CommentIntegrationTest {
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
-			.andExpect(jsonPath("$.code", is("C000")))
-			.andExpect(jsonPath("$.data.commentId", is(commentId.intValue())))
+			.andExpect(jsonPath("$.data.id", is(commentId.intValue())))
 			.andExpect(jsonPath("$.data.content", is(commentUpdateRequestDto.content())));
 	}
 
@@ -121,7 +118,7 @@ public class CommentIntegrationTest {
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isNotFound())
 			.andExpect(jsonPath("$.isSuccess", is(false)))
-			.andExpect(jsonPath("$.code", is(ErrorCode.COMMENT_NOT_FOUND.getCode())))
+			.andExpect(jsonPath("$.status", is(ErrorCode.COMMENT_NOT_FOUND.getHttpStatus().value())))
 			.andExpect(jsonPath("$.data.message", is(ErrorCode.COMMENT_NOT_FOUND.getMessage())));
 	}
 
@@ -137,7 +134,7 @@ public class CommentIntegrationTest {
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isNotFound())
 			.andExpect(jsonPath("$.isSuccess", is(false)))
-			.andExpect(jsonPath("$.code", is(ErrorCode.PRODUCT_NOT_FOUND.getCode())))
+			.andExpect(jsonPath("$.status", is(ErrorCode.PRODUCT_NOT_FOUND.getHttpStatus().value())))
 			.andExpect(jsonPath("$.data.message", is(ErrorCode.PRODUCT_NOT_FOUND.getMessage())));
 	}
 
@@ -153,7 +150,7 @@ public class CommentIntegrationTest {
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isBadRequest())
 			.andExpect(jsonPath("$.isSuccess", is(false)))
-			.andExpect(jsonPath("$.code", is(ErrorCode.COMMENT_PRODUCT_NOT_MATCH.getCode())))
+			.andExpect(jsonPath("$.status", is(ErrorCode.COMMENT_PRODUCT_NOT_MATCH.getHttpStatus().value())))
 			.andExpect(jsonPath("$.data.message", is(ErrorCode.COMMENT_PRODUCT_NOT_MATCH.getMessage())));
 	}
 
@@ -167,7 +164,6 @@ public class CommentIntegrationTest {
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isNoContent())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
-			.andExpect(jsonPath("$.code", is("C000")))
 			.andExpect(jsonPath("$.data", nullValue()));
 	}
 
@@ -182,7 +178,7 @@ public class CommentIntegrationTest {
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isNotFound())
 			.andExpect(jsonPath("$.isSuccess", is(false)))
-			.andExpect(jsonPath("$.code", is(ErrorCode.COMMENT_NOT_FOUND.getCode())))
+			.andExpect(jsonPath("$.status", is(ErrorCode.COMMENT_NOT_FOUND.getHttpStatus().value())))
 			.andExpect(jsonPath("$.data.message", is(ErrorCode.COMMENT_NOT_FOUND.getMessage())));
 	}
 
@@ -197,7 +193,7 @@ public class CommentIntegrationTest {
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isNotFound())
 			.andExpect(jsonPath("$.isSuccess", is(false)))
-			.andExpect(jsonPath("$.code", is(ErrorCode.PRODUCT_NOT_FOUND.getCode())))
+			.andExpect(jsonPath("$.status", is(ErrorCode.PRODUCT_NOT_FOUND.getHttpStatus().value())))
 			.andExpect(jsonPath("$.data.message", is(ErrorCode.PRODUCT_NOT_FOUND.getMessage())));
 	}
 
@@ -212,7 +208,7 @@ public class CommentIntegrationTest {
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isBadRequest())
 			.andExpect(jsonPath("$.isSuccess", is(false)))
-			.andExpect(jsonPath("$.code", is(ErrorCode.COMMENT_PRODUCT_NOT_MATCH.getCode())))
+			.andExpect(jsonPath("$.status", is(ErrorCode.COMMENT_PRODUCT_NOT_MATCH.getHttpStatus().value())))
 			.andExpect(jsonPath("$.data.message", is(ErrorCode.COMMENT_PRODUCT_NOT_MATCH.getMessage())));
 	}
 }

@@ -10,5 +10,5 @@ import taco.klkl.domain.category.domain.SubcategoryName;
 
 @Repository
 public interface SubcategoryRepository extends JpaRepository<Subcategory, Long> {
-	List<Subcategory> findAllByNameIn(List<SubcategoryName> names);
+	List<Subcategory> findAllByNameIn(final List<SubcategoryName> names);
 }

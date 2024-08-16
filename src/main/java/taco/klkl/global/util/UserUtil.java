@@ -22,7 +22,7 @@ public class UserUtil {
 	 * 현재 유저 조회
 	 * @return
 	 */
-	public User getCurrentUser() {
+	public User findCurrentUser() {
 		return userRepository.findFirstByName(UserConstants.TEST_USER_NAME);
 	}
 }

@@ -19,16 +19,16 @@ import org.slf4j.LoggerFactory;
 
 import taco.klkl.domain.region.dao.CountryRepository;
 import taco.klkl.domain.region.domain.City;
+import taco.klkl.domain.region.domain.CityType;
 import taco.klkl.domain.region.domain.Country;
+import taco.klkl.domain.region.domain.CountryType;
 import taco.klkl.domain.region.domain.Currency;
+import taco.klkl.domain.region.domain.CurrencyType;
 import taco.klkl.domain.region.domain.Region;
-import taco.klkl.domain.region.dto.response.CityResponseDto;
-import taco.klkl.domain.region.dto.response.CountryResponseDto;
-import taco.klkl.domain.region.dto.response.CountrySimpleResponseDto;
-import taco.klkl.domain.region.enums.CityType;
-import taco.klkl.domain.region.enums.CountryType;
-import taco.klkl.domain.region.enums.CurrencyType;
-import taco.klkl.domain.region.enums.RegionType;
+import taco.klkl.domain.region.domain.RegionType;
+import taco.klkl.domain.region.dto.response.CityResponse;
+import taco.klkl.domain.region.dto.response.CountryResponse;
+import taco.klkl.domain.region.dto.response.CountrySimpleResponse;
 import taco.klkl.domain.region.exception.CountryNotFoundException;
 
 @ExtendWith(MockitoExtension.class)
@@ -61,13 +61,13 @@ public class CountryServiceImplTest {
 
 	@Test
 	@DisplayName("모든 국가 조회 테스트")
-	void testGetAllCountries() {
+	void testFindAllCountries() {
 		// given
 		List<Country> countries = Arrays.asList(country1, country2);
 		when(countryRepository.findAll()).thenReturn(countries);
 
 		// when
-		List<CountryResponseDto> findCountries = countryService.getAllCountries();
+		List<CountryResponse> findCountries = countryService.findAllCountries();
 
 		// then
 		assertThat(findCountries.size()).isEqualTo(countries.size());
@@ -77,26 +77,26 @@ public class CountryServiceImplTest {
 
 	@Test
 	@DisplayName("id로 국가조회 테스트")
-	void testGetCountryById() {
+	void testFindCountryById() {
 		// given
 		when(countryRepository.findById(400L)).thenReturn(Optional.of(country1));
 
 		// when
-		CountryResponseDto findCountry = countryService.getCountryById(400L);
+		CountryResponse findCountry = countryService.findCountryById(400L);
 
 		// then
-		assertThat(findCountry).isEqualTo(CountryResponseDto.from(country1));
+		assertThat(findCountry).isEqualTo(CountryResponse.from(country1));
 	}
 
 	@Test
 	@DisplayName("국가 조회 실패 테스트")
-	void testGetCountryByIdFail() {
+	void testFindCountryByIdFail() {
 		// given
 		when(countryRepository.findById(400L)).thenThrow(CountryNotFoundException.class);
 
 		// when & then
 		Assertions.assertThrows(CountryNotFoundException.class, () ->
-			countryService.getCountryById(400L));
+			countryService.findCountryById(400L));
 
 		verify(countryRepository, times(1)).findById(400L);
 	}
@@ -110,7 +110,7 @@ public class CountryServiceImplTest {
 		when(mockCountry.getCities()).thenReturn(cities);
 
 		// when
-		List<CityResponseDto> findCountries = countryService.getCitiesByCountryId(400L);
+		List<CityResponse> findCountries = countryService.findCitiesByCountryId(400L);
 
 		// then
 		assertThat(findCountries.size()).isEqualTo(cities.size());
@@ -123,16 +123,16 @@ public class CountryServiceImplTest {
 	void testGetCountriesByCountryTypes() {
 		// given
 		List<CountryType> countryTypes = Arrays.asList(CountryType.JAPAN, CountryType.TAIWAN);
-		CountrySimpleResponseDto country1ResponseDto = CountrySimpleResponseDto.from(country1);
-		CountrySimpleResponseDto country2ResponseDto = CountrySimpleResponseDto.from(country2);
+		CountrySimpleResponse country1ResponseDto = CountrySimpleResponse.from(country1);
+		CountrySimpleResponse country2ResponseDto = CountrySimpleResponse.from(country2);
 		when(countryRepository.findAllByNameIn(countryTypes)).thenReturn(Arrays.asList(country1, country2));
 
 		// when
-		List<CountrySimpleResponseDto> countrySimpleResponseDtos = countryService.getAllCountriesByCountryTypes(
+		List<CountrySimpleResponse> countrySimpleResponses = countryService.getAllCountriesByCountryTypes(
 			countryTypes);
 
 		// then
-		assertThat(countrySimpleResponseDtos).hasSize(countryTypes.size());
-		assertThat(countrySimpleResponseDtos).containsExactlyInAnyOrder(country1ResponseDto, country2ResponseDto);
+		assertThat(countrySimpleResponses).hasSize(countryTypes.size());
+		assertThat(countrySimpleResponses).containsExactlyInAnyOrder(country1ResponseDto, country2ResponseDto);
 	}
 }

@@ -30,13 +30,13 @@ import taco.klkl.domain.notification.exception.NotificationNotFoundException;
 import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.product.domain.Rating;
 import taco.klkl.domain.region.domain.City;
+import taco.klkl.domain.region.domain.CityType;
 import taco.klkl.domain.region.domain.Country;
+import taco.klkl.domain.region.domain.CountryType;
 import taco.klkl.domain.region.domain.Currency;
+import taco.klkl.domain.region.domain.CurrencyType;
 import taco.klkl.domain.region.domain.Region;
-import taco.klkl.domain.region.enums.CityType;
-import taco.klkl.domain.region.enums.CountryType;
-import taco.klkl.domain.region.enums.CurrencyType;
-import taco.klkl.domain.region.enums.RegionType;
+import taco.klkl.domain.region.domain.RegionType;
 import taco.klkl.domain.user.domain.Gender;
 import taco.klkl.domain.user.domain.User;
 import taco.klkl.global.util.UserUtil;
@@ -111,7 +111,7 @@ public class NotificationServiceTest {
 
 	@Test
 	@DisplayName("댓글 알림이 비어있지 않을경우 조회 성공")
-	public void testGetNotifications() {
+	public void testFindAllNotifications() {
 		//given
 		when(userUtil.findTestUser()).thenReturn(mockUser);
 		when(mockNotification.getId()).thenReturn(1L);
@@ -123,11 +123,11 @@ public class NotificationServiceTest {
 		when(notificationRepository.findAllByComment_Product_User(mockUser)).thenReturn(notificationList);
 
 		//when
-		List<NotificationResponse> response = notificationService.getNotifications();
+		List<NotificationResponse> response = notificationService.findAllNotifications();
 
 		//then
 		assertThat(response).hasSize(1);
-		assertThat(response.get(0).notification().notificationId()).isEqualTo(mockNotification.getId());
+		assertThat(response.get(0).notification().id()).isEqualTo(mockNotification.getId());
 		assertThat(response.get(0).notification().isRead()).isFalse();
 	}
 
@@ -141,7 +141,7 @@ public class NotificationServiceTest {
 		when(notificationRepository.findAllByComment_Product_User(mockUser)).thenReturn(notificationList);
 
 		//when
-		List<NotificationResponse> response = notificationService.getNotifications();
+		List<NotificationResponse> response = notificationService.findAllNotifications();
 
 		//then
 		assertThat(response).hasSize(0);

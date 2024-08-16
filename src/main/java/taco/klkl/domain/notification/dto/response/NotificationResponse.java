@@ -1,21 +1,19 @@
 package taco.klkl.domain.notification.dto.response;
 
-import taco.klkl.domain.comment.dto.response.CommentResponseDto;
+import taco.klkl.domain.comment.dto.response.CommentResponse;
 import taco.klkl.domain.notification.domain.Notification;
-import taco.klkl.domain.product.dto.response.ProductSimpleResponseDto;
+import taco.klkl.domain.product.dto.response.ProductSimpleResponse;
 
 public record NotificationResponse(
 	NotificationInfo notification,
-	ProductSimpleResponseDto product,
-	CommentResponseDto comment
+	ProductSimpleResponse product,
+	CommentResponse comment
 ) {
-	public static NotificationResponse from(
-		Notification notification
-	) {
+	public static NotificationResponse from(final Notification notification) {
 		return new NotificationResponse(
 			NotificationInfo.from(notification),
-			ProductSimpleResponseDto.from(notification.getComment().getProduct()),
-			CommentResponseDto.from(notification.getComment())
+			ProductSimpleResponse.from(notification.getComment().getProduct()),
+			CommentResponse.from(notification.getComment())
 		);
 	}
 }

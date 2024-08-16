@@ -42,9 +42,9 @@ class GlobalExceptionHandlerTest {
 		List<FieldError> fieldErrors = List.of(
 			new FieldError("productCreateRequestDto", "name", "상품명은 필수 항목입니다."),
 			new FieldError("productCreateRequestDto", "description", "상품 설명은 필수 항목입니다."),
-			new FieldError("productCreateRequestDto", "cityId", "도시 ID는 필수 항목입니다."),
-			new FieldError("productCreateRequestDto", "subcategoryId", "상품 소분류 ID는 필수 항목입니다."),
-			new FieldError("productCreateRequestDto", "currencyId", "통화 ID는 필수 항목입니다.")
+			new FieldError("productCreateRequestDto", "id", "도시 ID는 필수 항목입니다."),
+			new FieldError("productCreateRequestDto", "id", "상품 소분류 ID는 필수 항목입니다."),
+			new FieldError("productCreateRequestDto", "id", "통화 ID는 필수 항목입니다.")
 		);
 
 		when(bindingResult.getFieldErrors()).thenReturn(fieldErrors);
@@ -65,7 +65,6 @@ class GlobalExceptionHandlerTest {
 		GlobalResponse globalResponse = (GlobalResponse)(response.getBody());
 		assertInstanceOf(ErrorResponse.class, globalResponse.data());
 		ErrorResponse errorResponse = (ErrorResponse)(globalResponse.data());
-		assertEquals(ErrorCode.METHOD_ARGUMENT_INVALID.getCode(), errorResponse.code());
 		assertTrue(errorResponse.message().contains(ErrorCode.METHOD_ARGUMENT_INVALID.getMessage()));
 	}
 
@@ -89,7 +88,6 @@ class GlobalExceptionHandlerTest {
 		GlobalResponse globalResponse = (GlobalResponse)(response.getBody());
 		assertInstanceOf(ErrorResponse.class, globalResponse.data());
 		ErrorResponse errorResponse = (ErrorResponse)(globalResponse.data());
-		assertEquals(ErrorCode.METHOD_NOT_SUPPORTED.getCode(), errorResponse.code());
 		assertEquals(ErrorCode.METHOD_NOT_SUPPORTED.getMessage(), errorResponse.message());
 	}
 
@@ -113,7 +111,6 @@ class GlobalExceptionHandlerTest {
 		GlobalResponse globalResponse = (GlobalResponse)(response.getBody());
 		assertInstanceOf(ErrorResponse.class, globalResponse.data());
 		ErrorResponse errorResponse = (ErrorResponse)(globalResponse.data());
-		assertEquals(ErrorCode.INTERNAL_SERVER_ERROR.getCode(), errorResponse.code());
 		assertEquals(ErrorCode.INTERNAL_SERVER_ERROR.getMessage(), errorResponse.message());
 	}
 
@@ -134,12 +131,11 @@ class GlobalExceptionHandlerTest {
 
 		// then
 		assertNotNull(response);
-		assertEquals(ErrorCode.HTTP_MESSAGE_NOT_READABLE.getStatus(), response.getStatusCode());
+		assertEquals(ErrorCode.HTTP_MESSAGE_NOT_READABLE.getHttpStatus(), response.getStatusCode());
 		assertInstanceOf(GlobalResponse.class, response.getBody());
 		GlobalResponse globalResponse = (GlobalResponse)(response.getBody());
 		assertInstanceOf(ErrorResponse.class, globalResponse.data());
 		ErrorResponse errorResponse = (ErrorResponse)(globalResponse.data());
-		assertEquals(ErrorCode.HTTP_MESSAGE_NOT_READABLE.getCode(), errorResponse.code());
 		assertEquals(ErrorCode.HTTP_MESSAGE_NOT_READABLE.getMessage(), errorResponse.message());
 	}
 
@@ -159,7 +155,6 @@ class GlobalExceptionHandlerTest {
 		GlobalResponse globalResponse = (GlobalResponse)(response.getBody());
 		assertInstanceOf(ErrorResponse.class, globalResponse.data());
 		ErrorResponse errorResponse = (ErrorResponse)(globalResponse.data());
-		assertEquals(ErrorCode.SAMPLE_ERROR.getCode(), errorResponse.code());
 		assertEquals(ErrorCode.SAMPLE_ERROR.getMessage(), errorResponse.message());
 	}
 
@@ -178,7 +173,6 @@ class GlobalExceptionHandlerTest {
 		assertNotNull(response.getBody());
 		GlobalResponse globalResponse = (GlobalResponse)(response.getBody());
 		ErrorResponse errorResponse = (ErrorResponse)(globalResponse.data());
-		assertEquals(ErrorCode.INTERNAL_SERVER_ERROR.getCode(), errorResponse.code());
 		assertEquals(ErrorCode.INTERNAL_SERVER_ERROR.getMessage(), errorResponse.message());
 	}
 }

@@ -8,8 +8,8 @@ import lombok.extern.slf4j.Slf4j;
 import taco.klkl.domain.user.dao.UserRepository;
 import taco.klkl.domain.user.domain.Gender;
 import taco.klkl.domain.user.domain.User;
-import taco.klkl.domain.user.dto.request.UserCreateRequestDto;
-import taco.klkl.domain.user.dto.response.UserDetailResponseDto;
+import taco.klkl.domain.user.dto.request.UserCreateRequest;
+import taco.klkl.domain.user.dto.response.UserDetailResponse;
 import taco.klkl.global.common.constants.UserConstants;
 
 @Slf4j
@@ -23,17 +23,17 @@ public class UserService {
 	 * 임시 나의 정보 조회
 	 * name 속성이 "testUser"인 유저를 반환합니다.
 	 */
-	public UserDetailResponseDto getMyInfo() {
+	public UserDetailResponse getMyInfo() {
 		User me = userRepository.findFirstByName(UserConstants.TEST_USER_NAME);
-		return UserDetailResponseDto.from(me);
+		return UserDetailResponse.from(me);
 	}
 
 	/**
 	 *
 	 * @param userDto
-	 * @return UserDetailResponseDto
+	 * @return UserDetailResponse
 	 */
-	public UserDetailResponseDto registerUser(UserCreateRequestDto userDto) {
+	public UserDetailResponse registerUser(UserCreateRequest userDto) {
 		User user = User.of(
 			userDto.profile(),
 			userDto.name(),
@@ -42,7 +42,7 @@ public class UserService {
 			userDto.description()
 		);
 		userRepository.save(user);
-		return UserDetailResponseDto.from(user);
+		return UserDetailResponse.from(user);
 	}
 
 }

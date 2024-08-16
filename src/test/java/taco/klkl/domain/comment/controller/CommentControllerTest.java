@@ -24,8 +24,8 @@ import taco.klkl.domain.category.domain.CategoryName;
 import taco.klkl.domain.category.domain.Subcategory;
 import taco.klkl.domain.category.domain.SubcategoryName;
 import taco.klkl.domain.comment.domain.Comment;
-import taco.klkl.domain.comment.dto.request.CommentCreateUpdateRequestDto;
-import taco.klkl.domain.comment.dto.response.CommentResponseDto;
+import taco.klkl.domain.comment.dto.request.CommentCreateUpdateRequest;
+import taco.klkl.domain.comment.dto.response.CommentResponse;
 import taco.klkl.domain.comment.exception.CommentNotFoundException;
 import taco.klkl.domain.comment.exception.CommentProductNotMatch;
 import taco.klkl.domain.comment.service.CommentService;
@@ -34,16 +34,16 @@ import taco.klkl.domain.product.domain.Rating;
 import taco.klkl.domain.product.exception.ProductNotFoundException;
 import taco.klkl.domain.product.service.ProductService;
 import taco.klkl.domain.region.domain.City;
+import taco.klkl.domain.region.domain.CityType;
 import taco.klkl.domain.region.domain.Country;
+import taco.klkl.domain.region.domain.CountryType;
 import taco.klkl.domain.region.domain.Currency;
+import taco.klkl.domain.region.domain.CurrencyType;
 import taco.klkl.domain.region.domain.Region;
-import taco.klkl.domain.region.enums.CityType;
-import taco.klkl.domain.region.enums.CountryType;
-import taco.klkl.domain.region.enums.CurrencyType;
-import taco.klkl.domain.region.enums.RegionType;
+import taco.klkl.domain.region.domain.RegionType;
 import taco.klkl.domain.user.domain.Gender;
 import taco.klkl.domain.user.domain.User;
-import taco.klkl.domain.user.dto.request.UserCreateRequestDto;
+import taco.klkl.domain.user.dto.request.UserCreateRequest;
 import taco.klkl.global.error.exception.ErrorCode;
 
 @WebMvcTest(CommentController.class)
@@ -64,7 +64,7 @@ public class CommentControllerTest {
 	private final Long productId = 1L;
 	private final Long commentId = 1L;
 
-	private final UserCreateRequestDto requestDto = new UserCreateRequestDto(
+	private final UserCreateRequest requestDto = new UserCreateRequest(
 		"이상화",
 		"남",
 		19,
@@ -116,11 +116,11 @@ public class CommentControllerTest {
 	private final Comment comment1 = Comment.of(product, user, "개추 ^^");
 	private final Comment comment2 = Comment.of(product, user, "안녕하세요");
 
-	private final CommentCreateUpdateRequestDto commentCreateRequestDto = new CommentCreateUpdateRequestDto(
+	private final CommentCreateUpdateRequest commentCreateRequestDto = new CommentCreateUpdateRequest(
 		"개추 ^^"
 	);
 
-	private final CommentCreateUpdateRequestDto commentUpdateRequestDto = new CommentCreateUpdateRequestDto(
+	private final CommentCreateUpdateRequest commentUpdateRequestDto = new CommentCreateUpdateRequest(
 		"윤상정은 바보다, 반박시 님 말이 틀림."
 	);
 
@@ -128,34 +128,33 @@ public class CommentControllerTest {
 	@DisplayName("상품에 있는 모든 댓글 반환 테스트")
 	public void testGetComment() throws Exception {
 		//given
-		List<CommentResponseDto> responseDtos = Arrays.asList(CommentResponseDto.from(comment1),
-			CommentResponseDto.from(comment2));
+		List<CommentResponse> responseDtos = Arrays.asList(CommentResponse.from(comment1),
+			CommentResponse.from(comment2));
 
-		when(commentService.getComments(productId)).thenReturn(responseDtos);
+		when(commentService.findCommentsByProductId(productId)).thenReturn(responseDtos);
 
 		//when & then
 		mockMvc.perform(get("/v1/products/{productId}/comments", productId)
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
-			.andExpect(jsonPath("$.code", is("C000")))
 			.andExpect(jsonPath("$.data", hasSize(2)))
-			.andExpect(jsonPath("$.data[0].commentId", is(comment1.getId())))
+			.andExpect(jsonPath("$.data[0].id", is(comment1.getId())))
 			.andExpect(jsonPath("$.data[0].content", is(comment1.getContent())))
-			.andExpect(jsonPath("$.data[1].commentId", is(comment2.getId())))
+			.andExpect(jsonPath("$.data[1].id", is(comment2.getId())))
 			.andExpect(jsonPath("$.data[1].content", is(comment2.getContent())));
 
 		verify(commentService, times(1))
-			.getComments(productId);
+			.findCommentsByProductId(productId);
 	}
 
 	@Test
 	@DisplayName("댓글 등록 성공 테스트")
 	public void testCreateComment() throws Exception {
 		//given
-		CommentResponseDto responseDto = CommentResponseDto.from(comment1);
+		CommentResponse responseDto = CommentResponse.from(comment1);
 
-		when(commentService.createComment(any(Long.class), any(CommentCreateUpdateRequestDto.class))).thenReturn(
+		when(commentService.createComment(any(Long.class), any(CommentCreateUpdateRequest.class))).thenReturn(
 			responseDto);
 
 		//when & then
@@ -164,8 +163,7 @@ public class CommentControllerTest {
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isCreated())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
-			.andExpect(jsonPath("$.code", is("C000")))
-			.andExpect(jsonPath("$.data.commentId", is(comment1.getId())))
+			.andExpect(jsonPath("$.data.id", is(comment1.getId())))
 			.andExpect(jsonPath("$.data.user.id", is(comment1.getUser().getId())))
 			.andExpect(jsonPath("$.data.content", is(comment1.getContent())));
 
@@ -181,7 +179,7 @@ public class CommentControllerTest {
 
 		doThrow(new ProductNotFoundException())
 			.when(commentService)
-			.createComment(any(Long.class), any(CommentCreateUpdateRequestDto.class));
+			.createComment(any(Long.class), any(CommentCreateUpdateRequest.class));
 
 		//when & then
 		mockMvc.perform(post("/v1/products/{wrongProductId}/comments", wrongProductId)
@@ -189,7 +187,7 @@ public class CommentControllerTest {
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isNotFound())
 			.andExpect(jsonPath("$.isSuccess", is(false)))
-			.andExpect(jsonPath("$.code", is(ErrorCode.PRODUCT_NOT_FOUND.getCode())))
+			.andExpect(jsonPath("$.status", is(ErrorCode.PRODUCT_NOT_FOUND.getHttpStatus().value())))
 			.andExpect(jsonPath("$.data.message", is(ErrorCode.PRODUCT_NOT_FOUND.getMessage())));
 	}
 
@@ -197,12 +195,12 @@ public class CommentControllerTest {
 	@DisplayName("댓글 수정 성공 테스트")
 	public void testUpdateComment() throws Exception {
 		///given
-		CommentResponseDto responseDto = CommentResponseDto.from(comment1);
+		CommentResponse responseDto = CommentResponse.from(comment1);
 
 		when(commentService.updateComment(
 			any(Long.class),
 			any(Long.class),
-			any(CommentCreateUpdateRequestDto.class)))
+			any(CommentCreateUpdateRequest.class)))
 			.thenReturn(responseDto);
 
 		//when & then
@@ -211,8 +209,7 @@ public class CommentControllerTest {
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
-			.andExpect(jsonPath("$.code", is("C000")))
-			.andExpect(jsonPath("$.data.commentId", is(comment1.getId())))
+			.andExpect(jsonPath("$.data.id", is(comment1.getId())))
 			.andExpect(jsonPath("$.data.user.id", is(comment1.getUser().getId())))
 			.andExpect(jsonPath("$.data.content", is(comment1.getContent())));
 
@@ -226,7 +223,7 @@ public class CommentControllerTest {
 		///given
 		Long wrongCommentId = 2L;
 
-		when(commentService.updateComment(any(Long.class), any(Long.class), any(CommentCreateUpdateRequestDto.class)))
+		when(commentService.updateComment(any(Long.class), any(Long.class), any(CommentCreateUpdateRequest.class)))
 			.thenThrow(new CommentNotFoundException());
 
 		//when & then
@@ -235,7 +232,7 @@ public class CommentControllerTest {
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isNotFound())
 			.andExpect(jsonPath("$.isSuccess", is(false)))
-			.andExpect(jsonPath("$.code", is(ErrorCode.COMMENT_NOT_FOUND.getCode())))
+			.andExpect(jsonPath("$.status", is(ErrorCode.COMMENT_NOT_FOUND.getHttpStatus().value())))
 			.andExpect(jsonPath("$.data.message", is(ErrorCode.COMMENT_NOT_FOUND.getMessage())));
 
 		verify(commentService, times(1))
@@ -248,7 +245,7 @@ public class CommentControllerTest {
 		//given
 		Long wrongProductId = 2L;
 
-		when(commentService.updateComment(any(Long.class), any(Long.class), any(CommentCreateUpdateRequestDto.class)))
+		when(commentService.updateComment(any(Long.class), any(Long.class), any(CommentCreateUpdateRequest.class)))
 			.thenThrow(new ProductNotFoundException());
 
 		//when & then
@@ -257,7 +254,7 @@ public class CommentControllerTest {
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isNotFound())
 			.andExpect(jsonPath("$.isSuccess", is(false)))
-			.andExpect(jsonPath("$.code", is(ErrorCode.PRODUCT_NOT_FOUND.getCode())))
+			.andExpect(jsonPath("$.status", is(ErrorCode.PRODUCT_NOT_FOUND.getHttpStatus().value())))
 			.andExpect(jsonPath("$.data.message", is(ErrorCode.PRODUCT_NOT_FOUND.getMessage())));
 
 		verify(commentService, times(1))
@@ -269,7 +266,7 @@ public class CommentControllerTest {
 	public void testUpdateCommentWhenExistProductButNotMatchWithComment() throws Exception {
 		//given
 
-		when(commentService.updateComment(any(Long.class), any(Long.class), any(CommentCreateUpdateRequestDto.class)))
+		when(commentService.updateComment(any(Long.class), any(Long.class), any(CommentCreateUpdateRequest.class)))
 			.thenThrow(new CommentProductNotMatch());
 
 		//when & then
@@ -278,7 +275,7 @@ public class CommentControllerTest {
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isBadRequest())
 			.andExpect(jsonPath("$.isSuccess", is(false)))
-			.andExpect(jsonPath("$.code", is(ErrorCode.COMMENT_PRODUCT_NOT_MATCH.getCode())))
+			.andExpect(jsonPath("$.status", is(ErrorCode.COMMENT_PRODUCT_NOT_MATCH.getHttpStatus().value())))
 			.andExpect(jsonPath("$.data.message", is(ErrorCode.COMMENT_PRODUCT_NOT_MATCH.getMessage())));
 
 		verify(commentService, times(1))
@@ -294,7 +291,6 @@ public class CommentControllerTest {
 		mockMvc.perform(delete("/v1/products/{productId}/comments/{commentId}", productId, commentId))
 			.andExpect(status().isNoContent())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
-			.andExpect(jsonPath("$.code", is("C000")))
 			.andExpect(jsonPath("$.data", nullValue()));
 
 		verify(commentService, times(1)).deleteComment(productId, commentId);
@@ -313,7 +309,7 @@ public class CommentControllerTest {
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isNotFound())
 			.andExpect(jsonPath("$.isSuccess", is(false)))
-			.andExpect(jsonPath("$.code", is(ErrorCode.COMMENT_NOT_FOUND.getCode())))
+			.andExpect(jsonPath("$.status", is(ErrorCode.COMMENT_NOT_FOUND.getHttpStatus().value())))
 			.andExpect(jsonPath("$.data.message", is(ErrorCode.COMMENT_NOT_FOUND.getMessage())));
 
 		verify(commentService, times(1)).deleteComment(productId, wrongCommentId);
@@ -332,7 +328,7 @@ public class CommentControllerTest {
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isNotFound())
 			.andExpect(jsonPath("$.isSuccess", is(false)))
-			.andExpect(jsonPath("$.code", is(ErrorCode.PRODUCT_NOT_FOUND.getCode())))
+			.andExpect(jsonPath("$.status", is(ErrorCode.PRODUCT_NOT_FOUND.getHttpStatus().value())))
 			.andExpect(jsonPath("$.data.message", is(ErrorCode.PRODUCT_NOT_FOUND.getMessage())));
 
 		verify(commentService, times(1)).deleteComment(wrongProductId, commentId);
@@ -351,7 +347,7 @@ public class CommentControllerTest {
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isBadRequest())
 			.andExpect(jsonPath("$.isSuccess", is(false)))
-			.andExpect(jsonPath("$.code", is(ErrorCode.COMMENT_PRODUCT_NOT_MATCH.getCode())))
+			.andExpect(jsonPath("$.status", is(ErrorCode.COMMENT_PRODUCT_NOT_MATCH.getHttpStatus().value())))
 			.andExpect(jsonPath("$.data.message", is(ErrorCode.COMMENT_PRODUCT_NOT_MATCH.getMessage())));
 
 		verify(commentService, times(1))

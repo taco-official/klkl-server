@@ -15,7 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import taco.klkl.domain.user.domain.User;
-import taco.klkl.domain.user.dto.response.UserDetailResponseDto;
+import taco.klkl.domain.user.dto.response.UserDetailResponse;
 import taco.klkl.domain.user.service.UserService;
 import taco.klkl.global.common.constants.UserConstants;
 
@@ -28,12 +28,12 @@ class UserControllerTest {
 	@MockBean
 	UserService userService;
 
-	private UserDetailResponseDto responseDto;
+	private UserDetailResponse responseDto;
 
 	@BeforeEach
 	public void setUp() {
 		User user = UserConstants.TEST_USER;
-		responseDto = UserDetailResponseDto.from(user);
+		responseDto = UserDetailResponse.from(user);
 	}
 
 	@Test
@@ -47,7 +47,6 @@ class UserControllerTest {
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
-			.andExpect(jsonPath("$.code", is("C000")))
 			.andExpect(jsonPath("$.data.id", is(nullValue())))
 			.andExpect(jsonPath("$.data.profile", is(notNullValue())))
 			.andExpect(jsonPath("$.data.name", is(responseDto.name())))

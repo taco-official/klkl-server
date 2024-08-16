@@ -15,8 +15,8 @@ import org.slf4j.LoggerFactory;
 import taco.klkl.domain.user.dao.UserRepository;
 import taco.klkl.domain.user.domain.Gender;
 import taco.klkl.domain.user.domain.User;
-import taco.klkl.domain.user.dto.request.UserCreateRequestDto;
-import taco.klkl.domain.user.dto.response.UserDetailResponseDto;
+import taco.klkl.domain.user.dto.request.UserCreateRequest;
+import taco.klkl.domain.user.dto.response.UserDetailResponse;
 import taco.klkl.global.common.constants.UserConstants;
 
 @ExtendWith(MockitoExtension.class)
@@ -37,7 +37,7 @@ class UserServiceTest {
 		when(userRepository.findFirstByName(UserConstants.TEST_USER_NAME)).thenReturn(user);
 
 		// when
-		UserDetailResponseDto userDto = userService.getMyInfo();
+		UserDetailResponse userDto = userService.getMyInfo();
 
 		// then
 		assertThat(userDto.profile()).isEqualTo(user.getProfile());
@@ -50,7 +50,7 @@ class UserServiceTest {
 	@DisplayName("사용자 등록 서비스 테스트")
 	public void testRegisterUser() {
 		// given
-		UserCreateRequestDto requestDto = new UserCreateRequestDto(
+		UserCreateRequest requestDto = new UserCreateRequest(
 			"이상화",
 			"남",
 			19,
@@ -67,7 +67,7 @@ class UserServiceTest {
 		when(userRepository.save(any(User.class))).thenReturn(user);
 
 		// when
-		UserDetailResponseDto responseDto = userService.registerUser(requestDto);
+		UserDetailResponse responseDto = userService.registerUser(requestDto);
 
 		// then
 		assertThat(responseDto.name()).isEqualTo(requestDto.name());

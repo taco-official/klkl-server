@@ -6,6 +6,7 @@ import java.util.regex.Pattern;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import taco.klkl.domain.category.exception.CategoryNameNotFoundException;
 
 @Getter
 @AllArgsConstructor
@@ -14,18 +15,18 @@ public enum CategoryName {
 	CLOTHES("의류"),
 	SUNDRIES("잡화"),
 	COSMETICS("화장품"),
-	NONE("");
+	;
 
 	private final String koreanName;
 
-	public static CategoryName getByName(String name) {
+	public static CategoryName fromKoreanName(final String koreanName) {
 		return Arrays.stream(values())
-			.filter(categoryName -> categoryName.getKoreanName().equals(name))
+			.filter(categoryName -> categoryName.getKoreanName().equals(koreanName))
 			.findFirst()
-			.orElse(NONE);
+			.orElseThrow(CategoryNameNotFoundException::new);
 	}
 
-	public static List<CategoryName> getCategoryNamesByPartialString(String partialString) {
+	public static List<CategoryName> findByPartialString(final String partialString) {
 
 		if (partialString == null || partialString.isEmpty()) {
 			return List.of();
