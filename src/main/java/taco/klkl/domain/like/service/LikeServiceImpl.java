@@ -32,31 +32,26 @@ public class LikeServiceImpl implements LikeService {
 
 	@Override
 	public LikeResponse createLike(final Long productId) {
-		Product product = findProductById(productId);
-		User user = findCurrentUser();
-
+		final Product product = findProductById(productId);
+		final User user = findCurrentUser();
 		if (isLikePresent(product, user)) {
 			return LikeResponse.of(true, product.getLikeCount());
 		}
-
 		Like like = Like.of(product, user);
 		likeRepository.save(like);
 		int likeCount = productService.increaseLikeCount(product);
-
 		return LikeResponse.of(true, likeCount);
 	}
 
 	@Override
 	public LikeResponse deleteLike(final Long productId) {
-		Product product = findProductById(productId);
-		User user = findCurrentUser();
-
+		final Product product = findProductById(productId);
+		final User user = findCurrentUser();
 		if (isLikePresent(product, user)) {
 			likeRepository.deleteByProductAndUser(product, user);
 			int likeCount = productService.decreaseLikeCount(product);
 			return LikeResponse.of(false, likeCount);
 		}
-
 		return LikeResponse.of(false, product.getLikeCount());
 	}
 

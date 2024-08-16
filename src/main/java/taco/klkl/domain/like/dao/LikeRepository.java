@@ -9,6 +9,7 @@ import taco.klkl.domain.user.domain.User;
 
 @Repository
 public interface LikeRepository extends JpaRepository<Like, Long> {
+
 	void deleteByProductAndUser(Product product, User user);
 
 	boolean existsByProductAndUser(Product product, User user);
