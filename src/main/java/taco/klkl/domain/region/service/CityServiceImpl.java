@@ -13,7 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import taco.klkl.domain.region.dao.CityRepository;
 import taco.klkl.domain.region.domain.City;
 import taco.klkl.domain.region.domain.Country;
-import taco.klkl.domain.region.dto.response.CityResponseDto;
+import taco.klkl.domain.region.dto.response.CityResponse;
 import taco.klkl.domain.region.enums.CityType;
 import taco.klkl.domain.region.exception.CityNotFoundException;
 
@@ -33,7 +33,7 @@ public class CityServiceImpl implements CityService {
 	}
 
 	@Override
-	public List<CityResponseDto> getAllCitiesByCityTypes(final List<CityType> cityTypes) {
+	public List<CityResponse> getAllCitiesByCityTypes(final List<CityType> cityTypes) {
 
 		if (cityTypes == null || cityTypes.isEmpty()) {
 			return List.of();
@@ -42,7 +42,7 @@ public class CityServiceImpl implements CityService {
 		final List<City> findCities = cityRepository.findAllByNameIn(cityTypes);
 
 		return findCities.stream()
-			.map(CityResponseDto::from)
+			.map(CityResponse::from)
 			.toList();
 	}
 

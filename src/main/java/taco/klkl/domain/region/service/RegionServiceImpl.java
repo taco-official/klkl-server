@@ -12,8 +12,8 @@ import lombok.extern.slf4j.Slf4j;
 import taco.klkl.domain.region.dao.RegionRepository;
 import taco.klkl.domain.region.domain.Country;
 import taco.klkl.domain.region.domain.Region;
-import taco.klkl.domain.region.dto.response.CountryResponseDto;
-import taco.klkl.domain.region.dto.response.RegionResponseDto;
+import taco.klkl.domain.region.dto.response.CountryResponse;
+import taco.klkl.domain.region.dto.response.RegionResponse;
 import taco.klkl.domain.region.enums.RegionType;
 import taco.klkl.domain.region.exception.RegionNotFoundException;
 
@@ -27,7 +27,7 @@ public class RegionServiceImpl implements RegionService {
 	private final RegionRepository regionRepository;
 
 	@Override
-	public List<RegionResponseDto> getAllRegions() {
+	public List<RegionResponse> getAllRegions() {
 
 		final List<Region> regions = regionRepository.findAllByOrderByRegionIdAsc();
 
@@ -36,21 +36,21 @@ public class RegionServiceImpl implements RegionService {
 		}
 
 		return regions.stream()
-			.map(RegionResponseDto::from)
+			.map(RegionResponse::from)
 			.toList();
 	}
 
 	@Override
-	public RegionResponseDto getRegionById(final Long id) throws RegionNotFoundException {
+	public RegionResponse getRegionById(final Long id) throws RegionNotFoundException {
 
 		final Region region = regionRepository.findById(id)
 			.orElseThrow(RegionNotFoundException::new);
 
-		return RegionResponseDto.from(region);
+		return RegionResponse.from(region);
 	}
 
 	@Override
-	public RegionResponseDto getRegionByName(final String name) throws RegionNotFoundException {
+	public RegionResponse getRegionByName(final String name) throws RegionNotFoundException {
 
 		final Region region = regionRepository.findFirstByName(RegionType.getRegionTypeByKoreanName(name));
 
@@ -58,11 +58,11 @@ public class RegionServiceImpl implements RegionService {
 			throw new RegionNotFoundException();
 		}
 
-		return RegionResponseDto.from(region);
+		return RegionResponse.from(region);
 	}
 
 	@Override
-	public List<CountryResponseDto> getCountriesByRegionId(final Long id) {
+	public List<CountryResponse> getCountriesByRegionId(final Long id) {
 
 		final Region findRegion = regionRepository.findById(id)
 			.orElseThrow(RegionNotFoundException::new);
@@ -70,7 +70,7 @@ public class RegionServiceImpl implements RegionService {
 		final List<Country> countries = findRegion.getCountries();
 
 		return countries.stream()
-			.map(CountryResponseDto::from)
+			.map(CountryResponse::from)
 			.toList();
 	}
 }

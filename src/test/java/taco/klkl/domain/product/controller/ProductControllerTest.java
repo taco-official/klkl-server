@@ -35,8 +35,8 @@ import taco.klkl.domain.product.dto.request.ProductSortOptions;
 import taco.klkl.domain.product.dto.response.ProductDetailResponse;
 import taco.klkl.domain.product.dto.response.ProductSimpleResponse;
 import taco.klkl.domain.product.service.ProductService;
-import taco.klkl.domain.region.dto.response.CityResponseDto;
-import taco.klkl.domain.region.dto.response.CurrencyResponseDto;
+import taco.klkl.domain.region.dto.response.CityResponse;
+import taco.klkl.domain.region.dto.response.CurrencyResponse;
 import taco.klkl.domain.region.enums.CountryType;
 import taco.klkl.domain.user.dto.response.UserDetailResponseDto;
 import taco.klkl.global.common.response.PagedResponseDto;
@@ -66,7 +66,7 @@ public class ProductControllerTest {
 			"userDescription",
 			100
 		);
-		CityResponseDto cityResponseDto = new CityResponseDto(
+		CityResponse cityResponse = new CityResponse(
 			1L,
 			"cityName"
 		);
@@ -74,7 +74,7 @@ public class ProductControllerTest {
 			1L,
 			"subcategoryName"
 		);
-		CurrencyResponseDto currencyResponseDto = new CurrencyResponseDto(
+		CurrencyResponse currencyResponse = new CurrencyResponse(
 			1L,
 			"currencyCode",
 			"image/flag.jpg"
@@ -106,9 +106,9 @@ public class ProductControllerTest {
 			10,
 			Rating.FIVE.getValue(),
 			userDetailResponseDto,
-			cityResponseDto,
+			cityResponse,
 			subcategoryResponse,
-			currencyResponseDto,
+			currencyResponse,
 			Set.of(filterResponse1, filterResponse2),
 			LocalDateTime.now()
 		);

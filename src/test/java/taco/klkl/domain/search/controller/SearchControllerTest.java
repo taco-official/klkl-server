@@ -27,8 +27,8 @@ import taco.klkl.domain.region.domain.City;
 import taco.klkl.domain.region.domain.Country;
 import taco.klkl.domain.region.domain.Currency;
 import taco.klkl.domain.region.domain.Region;
-import taco.klkl.domain.region.dto.response.CityResponseDto;
-import taco.klkl.domain.region.dto.response.CountrySimpleResponseDto;
+import taco.klkl.domain.region.dto.response.CityResponse;
+import taco.klkl.domain.region.dto.response.CountrySimpleResponse;
 import taco.klkl.domain.region.enums.CityType;
 import taco.klkl.domain.region.enums.CountryType;
 import taco.klkl.domain.search.dto.response.SearchResponseDto;
@@ -74,8 +74,8 @@ public class SearchControllerTest {
 	void setUp() {
 		// Mock 데이터 생성
 		mockResponse = SearchResponseDto.of(
-			Collections.singletonList(CountrySimpleResponseDto.from(country)),
-			Collections.singletonList(CityResponseDto.from(city)),
+			Collections.singletonList(CountrySimpleResponse.from(country)),
+			Collections.singletonList(CityResponse.from(city)),
 			Collections.singletonList(CategoryResponse.from(category)),
 			Collections.singletonList(SubcategoryResponse.from(subcategory)),
 			Collections.singletonList(ProductSimpleResponse.from(product))

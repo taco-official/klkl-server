@@ -17,7 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import taco.klkl.domain.region.dao.CityRepository;
 import taco.klkl.domain.region.domain.City;
 import taco.klkl.domain.region.domain.Country;
-import taco.klkl.domain.region.dto.response.CityResponseDto;
+import taco.klkl.domain.region.dto.response.CityResponse;
 import taco.klkl.domain.region.enums.CityType;
 
 @ExtendWith(MockitoExtension.class)
@@ -56,16 +56,16 @@ public class CityServiceImplTest {
 		// given
 		List<CityType> cityTypes = Arrays.asList(CityType.BEIJING, CityType.BORACAY);
 		List<City> cities = Arrays.asList(city1, city2);
-		CityResponseDto city1ResponseDto = CityResponseDto.from(city1);
-		CityResponseDto city2ResponseDto = CityResponseDto.from(city2);
-		List<CityResponseDto> cityResponseDtos = Arrays.asList(city1ResponseDto, city2ResponseDto);
+		CityResponse city1ResponseDto = CityResponse.from(city1);
+		CityResponse city2ResponseDto = CityResponse.from(city2);
+		List<CityResponse> cityResponses = Arrays.asList(city1ResponseDto, city2ResponseDto);
 		when(cityRepository.findAllByNameIn(cityTypes)).thenReturn(cities);
 
 		// when
-		List<CityResponseDto> cityResponseDtoList = cityService.getAllCitiesByCityTypes(cityTypes);
+		List<CityResponse> cityResponseList = cityService.getAllCitiesByCityTypes(cityTypes);
 
 		// then
-		assertThat(cityResponseDtoList).hasSize(cityTypes.size());
-		assertThat(cityResponseDtoList).containsExactly(city1ResponseDto, city2ResponseDto);
+		assertThat(cityResponseList).hasSize(cityTypes.size());
+		assertThat(cityResponseList).containsExactly(city1ResponseDto, city2ResponseDto);
 	}
 }

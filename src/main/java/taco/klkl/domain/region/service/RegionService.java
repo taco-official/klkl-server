@@ -4,16 +4,16 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import taco.klkl.domain.region.dto.response.CountryResponseDto;
-import taco.klkl.domain.region.dto.response.RegionResponseDto;
+import taco.klkl.domain.region.dto.response.CountryResponse;
+import taco.klkl.domain.region.dto.response.RegionResponse;
 
 @Service
 public interface RegionService {
-	List<RegionResponseDto> getAllRegions();
+	List<RegionResponse> getAllRegions();
 
-	RegionResponseDto getRegionById(final Long id);
+	RegionResponse getRegionById(final Long id);
 
-	RegionResponseDto getRegionByName(final String name);
+	RegionResponse getRegionByName(final String name);
 
-	List<CountryResponseDto> getCountriesByRegionId(final Long id);
+	List<CountryResponse> getCountriesByRegionId(final Long id);
 }

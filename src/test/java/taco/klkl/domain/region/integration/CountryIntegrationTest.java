@@ -15,8 +15,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import jakarta.transaction.Transactional;
-import taco.klkl.domain.region.dto.response.CityResponseDto;
-import taco.klkl.domain.region.dto.response.CountryResponseDto;
+import taco.klkl.domain.region.dto.response.CityResponse;
+import taco.klkl.domain.region.dto.response.CountryResponse;
 import taco.klkl.domain.region.service.CountryService;
 
 @SpringBootTest
@@ -34,7 +34,7 @@ public class CountryIntegrationTest {
 	@DisplayName("모든 국가 조회 테스트")
 	void testGetAllCountries() throws Exception {
 		// given
-		List<CountryResponseDto> countryResponseDtos = countryService.getAllCountries();
+		List<CountryResponse> countryResponses = countryService.getAllCountries();
 
 		// when & then
 		mockMvc.perform(get("/v1/countries")
@@ -42,14 +42,14 @@ public class CountryIntegrationTest {
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.code", is("C000")))
 			.andExpect(jsonPath("$.isSuccess", is(true)))
-			.andExpect(jsonPath("$.data", hasSize(countryResponseDtos.size())));
+			.andExpect(jsonPath("$.data", hasSize(countryResponses.size())));
 	}
 
 	@Test
 	@DisplayName("id로 국가 조회 테스트")
 	void testGetCountryById() throws Exception {
 		// given
-		CountryResponseDto countryResponseDto = countryService.getCountryById(403L);
+		CountryResponse countryResponse = countryService.getCountryById(403L);
 
 		// when & then
 		mockMvc.perform(get("/v1/countries/403")
@@ -57,14 +57,14 @@ public class CountryIntegrationTest {
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.code", is("C000")))
 			.andExpect(jsonPath("$.isSuccess", is(true)))
-			.andExpect(jsonPath("$.data.name", is(countryResponseDto.name())));
+			.andExpect(jsonPath("$.data.name", is(countryResponse.name())));
 	}
 
 	@Test
 	@DisplayName("국가에 속한 모든 도시목록 조회")
 	void testGetCountryWithCitiesById() throws Exception {
 		// given
-		List<CityResponseDto> responseDto = countryService.getCitiesByCountryId(403L);
+		List<CityResponse> responseDto = countryService.getCitiesByCountryId(403L);
 
 		// when & then
 		mockMvc.perform(get("/v1/countries/403/cities")

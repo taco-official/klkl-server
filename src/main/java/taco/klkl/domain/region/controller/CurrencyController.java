@@ -11,7 +11,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import taco.klkl.domain.region.dto.response.CurrencyResponseDto;
+import taco.klkl.domain.region.dto.response.CurrencyResponse;
 import taco.klkl.domain.region.service.CurrencyService;
 
 @Slf4j
@@ -25,10 +25,10 @@ public class CurrencyController {
 
 	@Operation(summary = "모든 통화 조회", description = "모든 통화 목록을 조회합니다.")
 	@GetMapping
-	public ResponseEntity<List<CurrencyResponseDto>> getAllCurrencies() {
+	public ResponseEntity<List<CurrencyResponse>> getAllCurrencies() {
 
-		final List<CurrencyResponseDto> currencyResponseDtos = currencyService.getAllCurrencies();
+		final List<CurrencyResponse> currencyResponses = currencyService.getAllCurrencies();
 
-		return ResponseEntity.ok().body(currencyResponseDtos);
+		return ResponseEntity.ok().body(currencyResponses);
 	}
 }

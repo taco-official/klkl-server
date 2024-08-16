@@ -10,25 +10,25 @@ import taco.klkl.domain.region.domain.Country;
  * @param photo
  * @param currency
  */
-public record CountryResponseDto(
+public record CountryResponse(
 	Long countryId,
 	String name,
 	String flag,
 	String photo,
-	CurrencyResponseDto currency
+	CurrencyResponse currency
 ) {
 	/**
 	 *
 	 * @param country
-	 * @return CountryResponseDto
+	 * @return CountryResponse
 	 */
-	public static CountryResponseDto from(Country country) {
-		return new CountryResponseDto(
+	public static CountryResponse from(Country country) {
+		return new CountryResponse(
 			country.getCountryId(),
 			country.getName().getKoreanName(),
 			country.getFlag(),
 			country.getPhoto(),
-			CurrencyResponseDto.from(country.getCurrency()));
+			CurrencyResponse.from(country.getCurrency()));
 	}
 
 }

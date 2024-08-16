@@ -6,8 +6,8 @@ import java.util.Set;
 import taco.klkl.domain.category.dto.response.FilterResponse;
 import taco.klkl.domain.category.dto.response.SubcategoryResponse;
 import taco.klkl.domain.product.domain.Product;
-import taco.klkl.domain.region.dto.response.CityResponseDto;
-import taco.klkl.domain.region.dto.response.CurrencyResponseDto;
+import taco.klkl.domain.region.dto.response.CityResponse;
+import taco.klkl.domain.region.dto.response.CurrencyResponse;
 import taco.klkl.domain.user.dto.response.UserDetailResponseDto;
 import taco.klkl.global.util.ProductUtil;
 
@@ -36,9 +36,9 @@ public record ProductDetailResponse(
 	Integer likeCount,
 	Double rating,
 	UserDetailResponseDto user,
-	CityResponseDto city,
+	CityResponse city,
 	SubcategoryResponse subcategory,
-	CurrencyResponseDto currency,
+	CurrencyResponse currency,
 	Set<FilterResponse> filters,
 	LocalDateTime createdAt
 ) {
@@ -53,9 +53,9 @@ public record ProductDetailResponse(
 			product.getLikeCount(),
 			product.getRating().getValue(),
 			UserDetailResponseDto.from(product.getUser()),
-			CityResponseDto.from(product.getCity()),
+			CityResponse.from(product.getCity()),
 			SubcategoryResponse.from(product.getSubcategory()),
-			CurrencyResponseDto.from(product.getCurrency()),
+			CurrencyResponse.from(product.getCurrency()),
 			ProductUtil.createFiltersByProduct(product),
 			product.getCreatedAt()
 		);

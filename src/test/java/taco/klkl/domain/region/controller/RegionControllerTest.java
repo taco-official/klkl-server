@@ -22,8 +22,8 @@ import taco.klkl.domain.region.dao.RegionRepository;
 import taco.klkl.domain.region.domain.Country;
 import taco.klkl.domain.region.domain.Currency;
 import taco.klkl.domain.region.domain.Region;
-import taco.klkl.domain.region.dto.response.CountryResponseDto;
-import taco.klkl.domain.region.dto.response.RegionResponseDto;
+import taco.klkl.domain.region.dto.response.CountryResponse;
+import taco.klkl.domain.region.dto.response.RegionResponse;
 import taco.klkl.domain.region.enums.CountryType;
 import taco.klkl.domain.region.enums.CurrencyType;
 import taco.klkl.domain.region.enums.RegionType;
@@ -62,13 +62,13 @@ class RegionControllerTest {
 	@DisplayName("모든 지역 조회 성공 테스트")
 	void testGetAllRegions() throws Exception {
 		// given
-		List<RegionResponseDto> regionResponseDtos = Arrays.asList(
-			RegionResponseDto.from(region1),
-			RegionResponseDto.from(region2),
-			RegionResponseDto.from(region3)
+		List<RegionResponse> regionResponses = Arrays.asList(
+			RegionResponse.from(region1),
+			RegionResponse.from(region2),
+			RegionResponse.from(region3)
 		);
 
-		when(regionService.getAllRegions()).thenReturn(regionResponseDtos);
+		when(regionService.getAllRegions()).thenReturn(regionResponses);
 
 		// when & then
 		mockMvc.perform(get("/v1/regions")
@@ -130,7 +130,7 @@ class RegionControllerTest {
 		when(mockRegion.getName()).thenReturn(RegionType.NORTHEAST_ASIA);
 		when(regionRepository.findById(1L)).thenReturn(Optional.of(mockRegion));
 		when(mockRegion.getCountries()).thenReturn(countryList);
-		List<CountryResponseDto> responseDto = countryList.stream().map(CountryResponseDto::from).toList();
+		List<CountryResponse> responseDto = countryList.stream().map(CountryResponse::from).toList();
 		when(regionService.getCountriesByRegionId(1L)).thenReturn(responseDto);
 
 		// when & then

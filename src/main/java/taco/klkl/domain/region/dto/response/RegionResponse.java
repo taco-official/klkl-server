@@ -7,13 +7,13 @@ import taco.klkl.domain.region.domain.Region;
  * @param regionId
  * @param name
  */
-public record RegionResponseDto(
+public record RegionResponse(
 	Long regionId,
 	String name
 ) {
 
-	public static RegionResponseDto from(Region region) {
-		return new RegionResponseDto(region.getRegionId(), region.getName().getKoreanName());
+	public static RegionResponse from(Region region) {
+		return new RegionResponse(region.getRegionId(), region.getName().getKoreanName());
 	}
 
 }

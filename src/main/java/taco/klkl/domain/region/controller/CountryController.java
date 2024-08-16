@@ -12,8 +12,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import taco.klkl.domain.region.dto.response.CityResponseDto;
-import taco.klkl.domain.region.dto.response.CountryResponseDto;
+import taco.klkl.domain.region.dto.response.CityResponse;
+import taco.klkl.domain.region.dto.response.CountryResponse;
 import taco.klkl.domain.region.service.CountryService;
 
 @Slf4j
@@ -27,27 +27,27 @@ public class CountryController {
 
 	@Operation(summary = "모든 국가 조회", description = "모든 국가를 조회합니다.")
 	@GetMapping()
-	public ResponseEntity<List<CountryResponseDto>> getAllCountries() {
+	public ResponseEntity<List<CountryResponse>> getAllCountries() {
 
-		final List<CountryResponseDto> findCountries = countryService.getAllCountries();
+		final List<CountryResponse> findCountries = countryService.getAllCountries();
 
 		return ResponseEntity.ok().body(findCountries);
 	}
 
 	@Operation(summary = "국가 하나 조회", description = "countryId로 특정 국가를 조회합니다.")
 	@GetMapping("/{id}")
-	public ResponseEntity<CountryResponseDto> getCountryById(@PathVariable final Long id) {
+	public ResponseEntity<CountryResponse> getCountryById(@PathVariable final Long id) {
 
-		final CountryResponseDto findCountry = countryService.getCountryById(id);
+		final CountryResponse findCountry = countryService.getCountryById(id);
 
 		return ResponseEntity.ok().body(findCountry);
 	}
 
 	@Operation(summary = "국가에 속한 모든 도시 조회", description = "countryId로 특정 국가에 속한 도시들을 조회합니다.")
 	@GetMapping("/{id}/cities")
-	public ResponseEntity<List<CityResponseDto>> getCitiesByCountryId(@PathVariable final Long id) {
+	public ResponseEntity<List<CityResponse>> getCitiesByCountryId(@PathVariable final Long id) {
 
-		final List<CityResponseDto> findCountry = countryService.getCitiesByCountryId(id);
+		final List<CityResponse> findCountry = countryService.getCitiesByCountryId(id);
 
 		return ResponseEntity.ok().body(findCountry);
 	}

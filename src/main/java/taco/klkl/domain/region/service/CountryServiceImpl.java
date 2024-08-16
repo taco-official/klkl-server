@@ -11,9 +11,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import taco.klkl.domain.region.dao.CountryRepository;
 import taco.klkl.domain.region.domain.Country;
-import taco.klkl.domain.region.dto.response.CityResponseDto;
-import taco.klkl.domain.region.dto.response.CountryResponseDto;
-import taco.klkl.domain.region.dto.response.CountrySimpleResponseDto;
+import taco.klkl.domain.region.dto.response.CityResponse;
+import taco.klkl.domain.region.dto.response.CountryResponse;
+import taco.klkl.domain.region.dto.response.CountrySimpleResponse;
 import taco.klkl.domain.region.enums.CountryType;
 import taco.klkl.domain.region.exception.CountryNotFoundException;
 
@@ -27,7 +27,7 @@ public class CountryServiceImpl implements CountryService {
 	private final CountryRepository countryRepository;
 
 	@Override
-	public List<CountryResponseDto> getAllCountries() {
+	public List<CountryResponse> getAllCountries() {
 
 		final List<Country> countries = countryRepository.findAll();
 
@@ -36,32 +36,32 @@ public class CountryServiceImpl implements CountryService {
 		}
 
 		return countries.stream()
-			.map(CountryResponseDto::from)
+			.map(CountryResponse::from)
 			.toList();
 	}
 
 	@Override
-	public CountryResponseDto getCountryById(final Long countryId) throws CountryNotFoundException {
+	public CountryResponse getCountryById(final Long countryId) throws CountryNotFoundException {
 
 		final Country country = countryRepository.findById(countryId)
 			.orElseThrow(CountryNotFoundException::new);
 
-		return CountryResponseDto.from(country);
+		return CountryResponse.from(country);
 	}
 
 	@Override
-	public List<CityResponseDto> getCitiesByCountryId(final Long countryId) throws CountryNotFoundException {
+	public List<CityResponse> getCitiesByCountryId(final Long countryId) throws CountryNotFoundException {
 
 		final Country country = countryRepository.findById(countryId)
 			.orElseThrow(CountryNotFoundException::new);
 
 		return country.getCities().stream()
-			.map(CityResponseDto::from)
+			.map(CityResponse::from)
 			.toList();
 	}
 
 	@Override
-	public List<CountrySimpleResponseDto> getAllCountriesByCountryTypes(final List<CountryType> countryTypes) {
+	public List<CountrySimpleResponse> getAllCountriesByCountryTypes(final List<CountryType> countryTypes) {
 
 		if (countryTypes == null || countryTypes.isEmpty()) {
 			return List.of();
@@ -70,7 +70,7 @@ public class CountryServiceImpl implements CountryService {
 		final List<Country> findCountries = countryRepository.findAllByNameIn(countryTypes);
 
 		return findCountries.stream()
-			.map(CountrySimpleResponseDto::from)
+			.map(CountrySimpleResponse::from)
 			.toList();
 	}
 

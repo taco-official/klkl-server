@@ -5,19 +5,19 @@ import java.util.List;
 import taco.klkl.domain.category.dto.response.CategoryResponse;
 import taco.klkl.domain.category.dto.response.SubcategoryResponse;
 import taco.klkl.domain.product.dto.response.ProductSimpleResponse;
-import taco.klkl.domain.region.dto.response.CityResponseDto;
-import taco.klkl.domain.region.dto.response.CountrySimpleResponseDto;
+import taco.klkl.domain.region.dto.response.CityResponse;
+import taco.klkl.domain.region.dto.response.CountrySimpleResponse;
 
 public record SearchResponseDto(
-	List<CountrySimpleResponseDto> countries,
-	List<CityResponseDto> cities,
+	List<CountrySimpleResponse> countries,
+	List<CityResponse> cities,
 	List<CategoryResponse> categories,
 	List<SubcategoryResponse> subcategories,
 	List<ProductSimpleResponse> products
 ) {
 	public static SearchResponseDto of(
-		List<CountrySimpleResponseDto> countries,
-		List<CityResponseDto> cities,
+		List<CountrySimpleResponse> countries,
+		List<CityResponse> cities,
 		List<CategoryResponse> categories,
 		List<SubcategoryResponse> subcategories,
 		List<ProductSimpleResponse> products

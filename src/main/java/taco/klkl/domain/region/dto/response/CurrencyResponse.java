@@ -8,13 +8,13 @@ import taco.klkl.domain.region.domain.Currency;
  * @param code
  * @param flag
  */
-public record CurrencyResponseDto(
+public record CurrencyResponse(
 	Long currencyId,
 	String code,
 	String flag
 ) {
-	public static CurrencyResponseDto from(Currency currency) {
-		return new CurrencyResponseDto(
+	public static CurrencyResponse from(Currency currency) {
+		return new CurrencyResponse(
 			currency.getCurrencyId(),
 			currency.getCode().getCodeName(),
 			currency.getFlag()

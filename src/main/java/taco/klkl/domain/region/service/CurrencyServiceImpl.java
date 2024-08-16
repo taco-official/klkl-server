@@ -11,7 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import taco.klkl.domain.region.dao.CurrencyRepository;
 import taco.klkl.domain.region.domain.Currency;
-import taco.klkl.domain.region.dto.response.CurrencyResponseDto;
+import taco.klkl.domain.region.dto.response.CurrencyResponse;
 import taco.klkl.domain.region.exception.CurrencyNotFoundException;
 
 @Slf4j
@@ -24,7 +24,7 @@ public class CurrencyServiceImpl implements CurrencyService {
 	private final CurrencyRepository currencyRepository;
 
 	@Override
-	public List<CurrencyResponseDto> getAllCurrencies() {
+	public List<CurrencyResponse> getAllCurrencies() {
 
 		final List<Currency> findCurrencies = currencyRepository.findAll();
 
@@ -33,7 +33,7 @@ public class CurrencyServiceImpl implements CurrencyService {
 		}
 
 		return findCurrencies.stream()
-			.map(CurrencyResponseDto::from)
+			.map(CurrencyResponse::from)
 			.toList();
 	}
 

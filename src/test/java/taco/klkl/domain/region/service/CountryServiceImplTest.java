@@ -22,9 +22,9 @@ import taco.klkl.domain.region.domain.City;
 import taco.klkl.domain.region.domain.Country;
 import taco.klkl.domain.region.domain.Currency;
 import taco.klkl.domain.region.domain.Region;
-import taco.klkl.domain.region.dto.response.CityResponseDto;
-import taco.klkl.domain.region.dto.response.CountryResponseDto;
-import taco.klkl.domain.region.dto.response.CountrySimpleResponseDto;
+import taco.klkl.domain.region.dto.response.CityResponse;
+import taco.klkl.domain.region.dto.response.CountryResponse;
+import taco.klkl.domain.region.dto.response.CountrySimpleResponse;
 import taco.klkl.domain.region.enums.CityType;
 import taco.klkl.domain.region.enums.CountryType;
 import taco.klkl.domain.region.enums.CurrencyType;
@@ -67,7 +67,7 @@ public class CountryServiceImplTest {
 		when(countryRepository.findAll()).thenReturn(countries);
 
 		// when
-		List<CountryResponseDto> findCountries = countryService.getAllCountries();
+		List<CountryResponse> findCountries = countryService.getAllCountries();
 
 		// then
 		assertThat(findCountries.size()).isEqualTo(countries.size());
@@ -82,10 +82,10 @@ public class CountryServiceImplTest {
 		when(countryRepository.findById(400L)).thenReturn(Optional.of(country1));
 
 		// when
-		CountryResponseDto findCountry = countryService.getCountryById(400L);
+		CountryResponse findCountry = countryService.getCountryById(400L);
 
 		// then
-		assertThat(findCountry).isEqualTo(CountryResponseDto.from(country1));
+		assertThat(findCountry).isEqualTo(CountryResponse.from(country1));
 	}
 
 	@Test
@@ -110,7 +110,7 @@ public class CountryServiceImplTest {
 		when(mockCountry.getCities()).thenReturn(cities);
 
 		// when
-		List<CityResponseDto> findCountries = countryService.getCitiesByCountryId(400L);
+		List<CityResponse> findCountries = countryService.getCitiesByCountryId(400L);
 
 		// then
 		assertThat(findCountries.size()).isEqualTo(cities.size());
@@ -123,16 +123,16 @@ public class CountryServiceImplTest {
 	void testGetCountriesByCountryTypes() {
 		// given
 		List<CountryType> countryTypes = Arrays.asList(CountryType.JAPAN, CountryType.TAIWAN);
-		CountrySimpleResponseDto country1ResponseDto = CountrySimpleResponseDto.from(country1);
-		CountrySimpleResponseDto country2ResponseDto = CountrySimpleResponseDto.from(country2);
+		CountrySimpleResponse country1ResponseDto = CountrySimpleResponse.from(country1);
+		CountrySimpleResponse country2ResponseDto = CountrySimpleResponse.from(country2);
 		when(countryRepository.findAllByNameIn(countryTypes)).thenReturn(Arrays.asList(country1, country2));
 
 		// when
-		List<CountrySimpleResponseDto> countrySimpleResponseDtos = countryService.getAllCountriesByCountryTypes(
+		List<CountrySimpleResponse> countrySimpleResponses = countryService.getAllCountriesByCountryTypes(
 			countryTypes);
 
 		// then
-		assertThat(countrySimpleResponseDtos).hasSize(countryTypes.size());
-		assertThat(countrySimpleResponseDtos).containsExactlyInAnyOrder(country1ResponseDto, country2ResponseDto);
+		assertThat(countrySimpleResponses).hasSize(countryTypes.size());
+		assertThat(countrySimpleResponses).containsExactlyInAnyOrder(country1ResponseDto, country2ResponseDto);
 	}
 }

@@ -7,12 +7,12 @@ import taco.klkl.domain.region.domain.Country;
  * @param countryId
  * @param name
  */
-public record CountrySimpleResponseDto(
+public record CountrySimpleResponse(
 	Long countryId,
 	String name
 ) {
-	public static CountrySimpleResponseDto from(Country country) {
-		return new CountrySimpleResponseDto(
+	public static CountrySimpleResponse from(Country country) {
+		return new CountrySimpleResponse(
 			country.getCountryId(),
 			country.getName().getKoreanName()
 		);
