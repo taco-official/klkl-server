@@ -11,7 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import taco.klkl.domain.region.dao.CityRepository;
 import taco.klkl.domain.region.domain.City;
 import taco.klkl.domain.region.dto.response.CityResponse;
-import taco.klkl.domain.region.enums.CityType;
+import taco.klkl.domain.region.domain.CityType;
 
 @Slf4j
 @Primary

@@ -14,7 +14,7 @@ import taco.klkl.domain.region.domain.Country;
 import taco.klkl.domain.region.dto.response.CityResponse;
 import taco.klkl.domain.region.dto.response.CountryResponse;
 import taco.klkl.domain.region.dto.response.CountrySimpleResponse;
-import taco.klkl.domain.region.enums.CountryType;
+import taco.klkl.domain.region.domain.CountryType;
 import taco.klkl.domain.region.exception.CountryNotFoundException;
 
 @Slf4j
@@ -27,7 +27,7 @@ public class CountryServiceImpl implements CountryService {
 	private final CountryRepository countryRepository;
 
 	@Override
-	public List<CountryResponse> getAllCountries() {
+	public List<CountryResponse> findAllCountries() {
 
 		final List<Country> countries = countryRepository.findAll();
 
@@ -41,7 +41,7 @@ public class CountryServiceImpl implements CountryService {
 	}
 
 	@Override
-	public CountryResponse getCountryById(final Long countryId) throws CountryNotFoundException {
+	public CountryResponse findCountryById(final Long countryId) throws CountryNotFoundException {
 
 		final Country country = countryRepository.findById(countryId)
 			.orElseThrow(CountryNotFoundException::new);
@@ -50,7 +50,7 @@ public class CountryServiceImpl implements CountryService {
 	}
 
 	@Override
-	public List<CityResponse> getCitiesByCountryId(final Long countryId) throws CountryNotFoundException {
+	public List<CityResponse> findCitiesByCountryId(final Long countryId) throws CountryNotFoundException {
 
 		final Country country = countryRepository.findById(countryId)
 			.orElseThrow(CountryNotFoundException::new);

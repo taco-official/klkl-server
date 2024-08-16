@@ -5,7 +5,6 @@ import static org.mockito.Mockito.*;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,8 +17,7 @@ import taco.klkl.domain.region.dao.CityRepository;
 import taco.klkl.domain.region.domain.City;
 import taco.klkl.domain.region.domain.Country;
 import taco.klkl.domain.region.dto.response.CityResponse;
-import taco.klkl.domain.region.enums.CityType;
-import taco.klkl.global.util.CityUtil;
+import taco.klkl.domain.region.domain.CityType;
 
 @ExtendWith(MockitoExtension.class)
 public class CityServiceImplTest {

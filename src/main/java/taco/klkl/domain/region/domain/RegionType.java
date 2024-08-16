@@ -1,9 +1,10 @@
-package taco.klkl.domain.region.enums;
+package taco.klkl.domain.region.domain;
 
 import java.util.Arrays;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import taco.klkl.domain.region.exception.RegionTypeNotFoundException;
 
 @Getter
 @AllArgsConstructor
@@ -13,8 +14,7 @@ public enum RegionType {
 	SOUTHEAST_ASIA("동남아시아"),
 
 	ETC("기타"),
-
-	NONE("");
+	;
 
 	private final String koreanName;
 
@@ -27,6 +27,6 @@ public enum RegionType {
 		return Arrays.stream(RegionType.values())
 			.filter(r -> r.getKoreanName().equals(koreanName))
 			.findFirst()
-			.orElse(NONE);
+			.orElseThrow(RegionTypeNotFoundException::new);
 	}
 }

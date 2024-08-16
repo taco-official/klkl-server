@@ -25,10 +25,10 @@ import taco.klkl.domain.region.domain.Region;
 import taco.klkl.domain.region.dto.response.CityResponse;
 import taco.klkl.domain.region.dto.response.CountryResponse;
 import taco.klkl.domain.region.dto.response.CountrySimpleResponse;
-import taco.klkl.domain.region.enums.CityType;
-import taco.klkl.domain.region.enums.CountryType;
-import taco.klkl.domain.region.enums.CurrencyType;
-import taco.klkl.domain.region.enums.RegionType;
+import taco.klkl.domain.region.domain.CityType;
+import taco.klkl.domain.region.domain.CountryType;
+import taco.klkl.domain.region.domain.CurrencyType;
+import taco.klkl.domain.region.domain.RegionType;
 import taco.klkl.domain.region.exception.CountryNotFoundException;
 
 @ExtendWith(MockitoExtension.class)
@@ -61,13 +61,13 @@ public class CountryServiceImplTest {
 
 	@Test
 	@DisplayName("모든 국가 조회 테스트")
-	void testGetAllCountries() {
+	void testFindAllCountries() {
 		// given
 		List<Country> countries = Arrays.asList(country1, country2);
 		when(countryRepository.findAll()).thenReturn(countries);
 
 		// when
-		List<CountryResponse> findCountries = countryService.getAllCountries();
+		List<CountryResponse> findCountries = countryService.findAllCountries();
 
 		// then
 		assertThat(findCountries.size()).isEqualTo(countries.size());
@@ -77,12 +77,12 @@ public class CountryServiceImplTest {
 
 	@Test
 	@DisplayName("id로 국가조회 테스트")
-	void testGetCountryById() {
+	void testFindCountryById() {
 		// given
 		when(countryRepository.findById(400L)).thenReturn(Optional.of(country1));
 
 		// when
-		CountryResponse findCountry = countryService.getCountryById(400L);
+		CountryResponse findCountry = countryService.findCountryById(400L);
 
 		// then
 		assertThat(findCountry).isEqualTo(CountryResponse.from(country1));
@@ -90,13 +90,13 @@ public class CountryServiceImplTest {
 
 	@Test
 	@DisplayName("국가 조회 실패 테스트")
-	void testGetCountryByIdFail() {
+	void testFindCountryByIdFail() {
 		// given
 		when(countryRepository.findById(400L)).thenThrow(CountryNotFoundException.class);
 
 		// when & then
 		Assertions.assertThrows(CountryNotFoundException.class, () ->
-			countryService.getCountryById(400L));
+			countryService.findCountryById(400L));
 
 		verify(countryRepository, times(1)).findById(400L);
 	}
@@ -110,7 +110,7 @@ public class CountryServiceImplTest {
 		when(mockCountry.getCities()).thenReturn(cities);
 
 		// when
-		List<CityResponse> findCountries = countryService.getCitiesByCountryId(400L);
+		List<CityResponse> findCountries = countryService.findCitiesByCountryId(400L);
 
 		// then
 		assertThat(findCountries.size()).isEqualTo(cities.size());

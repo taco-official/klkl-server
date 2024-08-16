@@ -24,7 +24,7 @@ public class CurrencyServiceImpl implements CurrencyService {
 	private final CurrencyRepository currencyRepository;
 
 	@Override
-	public List<CurrencyResponse> getAllCurrencies() {
+	public List<CurrencyResponse> findAllCurrencies() {
 
 		final List<Currency> findCurrencies = currencyRepository.findAll();
 

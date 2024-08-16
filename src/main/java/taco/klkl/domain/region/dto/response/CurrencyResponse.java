@@ -13,7 +13,7 @@ public record CurrencyResponse(
 	String code,
 	String flag
 ) {
-	public static CurrencyResponse from(Currency currency) {
+	public static CurrencyResponse from(final Currency currency) {
 		return new CurrencyResponse(
 			currency.getId(),
 			currency.getCode().getCodeName(),

@@ -1,4 +1,4 @@
-package taco.klkl.domain.region.enums;
+package taco.klkl.domain.region.domain;
 
 import java.util.Arrays;
 import java.util.List;
@@ -6,6 +6,7 @@ import java.util.regex.Pattern;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import taco.klkl.domain.region.exception.CountryTypeNotFoundException;
 
 @Getter
 @AllArgsConstructor
@@ -31,8 +32,7 @@ public enum CountryType {
 	GUAM("괌"),
 
 	USA("미국"),
-
-	NONE("");
+	;
 
 	private final String koreanName;
 
@@ -45,7 +45,7 @@ public enum CountryType {
 		return Arrays.stream(CountryType.values())
 			.filter(c -> c.getKoreanName().equals(koreanName))
 			.findFirst()
-			.orElse(NONE);
+			.orElseThrow(CountryTypeNotFoundException::new);
 	}
 
 	/**
@@ -54,14 +54,11 @@ public enum CountryType {
 	 * @return 부분문자열을 포함하는 CountryType의 리스트
 	 */
 	public static List<CountryType> getCountryTypesByPartialString(String partialString) {
-
 		if (partialString == null || partialString.isEmpty()) {
 			return List.of();
 		}
-
 		String regex = ".*" + Pattern.quote(partialString) + ".*";
 		Pattern pattern = Pattern.compile(regex);
-
 		return Arrays.stream(CountryType.values())
 			.filter(c -> pattern.matcher(c.getKoreanName()).matches())
 			.toList();

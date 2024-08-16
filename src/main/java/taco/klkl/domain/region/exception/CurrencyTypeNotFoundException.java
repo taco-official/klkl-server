@@ -3,8 +3,8 @@ package taco.klkl.domain.region.exception;
 import taco.klkl.global.error.exception.CustomException;
 import taco.klkl.global.error.exception.ErrorCode;
 
-public class CityNotFoundException extends CustomException {
-	public CityNotFoundException() {
-		super(ErrorCode.CITY_NOT_FOUND);
+public class CurrencyTypeNotFoundException extends CustomException {
+	public CurrencyTypeNotFoundException() {
+		super(ErrorCode.CURRENCY_TYPE_NOT_FOUND);
 	}
 }

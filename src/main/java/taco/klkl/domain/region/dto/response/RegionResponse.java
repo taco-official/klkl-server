@@ -12,7 +12,7 @@ public record RegionResponse(
 	String name
 ) {
 
-	public static RegionResponse from(Region region) {
+	public static RegionResponse from(final Region region) {
 		return new RegionResponse(region.getId(), region.getName().getKoreanName());
 	}
 

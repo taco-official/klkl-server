@@ -24,9 +24,9 @@ import taco.klkl.domain.region.domain.Currency;
 import taco.klkl.domain.region.domain.Region;
 import taco.klkl.domain.region.dto.response.CountryResponse;
 import taco.klkl.domain.region.dto.response.RegionResponse;
-import taco.klkl.domain.region.enums.CountryType;
-import taco.klkl.domain.region.enums.CurrencyType;
-import taco.klkl.domain.region.enums.RegionType;
+import taco.klkl.domain.region.domain.CountryType;
+import taco.klkl.domain.region.domain.CurrencyType;
+import taco.klkl.domain.region.domain.RegionType;
 import taco.klkl.domain.region.service.RegionService;
 import taco.klkl.global.error.exception.ErrorCode;
 
@@ -60,7 +60,7 @@ class RegionControllerTest {
 
 	@Test
 	@DisplayName("모든 지역 조회 성공 테스트")
-	void testGetAllRegions() throws Exception {
+	void testFindAllRegions() throws Exception {
 		// given
 		List<RegionResponse> regionResponses = Arrays.asList(
 			RegionResponse.from(region1),
@@ -68,7 +68,7 @@ class RegionControllerTest {
 			RegionResponse.from(region3)
 		);
 
-		when(regionService.getAllRegions()).thenReturn(regionResponses);
+		when(regionService.findAllRegions()).thenReturn(regionResponses);
 
 		// when & then
 		mockMvc.perform(get("/v1/regions")
@@ -82,14 +82,14 @@ class RegionControllerTest {
 			.andExpect(jsonPath("$.data[2].name", is(region3.getName().getKoreanName())))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
 
-		verify(regionService, times(1)).getAllRegions();
+		verify(regionService, times(1)).findAllRegions();
 	}
 
 	@Test
 	@DisplayName("모든 지역 조회 empty 테스트")
-	void testGetAllRegionsEmpty() throws Exception {
+	void testFindAllRegionsEmpty() throws Exception {
 		// given
-		when(regionService.getAllRegions()).thenReturn(Collections.emptyList());
+		when(regionService.findAllRegions()).thenReturn(Collections.emptyList());
 
 		// when & then
 		mockMvc.perform(get("/v1/regions")
@@ -100,14 +100,14 @@ class RegionControllerTest {
 			.andExpect(jsonPath("$.data", hasSize(0)))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
 
-		verify(regionService, times(1)).getAllRegions();
+		verify(regionService, times(1)).findAllRegions();
 	}
 
 	@Test
 	@DisplayName("모든 지역 조회 실패 테스트")
 	void testGetRegionsFail() throws Exception {
 		// given
-		when(regionService.getAllRegions()).thenThrow(RuntimeException.class);
+		when(regionService.findAllRegions()).thenThrow(RuntimeException.class);
 
 		// when & then
 		mockMvc.perform(get("/v1/regions")
@@ -118,7 +118,7 @@ class RegionControllerTest {
 			.andExpect(jsonPath("$.data.message", is(ErrorCode.INTERNAL_SERVER_ERROR.getMessage())))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
 
-		verify(regionService, times(1)).getAllRegions();
+		verify(regionService, times(1)).findAllRegions();
 	}
 
 	@Test
@@ -131,7 +131,7 @@ class RegionControllerTest {
 		when(regionRepository.findById(1L)).thenReturn(Optional.of(mockRegion));
 		when(mockRegion.getCountries()).thenReturn(countryList);
 		List<CountryResponse> responseDto = countryList.stream().map(CountryResponse::from).toList();
-		when(regionService.getCountriesByRegionId(1L)).thenReturn(responseDto);
+		when(regionService.findCountriesByRegionId(1L)).thenReturn(responseDto);
 
 		// when & then
 		mockMvc.perform(get("/v1/regions/1/countries")
@@ -143,6 +143,6 @@ class RegionControllerTest {
 			.andExpect(jsonPath("$.data[1].name", is(countryList.get(1).getName().getKoreanName())))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
 
-		verify(regionService, times(1)).getCountriesByRegionId(1L);
+		verify(regionService, times(1)).findCountriesByRegionId(1L);
 	}
 }

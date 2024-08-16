@@ -25,10 +25,7 @@ public class CurrencyController {
 
 	@Operation(summary = "모든 통화 조회", description = "모든 통화 목록을 조회합니다.")
 	@GetMapping
-	public ResponseEntity<List<CurrencyResponse>> getAllCurrencies() {
-
-		final List<CurrencyResponse> currencyResponses = currencyService.getAllCurrencies();
-
-		return ResponseEntity.ok().body(currencyResponses);
+	public List<CurrencyResponse> findAllCurrencies() {
+		return currencyService.findAllCurrencies();
 	}
 }

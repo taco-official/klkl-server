@@ -22,7 +22,7 @@ public record CountryResponse(
 	 * @param country
 	 * @return CountryResponse
 	 */
-	public static CountryResponse from(Country country) {
+	public static CountryResponse from(final Country country) {
 		return new CountryResponse(
 			country.getId(),
 			country.getName().getKoreanName(),

@@ -34,7 +34,7 @@ public class CountryIntegrationTest {
 	@DisplayName("모든 국가 조회 테스트")
 	void testGetAllCountries() throws Exception {
 		// given
-		List<CountryResponse> countryResponses = countryService.getAllCountries();
+		List<CountryResponse> countryResponses = countryService.findAllCountries();
 
 		// when & then
 		mockMvc.perform(get("/v1/countries")
@@ -49,7 +49,7 @@ public class CountryIntegrationTest {
 	@DisplayName("id로 국가 조회 테스트")
 	void testGetCountryById() throws Exception {
 		// given
-		CountryResponse countryResponse = countryService.getCountryById(403L);
+		CountryResponse countryResponse = countryService.findCountryById(403L);
 
 		// when & then
 		mockMvc.perform(get("/v1/countries/403")
@@ -64,7 +64,7 @@ public class CountryIntegrationTest {
 	@DisplayName("국가에 속한 모든 도시목록 조회")
 	void testGetCountryWithCitiesById() throws Exception {
 		// given
-		List<CityResponse> responseDto = countryService.getCitiesByCountryId(403L);
+		List<CityResponse> responseDto = countryService.findCitiesByCountryId(403L);
 
 		// when & then
 		mockMvc.perform(get("/v1/countries/403/cities")

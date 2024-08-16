@@ -16,7 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import taco.klkl.domain.region.dao.CurrencyRepository;
 import taco.klkl.domain.region.domain.Currency;
 import taco.klkl.domain.region.dto.response.CurrencyResponse;
-import taco.klkl.domain.region.enums.CurrencyType;
+import taco.klkl.domain.region.domain.CurrencyType;
 
 @ExtendWith(MockitoExtension.class)
 public class CurrencyServiceImplTest {
@@ -39,7 +39,7 @@ public class CurrencyServiceImplTest {
 		when(currencyRepository.findAll()).thenReturn(Arrays.asList(currency1, currency2));
 
 		// when
-		List<CurrencyResponse> currencyResponses = currencyService.getAllCurrencies();
+		List<CurrencyResponse> currencyResponses = currencyService.findAllCurrencies();
 
 		// then
 		assertThat(currencyResponses.get(0)).isEqualTo(currencyResponse1);

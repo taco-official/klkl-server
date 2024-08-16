@@ -1,4 +1,4 @@
-package taco.klkl.domain.region.enums;
+package taco.klkl.domain.region.domain;
 
 import java.util.Arrays;
 import java.util.List;
@@ -6,6 +6,7 @@ import java.util.regex.Pattern;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import taco.klkl.domain.region.exception.CityTypeNotFoundException;
 
 @Getter
 @AllArgsConstructor
@@ -59,8 +60,7 @@ public enum CityType {
 	NEW_YORK("뉴욕"),
 	LOS_ANGELES("로스엔젤레스"),
 	HAWAII("하와이"),
-
-	NONE("");
+	;
 
 	private final String koreanName;
 
@@ -73,7 +73,7 @@ public enum CityType {
 		return Arrays.stream(CityType.values())
 			.filter(c -> c.getKoreanName().equals(koreanName))
 			.findFirst()
-			.orElse(NONE);
+			.orElseThrow(CityTypeNotFoundException::new);
 	}
 
 	/**
@@ -82,14 +82,11 @@ public enum CityType {
 	 * @return 부분문자열을 포함하는 CityType의 리스트
 	 */
 	public static List<CityType> getCityTypesByPartialString(String partialString) {
-
 		if (partialString == null || partialString.isEmpty()) {
 			return List.of();
 		}
-
 		String regex = ".*" + Pattern.quote(partialString) + ".*";
 		Pattern pattern = Pattern.compile(regex);
-
 		return Arrays.stream(CityType.values())
 			.filter(c -> pattern.matcher(c.getKoreanName()).matches())
 			.toList();

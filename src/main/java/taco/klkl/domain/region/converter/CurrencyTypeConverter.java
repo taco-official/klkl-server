@@ -2,29 +2,23 @@ package taco.klkl.domain.region.converter;
 
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
-import taco.klkl.domain.region.enums.CurrencyType;
+import taco.klkl.domain.region.domain.CurrencyType;
 
 @Converter(autoApply = true)
 public class CurrencyTypeConverter implements AttributeConverter<CurrencyType, String> {
 	@Override
-	public String convertToDatabaseColumn(CurrencyType currencyType) {
-
+	public String convertToDatabaseColumn(final CurrencyType currencyType) {
 		if (currencyType == null) {
 			return null;
 		}
-
 		return currencyType.getCodeName();
 	}
 
 	@Override
-	public CurrencyType convertToEntityAttribute(String dbData) {
-
-		final CurrencyType currencyType = CurrencyType.getCurrencyTypeByCodeName(dbData);
-
-		if (currencyType.equals(CurrencyType.NONE)) {
-			throw new IllegalArgumentException("Unknown value: " + dbData);
+	public CurrencyType convertToEntityAttribute(final String dbData) {
+		if (dbData == null) {
+			return null;
 		}
-
-		return currencyType;
+		return CurrencyType.getCurrencyTypeByCodeName(dbData);
 	}
 }

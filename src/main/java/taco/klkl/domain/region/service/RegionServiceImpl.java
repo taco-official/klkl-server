@@ -14,7 +14,7 @@ import taco.klkl.domain.region.domain.Country;
 import taco.klkl.domain.region.domain.Region;
 import taco.klkl.domain.region.dto.response.CountryResponse;
 import taco.klkl.domain.region.dto.response.RegionResponse;
-import taco.klkl.domain.region.enums.RegionType;
+import taco.klkl.domain.region.domain.RegionType;
 import taco.klkl.domain.region.exception.RegionNotFoundException;
 
 @Slf4j
@@ -27,48 +27,37 @@ public class RegionServiceImpl implements RegionService {
 	private final RegionRepository regionRepository;
 
 	@Override
-	public List<RegionResponse> getAllRegions() {
-
+	public List<RegionResponse> findAllRegions() {
 		final List<Region> regions = regionRepository.findAllByOrderByIdAsc();
-
 		if (regions == null) {
 			return Collections.emptyList();
 		}
-
 		return regions.stream()
 			.map(RegionResponse::from)
 			.toList();
 	}
 
 	@Override
-	public RegionResponse getRegionById(final Long id) throws RegionNotFoundException {
-
+	public RegionResponse findRegionById(final Long id) throws RegionNotFoundException {
 		final Region region = regionRepository.findById(id)
 			.orElseThrow(RegionNotFoundException::new);
-
 		return RegionResponse.from(region);
 	}
 
 	@Override
-	public RegionResponse getRegionByName(final String name) throws RegionNotFoundException {
-
+	public RegionResponse findRegionByName(final String name) throws RegionNotFoundException {
 		final Region region = regionRepository.findFirstByName(RegionType.getRegionTypeByKoreanName(name));
-
 		if (region == null) {
 			throw new RegionNotFoundException();
 		}
-
 		return RegionResponse.from(region);
 	}
 
 	@Override
-	public List<CountryResponse> getCountriesByRegionId(final Long id) {
-
+	public List<CountryResponse> findCountriesByRegionId(final Long id) {
 		final Region findRegion = regionRepository.findById(id)
 			.orElseThrow(RegionNotFoundException::new);
-
 		final List<Country> countries = findRegion.getCountries();
-
 		return countries.stream()
 			.map(CountryResponse::from)
 			.toList();

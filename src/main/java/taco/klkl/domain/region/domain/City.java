@@ -11,7 +11,6 @@ import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import taco.klkl.domain.region.enums.CityType;
 
 @Getter
 @Entity

@@ -7,15 +7,15 @@ import org.springframework.stereotype.Service;
 import taco.klkl.domain.region.dto.response.CityResponse;
 import taco.klkl.domain.region.dto.response.CountryResponse;
 import taco.klkl.domain.region.dto.response.CountrySimpleResponse;
-import taco.klkl.domain.region.enums.CountryType;
+import taco.klkl.domain.region.domain.CountryType;
 
 @Service
 public interface CountryService {
-	List<CountryResponse> getAllCountries();
+	List<CountryResponse> findAllCountries();
 
-	CountryResponse getCountryById(final Long countryId);
+	CountryResponse findCountryById(final Long countryId);
 
-	List<CityResponse> getCitiesByCountryId(final Long countryId);
+	List<CityResponse> findCitiesByCountryId(final Long countryId);
 
 	List<CountrySimpleResponse> getAllCountriesByCountryTypes(final List<CountryType> countryTypes);
 }

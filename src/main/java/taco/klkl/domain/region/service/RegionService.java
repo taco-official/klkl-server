@@ -9,11 +9,11 @@ import taco.klkl.domain.region.dto.response.RegionResponse;
 
 @Service
 public interface RegionService {
-	List<RegionResponse> getAllRegions();
+	List<RegionResponse> findAllRegions();
 
-	RegionResponse getRegionById(final Long id);
+	RegionResponse findRegionById(final Long id);
 
-	RegionResponse getRegionByName(final String name);
+	RegionResponse findRegionByName(final String name);
 
-	List<CountryResponse> getCountriesByRegionId(final Long id);
+	List<CountryResponse> findCountriesByRegionId(final Long id);
 }

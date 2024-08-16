@@ -1,9 +1,10 @@
-package taco.klkl.domain.region.enums;
+package taco.klkl.domain.region.domain;
 
 import java.util.Arrays;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import taco.klkl.domain.region.exception.CurrencyTypeNotFoundException;
 
 @Getter
 @AllArgsConstructor
@@ -27,8 +28,7 @@ public enum CurrencyType {
 	MALAYSIAN_RINGGIT("MYR"),
 
 	UNITED_STATES_DOLLAR("USD"),
-
-	NONE("");
+	;
 
 	private final String codeName;
 
@@ -41,6 +41,6 @@ public enum CurrencyType {
 		return Arrays.stream(CurrencyType.values())
 			.filter(c -> c.getCodeName().equals(codeName))
 			.findFirst()
-			.orElse(NONE);
+			.orElseThrow(CurrencyTypeNotFoundException::new);
 	}
 }

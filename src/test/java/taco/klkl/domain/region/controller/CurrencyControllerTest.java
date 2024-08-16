@@ -19,7 +19,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import taco.klkl.domain.region.dao.CurrencyRepository;
 import taco.klkl.domain.region.domain.Currency;
 import taco.klkl.domain.region.dto.response.CurrencyResponse;
-import taco.klkl.domain.region.enums.CurrencyType;
+import taco.klkl.domain.region.domain.CurrencyType;
 import taco.klkl.domain.region.service.CurrencyService;
 
 @WebMvcTest(CurrencyController.class)
@@ -46,7 +46,7 @@ public class CurrencyControllerTest {
 	void testGetAllCurrency() throws Exception {
 		// given
 		List<CurrencyResponse> currencyResponseList = Arrays.asList(currencyResponse1, currencyResponse2);
-		when(currencyService.getAllCurrencies()).thenReturn(currencyResponseList);
+		when(currencyService.findAllCurrencies()).thenReturn(currencyResponseList);
 
 		// when & then
 		mockMvc.perform(get("/v1/currencies")

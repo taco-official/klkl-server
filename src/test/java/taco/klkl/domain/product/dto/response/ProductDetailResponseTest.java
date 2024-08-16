@@ -17,8 +17,8 @@ import taco.klkl.domain.region.domain.City;
 import taco.klkl.domain.region.domain.Currency;
 import taco.klkl.domain.region.dto.response.CityResponse;
 import taco.klkl.domain.region.dto.response.CurrencyResponse;
-import taco.klkl.domain.region.enums.CityType;
-import taco.klkl.domain.region.enums.CurrencyType;
+import taco.klkl.domain.region.domain.CityType;
+import taco.klkl.domain.region.domain.CurrencyType;
 import taco.klkl.domain.user.domain.User;
 import taco.klkl.domain.user.dto.response.UserDetailResponse;
 

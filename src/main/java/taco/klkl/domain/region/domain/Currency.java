@@ -8,7 +8,6 @@ import jakarta.persistence.Id;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import taco.klkl.domain.region.enums.CurrencyType;
 
 @Getter
 @Entity

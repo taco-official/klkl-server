@@ -34,7 +34,7 @@ public class RegionIntegrationTest {
 	@DisplayName("모든 지역 조회 통합 테스트")
 	void testGetAllRegions() throws Exception {
 		// given
-		List<RegionResponse> regionResponses = regionService.getAllRegions();
+		List<RegionResponse> regionResponses = regionService.findAllRegions();
 
 		// when & then
 		mockMvc.perform(get("/v1/regions")
@@ -49,7 +49,7 @@ public class RegionIntegrationTest {
 	@DisplayName("지역에 속한 국가목록 조회 테스트")
 	void testGetCountriesByRegionId() throws Exception {
 		// given
-		List<CountryResponse> countryResponses = regionService.getCountriesByRegionId(400L);
+		List<CountryResponse> countryResponses = regionService.findCountriesByRegionId(400L);
 
 		// when
 		mockMvc.perform(get("/v1/regions/400/countries")
