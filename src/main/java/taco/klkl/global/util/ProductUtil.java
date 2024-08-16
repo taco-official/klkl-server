@@ -21,7 +21,7 @@ public class ProductUtil {
 
 	private final ProductRepository productRepository;
 
-	public Product getProductEntityById(final Long id) {
+	public Product findProductEntityById(final Long id) {
 		return productRepository.findById(id)
 			.orElseThrow(ProductNotFoundException::new);
 	}

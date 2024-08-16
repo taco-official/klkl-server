@@ -58,13 +58,13 @@ public class Like {
 	)
 	private LocalDateTime createdAt;
 
-	private Like(Product product, User user) {
+	private Like(final Product product, final User user) {
 		this.product = product;
 		this.user = user;
 		this.createdAt = LocalDateTime.now();
 	}
 
-	public static Like of(Product product, User user) {
+	public static Like of(final Product product, final User user) {
 		return new Like(product, user);
 	}
 }

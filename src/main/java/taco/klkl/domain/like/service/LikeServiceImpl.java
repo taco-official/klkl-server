@@ -24,14 +24,16 @@ import taco.klkl.global.util.UserUtil;
 public class LikeServiceImpl implements LikeService {
 
 	private final LikeRepository likeRepository;
+
 	private final ProductService productService;
+
 	private final UserUtil userUtil;
 	private final ProductUtil productUtil;
 
 	@Override
-	public LikeResponse createLike(Long productId) {
-		Product product = getProductById(productId);
-		User user = getCurrentUser();
+	public LikeResponse createLike(final Long productId) {
+		Product product = findProductById(productId);
+		User user = findCurrentUser();
 
 		if (isLikePresent(product, user)) {
 			return LikeResponse.of(true, product.getLikeCount());
@@ -45,9 +47,9 @@ public class LikeServiceImpl implements LikeService {
 	}
 
 	@Override
-	public LikeResponse deleteLike(Long productId) {
-		Product product = getProductById(productId);
-		User user = getCurrentUser();
+	public LikeResponse deleteLike(final Long productId) {
+		Product product = findProductById(productId);
+		User user = findCurrentUser();
 
 		if (isLikePresent(product, user)) {
 			likeRepository.deleteByProductAndUser(product, user);
@@ -58,12 +60,12 @@ public class LikeServiceImpl implements LikeService {
 		return LikeResponse.of(false, product.getLikeCount());
 	}
 
-	private Product getProductById(Long productId) {
-		return productUtil.getProductEntityById(productId);
+	private Product findProductById(final Long productId) {
+		return productUtil.findProductEntityById(productId);
 	}
 
-	private User getCurrentUser() {
-		return userUtil.getCurrentUser();
+	private User findCurrentUser() {
+		return userUtil.findCurrentUser();
 	}
 
 	@Override

@@ -14,7 +14,6 @@ import taco.klkl.domain.comment.exception.CommentNotFoundException;
 import taco.klkl.domain.comment.exception.CommentProductNotMatch;
 import taco.klkl.domain.notification.service.NotificationService;
 import taco.klkl.domain.product.domain.Product;
-import taco.klkl.domain.product.exception.ProductNotFoundException;
 import taco.klkl.domain.user.domain.User;
 import taco.klkl.global.util.ProductUtil;
 import taco.klkl.global.util.UserUtil;
@@ -83,7 +82,7 @@ public class CommentService {
 	) {
 		//TODO: getCurrentUser() 함수로 교채
 		final User user = userUtil.findTestUser();
-		final Product product = productUtil.getProductEntityById(productId);
+		final Product product = productUtil.findProductEntityById(productId);
 		return Comment.of(
 			product,
 			user,

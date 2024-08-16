@@ -13,13 +13,13 @@ public interface LikeService {
 	 * 상품에 좋아요를 누르는 경우
 	 * @param productId
 	 */
-	LikeResponse createLike(Long productId);
+	LikeResponse createLike(final Long productId);
 
 	/**
 	 * 상품에 좋아요를 취소하는 경우
 	 * @param productId
 	 */
-	LikeResponse deleteLike(Long productId);
+	LikeResponse deleteLike(final Long productId);
 
 	/**
 	 * 상품에 이미 사용자가 좋아요를 했는지 확인
@@ -27,5 +27,5 @@ public interface LikeService {
 	 * @param user
 	 * @return
 	 */
-	boolean isLikePresent(Product product, User user);
+	boolean isLikePresent(final Product product, final User user);
 }

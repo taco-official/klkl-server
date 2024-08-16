@@ -62,7 +62,7 @@ public class LikeIntegrationTest {
 			null
 		);
 		ProductDetailResponse productResponseDto = productService.createProduct(createDto);
-		product = productUtil.getProductEntityById(productResponseDto.id());
+		product = productUtil.findProductEntityById(productResponseDto.id());
 	}
 
 	@AfterEach
