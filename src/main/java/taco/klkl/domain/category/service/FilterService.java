@@ -17,7 +17,7 @@ public class FilterService {
 
 	private final FilterRepository filterRepository;
 
-	public Filter getFilterEntityById(long id) {
+	public Filter getFilterEntityById(final Long id) {
 		return filterRepository.findById(id)
 			.orElseThrow(FilterNotFoundException::new);
 	}
