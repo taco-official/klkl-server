@@ -52,6 +52,14 @@ public enum CityType {
 	KOTA_KINABALU("코타키나발루"),
 	KUALA_LUMPUR("쿠알라룸푸르"),
 
+	// 괌
+	TUMON("투몬"),
+
+	// 미국
+	NEW_YORK("뉴욕"),
+	LOS_ANGELES("로스엔젤레스"),
+	HAWAII("하와이"),
+
 	NONE("");
 
 	private final String koreanName;
