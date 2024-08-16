@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import taco.klkl.domain.notification.domain.Notification;
 
 public record NotificationInfo(
-	long notificationId,
+	long id,
 	boolean isRead,
 	LocalDateTime createdAt
 ) {

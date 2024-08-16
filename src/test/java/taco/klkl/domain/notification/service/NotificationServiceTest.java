@@ -127,7 +127,7 @@ public class NotificationServiceTest {
 
 		//then
 		assertThat(response).hasSize(1);
-		assertThat(response.get(0).notification().notificationId()).isEqualTo(mockNotification.getId());
+		assertThat(response.get(0).notification().id()).isEqualTo(mockNotification.getId());
 		assertThat(response.get(0).notification().isRead()).isFalse();
 	}
 
