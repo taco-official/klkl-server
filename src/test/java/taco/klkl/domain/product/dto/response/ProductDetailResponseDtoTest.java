@@ -12,6 +12,7 @@ import taco.klkl.domain.category.domain.Subcategory;
 import taco.klkl.domain.category.domain.SubcategoryName;
 import taco.klkl.domain.category.dto.response.SubcategoryResponseDto;
 import taco.klkl.domain.product.domain.Product;
+import taco.klkl.domain.product.domain.Rating;
 import taco.klkl.domain.region.domain.City;
 import taco.klkl.domain.region.domain.Currency;
 import taco.klkl.domain.region.dto.response.CityResponseDto;
@@ -57,6 +58,7 @@ class ProductDetailResponseDtoTest {
 		when(mockProduct.getAddress()).thenReturn("productAddress");
 		when(mockProduct.getPrice()).thenReturn(1000);
 		when(mockProduct.getLikeCount()).thenReturn(0);
+		when(mockProduct.getRating()).thenReturn(Rating.FIVE);
 		when(mockProduct.getUser()).thenReturn(mockUser);
 		when(mockProduct.getCity()).thenReturn(mockCity);
 		when(mockProduct.getSubcategory()).thenReturn(mockSubcategory);
@@ -70,12 +72,13 @@ class ProductDetailResponseDtoTest {
 		ProductDetailResponseDto dto = ProductDetailResponseDto.from(mockProduct);
 
 		// then
-		assertThat(dto.productId()).isEqualTo(mockProduct.getId());
+		assertThat(dto.id()).isEqualTo(mockProduct.getId());
 		assertThat(dto.name()).isEqualTo(mockProduct.getName());
 		assertThat(dto.description()).isEqualTo(mockProduct.getDescription());
 		assertThat(dto.address()).isEqualTo(mockProduct.getAddress());
 		assertThat(dto.price()).isEqualTo(mockProduct.getPrice());
 		assertThat(dto.likeCount()).isEqualTo(mockProduct.getLikeCount());
+		assertThat(dto.rating()).isEqualTo(mockProduct.getRating().getValue());
 		assertThat(dto.user()).isEqualTo(UserDetailResponseDto.from(mockUser));
 		assertThat(dto.city()).isEqualTo(CityResponseDto.from(mockCity));
 		assertThat(dto.subcategory()).isEqualTo(SubcategoryResponseDto.from(mockSubcategory));
@@ -89,12 +92,13 @@ class ProductDetailResponseDtoTest {
 		ProductDetailResponseDto dto = ProductDetailResponseDto.from(mockProduct);
 
 		// then
-		assertThat(dto.productId()).isEqualTo(mockProduct.getId());
+		assertThat(dto.id()).isEqualTo(mockProduct.getId());
 		assertThat(dto.name()).isEqualTo(mockProduct.getName());
 		assertThat(dto.description()).isEqualTo(mockProduct.getDescription());
 		assertThat(dto.address()).isEqualTo(mockProduct.getAddress());
 		assertThat(dto.price()).isEqualTo(mockProduct.getPrice());
 		assertThat(dto.likeCount()).isEqualTo(mockProduct.getLikeCount());
+		assertThat(dto.rating()).isEqualTo(mockProduct.getRating().getValue());
 		assertThat(dto.user()).isEqualTo(UserDetailResponseDto.from(mockUser));
 		assertThat(dto.city()).isEqualTo(CityResponseDto.from(mockCity));
 		assertThat(dto.subcategory()).isEqualTo(SubcategoryResponseDto.from(mockSubcategory));

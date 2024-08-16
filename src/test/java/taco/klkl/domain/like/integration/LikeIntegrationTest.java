@@ -20,6 +20,7 @@ import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.product.dto.request.ProductCreateUpdateRequestDto;
 import taco.klkl.domain.product.dto.response.ProductDetailResponseDto;
 import taco.klkl.domain.product.service.ProductService;
+import taco.klkl.global.util.ProductUtil;
 import taco.klkl.global.util.UserUtil;
 
 @SpringBootTest
@@ -42,6 +43,9 @@ public class LikeIntegrationTest {
 	@Autowired
 	private UserUtil userUtil;
 
+	@Autowired
+	private ProductUtil productUtil;
+
 	Product product;
 
 	@BeforeEach
@@ -51,12 +55,14 @@ public class LikeIntegrationTest {
 			"description",
 			"address",
 			1000,
+			5.0,
 			414L,
 			311L,
-			438L
+			438L,
+			null
 		);
 		ProductDetailResponseDto productResponseDto = productService.createProduct(createDto);
-		product = productService.getProductEntityById(productResponseDto.productId());
+		product = productUtil.getProductEntityById(productResponseDto.id());
 	}
 
 	@AfterEach

@@ -15,8 +15,8 @@ import taco.klkl.domain.comment.exception.CommentProductNotMatch;
 import taco.klkl.domain.notification.service.NotificationService;
 import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.product.exception.ProductNotFoundException;
-import taco.klkl.domain.product.service.ProductService;
 import taco.klkl.domain.user.domain.User;
+import taco.klkl.global.util.ProductUtil;
 import taco.klkl.global.util.UserUtil;
 
 @Service
@@ -24,9 +24,11 @@ import taco.klkl.global.util.UserUtil;
 @Transactional(readOnly = true)
 public class CommentService {
 	private final CommentRepository commentRepository;
-	private final ProductService productService;
+
 	private final NotificationService notificationService;
+
 	private final UserUtil userUtil;
+	private final ProductUtil productUtil;
 
 	public List<CommentResponseDto> getComments(final Long productId) {
 		validateProductId(productId);
@@ -80,7 +82,7 @@ public class CommentService {
 	) {
 		//TODO: getCurrentUser() 함수로 교채
 		final User user = userUtil.findTestUser();
-		final Product product = productService.getProductEntityById(productId);
+		final Product product = productUtil.getProductEntityById(productId);
 		return Comment.of(
 			product,
 			user,
@@ -96,7 +98,7 @@ public class CommentService {
 	}
 
 	private void validateProductId(final Long productId) {
-		boolean isValidProductId = productService.existsProductById(productId);
+		boolean isValidProductId = productUtil.existsProductById(productId);
 		if (!isValidProductId) {
 			throw new ProductNotFoundException();
 		}

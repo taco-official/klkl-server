@@ -1,6 +1,6 @@
 package taco.klkl.domain.product.controller;
 
-import java.util.List;
+import java.util.Set;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -23,6 +23,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import taco.klkl.domain.product.dto.request.ProductCreateUpdateRequestDto;
 import taco.klkl.domain.product.dto.request.ProductFilterOptionsDto;
+import taco.klkl.domain.product.dto.request.ProductSortOptionsDto;
 import taco.klkl.domain.product.dto.response.ProductDetailResponseDto;
 import taco.klkl.domain.product.dto.response.ProductSimpleResponseDto;
 import taco.klkl.domain.product.service.ProductService;
@@ -41,14 +42,22 @@ public class ProductController {
 	@Operation(summary = "상품 목록 조회", description = "상품 목록을 조회합니다.")
 	public PagedResponseDto<ProductSimpleResponseDto> getProducts(
 		@PageableDefault(size = ProductConstants.DEFAULT_PAGE_SIZE) Pageable pageable,
-		@RequestParam(name = "country_id", required = false) Long countryId,
-		@RequestParam(name = "city_id", required = false) List<Long> cityIds
+		@RequestParam(name = "city_id", required = false) Set<Long> cityIds,
+		@RequestParam(name = "subcategory_id", required = false) Set<Long> subcategoryIds,
+		@RequestParam(name = "filter_id", required = false) Set<Long> filterIds,
+		@RequestParam(name = "sort_by", required = false, defaultValue = "createdAt") String sortBy,
+		@RequestParam(name = "sort_direction", required = false, defaultValue = "DESC") String sortDirection
 	) {
 		ProductFilterOptionsDto filterOptions = new ProductFilterOptionsDto(
-			countryId,
-			cityIds
+			cityIds,
+			subcategoryIds,
+			filterIds
 		);
-		return productService.getProductsByFilterOptions(pageable, filterOptions);
+		ProductSortOptionsDto sortOptions = new ProductSortOptionsDto(
+			sortBy,
+			sortDirection
+		);
+		return productService.getProductsByFilterOptions(pageable, filterOptions, sortOptions);
 	}
 
 	@GetMapping("/{id}")

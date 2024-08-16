@@ -43,6 +43,7 @@ class ProductTest {
 		String description = "나성공 설명";
 		String address = "나성공 주소";
 		Integer price = 0;
+		Rating rating = Rating.FIVE;
 
 		// when
 		Product product = Product.of(
@@ -50,6 +51,7 @@ class ProductTest {
 			description,
 			address,
 			price,
+			rating,
 			mockUser,
 			mockCity,
 			mockSubcategory,
@@ -63,6 +65,7 @@ class ProductTest {
 		assertThat(product.getAddress()).isEqualTo(address);
 		assertThat(product.getPrice()).isEqualTo(price);
 		assertThat(product.getLikeCount()).isEqualTo(ProductConstants.DEFAULT_LIKE_COUNT);
+		assertThat(product.getRating()).isEqualTo(rating);
 		assertThat(product.getUser()).isEqualTo(mockUser);
 		assertThat(product.getCity()).isEqualTo(mockCity);
 		assertThat(product.getSubcategory()).isEqualTo(mockSubcategory);
@@ -77,6 +80,7 @@ class ProductTest {
 		String description = "설명";
 		String address = null;
 		Integer price = 0;
+		Rating rating = Rating.FIVE;
 
 		// when
 		Product product = Product.of(
@@ -84,6 +88,7 @@ class ProductTest {
 			description,
 			address,
 			price,
+			rating,
 			mockUser,
 			mockCity,
 			mockSubcategory,
@@ -97,6 +102,7 @@ class ProductTest {
 		assertThat(product.getAddress()).isEqualTo(ProductConstants.DEFAULT_ADDRESS);
 		assertThat(product.getPrice()).isEqualTo(price);
 		assertThat(product.getLikeCount()).isEqualTo(ProductConstants.DEFAULT_LIKE_COUNT);
+		assertThat(product.getRating()).isEqualTo(rating);
 		assertThat(product.getUser()).isEqualTo(mockUser);
 		assertThat(product.getCity()).isEqualTo(mockCity);
 		assertThat(product.getSubcategory()).isEqualTo(mockSubcategory);
@@ -111,6 +117,7 @@ class ProductTest {
 		String description = "설명";
 		String address = "주소";
 		Integer price = null;
+		Rating rating = Rating.FIVE;
 
 		// when
 		Product product = Product.of(
@@ -118,6 +125,7 @@ class ProductTest {
 			description,
 			address,
 			price,
+			rating,
 			mockUser,
 			mockCity,
 			mockSubcategory,
@@ -131,6 +139,7 @@ class ProductTest {
 		assertThat(product.getAddress()).isEqualTo(address);
 		assertThat(product.getPrice()).isEqualTo(ProductConstants.DEFAULT_PRICE);
 		assertThat(product.getLikeCount()).isEqualTo(ProductConstants.DEFAULT_LIKE_COUNT);
+		assertThat(product.getRating()).isEqualTo(rating);
 		assertThat(product.getUser()).isEqualTo(mockUser);
 		assertThat(product.getCity()).isEqualTo(mockCity);
 		assertThat(product.getSubcategory()).isEqualTo(mockSubcategory);
@@ -145,6 +154,7 @@ class ProductTest {
 		String originDescription = "Original Description";
 		String originAddress = "Original Address";
 		Integer originPrice = 100;
+		Rating originRating = Rating.FIVE;
 		City originCity = mockCity;
 		Subcategory originSubcategory = mockSubcategory;
 		Currency originCurrency = mockCurrency;
@@ -154,6 +164,7 @@ class ProductTest {
 			originDescription,
 			originAddress,
 			originPrice,
+			originRating,
 			mockUser,
 			originCity,
 			originSubcategory,
@@ -165,6 +176,7 @@ class ProductTest {
 		String updatedDescription = "Updated Description";
 		String updatedAddress = "Updated Address";
 		Integer updatedPrice = 200;
+		Rating updatedRating = Rating.FOUR_FIVE;
 		City updatedCity = mock(City.class);
 		Subcategory updatedSubcategory = mock(Subcategory.class);
 		Currency updatedCurrency = mock(Currency.class);
@@ -174,6 +186,7 @@ class ProductTest {
 			updatedDescription,
 			updatedAddress,
 			updatedPrice,
+			updatedRating,
 			updatedCity,
 			updatedSubcategory,
 			updatedCurrency
@@ -184,6 +197,7 @@ class ProductTest {
 		assertThat(product.getDescription()).isEqualTo(updatedDescription);
 		assertThat(product.getAddress()).isEqualTo(updatedAddress);
 		assertThat(product.getPrice()).isEqualTo(updatedPrice);
+		assertThat(product.getRating()).isEqualTo(updatedRating);
 		assertThat(product.getCity()).isEqualTo(updatedCity);
 		assertThat(product.getSubcategory()).isEqualTo(updatedSubcategory);
 		assertThat(product.getCurrency()).isEqualTo(updatedCurrency);
@@ -198,6 +212,7 @@ class ProductTest {
 			"Original Name",
 			"Original Description",
 			100,
+			Rating.FIVE,
 			mockUser,
 			mockCity,
 			mockSubcategory,
@@ -230,6 +245,7 @@ class ProductTest {
 			"Original Description",
 			"Original address",
 			100,
+			Rating.FIVE,
 			mockUser,
 			mockCity,
 			mockSubcategory,

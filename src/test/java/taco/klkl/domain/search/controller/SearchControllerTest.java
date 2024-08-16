@@ -21,6 +21,7 @@ import taco.klkl.domain.category.domain.SubcategoryName;
 import taco.klkl.domain.category.dto.response.CategoryResponseDto;
 import taco.klkl.domain.category.dto.response.SubcategoryResponseDto;
 import taco.klkl.domain.product.domain.Product;
+import taco.klkl.domain.product.domain.Rating;
 import taco.klkl.domain.product.dto.response.ProductSimpleResponseDto;
 import taco.klkl.domain.region.domain.City;
 import taco.klkl.domain.region.domain.Country;
@@ -62,6 +63,7 @@ public class SearchControllerTest {
 		"description",
 		"address",
 		1000,
+		Rating.FIVE,
 		user,
 		city,
 		subcategory,

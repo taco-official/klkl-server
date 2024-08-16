@@ -5,9 +5,10 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -21,23 +22,33 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.dsl.PathBuilder;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import taco.klkl.domain.category.domain.Category;
 import taco.klkl.domain.category.domain.CategoryName;
+import taco.klkl.domain.category.domain.Filter;
 import taco.klkl.domain.category.domain.QCategory;
+import taco.klkl.domain.category.domain.QFilter;
 import taco.klkl.domain.category.domain.QSubcategory;
 import taco.klkl.domain.category.domain.Subcategory;
 import taco.klkl.domain.category.domain.SubcategoryName;
+import taco.klkl.domain.category.dto.response.FilterResponseDto;
+import taco.klkl.domain.category.service.FilterService;
 import taco.klkl.domain.category.service.SubcategoryService;
 import taco.klkl.domain.like.exception.LikeCountBelowMinimumException;
 import taco.klkl.domain.like.exception.LikeCountOverMaximumException;
 import taco.klkl.domain.product.dao.ProductRepository;
 import taco.klkl.domain.product.domain.Product;
+import taco.klkl.domain.product.domain.ProductFilter;
 import taco.klkl.domain.product.domain.QProduct;
+import taco.klkl.domain.product.domain.QProductFilter;
+import taco.klkl.domain.product.domain.Rating;
 import taco.klkl.domain.product.dto.request.ProductCreateUpdateRequestDto;
 import taco.klkl.domain.product.dto.request.ProductFilterOptionsDto;
+import taco.klkl.domain.product.dto.request.ProductSortOptionsDto;
 import taco.klkl.domain.product.dto.response.ProductDetailResponseDto;
 import taco.klkl.domain.product.dto.response.ProductSimpleResponseDto;
 import taco.klkl.domain.product.exception.ProductNotFoundException;
@@ -52,7 +63,6 @@ import taco.klkl.domain.region.enums.CountryType;
 import taco.klkl.domain.region.enums.CurrencyType;
 import taco.klkl.domain.region.enums.RegionType;
 import taco.klkl.domain.region.service.CityService;
-import taco.klkl.domain.region.service.CountryService;
 import taco.klkl.domain.region.service.CurrencyService;
 import taco.klkl.domain.user.domain.User;
 import taco.klkl.global.common.constants.UserConstants;
@@ -71,13 +81,13 @@ class ProductServiceTest {
 	private CityService cityService;
 
 	@Mock
-	private CountryService countryService;
-
-	@Mock
 	private CurrencyService currencyService;
 
 	@Mock
 	private SubcategoryService subcategoryService;
+
+	@Mock
+	private FilterService filterService;
 
 	@Mock
 	private UserUtil userUtil;
@@ -128,6 +138,7 @@ class ProductServiceTest {
 			"description",
 			"address",
 			1000,
+			Rating.FIVE,
 			user,
 			city,
 			subcategory,
@@ -139,9 +150,11 @@ class ProductServiceTest {
 			"productDescription",
 			"productAddress",
 			1000,
+			5.0,
 			1L,
 			1L,
-			1L
+			1L,
+			Set.of(1L, 2L)
 		);
 		mockProduct = Mockito.mock(Product.class);
 	}
@@ -150,44 +163,63 @@ class ProductServiceTest {
 	@DisplayName("상품 목록 조회 - 성공")
 	void testGetProductsByFilterOptions() {
 		// Given
-		Long countryId = 1L;
-		List<Long> cityIds = List.of(4L, 5L);
+		Set<Long> cityIds = Set.of(4L, 5L);
+		Set<Long> subcategoryIds = Set.of(1L, 2L, 3L);
+		Set<Long> filterIds = Set.of(6L, 7L);
 		ProductFilterOptionsDto filterOptions = new ProductFilterOptionsDto(
-			countryId,
-			cityIds
+			cityIds,
+			subcategoryIds,
+			filterIds
+		);
+		ProductSortOptionsDto sortOptions = new ProductSortOptionsDto(
+			"rating",
+			"DESC"
 		);
 		Pageable pageable = PageRequest.of(0, 10);
 
 		// Mocking QueryDSL behavior
-		List<Product> productList = Arrays.asList(testProduct);
+		List<Product> productList = List.of(testProduct);
 
+		JPAQuery<Product> baseQuery = mock(JPAQuery.class);
 		JPAQuery<Product> productQuery = mock(JPAQuery.class);
 		JPAQuery<Long> countQuery = mock(JPAQuery.class);
 
 		QProduct product = QProduct.product;
+		QProductFilter productFilter = QProductFilter.productFilter;
+		QFilter filter = QFilter.filter;
 
-		when(queryFactory.selectFrom(product)).thenReturn(productQuery);
-		when(productQuery.where(any(BooleanBuilder.class))).thenReturn(productQuery);
+		when(queryFactory.from(product)).thenReturn((JPAQuery)baseQuery);
+		when(baseQuery.leftJoin(product.productFilters, productFilter)).thenReturn(baseQuery);
+		when(baseQuery.leftJoin(productFilter.filter, filter)).thenReturn(baseQuery);
+		when(baseQuery.where(any(BooleanBuilder.class))).thenReturn(baseQuery);
+
+		when(baseQuery.select(QProduct.product.countDistinct())).thenReturn(countQuery);
+		when(countQuery.fetchOne()).thenReturn((long)productList.size());
+
+		when(baseQuery.select(QProduct.product)).thenReturn(productQuery);
+		when(productQuery.distinct()).thenReturn(productQuery);
 		when(productQuery.offset(pageable.getOffset())).thenReturn(productQuery);
 		when(productQuery.limit(pageable.getPageSize())).thenReturn(productQuery);
 		when(productQuery.fetch()).thenReturn(productList);
 
-		when(queryFactory.select(product.count())).thenReturn(countQuery);
-		when(countQuery.from(product)).thenReturn(countQuery);
-		when(countQuery.where(any(BooleanBuilder.class))).thenReturn(countQuery);
-		when(countQuery.fetchOne()).thenReturn((long)productList.size());
+		// Mocking sorting behavior
+		PathBuilder<Product> pathBuilder = new PathBuilder<>(Product.class, "product");
+		when(productQuery.orderBy(any(OrderSpecifier.class))).thenReturn(productQuery);
 
 		// Mocking validation behavior
-		when(countryService.existsCountryById(anyLong())).thenReturn(true);
-		when(cityService.isCitiesMappedToSameCountry(anyLong(), anyList())).thenReturn(true);
+		Subcategory mockSubcategory = mock(Subcategory.class);
+		Filter mockFilter = mock(Filter.class);
+		when(cityService.isCitiesMappedToSameCountry(anySet())).thenReturn(true);
+		when(subcategoryService.getSubcategoryEntityById(anyLong())).thenReturn(mockSubcategory);
+		when(filterService.getFilterEntityById(anyLong())).thenReturn(mockFilter);
 
 		// When
 		PagedResponseDto<ProductSimpleResponseDto> result = productService
-			.getProductsByFilterOptions(pageable, filterOptions);
+			.getProductsByFilterOptions(pageable, filterOptions, sortOptions);
 
 		// Then
 		assertThat(result.content()).hasSize(1);
-		assertThat(result.content().get(0).productId()).isEqualTo(testProduct.getId());
+		assertThat(result.content().get(0).id()).isEqualTo(testProduct.getId());
 		assertThat(result.totalElements()).isEqualTo(1);
 		assertThat(result.totalPages()).isEqualTo(1);
 		assertThat(result.pageNumber()).isEqualTo(0);
@@ -195,26 +227,69 @@ class ProductServiceTest {
 		assertThat(result.last()).isTrue();
 
 		// Verify that the query methods were called
-		verify(queryFactory).selectFrom(product);
-		verify(queryFactory).select(product.count());
+		verify(queryFactory).from(product);
+		verify(baseQuery).leftJoin(product.productFilters, productFilter);
+		verify(baseQuery).leftJoin(productFilter.filter, filter);
+		verify(baseQuery).where(any(BooleanBuilder.class));
+
+		verify(baseQuery).select(QProduct.product.countDistinct());
+		verify(countQuery).fetchOne();
+
+		verify(baseQuery).select(QProduct.product);
+		verify(productQuery).distinct();
+		verify(productQuery).offset(pageable.getOffset());
+		verify(productQuery).limit(pageable.getPageSize());
+		verify(productQuery).orderBy(any(OrderSpecifier.class));
+		verify(productQuery).fetch();
 
 		// Verify that validation methods were called
-		verify(countryService).existsCountryById(countryId);
-		verify(cityService).isCitiesMappedToSameCountry(countryId, cityIds);
+		verify(cityService).isCitiesMappedToSameCountry(cityIds);
+		verify(subcategoryService, times(3)).getSubcategoryEntityById(anyLong());
+		verify(filterService, times(2)).getFilterEntityById(anyLong());
 	}
 
 	@Test
 	@DisplayName("상품 상세 조회 - 성공")
 	void testGetProductById() {
 		// Given
-		when(productRepository.findById(1L)).thenReturn(Optional.of(testProduct));
+		Long productId = 1L;
+		when(productRepository.findById(productId)).thenReturn(Optional.of(testProduct));
 
 		// When
-		ProductDetailResponseDto result = productService.getProductById(1L);
+		ProductDetailResponseDto result = productService.getProductById(productId);
 
 		// Then
-		assertThat(result.productId()).isEqualTo(testProduct.getId());
-		verify(productRepository).findById(1L);
+		assertThat(result).isNotNull();
+		assertThat(result.id()).isEqualTo(testProduct.getId());
+		assertThat(result.name()).isEqualTo(testProduct.getName());
+		assertThat(result.description()).isEqualTo(testProduct.getDescription());
+		assertThat(result.address()).isEqualTo(testProduct.getAddress());
+		assertThat(result.price()).isEqualTo(testProduct.getPrice());
+		assertThat(result.rating()).isEqualTo(testProduct.getRating().getValue());
+
+		// 필터 검증
+		if (testProduct.getProductFilters() != null && !testProduct.getProductFilters().isEmpty()) {
+			assertThat(result.filters()).isNotNull();
+			assertThat(result.filters()).hasSize(testProduct.getProductFilters().size());
+			Set<Long> resultFilterIds = result.filters().stream()
+				.map(FilterResponseDto::id)
+				.collect(Collectors.toSet());
+
+			Set<Long> testProductFilterIds = testProduct.getProductFilters().stream()
+				.map(ProductFilter::getFilter)
+				.map(Filter::getId)
+				.collect(Collectors.toSet());
+
+			assertThat(resultFilterIds).containsExactlyInAnyOrderElementsOf(testProductFilterIds);
+		} else {
+			assertThat(result.filters()).isEmpty();
+		}
+
+		// City, Subcategory, Currency 검증
+		assertThat(result.city().cityId()).isEqualTo(testProduct.getCity().getCityId());
+		assertThat(result.subcategory().subcategoryId()).isEqualTo(testProduct.getSubcategory().getId());
+		assertThat(result.currency().currencyId()).isEqualTo(testProduct.getCurrency().getCurrencyId());
+		verify(productRepository).findById(productId);
 	}
 
 	@Test
@@ -249,13 +324,14 @@ class ProductServiceTest {
 		ProductDetailResponseDto result = productService.createProduct(requestDto);
 
 		// Then
-		assertThat(result.productId()).isEqualTo(1L);
+		assertThat(result.id()).isEqualTo(1L);
 		verify(productRepository).save(argThat(savedProduct -> {
 			assertThat(savedProduct.getId()).isEqualTo(1L);
 			assertThat(savedProduct.getName()).isEqualTo(requestDto.name());
 			assertThat(savedProduct.getDescription()).isEqualTo(requestDto.description());
 			assertThat(savedProduct.getAddress()).isEqualTo(requestDto.address());
 			assertThat(savedProduct.getPrice()).isEqualTo(requestDto.price());
+			assertThat(savedProduct.getRating().getValue()).isEqualTo(requestDto.rating());
 			assertThat(savedProduct.getUser()).isEqualTo(user);
 			assertThat(savedProduct.getCity()).isEqualTo(city);
 			assertThat(savedProduct.getSubcategory()).isEqualTo(subcategory);
@@ -277,7 +353,7 @@ class ProductServiceTest {
 		ProductDetailResponseDto result = productService.updateProduct(1L, requestDto);
 
 		// Then
-		assertThat(result.productId()).isEqualTo(testProduct.getId());
+		assertThat(result.id()).isEqualTo(testProduct.getId());
 		verify(productRepository).findById(1L);
 	}
 
@@ -318,7 +394,7 @@ class ProductServiceTest {
 	}
 
 	@Test
-	@DisplayName("상품 좋아요수 추가 테스트")
+	@DisplayName("상품 좋아요 수 추가 테스트")
 	void testAddLikeCount() {
 		// given
 		when(mockProduct.increaseLikeCount()).thenReturn(1);
@@ -332,7 +408,7 @@ class ProductServiceTest {
 	}
 
 	@Test
-	@DisplayName("상품 좋아요수 최대값 에러 테스트")
+	@DisplayName("상품 좋아요 수 최대값 에러 테스트")
 	void testIncreaseLikeCountMaximum() {
 		// given
 		when(mockProduct.increaseLikeCount()).thenThrow(LikeCountOverMaximumException.class);
@@ -344,7 +420,7 @@ class ProductServiceTest {
 	}
 
 	@Test
-	@DisplayName("상품 좋아요수 빼기 테스트")
+	@DisplayName("상품 좋아요 수 빼기 테스트")
 	void testSubtractLikeCount() {
 		// given
 		testProduct.increaseLikeCount();
@@ -358,7 +434,7 @@ class ProductServiceTest {
 	}
 
 	@Test
-	@DisplayName("상품 좋아요수 최소값 에러 테스트")
+	@DisplayName("상품 좋아요 수 최소값 에러 테스트")
 	void testIncreaseLikeCountMinimum() {
 		// given
 		when(mockProduct.decreaseLikeCount()).thenThrow(LikeCountBelowMinimumException.class);
@@ -370,7 +446,7 @@ class ProductServiceTest {
 	}
 
 	@Test
-	@DisplayName("상품이름 부분문자열 조회 테스트")
+	@DisplayName("상품 이름 부분 문자열 조회 테스트")
 	void testGetProductsByPartialName() {
 		// given
 		String partialName = "am";
