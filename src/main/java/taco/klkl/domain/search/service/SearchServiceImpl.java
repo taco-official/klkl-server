@@ -14,7 +14,7 @@ import taco.klkl.domain.category.dto.response.CategoryResponse;
 import taco.klkl.domain.category.dto.response.SubcategoryResponse;
 import taco.klkl.domain.category.service.CategoryService;
 import taco.klkl.domain.category.service.SubcategoryService;
-import taco.klkl.domain.product.dto.response.ProductSimpleResponseDto;
+import taco.klkl.domain.product.dto.response.ProductSimpleResponse;
 import taco.klkl.domain.product.service.ProductService;
 import taco.klkl.domain.region.dto.response.CityResponseDto;
 import taco.klkl.domain.region.dto.response.CountrySimpleResponseDto;
@@ -44,7 +44,7 @@ public class SearchServiceImpl implements SearchService {
 		final List<CityResponseDto> findCities = getCitiesByQueryParam(queryParam);
 		final List<CategoryResponse> findCategories = getCategoriesByQueryParam(queryParam);
 		final List<SubcategoryResponse> findSubcategories = getSubcategoriesByQueryParam(queryParam);
-		List<ProductSimpleResponseDto> findProducts = getProductsByQueryParam(queryParam);
+		List<ProductSimpleResponse> findProducts = getProductsByQueryParam(queryParam);
 
 		return SearchResponseDto.of(findCountries, findCities, findCategories, findSubcategories, findProducts);
 	}
@@ -73,7 +73,7 @@ public class SearchServiceImpl implements SearchService {
 		return subcategoryService.getSubcategoriesBySubcategoryNames(subcategoryNames);
 	}
 
-	private List<ProductSimpleResponseDto> getProductsByQueryParam(final String queryParam) {
+	private List<ProductSimpleResponse> getProductsByQueryParam(final String queryParam) {
 		return productService.getProductsByPartialName(queryParam);
 	}
 

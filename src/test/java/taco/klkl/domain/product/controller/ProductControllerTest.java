@@ -3,7 +3,7 @@ package taco.klkl.domain.product.controller;
 import static org.assertj.core.api.Assertions.*;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -29,11 +29,11 @@ import taco.klkl.domain.category.domain.CategoryName;
 import taco.klkl.domain.category.dto.response.FilterResponse;
 import taco.klkl.domain.category.dto.response.SubcategoryResponse;
 import taco.klkl.domain.product.domain.Rating;
-import taco.klkl.domain.product.dto.request.ProductCreateUpdateRequestDto;
-import taco.klkl.domain.product.dto.request.ProductFilterOptionsDto;
-import taco.klkl.domain.product.dto.request.ProductSortOptionsDto;
-import taco.klkl.domain.product.dto.response.ProductDetailResponseDto;
-import taco.klkl.domain.product.dto.response.ProductSimpleResponseDto;
+import taco.klkl.domain.product.dto.request.ProductCreateUpdateRequest;
+import taco.klkl.domain.product.dto.request.ProductFilterOptions;
+import taco.klkl.domain.product.dto.request.ProductSortOptions;
+import taco.klkl.domain.product.dto.response.ProductDetailResponse;
+import taco.klkl.domain.product.dto.response.ProductSimpleResponse;
 import taco.klkl.domain.product.service.ProductService;
 import taco.klkl.domain.region.dto.response.CityResponseDto;
 import taco.klkl.domain.region.dto.response.CurrencyResponseDto;
@@ -53,9 +53,9 @@ public class ProductControllerTest {
 	@Autowired
 	private ObjectMapper objectMapper;
 
-	private ProductSimpleResponseDto productSimpleResponseDto;
-	private ProductDetailResponseDto productDetailResponseDto;
-	private ProductCreateUpdateRequestDto productCreateUpdateRequestDto;
+	private ProductSimpleResponse productSimpleResponse;
+	private ProductDetailResponse productDetailResponse;
+	private ProductCreateUpdateRequest productCreateUpdateRequest;
 
 	@BeforeEach
 	void setUp() {
@@ -88,7 +88,7 @@ public class ProductControllerTest {
 			"filterName2"
 		);
 
-		productSimpleResponseDto = new ProductSimpleResponseDto(
+		productSimpleResponse = new ProductSimpleResponse(
 			1L,
 			"productName",
 			10,
@@ -97,7 +97,7 @@ public class ProductControllerTest {
 			CategoryName.FOOD.getKoreanName(),
 			Set.of(filterResponse1, filterResponse2)
 		);
-		productDetailResponseDto = new ProductDetailResponseDto(
+		productDetailResponse = new ProductDetailResponse(
 			1L,
 			"productName",
 			"Description",
@@ -112,7 +112,7 @@ public class ProductControllerTest {
 			Set.of(filterResponse1, filterResponse2),
 			LocalDateTime.now()
 		);
-		productCreateUpdateRequestDto = new ProductCreateUpdateRequestDto(
+		productCreateUpdateRequest = new ProductCreateUpdateRequest(
 			"productName",
 			"productDescription",
 			"productAddress",
@@ -129,14 +129,14 @@ public class ProductControllerTest {
 	@DisplayName("상품 목록 조회 - 성공")
 	void testGetProducts_ShouldReturnPagedProducts() throws Exception {
 		// Given
-		List<ProductSimpleResponseDto> products = List.of(productSimpleResponseDto);
-		PagedResponseDto<ProductSimpleResponseDto> pagedResponse = new PagedResponseDto<>(
+		List<ProductSimpleResponse> products = List.of(productSimpleResponse);
+		PagedResponseDto<ProductSimpleResponse> pagedResponse = new PagedResponseDto<>(
 			products, 0, 10, 1, 1, true
 		);
 		when(productService.getProductsByFilterOptions(
 			any(Pageable.class),
-			any(ProductFilterOptionsDto.class),
-			any(ProductSortOptionsDto.class)))
+			any(ProductFilterOptions.class),
+			any(ProductSortOptions.class)))
 			.thenReturn(pagedResponse);
 
 		// When & Then
@@ -153,15 +153,15 @@ public class ProductControllerTest {
 			.andExpect(jsonPath("$.code", is("C000")))
 			.andExpect(jsonPath("$.data.content", hasSize(1)))
 			.andExpect(jsonPath("$.data.content[0].id",
-				is(productSimpleResponseDto.id().intValue())))
-			.andExpect(jsonPath("$.data.content[0].name", is(productSimpleResponseDto.name())))
-			.andExpect(jsonPath("$.data.content[0].likeCount", is(productSimpleResponseDto.likeCount())))
-			.andExpect(jsonPath("$.data.content[0].rating", is(productSimpleResponseDto.rating())))
-			.andExpect(jsonPath("$.data.content[0].countryName", is(productSimpleResponseDto.countryName())))
+				is(productSimpleResponse.id().intValue())))
+			.andExpect(jsonPath("$.data.content[0].name", is(productSimpleResponse.name())))
+			.andExpect(jsonPath("$.data.content[0].likeCount", is(productSimpleResponse.likeCount())))
+			.andExpect(jsonPath("$.data.content[0].rating", is(productSimpleResponse.rating())))
+			.andExpect(jsonPath("$.data.content[0].countryName", is(productSimpleResponse.countryName())))
 			.andExpect(jsonPath("$.data.content[0].categoryName",
-				is(productSimpleResponseDto.categoryName())))
+				is(productSimpleResponse.categoryName())))
 			.andExpect(jsonPath("$.data.content[0].filters",
-				hasSize(productSimpleResponseDto.filters().size())))
+				hasSize(productSimpleResponse.filters().size())))
 			.andExpect(jsonPath("$.data.pageNumber", is(0)))
 			.andExpect(jsonPath("$.data.pageSize", is(10)))
 			.andExpect(jsonPath("$.data.totalElements", is(1)))
@@ -171,9 +171,9 @@ public class ProductControllerTest {
 
 		// Verify that the service method was called with correct parameters
 		ArgumentCaptor<Pageable> pageableCaptor = ArgumentCaptor.forClass(Pageable.class);
-		ArgumentCaptor<ProductFilterOptionsDto> filterOptionsCaptor =
-			ArgumentCaptor.forClass(ProductFilterOptionsDto.class);
-		ArgumentCaptor<ProductSortOptionsDto> sortOptionsCaptor = ArgumentCaptor.forClass(ProductSortOptionsDto.class);
+		ArgumentCaptor<ProductFilterOptions> filterOptionsCaptor =
+			ArgumentCaptor.forClass(ProductFilterOptions.class);
+		ArgumentCaptor<ProductSortOptions> sortOptionsCaptor = ArgumentCaptor.forClass(ProductSortOptions.class);
 
 		verify(productService).getProductsByFilterOptions(
 			pageableCaptor.capture(),
@@ -182,8 +182,8 @@ public class ProductControllerTest {
 		);
 
 		Pageable capturedPageable = pageableCaptor.getValue();
-		ProductFilterOptionsDto capturedFilterOptions = filterOptionsCaptor.getValue();
-		ProductSortOptionsDto capturedSortOptions = sortOptionsCaptor.getValue();
+		ProductFilterOptions capturedFilterOptions = filterOptionsCaptor.getValue();
+		ProductSortOptions capturedSortOptions = sortOptionsCaptor.getValue();
 
 		assertThat(capturedPageable.getPageNumber()).isEqualTo(0);
 		assertThat(capturedPageable.getPageSize()).isEqualTo(10);
@@ -198,39 +198,39 @@ public class ProductControllerTest {
 	@DisplayName("상품 상세 조회 - 성공")
 	void testGetProductById_ShouldReturnProduct() throws Exception {
 		// Given
-		when(productService.getProductById(1L)).thenReturn(productDetailResponseDto);
+		when(productService.getProductById(1L)).thenReturn(productDetailResponse);
 
 		// When & Then
 		mockMvc.perform(get("/v1/products/1"))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
 			.andExpect(jsonPath("$.code", is("C000")))
-			.andExpect(jsonPath("$.data.id", is(productDetailResponseDto.id().intValue())))
-			.andExpect(jsonPath("$.data.name", is(productDetailResponseDto.name())))
-			.andExpect(jsonPath("$.data.description", is(productDetailResponseDto.description())))
-			.andExpect(jsonPath("$.data.address", is(productDetailResponseDto.address())))
-			.andExpect(jsonPath("$.data.price", is(productDetailResponseDto.price())))
-			.andExpect(jsonPath("$.data.likeCount", is(productDetailResponseDto.likeCount())))
-			.andExpect(jsonPath("$.data.rating", is(productSimpleResponseDto.rating())))
-			.andExpect(jsonPath("$.data.user.id", is(productDetailResponseDto.user().id().intValue())))
-			.andExpect(jsonPath("$.data.user.profile", is(productDetailResponseDto.user().profile())))
-			.andExpect(jsonPath("$.data.user.name", is(productDetailResponseDto.user().name())))
+			.andExpect(jsonPath("$.data.id", is(productDetailResponse.id().intValue())))
+			.andExpect(jsonPath("$.data.name", is(productDetailResponse.name())))
+			.andExpect(jsonPath("$.data.description", is(productDetailResponse.description())))
+			.andExpect(jsonPath("$.data.address", is(productDetailResponse.address())))
+			.andExpect(jsonPath("$.data.price", is(productDetailResponse.price())))
+			.andExpect(jsonPath("$.data.likeCount", is(productDetailResponse.likeCount())))
+			.andExpect(jsonPath("$.data.rating", is(productSimpleResponse.rating())))
+			.andExpect(jsonPath("$.data.user.id", is(productDetailResponse.user().id().intValue())))
+			.andExpect(jsonPath("$.data.user.profile", is(productDetailResponse.user().profile())))
+			.andExpect(jsonPath("$.data.user.name", is(productDetailResponse.user().name())))
 			.andExpect(jsonPath("$.data.user.description",
-				is(productDetailResponseDto.user().description())))
+				is(productDetailResponse.user().description())))
 			.andExpect(jsonPath("$.data.user.totalLikeCount",
-				is(productDetailResponseDto.user().totalLikeCount())))
+				is(productDetailResponse.user().totalLikeCount())))
 			.andExpect(jsonPath("$.data.city.cityId",
-				is(productDetailResponseDto.city().cityId().intValue())))
-			.andExpect(jsonPath("$.data.city.name", is(productDetailResponseDto.city().name())))
+				is(productDetailResponse.city().cityId().intValue())))
+			.andExpect(jsonPath("$.data.city.name", is(productDetailResponse.city().name())))
 			.andExpect(jsonPath("$.data.subcategory.subcategoryId",
-				is(productDetailResponseDto.subcategory().subcategoryId().intValue())))
+				is(productDetailResponse.subcategory().subcategoryId().intValue())))
 			.andExpect(jsonPath("$.data.subcategory.subcategory",
-				is(productDetailResponseDto.subcategory().subcategory())))
+				is(productDetailResponse.subcategory().subcategory())))
 			.andExpect(jsonPath("$.data.currency.currencyId",
-				is(productDetailResponseDto.currency().currencyId().intValue())))
-			.andExpect(jsonPath("$.data.currency.code", is(productDetailResponseDto.currency().code())))
-			.andExpect(jsonPath("$.data.currency.flag", is(productDetailResponseDto.currency().flag())))
-			.andExpect(jsonPath("$.data.filters", hasSize(productSimpleResponseDto.filters().size())))
+				is(productDetailResponse.currency().currencyId().intValue())))
+			.andExpect(jsonPath("$.data.currency.code", is(productDetailResponse.currency().code())))
+			.andExpect(jsonPath("$.data.currency.flag", is(productDetailResponse.currency().flag())))
+			.andExpect(jsonPath("$.data.filters", hasSize(productSimpleResponse.filters().size())))
 			.andExpect(jsonPath("$.data.createdAt", notNullValue()))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
 	}
@@ -239,42 +239,42 @@ public class ProductControllerTest {
 	@DisplayName("상품 등록 - 성공")
 	void testCreateProduct_ShouldReturnCreatedProduct() throws Exception {
 		// Given
-		when(productService.createProduct(any(ProductCreateUpdateRequestDto.class)))
-			.thenReturn(productDetailResponseDto);
+		when(productService.createProduct(any(ProductCreateUpdateRequest.class)))
+			.thenReturn(productDetailResponse);
 
 		// When & Then
 		mockMvc.perform(post("/v1/products")
 				.contentType(MediaType.APPLICATION_JSON)
-				.content(objectMapper.writeValueAsString(productCreateUpdateRequestDto)))
+				.content(objectMapper.writeValueAsString(productCreateUpdateRequest)))
 			.andExpect(status().isCreated())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
 			.andExpect(jsonPath("$.code", is("C000")))
-			.andExpect(jsonPath("$.data.id", is(productDetailResponseDto.id().intValue())))
-			.andExpect(jsonPath("$.data.name", is(productDetailResponseDto.name())))
-			.andExpect(jsonPath("$.data.description", is(productDetailResponseDto.description())))
-			.andExpect(jsonPath("$.data.address", is(productDetailResponseDto.address())))
-			.andExpect(jsonPath("$.data.price", is(productDetailResponseDto.price())))
-			.andExpect(jsonPath("$.data.likeCount", is(productDetailResponseDto.likeCount())))
-			.andExpect(jsonPath("$.data.rating", is(productSimpleResponseDto.rating())))
-			.andExpect(jsonPath("$.data.user.id", is(productDetailResponseDto.user().id().intValue())))
-			.andExpect(jsonPath("$.data.user.profile", is(productDetailResponseDto.user().profile())))
-			.andExpect(jsonPath("$.data.user.name", is(productDetailResponseDto.user().name())))
+			.andExpect(jsonPath("$.data.id", is(productDetailResponse.id().intValue())))
+			.andExpect(jsonPath("$.data.name", is(productDetailResponse.name())))
+			.andExpect(jsonPath("$.data.description", is(productDetailResponse.description())))
+			.andExpect(jsonPath("$.data.address", is(productDetailResponse.address())))
+			.andExpect(jsonPath("$.data.price", is(productDetailResponse.price())))
+			.andExpect(jsonPath("$.data.likeCount", is(productDetailResponse.likeCount())))
+			.andExpect(jsonPath("$.data.rating", is(productSimpleResponse.rating())))
+			.andExpect(jsonPath("$.data.user.id", is(productDetailResponse.user().id().intValue())))
+			.andExpect(jsonPath("$.data.user.profile", is(productDetailResponse.user().profile())))
+			.andExpect(jsonPath("$.data.user.name", is(productDetailResponse.user().name())))
 			.andExpect(jsonPath("$.data.user.description",
-				is(productDetailResponseDto.user().description())))
+				is(productDetailResponse.user().description())))
 			.andExpect(jsonPath("$.data.user.totalLikeCount",
-				is(productDetailResponseDto.user().totalLikeCount())))
+				is(productDetailResponse.user().totalLikeCount())))
 			.andExpect(jsonPath("$.data.city.cityId",
-				is(productDetailResponseDto.city().cityId().intValue())))
-			.andExpect(jsonPath("$.data.city.name", is(productDetailResponseDto.city().name())))
+				is(productDetailResponse.city().cityId().intValue())))
+			.andExpect(jsonPath("$.data.city.name", is(productDetailResponse.city().name())))
 			.andExpect(jsonPath("$.data.subcategory.subcategoryId",
-				is(productDetailResponseDto.subcategory().subcategoryId().intValue())))
+				is(productDetailResponse.subcategory().subcategoryId().intValue())))
 			.andExpect(jsonPath("$.data.subcategory.subcategory",
-				is(productDetailResponseDto.subcategory().subcategory())))
+				is(productDetailResponse.subcategory().subcategory())))
 			.andExpect(jsonPath("$.data.currency.currencyId",
-				is(productDetailResponseDto.currency().currencyId().intValue())))
-			.andExpect(jsonPath("$.data.currency.code", is(productDetailResponseDto.currency().code())))
-			.andExpect(jsonPath("$.data.currency.flag", is(productDetailResponseDto.currency().flag())))
-			.andExpect(jsonPath("$.data.filters", hasSize(productSimpleResponseDto.filters().size())))
+				is(productDetailResponse.currency().currencyId().intValue())))
+			.andExpect(jsonPath("$.data.currency.code", is(productDetailResponse.currency().code())))
+			.andExpect(jsonPath("$.data.currency.flag", is(productDetailResponse.currency().flag())))
+			.andExpect(jsonPath("$.data.filters", hasSize(productSimpleResponse.filters().size())))
 			.andExpect(jsonPath("$.data.createdAt", notNullValue()))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
 	}
@@ -283,42 +283,42 @@ public class ProductControllerTest {
 	@DisplayName("상품 정보 수정 - 성공")
 	void testUpdateProduct_ShouldReturnUpdatedProduct() throws Exception {
 		// Given
-		when(productService.updateProduct(eq(1L), any(ProductCreateUpdateRequestDto.class)))
-			.thenReturn(productDetailResponseDto);
+		when(productService.updateProduct(eq(1L), any(ProductCreateUpdateRequest.class)))
+			.thenReturn(productDetailResponse);
 
 		// When & Then
 		mockMvc.perform(put("/v1/products/1")
 				.contentType(MediaType.APPLICATION_JSON)
-				.content(objectMapper.writeValueAsString(productCreateUpdateRequestDto)))
+				.content(objectMapper.writeValueAsString(productCreateUpdateRequest)))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
 			.andExpect(jsonPath("$.code", is("C000")))
-			.andExpect(jsonPath("$.data.id", is(productDetailResponseDto.id().intValue())))
-			.andExpect(jsonPath("$.data.name", is(productDetailResponseDto.name())))
-			.andExpect(jsonPath("$.data.description", is(productDetailResponseDto.description())))
-			.andExpect(jsonPath("$.data.address", is(productDetailResponseDto.address())))
-			.andExpect(jsonPath("$.data.price", is(productDetailResponseDto.price())))
-			.andExpect(jsonPath("$.data.likeCount", is(productDetailResponseDto.likeCount())))
-			.andExpect(jsonPath("$.data.rating", is(productSimpleResponseDto.rating())))
-			.andExpect(jsonPath("$.data.user.id", is(productDetailResponseDto.user().id().intValue())))
-			.andExpect(jsonPath("$.data.user.profile", is(productDetailResponseDto.user().profile())))
-			.andExpect(jsonPath("$.data.user.name", is(productDetailResponseDto.user().name())))
+			.andExpect(jsonPath("$.data.id", is(productDetailResponse.id().intValue())))
+			.andExpect(jsonPath("$.data.name", is(productDetailResponse.name())))
+			.andExpect(jsonPath("$.data.description", is(productDetailResponse.description())))
+			.andExpect(jsonPath("$.data.address", is(productDetailResponse.address())))
+			.andExpect(jsonPath("$.data.price", is(productDetailResponse.price())))
+			.andExpect(jsonPath("$.data.likeCount", is(productDetailResponse.likeCount())))
+			.andExpect(jsonPath("$.data.rating", is(productSimpleResponse.rating())))
+			.andExpect(jsonPath("$.data.user.id", is(productDetailResponse.user().id().intValue())))
+			.andExpect(jsonPath("$.data.user.profile", is(productDetailResponse.user().profile())))
+			.andExpect(jsonPath("$.data.user.name", is(productDetailResponse.user().name())))
 			.andExpect(jsonPath("$.data.user.description",
-				is(productDetailResponseDto.user().description())))
+				is(productDetailResponse.user().description())))
 			.andExpect(jsonPath("$.data.user.totalLikeCount",
-				is(productDetailResponseDto.user().totalLikeCount())))
+				is(productDetailResponse.user().totalLikeCount())))
 			.andExpect(jsonPath("$.data.city.cityId",
-				is(productDetailResponseDto.city().cityId().intValue())))
-			.andExpect(jsonPath("$.data.city.name", is(productDetailResponseDto.city().name())))
+				is(productDetailResponse.city().cityId().intValue())))
+			.andExpect(jsonPath("$.data.city.name", is(productDetailResponse.city().name())))
 			.andExpect(jsonPath("$.data.subcategory.subcategoryId",
-				is(productDetailResponseDto.subcategory().subcategoryId().intValue())))
+				is(productDetailResponse.subcategory().subcategoryId().intValue())))
 			.andExpect(jsonPath("$.data.subcategory.subcategory",
-				is(productDetailResponseDto.subcategory().subcategory())))
+				is(productDetailResponse.subcategory().subcategory())))
 			.andExpect(jsonPath("$.data.currency.currencyId",
-				is(productDetailResponseDto.currency().currencyId().intValue())))
-			.andExpect(jsonPath("$.data.currency.code", is(productDetailResponseDto.currency().code())))
-			.andExpect(jsonPath("$.data.currency.flag", is(productDetailResponseDto.currency().flag())))
-			.andExpect(jsonPath("$.data.filters", hasSize(productSimpleResponseDto.filters().size())))
+				is(productDetailResponse.currency().currencyId().intValue())))
+			.andExpect(jsonPath("$.data.currency.code", is(productDetailResponse.currency().code())))
+			.andExpect(jsonPath("$.data.currency.flag", is(productDetailResponse.currency().flag())))
+			.andExpect(jsonPath("$.data.filters", hasSize(productSimpleResponse.filters().size())))
 			.andExpect(jsonPath("$.data.createdAt", notNullValue()))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
 	}

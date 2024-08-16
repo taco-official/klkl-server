@@ -31,7 +31,7 @@ import taco.klkl.domain.region.enums.CurrencyType;
 import taco.klkl.domain.region.enums.RegionType;
 import taco.klkl.domain.user.domain.User;
 
-class ProductSimpleResponseDtoTest {
+class ProductSimpleResponseTest {
 
 	private Product product;
 	private User mockUser;
@@ -92,10 +92,10 @@ class ProductSimpleResponseDtoTest {
 	}
 
 	@Test
-	@DisplayName("Product 객체로부터 ProductSimpleResponseDto 생성 테스트")
+	@DisplayName("Product 객체로부터 ProductSimpleResponse 생성 테스트")
 	void testFromProduct() {
 		// when
-		ProductSimpleResponseDto dto = ProductSimpleResponseDto.from(product);
+		ProductSimpleResponse dto = ProductSimpleResponse.from(product);
 
 		// then
 		assertThat(dto.id()).isEqualTo(product.getId());
@@ -107,7 +107,7 @@ class ProductSimpleResponseDtoTest {
 	}
 
 	@Test
-	@DisplayName("생성자를 통해 ProductSimpleResponseDto 생성 테스트")
+	@DisplayName("생성자를 통해 ProductSimpleResponse 생성 테스트")
 	void testConstructor() {
 		// when
 		Set<FilterResponse> filters = product.getProductFilters().stream()
@@ -115,7 +115,7 @@ class ProductSimpleResponseDtoTest {
 			.map(FilterResponse::from)
 			.collect(Collectors.toSet());
 
-		ProductSimpleResponseDto dto = new ProductSimpleResponseDto(
+		ProductSimpleResponse dto = new ProductSimpleResponse(
 			product.getId(),
 			product.getName(),
 			product.getLikeCount(),

@@ -24,7 +24,7 @@ import taco.klkl.global.common.constants.ProductConstants;
  * @param subcategoryId
  * @param currencyId
  */
-public record ProductCreateUpdateRequestDto(
+public record ProductCreateUpdateRequest(
 	@NotNull(message = NAME_NOT_NULL)
 	@NotBlank(message = NAME_NOT_BLANK)
 	@Size(max = ProductConstants.NAME_MAX_LENGTH, message = NAME_SIZE)

@@ -23,7 +23,7 @@ import taco.klkl.domain.category.service.CategoryService;
 import taco.klkl.domain.category.service.SubcategoryService;
 import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.product.domain.Rating;
-import taco.klkl.domain.product.dto.response.ProductSimpleResponseDto;
+import taco.klkl.domain.product.dto.response.ProductSimpleResponse;
 import taco.klkl.domain.product.service.ProductService;
 import taco.klkl.domain.region.domain.City;
 import taco.klkl.domain.region.domain.Country;
@@ -95,7 +95,7 @@ class SearchServiceImplTest {
 		List<CategoryResponse> mockCategories = Collections.singletonList(CategoryResponse.from(category));
 		List<SubcategoryResponse> mockSubcategories = Collections.singletonList(
 			SubcategoryResponse.from(subcategory));
-		List<ProductSimpleResponseDto> mockProducts = Collections.singletonList(ProductSimpleResponseDto.from(product));
+		List<ProductSimpleResponse> mockProducts = Collections.singletonList(ProductSimpleResponse.from(product));
 
 		when(countryService.getAllCountriesByCountryTypes(any(List.class))).thenReturn(mockCountries);
 		when(cityService.getAllCitiesByCityTypes(any(List.class))).thenReturn(mockCities);

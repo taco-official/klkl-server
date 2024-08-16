@@ -34,11 +34,11 @@ import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.product.domain.QProduct;
 import taco.klkl.domain.product.domain.QProductFilter;
 import taco.klkl.domain.product.domain.Rating;
-import taco.klkl.domain.product.dto.request.ProductCreateUpdateRequestDto;
-import taco.klkl.domain.product.dto.request.ProductFilterOptionsDto;
-import taco.klkl.domain.product.dto.request.ProductSortOptionsDto;
-import taco.klkl.domain.product.dto.response.ProductDetailResponseDto;
-import taco.klkl.domain.product.dto.response.ProductSimpleResponseDto;
+import taco.klkl.domain.product.dto.request.ProductCreateUpdateRequest;
+import taco.klkl.domain.product.dto.request.ProductFilterOptions;
+import taco.klkl.domain.product.dto.request.ProductSortOptions;
+import taco.klkl.domain.product.dto.response.ProductDetailResponse;
+import taco.klkl.domain.product.dto.response.ProductSimpleResponse;
 import taco.klkl.domain.product.exception.InvalidCityIdsException;
 import taco.klkl.domain.product.exception.InvalidSortOptionException;
 import taco.klkl.domain.product.exception.ProductNotFoundException;
@@ -70,10 +70,10 @@ public class ProductService {
 
 	private final UserUtil userUtil;
 
-	public PagedResponseDto<ProductSimpleResponseDto> getProductsByFilterOptions(
+	public PagedResponseDto<ProductSimpleResponse> getProductsByFilterOptions(
 		final Pageable pageable,
-		final ProductFilterOptionsDto filterOptions,
-		final ProductSortOptionsDto sortOptions
+		final ProductFilterOptions filterOptions,
+		final ProductSortOptions sortOptions
 	) {
 		validateFilterOptions(filterOptions);
 		validateSortOptions(sortOptions);
@@ -83,24 +83,24 @@ public class ProductService {
 		List<Product> products = fetchProducts(baseQuery, pageable, sortOptions);
 
 		Page<Product> productPage = new PageImpl<>(products, pageable, total);
-		return PagedResponseDto.of(productPage, ProductSimpleResponseDto::from);
+		return PagedResponseDto.of(productPage, ProductSimpleResponse::from);
 	}
 
-	public ProductDetailResponseDto getProductById(final Long id) throws ProductNotFoundException {
+	public ProductDetailResponse getProductById(final Long id) throws ProductNotFoundException {
 		final Product product = productRepository.findById(id)
 			.orElseThrow(ProductNotFoundException::new);
-		return ProductDetailResponseDto.from(product);
+		return taco.klkl.domain.product.dto.response.ProductDetailResponse.from(product);
 	}
 
 	@Transactional
-	public ProductDetailResponseDto createProduct(final ProductCreateUpdateRequestDto createRequest) {
+	public ProductDetailResponse createProduct(final ProductCreateUpdateRequest createRequest) {
 		final Product product = createProductEntity(createRequest);
 		productRepository.save(product);
 		if (createRequest.filterIds() != null) {
 			Set<Filter> filters = getFiltersByFilterIds(createRequest.filterIds());
 			product.addFilters(filters);
 		}
-		return ProductDetailResponseDto.from(product);
+		return taco.klkl.domain.product.dto.response.ProductDetailResponse.from(product);
 	}
 
 	@Transactional
@@ -114,7 +114,7 @@ public class ProductService {
 	}
 
 	@Transactional
-	public ProductDetailResponseDto updateProduct(final Long id, final ProductCreateUpdateRequestDto updateRequest)
+	public ProductDetailResponse updateProduct(final Long id, final ProductCreateUpdateRequest updateRequest)
 		throws ProductNotFoundException {
 		final Product product = productRepository.findById(id)
 			.orElseThrow(ProductNotFoundException::new);
@@ -123,7 +123,7 @@ public class ProductService {
 			Set<Filter> updatedFilters = getFiltersByFilterIds(updateRequest.filterIds());
 			product.updateFilters(updatedFilters);
 		}
-		return ProductDetailResponseDto.from(product);
+		return ProductDetailResponse.from(product);
 	}
 
 	@Transactional
@@ -133,7 +133,7 @@ public class ProductService {
 		productRepository.delete(product);
 	}
 
-	public List<ProductSimpleResponseDto> getProductsByPartialName(String partialName) {
+	public List<ProductSimpleResponse> getProductsByPartialName(String partialName) {
 
 		QProduct product = QProduct.product;
 		QCity city = QCity.city;
@@ -151,11 +151,11 @@ public class ProductService {
 			.fetch();
 
 		return products.stream()
-			.map(ProductSimpleResponseDto::from)
+			.map(ProductSimpleResponse::from)
 			.toList();
 	}
 
-	private JPAQuery<?> createBaseQuery(final ProductFilterOptionsDto filterOptions) {
+	private JPAQuery<?> createBaseQuery(final ProductFilterOptions filterOptions) {
 		QProduct product = QProduct.product;
 		QProductFilter productFilter = QProductFilter.productFilter;
 		QFilter filter = QFilter.filter;
@@ -183,7 +183,7 @@ public class ProductService {
 	private List<Product> fetchProducts(
 		final JPAQuery<?> baseQuery,
 		final Pageable pageable,
-		final ProductSortOptionsDto sortOptions
+		final ProductSortOptions sortOptions
 	) {
 		JPAQuery<Product> productQuery = baseQuery.select(QProduct.product).distinct();
 
@@ -195,7 +195,7 @@ public class ProductService {
 			.fetch();
 	}
 
-	private void applySorting(final JPAQuery<Product> query, final ProductSortOptionsDto sortOptions) {
+	private void applySorting(final JPAQuery<Product> query, final ProductSortOptions sortOptions) {
 		PathBuilder<Product> pathBuilder = new PathBuilder<>(Product.class, "product");
 		Sort.Direction sortDirection = Sort.Direction.fromString(sortOptions.sortDirection());
 		OrderSpecifier<?> orderSpecifier = new OrderSpecifier<>(
@@ -232,7 +232,7 @@ public class ProductService {
 			.collect(Collectors.toSet());
 	}
 
-	private Product createProductEntity(final ProductCreateUpdateRequestDto createRequest) {
+	private Product createProductEntity(final ProductCreateUpdateRequest createRequest) {
 		final Rating rating = Rating.from(createRequest.rating());
 		final User user = userUtil.findTestUser();
 		final City city = getCityEntity(createRequest.cityId());
@@ -252,7 +252,7 @@ public class ProductService {
 		);
 	}
 
-	private void updateProductEntity(final Product product, final ProductCreateUpdateRequestDto updateRequest) {
+	private void updateProductEntity(final Product product, final ProductCreateUpdateRequest updateRequest) {
 		final Rating rating = Rating.from(updateRequest.rating());
 		final City city = getCityEntity(updateRequest.cityId());
 		final Subcategory subcategory = getSubcategoryEntity(updateRequest.subcategoryId());
@@ -282,7 +282,7 @@ public class ProductService {
 		return currencyService.getCurrencyEntityById(currencyId);
 	}
 
-	private void validateFilterOptions(final ProductFilterOptionsDto filterOptions) {
+	private void validateFilterOptions(final ProductFilterOptions filterOptions) {
 		if (filterOptions.cityIds() != null) {
 			validateCityIds(filterOptions.cityIds());
 		}
@@ -294,7 +294,7 @@ public class ProductService {
 		}
 	}
 
-	private void validateSortOptions(final ProductSortOptionsDto sortOptions) throws InvalidSortOptionException {
+	private void validateSortOptions(final ProductSortOptions sortOptions) throws InvalidSortOptionException {
 		if (!ProductConstants.ALLOWED_SORT_BY.contains(sortOptions.sortBy())) {
 			throw new InvalidSortOptionException();
 		}

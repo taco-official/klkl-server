@@ -22,7 +22,7 @@ import taco.klkl.domain.category.dto.response.CategoryResponse;
 import taco.klkl.domain.category.dto.response.SubcategoryResponse;
 import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.product.domain.Rating;
-import taco.klkl.domain.product.dto.response.ProductSimpleResponseDto;
+import taco.klkl.domain.product.dto.response.ProductSimpleResponse;
 import taco.klkl.domain.region.domain.City;
 import taco.klkl.domain.region.domain.Country;
 import taco.klkl.domain.region.domain.Currency;
@@ -78,7 +78,7 @@ public class SearchControllerTest {
 			Collections.singletonList(CityResponseDto.from(city)),
 			Collections.singletonList(CategoryResponse.from(category)),
 			Collections.singletonList(SubcategoryResponse.from(subcategory)),
-			Collections.singletonList(ProductSimpleResponseDto.from(product))
+			Collections.singletonList(ProductSimpleResponse.from(product))
 		);
 	}
 

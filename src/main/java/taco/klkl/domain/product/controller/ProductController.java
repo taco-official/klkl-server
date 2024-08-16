@@ -21,11 +21,11 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import taco.klkl.domain.product.dto.request.ProductCreateUpdateRequestDto;
-import taco.klkl.domain.product.dto.request.ProductFilterOptionsDto;
-import taco.klkl.domain.product.dto.request.ProductSortOptionsDto;
-import taco.klkl.domain.product.dto.response.ProductDetailResponseDto;
-import taco.klkl.domain.product.dto.response.ProductSimpleResponseDto;
+import taco.klkl.domain.product.dto.request.ProductCreateUpdateRequest;
+import taco.klkl.domain.product.dto.request.ProductFilterOptions;
+import taco.klkl.domain.product.dto.request.ProductSortOptions;
+import taco.klkl.domain.product.dto.response.ProductDetailResponse;
+import taco.klkl.domain.product.dto.response.ProductSimpleResponse;
 import taco.klkl.domain.product.service.ProductService;
 import taco.klkl.global.common.constants.ProductConstants;
 import taco.klkl.global.common.response.PagedResponseDto;
@@ -40,7 +40,7 @@ public class ProductController {
 
 	@GetMapping
 	@Operation(summary = "상품 목록 조회", description = "상품 목록을 조회합니다.")
-	public PagedResponseDto<ProductSimpleResponseDto> getProducts(
+	public PagedResponseDto<ProductSimpleResponse> getProducts(
 		@PageableDefault(size = ProductConstants.DEFAULT_PAGE_SIZE) Pageable pageable,
 		@RequestParam(name = "city_id", required = false) Set<Long> cityIds,
 		@RequestParam(name = "subcategory_id", required = false) Set<Long> subcategoryIds,
@@ -48,12 +48,12 @@ public class ProductController {
 		@RequestParam(name = "sort_by", required = false, defaultValue = "createdAt") String sortBy,
 		@RequestParam(name = "sort_direction", required = false, defaultValue = "DESC") String sortDirection
 	) {
-		ProductFilterOptionsDto filterOptions = new ProductFilterOptionsDto(
+		ProductFilterOptions filterOptions = new ProductFilterOptions(
 			cityIds,
 			subcategoryIds,
 			filterIds
 		);
-		ProductSortOptionsDto sortOptions = new ProductSortOptionsDto(
+		ProductSortOptions sortOptions = new ProductSortOptions(
 			sortBy,
 			sortDirection
 		);
@@ -62,7 +62,7 @@ public class ProductController {
 
 	@GetMapping("/{id}")
 	@Operation(summary = "상품 상세 조회", description = "상품 상세 정보를 조회합니다.")
-	public ProductDetailResponseDto getProductById(
+	public ProductDetailResponse getProductById(
 		@PathVariable Long id
 	) {
 		return productService.getProductById(id);
@@ -71,17 +71,17 @@ public class ProductController {
 	@PostMapping
 	@Operation(summary = "상품 등록", description = "상품을 등록합니다.")
 	@ResponseStatus(HttpStatus.CREATED)
-	public ProductDetailResponseDto createProduct(
-		@Valid @RequestBody ProductCreateUpdateRequestDto createRequest
+	public ProductDetailResponse createProduct(
+		@Valid @RequestBody ProductCreateUpdateRequest createRequest
 	) {
 		return productService.createProduct(createRequest);
 	}
 
 	@PutMapping("/{id}")
 	@Operation(summary = "상품 정보 수정", description = "상품 정보를 수정합니다.")
-	public ProductDetailResponseDto updateProduct(
+	public ProductDetailResponse updateProduct(
 		@PathVariable Long id,
-		@Valid @RequestBody ProductCreateUpdateRequestDto updateRequest
+		@Valid @RequestBody ProductCreateUpdateRequest updateRequest
 	) {
 		return productService.updateProduct(id, updateRequest);
 	}

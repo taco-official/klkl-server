@@ -16,7 +16,7 @@ import taco.klkl.global.util.ProductUtil;
  * @param countryName
  * @param categoryName
  */
-public record ProductSimpleResponseDto(
+public record ProductSimpleResponse(
 	Long id,
 	String name,
 	Integer likeCount,
@@ -26,8 +26,8 @@ public record ProductSimpleResponseDto(
 	Set<FilterResponse> filters
 ) {
 
-	public static ProductSimpleResponseDto from(final Product product) {
-		return new ProductSimpleResponseDto(
+	public static ProductSimpleResponse from(final Product product) {
+		return new ProductSimpleResponse(
 			product.getId(),
 			product.getName(),
 			product.getLikeCount(),

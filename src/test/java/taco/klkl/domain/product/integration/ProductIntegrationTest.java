@@ -18,8 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import taco.klkl.domain.product.dao.ProductRepository;
-import taco.klkl.domain.product.dto.request.ProductCreateUpdateRequestDto;
-import taco.klkl.domain.product.dto.response.ProductDetailResponseDto;
+import taco.klkl.domain.product.dto.request.ProductCreateUpdateRequest;
+import taco.klkl.domain.product.dto.response.ProductDetailResponse;
 import taco.klkl.domain.product.service.ProductService;
 import taco.klkl.global.common.constants.ProductConstants;
 
@@ -42,7 +42,7 @@ public class ProductIntegrationTest {
 	@DisplayName("상품 상세 조회 API 테스트")
 	public void testGetProductById() throws Exception {
 		// given
-		ProductCreateUpdateRequestDto createRequest = new ProductCreateUpdateRequestDto(
+		ProductCreateUpdateRequest createRequest = new ProductCreateUpdateRequest(
 			"name",
 			"description",
 			"address",
@@ -53,7 +53,7 @@ public class ProductIntegrationTest {
 			438L,
 			Set.of(350L, 351L)
 		);
-		ProductDetailResponseDto productDto = productService.createProduct(createRequest);
+		ProductDetailResponse productDto = productService.createProduct(createRequest);
 
 		// when & then
 		mockMvc.perform(get("/v1/products/" + productDto.id())
@@ -80,7 +80,7 @@ public class ProductIntegrationTest {
 	@DisplayName("상품 등록 API 테스트")
 	public void testCreateProduct() throws Exception {
 		// given
-		ProductCreateUpdateRequestDto createRequest = new ProductCreateUpdateRequestDto(
+		ProductCreateUpdateRequest createRequest = new ProductCreateUpdateRequest(
 			"name",
 			"description",
 			"address",
@@ -118,7 +118,7 @@ public class ProductIntegrationTest {
 	@DisplayName("페이지네이션으로 상품 목록 조회 API 테스트")
 	public void testGetProductsByPagination() throws Exception {
 		// given
-		ProductCreateUpdateRequestDto createRequest1 = new ProductCreateUpdateRequestDto(
+		ProductCreateUpdateRequest createRequest1 = new ProductCreateUpdateRequest(
 			"name1",
 			"description1",
 			"address1",
@@ -129,7 +129,7 @@ public class ProductIntegrationTest {
 			438L,
 			null
 		);
-		ProductCreateUpdateRequestDto createRequest2 = new ProductCreateUpdateRequestDto(
+		ProductCreateUpdateRequest createRequest2 = new ProductCreateUpdateRequest(
 			"name2",
 			"description2",
 			"address2",
@@ -166,7 +166,7 @@ public class ProductIntegrationTest {
 	@DisplayName("단일 도시 ID로 필터링된 상품 목록 조회 API 테스트")
 	public void testGetProductsBySingleCityId() throws Exception {
 		// given
-		ProductCreateUpdateRequestDto createOsakaRequest1 = new ProductCreateUpdateRequestDto(
+		ProductCreateUpdateRequest createOsakaRequest1 = new ProductCreateUpdateRequest(
 			"name1",
 			"description1",
 			"address1",
@@ -177,7 +177,7 @@ public class ProductIntegrationTest {
 			438L,
 			null
 		);
-		ProductCreateUpdateRequestDto createOsakaRequest2 = new ProductCreateUpdateRequestDto(
+		ProductCreateUpdateRequest createOsakaRequest2 = new ProductCreateUpdateRequest(
 			"name2",
 			"description2",
 			"address2",
@@ -188,7 +188,7 @@ public class ProductIntegrationTest {
 			438L,
 			null
 		);
-		ProductCreateUpdateRequestDto createTokyoRequest = new ProductCreateUpdateRequestDto(
+		ProductCreateUpdateRequest createTokyoRequest = new ProductCreateUpdateRequest(
 			"name3",
 			"description3",
 			"address3",
@@ -226,7 +226,7 @@ public class ProductIntegrationTest {
 	@DisplayName("여러 도시 ID로 필터링된 상품 목록 조회 API 테스트")
 	public void testGetProductsByMultipleCityIds() throws Exception {
 		// given
-		ProductCreateUpdateRequestDto createKyotoRequest1 = new ProductCreateUpdateRequestDto(
+		ProductCreateUpdateRequest createKyotoRequest1 = new ProductCreateUpdateRequest(
 			"name1",
 			"description1",
 			"address1",
@@ -237,7 +237,7 @@ public class ProductIntegrationTest {
 			438L,
 			null
 		);
-		ProductCreateUpdateRequestDto createKyotoRequest2 = new ProductCreateUpdateRequestDto(
+		ProductCreateUpdateRequest createKyotoRequest2 = new ProductCreateUpdateRequest(
 			"name2",
 			"description2",
 			"address2",
@@ -248,7 +248,7 @@ public class ProductIntegrationTest {
 			438L,
 			null
 		);
-		ProductCreateUpdateRequestDto createTokyoRequest = new ProductCreateUpdateRequestDto(
+		ProductCreateUpdateRequest createTokyoRequest = new ProductCreateUpdateRequest(
 			"name3",
 			"description3",
 			"address3",
@@ -288,7 +288,7 @@ public class ProductIntegrationTest {
 	@DisplayName("단일 소분류 ID로 필터링된 상품 목록 조회 API 테스트")
 	public void testGetProductsBySingleSubcategoryId() throws Exception {
 		// given
-		ProductCreateUpdateRequestDto createRamenRequest1 = new ProductCreateUpdateRequestDto(
+		ProductCreateUpdateRequest createRamenRequest1 = new ProductCreateUpdateRequest(
 			"name1",
 			"description1",
 			"address1",
@@ -299,7 +299,7 @@ public class ProductIntegrationTest {
 			438L,
 			null
 		);
-		ProductCreateUpdateRequestDto createRamenRequest2 = new ProductCreateUpdateRequestDto(
+		ProductCreateUpdateRequest createRamenRequest2 = new ProductCreateUpdateRequest(
 			"name2",
 			"description2",
 			"address2",
@@ -310,7 +310,7 @@ public class ProductIntegrationTest {
 			442L,
 			null
 		);
-		ProductCreateUpdateRequestDto createShoeRequest = new ProductCreateUpdateRequestDto(
+		ProductCreateUpdateRequest createShoeRequest = new ProductCreateUpdateRequest(
 			"name3",
 			"description3",
 			"address3",
@@ -321,7 +321,7 @@ public class ProductIntegrationTest {
 			438L,
 			null
 		);
-		ProductCreateUpdateRequestDto createAlcoholRequest = new ProductCreateUpdateRequestDto(
+		ProductCreateUpdateRequest createAlcoholRequest = new ProductCreateUpdateRequest(
 			"name4",
 			"description4",
 			"address4",
@@ -361,7 +361,7 @@ public class ProductIntegrationTest {
 	@DisplayName("여러 소분류 ID로 필터링된 상품 목록 조회 API 테스트")
 	public void testGetProductsByMultipleSubcategoryIds() throws Exception {
 		// given
-		ProductCreateUpdateRequestDto createRamenRequest1 = new ProductCreateUpdateRequestDto(
+		ProductCreateUpdateRequest createRamenRequest1 = new ProductCreateUpdateRequest(
 			"name1",
 			"description1",
 			"address1",
@@ -372,7 +372,7 @@ public class ProductIntegrationTest {
 			438L,
 			null
 		);
-		ProductCreateUpdateRequestDto createRamenRequest2 = new ProductCreateUpdateRequestDto(
+		ProductCreateUpdateRequest createRamenRequest2 = new ProductCreateUpdateRequest(
 			"name2",
 			"description2",
 			"address2",
@@ -383,7 +383,7 @@ public class ProductIntegrationTest {
 			442L,
 			null
 		);
-		ProductCreateUpdateRequestDto createShoeRequest = new ProductCreateUpdateRequestDto(
+		ProductCreateUpdateRequest createShoeRequest = new ProductCreateUpdateRequest(
 			"name3",
 			"description3",
 			"address3",
@@ -394,7 +394,7 @@ public class ProductIntegrationTest {
 			438L,
 			null
 		);
-		ProductCreateUpdateRequestDto createAlcoholRequest = new ProductCreateUpdateRequestDto(
+		ProductCreateUpdateRequest createAlcoholRequest = new ProductCreateUpdateRequest(
 			"name4",
 			"description4",
 			"address4",
@@ -435,7 +435,7 @@ public class ProductIntegrationTest {
 	@DisplayName("단일 필터 ID로 필터링된 상품 목록 조회 API 테스트")
 	public void testGetProductsBySingleFilterId() throws Exception {
 		// given
-		ProductCreateUpdateRequestDto createCilantroRequest1 = new ProductCreateUpdateRequestDto(
+		ProductCreateUpdateRequest createCilantroRequest1 = new ProductCreateUpdateRequest(
 			"name1",
 			"description1",
 			"address1",
@@ -446,7 +446,7 @@ public class ProductIntegrationTest {
 			438L,
 			Set.of(351L)
 		);
-		ProductCreateUpdateRequestDto createCilantroRequest2 = new ProductCreateUpdateRequestDto(
+		ProductCreateUpdateRequest createCilantroRequest2 = new ProductCreateUpdateRequest(
 			"name2",
 			"description2",
 			"address2",
@@ -457,7 +457,7 @@ public class ProductIntegrationTest {
 			442L,
 			Set.of(351L)
 		);
-		ProductCreateUpdateRequestDto createRequest = new ProductCreateUpdateRequestDto(
+		ProductCreateUpdateRequest createRequest = new ProductCreateUpdateRequest(
 			"name3",
 			"description3",
 			"address3",
@@ -468,7 +468,7 @@ public class ProductIntegrationTest {
 			438L,
 			null
 		);
-		ProductCreateUpdateRequestDto createConvenienceStoreRequest = new ProductCreateUpdateRequestDto(
+		ProductCreateUpdateRequest createConvenienceStoreRequest = new ProductCreateUpdateRequest(
 			"name4",
 			"description4",
 			"address4",
@@ -508,7 +508,7 @@ public class ProductIntegrationTest {
 	@DisplayName("다중 필터 ID로 필터링된 상품 목록 조회 API 테스트")
 	public void testGetProductsByMultipleFilterIds() throws Exception {
 		// given
-		ProductCreateUpdateRequestDto createCilantroRequest1 = new ProductCreateUpdateRequestDto(
+		ProductCreateUpdateRequest createCilantroRequest1 = new ProductCreateUpdateRequest(
 			"name1",
 			"description1",
 			"address1",
@@ -519,7 +519,7 @@ public class ProductIntegrationTest {
 			438L,
 			Set.of(351L)
 		);
-		ProductCreateUpdateRequestDto createCilantroRequest2 = new ProductCreateUpdateRequestDto(
+		ProductCreateUpdateRequest createCilantroRequest2 = new ProductCreateUpdateRequest(
 			"name2",
 			"description2",
 			"address2",
@@ -530,7 +530,7 @@ public class ProductIntegrationTest {
 			442L,
 			Set.of(351L)
 		);
-		ProductCreateUpdateRequestDto createRequest = new ProductCreateUpdateRequestDto(
+		ProductCreateUpdateRequest createRequest = new ProductCreateUpdateRequest(
 			"name3",
 			"description3",
 			"address3",
@@ -541,7 +541,7 @@ public class ProductIntegrationTest {
 			438L,
 			null
 		);
-		ProductCreateUpdateRequestDto createConvenienceStoreRequest = new ProductCreateUpdateRequestDto(
+		ProductCreateUpdateRequest createConvenienceStoreRequest = new ProductCreateUpdateRequest(
 			"name4",
 			"description4",
 			"address4",
@@ -582,7 +582,7 @@ public class ProductIntegrationTest {
 	@DisplayName("생성된 날짜로 오름차순 정렬된 상품 목록 조회 API 테스트")
 	public void testSortProductsByCreatedAtAsc() throws Exception {
 		// given
-		ProductCreateUpdateRequestDto createRequest1 = new ProductCreateUpdateRequestDto(
+		ProductCreateUpdateRequest createRequest1 = new ProductCreateUpdateRequest(
 			"name1",
 			"description1",
 			"address1",
@@ -593,7 +593,7 @@ public class ProductIntegrationTest {
 			438L,
 			Set.of(351L)
 		);
-		ProductCreateUpdateRequestDto createRequest2 = new ProductCreateUpdateRequestDto(
+		ProductCreateUpdateRequest createRequest2 = new ProductCreateUpdateRequest(
 			"name2",
 			"description2",
 			"address2",
@@ -604,7 +604,7 @@ public class ProductIntegrationTest {
 			442L,
 			Set.of(351L)
 		);
-		ProductCreateUpdateRequestDto createRequest3 = new ProductCreateUpdateRequestDto(
+		ProductCreateUpdateRequest createRequest3 = new ProductCreateUpdateRequest(
 			"name3",
 			"description3",
 			"address3",
@@ -615,7 +615,7 @@ public class ProductIntegrationTest {
 			438L,
 			Set.of(350L, 351L)
 		);
-		ProductCreateUpdateRequestDto createRequest4 = new ProductCreateUpdateRequestDto(
+		ProductCreateUpdateRequest createRequest4 = new ProductCreateUpdateRequest(
 			"name4",
 			"description4",
 			"address4",
@@ -657,7 +657,7 @@ public class ProductIntegrationTest {
 	@DisplayName("생성된 날짜로 내림차순 정렬된 상품 목록 조회 API 테스트")
 	public void testSortProductsByCreatedAtDesc() throws Exception {
 		// given
-		ProductCreateUpdateRequestDto createRequest1 = new ProductCreateUpdateRequestDto(
+		ProductCreateUpdateRequest createRequest1 = new ProductCreateUpdateRequest(
 			"name1",
 			"description1",
 			"address1",
@@ -668,7 +668,7 @@ public class ProductIntegrationTest {
 			438L,
 			Set.of(351L)
 		);
-		ProductCreateUpdateRequestDto createRequest2 = new ProductCreateUpdateRequestDto(
+		ProductCreateUpdateRequest createRequest2 = new ProductCreateUpdateRequest(
 			"name2",
 			"description2",
 			"address2",
@@ -679,7 +679,7 @@ public class ProductIntegrationTest {
 			442L,
 			Set.of(351L)
 		);
-		ProductCreateUpdateRequestDto createRequest3 = new ProductCreateUpdateRequestDto(
+		ProductCreateUpdateRequest createRequest3 = new ProductCreateUpdateRequest(
 			"name3",
 			"description3",
 			"address3",
@@ -690,7 +690,7 @@ public class ProductIntegrationTest {
 			438L,
 			Set.of(350L, 351L)
 		);
-		ProductCreateUpdateRequestDto createRequest4 = new ProductCreateUpdateRequestDto(
+		ProductCreateUpdateRequest createRequest4 = new ProductCreateUpdateRequest(
 			"name4",
 			"description4",
 			"address4",
@@ -732,7 +732,7 @@ public class ProductIntegrationTest {
 	@DisplayName("평점으로 오름차순 정렬된 상품 목록 조회 API 테스트")
 	public void testSortProductsByRatingAsc() throws Exception {
 		// given
-		ProductCreateUpdateRequestDto createRequest1 = new ProductCreateUpdateRequestDto(
+		ProductCreateUpdateRequest createRequest1 = new ProductCreateUpdateRequest(
 			"name1",
 			"description1",
 			"address1",
@@ -743,7 +743,7 @@ public class ProductIntegrationTest {
 			438L,
 			Set.of(351L)
 		);
-		ProductCreateUpdateRequestDto createRequest2 = new ProductCreateUpdateRequestDto(
+		ProductCreateUpdateRequest createRequest2 = new ProductCreateUpdateRequest(
 			"name2",
 			"description2",
 			"address2",
@@ -754,7 +754,7 @@ public class ProductIntegrationTest {
 			442L,
 			Set.of(351L)
 		);
-		ProductCreateUpdateRequestDto createRequest3 = new ProductCreateUpdateRequestDto(
+		ProductCreateUpdateRequest createRequest3 = new ProductCreateUpdateRequest(
 			"name3",
 			"description3",
 			"address3",
@@ -765,7 +765,7 @@ public class ProductIntegrationTest {
 			438L,
 			Set.of(350L, 351L)
 		);
-		ProductCreateUpdateRequestDto createRequest4 = new ProductCreateUpdateRequestDto(
+		ProductCreateUpdateRequest createRequest4 = new ProductCreateUpdateRequest(
 			"name4",
 			"description4",
 			"address4",
@@ -807,7 +807,7 @@ public class ProductIntegrationTest {
 	@DisplayName("평점으로 내림차순 정렬된 상품 목록 조회 API 테스트")
 	public void testSortProductsByRatingDesc() throws Exception {
 		// given
-		ProductCreateUpdateRequestDto createRequest1 = new ProductCreateUpdateRequestDto(
+		ProductCreateUpdateRequest createRequest1 = new ProductCreateUpdateRequest(
 			"name1",
 			"description1",
 			"address1",
@@ -818,7 +818,7 @@ public class ProductIntegrationTest {
 			438L,
 			Set.of(351L)
 		);
-		ProductCreateUpdateRequestDto createRequest2 = new ProductCreateUpdateRequestDto(
+		ProductCreateUpdateRequest createRequest2 = new ProductCreateUpdateRequest(
 			"name2",
 			"description2",
 			"address2",
@@ -829,7 +829,7 @@ public class ProductIntegrationTest {
 			442L,
 			Set.of(351L)
 		);
-		ProductCreateUpdateRequestDto createRequest3 = new ProductCreateUpdateRequestDto(
+		ProductCreateUpdateRequest createRequest3 = new ProductCreateUpdateRequest(
 			"name3",
 			"description3",
 			"address3",
@@ -840,7 +840,7 @@ public class ProductIntegrationTest {
 			438L,
 			Set.of(350L, 351L)
 		);
-		ProductCreateUpdateRequestDto createRequest4 = new ProductCreateUpdateRequestDto(
+		ProductCreateUpdateRequest createRequest4 = new ProductCreateUpdateRequest(
 			"name4",
 			"description4",
 			"address4",
@@ -928,7 +928,7 @@ public class ProductIntegrationTest {
 	@DisplayName("상품 수정 API 테스트")
 	public void testUpdateProduct() throws Exception {
 		// given
-		ProductCreateUpdateRequestDto createRequest = new ProductCreateUpdateRequestDto(
+		ProductCreateUpdateRequest createRequest = new ProductCreateUpdateRequest(
 			"name",
 			"description",
 			"address",
@@ -939,9 +939,9 @@ public class ProductIntegrationTest {
 			438L,
 			null
 		);
-		ProductDetailResponseDto productDto = productService.createProduct(createRequest);
+		ProductDetailResponse productDto = productService.createProduct(createRequest);
 
-		ProductCreateUpdateRequestDto updateRequest = new ProductCreateUpdateRequestDto(
+		ProductCreateUpdateRequest updateRequest = new ProductCreateUpdateRequest(
 			"Updated Name",
 			"Updated Description",
 			"Updated Address",
@@ -980,7 +980,7 @@ public class ProductIntegrationTest {
 	@DisplayName("상품 삭제 API 테스트")
 	public void testDeleteProduct() throws Exception {
 		// given
-		ProductCreateUpdateRequestDto createRequest = new ProductCreateUpdateRequestDto(
+		ProductCreateUpdateRequest createRequest = new ProductCreateUpdateRequest(
 			"name",
 			"description",
 			"address",
@@ -991,7 +991,7 @@ public class ProductIntegrationTest {
 			438L,
 			Set.of(350L, 351L)
 		);
-		ProductDetailResponseDto productDto = productService.createProduct(createRequest);
+		ProductDetailResponse productDto = productService.createProduct(createRequest);
 
 		// when & then
 		mockMvc.perform(delete("/v1/products/" + productDto.id())

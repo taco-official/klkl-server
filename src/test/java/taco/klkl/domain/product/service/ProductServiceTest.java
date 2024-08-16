@@ -46,11 +46,11 @@ import taco.klkl.domain.product.domain.ProductFilter;
 import taco.klkl.domain.product.domain.QProduct;
 import taco.klkl.domain.product.domain.QProductFilter;
 import taco.klkl.domain.product.domain.Rating;
-import taco.klkl.domain.product.dto.request.ProductCreateUpdateRequestDto;
-import taco.klkl.domain.product.dto.request.ProductFilterOptionsDto;
-import taco.klkl.domain.product.dto.request.ProductSortOptionsDto;
-import taco.klkl.domain.product.dto.response.ProductDetailResponseDto;
-import taco.klkl.domain.product.dto.response.ProductSimpleResponseDto;
+import taco.klkl.domain.product.dto.request.ProductCreateUpdateRequest;
+import taco.klkl.domain.product.dto.request.ProductFilterOptions;
+import taco.klkl.domain.product.dto.request.ProductSortOptions;
+import taco.klkl.domain.product.dto.response.ProductDetailResponse;
+import taco.klkl.domain.product.dto.response.ProductSimpleResponse;
 import taco.klkl.domain.product.exception.ProductNotFoundException;
 import taco.klkl.domain.region.domain.City;
 import taco.klkl.domain.region.domain.Country;
@@ -100,7 +100,7 @@ class ProductServiceTest {
 	private City city;
 	private Subcategory subcategory;
 	private Currency currency;
-	private ProductCreateUpdateRequestDto requestDto;
+	private ProductCreateUpdateRequest requestDto;
 
 	private Product mockProduct;
 
@@ -145,7 +145,7 @@ class ProductServiceTest {
 			currency
 		);
 
-		requestDto = new ProductCreateUpdateRequestDto(
+		requestDto = new ProductCreateUpdateRequest(
 			"productName",
 			"productDescription",
 			"productAddress",
@@ -166,12 +166,12 @@ class ProductServiceTest {
 		Set<Long> cityIds = Set.of(4L, 5L);
 		Set<Long> subcategoryIds = Set.of(1L, 2L, 3L);
 		Set<Long> filterIds = Set.of(6L, 7L);
-		ProductFilterOptionsDto filterOptions = new ProductFilterOptionsDto(
+		ProductFilterOptions filterOptions = new ProductFilterOptions(
 			cityIds,
 			subcategoryIds,
 			filterIds
 		);
-		ProductSortOptionsDto sortOptions = new ProductSortOptionsDto(
+		ProductSortOptions sortOptions = new ProductSortOptions(
 			"rating",
 			"DESC"
 		);
@@ -214,7 +214,7 @@ class ProductServiceTest {
 		when(filterService.getFilterEntityById(anyLong())).thenReturn(mockFilter);
 
 		// When
-		PagedResponseDto<ProductSimpleResponseDto> result = productService
+		PagedResponseDto<ProductSimpleResponse> result = productService
 			.getProductsByFilterOptions(pageable, filterOptions, sortOptions);
 
 		// Then
@@ -256,7 +256,7 @@ class ProductServiceTest {
 		when(productRepository.findById(productId)).thenReturn(Optional.of(testProduct));
 
 		// When
-		ProductDetailResponseDto result = productService.getProductById(productId);
+		ProductDetailResponse result = productService.getProductById(productId);
 
 		// Then
 		assertThat(result).isNotNull();
@@ -321,7 +321,7 @@ class ProductServiceTest {
 		});
 
 		// When
-		ProductDetailResponseDto result = productService.createProduct(requestDto);
+		ProductDetailResponse result = productService.createProduct(requestDto);
 
 		// Then
 		assertThat(result.id()).isEqualTo(1L);
@@ -350,7 +350,7 @@ class ProductServiceTest {
 		when(currencyService.getCurrencyEntityById(1L)).thenReturn(currency);
 
 		// When
-		ProductDetailResponseDto result = productService.updateProduct(1L, requestDto);
+		ProductDetailResponse result = productService.updateProduct(1L, requestDto);
 
 		// Then
 		assertThat(result.id()).isEqualTo(testProduct.getId());
@@ -466,10 +466,10 @@ class ProductServiceTest {
 		when(mockQuery.fetch()).thenReturn(mockProducts);
 
 		// when
-		List<ProductSimpleResponseDto> responseDtos = productService.getProductsByPartialName(partialName);
+		List<ProductSimpleResponse> responseDtos = productService.getProductsByPartialName(partialName);
 
 		// then
-		assertThat(responseDtos.get(0)).isEqualTo(ProductSimpleResponseDto.from(testProduct));
+		assertThat(responseDtos.get(0)).isEqualTo(ProductSimpleResponse.from(testProduct));
 
 	}
 

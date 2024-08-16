@@ -27,7 +27,7 @@ import taco.klkl.global.util.ProductUtil;
  * @param currency
  * @param createdAt
  */
-public record ProductDetailResponseDto(
+public record ProductDetailResponse(
 	Long id,
 	String name,
 	String description,
@@ -43,8 +43,8 @@ public record ProductDetailResponseDto(
 	LocalDateTime createdAt
 ) {
 
-	public static ProductDetailResponseDto from(final Product product) {
-		return new ProductDetailResponseDto(
+	public static ProductDetailResponse from(final Product product) {
+		return new ProductDetailResponse(
 			product.getId(),
 			product.getName(),
 			product.getDescription(),

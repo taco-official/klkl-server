@@ -22,7 +22,7 @@ import taco.klkl.domain.region.enums.CurrencyType;
 import taco.klkl.domain.user.domain.User;
 import taco.klkl.domain.user.dto.response.UserDetailResponseDto;
 
-class ProductDetailResponseDtoTest {
+class ProductDetailResponseTest {
 
 	private Product mockProduct;
 	private User mockUser;
@@ -66,10 +66,10 @@ class ProductDetailResponseDtoTest {
 	}
 
 	@Test
-	@DisplayName("Product 객체로부터 ProductDetailResponseDto 생성 테스트")
+	@DisplayName("Product 객체로부터 ProductDetailResponse 생성 테스트")
 	void testFromProduct() {
 		// when
-		ProductDetailResponseDto dto = ProductDetailResponseDto.from(mockProduct);
+		ProductDetailResponse dto = taco.klkl.domain.product.dto.response.ProductDetailResponse.from(mockProduct);
 
 		// then
 		assertThat(dto.id()).isEqualTo(mockProduct.getId());
@@ -86,10 +86,10 @@ class ProductDetailResponseDtoTest {
 	}
 
 	@Test
-	@DisplayName("ProductDetailResponseDto 생성자 테스트")
+	@DisplayName("ProductDetailResponse 생성자 테스트")
 	void testConstructor() {
 		// when
-		ProductDetailResponseDto dto = ProductDetailResponseDto.from(mockProduct);
+		ProductDetailResponse dto = taco.klkl.domain.product.dto.response.ProductDetailResponse.from(mockProduct);
 
 		// then
 		assertThat(dto.id()).isEqualTo(mockProduct.getId());
