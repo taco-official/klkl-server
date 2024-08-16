@@ -19,6 +19,7 @@ import taco.klkl.domain.region.domain.City;
 import taco.klkl.domain.region.domain.Country;
 import taco.klkl.domain.region.dto.response.CityResponse;
 import taco.klkl.domain.region.enums.CityType;
+import taco.klkl.global.util.CityUtil;
 
 @ExtendWith(MockitoExtension.class)
 public class CityServiceImplTest {
@@ -34,21 +35,6 @@ public class CityServiceImplTest {
 
 	private final City city1 = City.of(country, CityType.BEIJING);
 	private final City city2 = City.of(country, CityType.BORACAY);
-
-	@Test
-	@DisplayName("id로 도시 존재 여부 확인 테스트")
-	void testGetCityEntityById_True() {
-		// given
-		City mockCity = mock(City.class);
-		when(cityRepository.findById(1L))
-			.thenReturn(Optional.ofNullable(mockCity));
-
-		// when
-		City city = cityService.getCityEntityById(1L);
-
-		// then
-		assertThat(city).isEqualTo(mockCity);
-	}
 
 	@Test
 	@DisplayName("CityType리스트로 도시 조회")

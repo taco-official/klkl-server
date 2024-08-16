@@ -27,7 +27,6 @@ import taco.klkl.domain.category.domain.QFilter;
 import taco.klkl.domain.category.domain.QSubcategory;
 import taco.klkl.domain.category.domain.Subcategory;
 import taco.klkl.domain.category.exception.SubcategoryNotFoundException;
-import taco.klkl.domain.category.service.SubcategoryService;
 import taco.klkl.domain.product.dao.ProductRepository;
 import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.product.domain.QProduct;
@@ -52,6 +51,7 @@ import taco.klkl.domain.region.service.CurrencyService;
 import taco.klkl.domain.user.domain.User;
 import taco.klkl.global.common.constants.ProductConstants;
 import taco.klkl.global.common.response.PagedResponseDto;
+import taco.klkl.global.util.CityUtil;
 import taco.klkl.global.util.FilterUtil;
 import taco.klkl.global.util.SubcategoryUtil;
 import taco.klkl.global.util.UserUtil;
@@ -66,11 +66,11 @@ public class ProductService {
 
 	private final CityService cityService;
 	private final CurrencyService currencyService;
-	private final SubcategoryService subcategoryService;
 
 	private final UserUtil userUtil;
 	private final FilterUtil filterUtil;
 	private final SubcategoryUtil subcategoryUtil;
+	private final CityUtil cityUtil;
 
 	public PagedResponseDto<ProductSimpleResponse> getProductsByFilterOptions(
 		final Pageable pageable,
@@ -273,7 +273,7 @@ public class ProductService {
 	}
 
 	private City getCityEntity(final Long cityId) throws CityNotFoundException {
-		return cityService.getCityEntityById(cityId);
+		return cityUtil.getCityEntityById(cityId);
 	}
 
 	private Subcategory getSubcategoryEntity(final Long subcategoryId) throws SubcategoryNotFoundException {
@@ -306,7 +306,7 @@ public class ProductService {
 	}
 
 	private void validateCityIds(final Set<Long> cityIds) throws InvalidCityIdsException {
-		boolean isValidCityIds = cityService.isCitiesMappedToSameCountry(cityIds);
+		boolean isValidCityIds = cityUtil.isCitiesMappedToSameCountry(cityIds);
 		if (!isValidCityIds) {
 			throw new InvalidCityIdsException();
 		}

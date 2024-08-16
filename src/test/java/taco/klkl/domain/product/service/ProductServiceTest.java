@@ -66,6 +66,7 @@ import taco.klkl.domain.region.service.CurrencyService;
 import taco.klkl.domain.user.domain.User;
 import taco.klkl.global.common.constants.UserConstants;
 import taco.klkl.global.common.response.PagedResponseDto;
+import taco.klkl.global.util.CityUtil;
 import taco.klkl.global.util.FilterUtil;
 import taco.klkl.global.util.SubcategoryUtil;
 import taco.klkl.global.util.UserUtil;
@@ -95,6 +96,9 @@ class ProductServiceTest {
 
 	@Mock
 	private SubcategoryUtil subcategoryUtil;
+
+	@Mock
+	private CityUtil cityUtil;
 
 	@InjectMocks
 	private ProductService productService;
@@ -213,7 +217,7 @@ class ProductServiceTest {
 		// Mocking validation behavior
 		Subcategory mockSubcategory = mock(Subcategory.class);
 		Filter mockFilter = mock(Filter.class);
-		when(cityService.isCitiesMappedToSameCountry(anySet())).thenReturn(true);
+		when(cityUtil.isCitiesMappedToSameCountry(anySet())).thenReturn(true);
 		when(subcategoryUtil.getSubcategoryEntityById(anyLong())).thenReturn(mockSubcategory);
 		when(filterUtil.getFilterEntityById(anyLong())).thenReturn(mockFilter);
 
@@ -247,7 +251,7 @@ class ProductServiceTest {
 		verify(productQuery).fetch();
 
 		// Verify that validation methods were called
-		verify(cityService).isCitiesMappedToSameCountry(cityIds);
+		verify(cityUtil).isCitiesMappedToSameCountry(cityIds);
 		verify(subcategoryUtil, times(3)).getSubcategoryEntityById(anyLong());
 		verify(filterUtil, times(2)).getFilterEntityById(anyLong());
 	}
@@ -312,7 +316,7 @@ class ProductServiceTest {
 	void testCreateProduct() {
 		// Given
 		when(userUtil.findTestUser()).thenReturn(user);
-		when(cityService.getCityEntityById(1L)).thenReturn(city);
+		when(cityUtil.getCityEntityById(1L)).thenReturn(city);
 		when(subcategoryUtil.getSubcategoryEntityById(1L)).thenReturn(subcategory);
 		when(currencyService.getCurrencyEntityById(1L)).thenReturn(currency);
 
@@ -349,7 +353,7 @@ class ProductServiceTest {
 	void testUpdateProduct() {
 		// Given
 		when(productRepository.findById(1L)).thenReturn(Optional.of(testProduct));
-		when(cityService.getCityEntityById(1L)).thenReturn(city);
+		when(cityUtil.getCityEntityById(1L)).thenReturn(city);
 		when(subcategoryUtil.getSubcategoryEntityById(1L)).thenReturn(subcategory);
 		when(currencyService.getCurrencyEntityById(1L)).thenReturn(currency);
 
