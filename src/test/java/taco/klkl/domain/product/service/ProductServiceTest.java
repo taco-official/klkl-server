@@ -36,7 +36,6 @@ import taco.klkl.domain.category.domain.QSubcategory;
 import taco.klkl.domain.category.domain.Subcategory;
 import taco.klkl.domain.category.domain.SubcategoryName;
 import taco.klkl.domain.category.dto.response.FilterResponse;
-import taco.klkl.domain.category.service.FilterService;
 import taco.klkl.domain.category.service.SubcategoryService;
 import taco.klkl.domain.like.exception.LikeCountBelowMinimumException;
 import taco.klkl.domain.like.exception.LikeCountOverMaximumException;
@@ -67,6 +66,7 @@ import taco.klkl.domain.region.service.CurrencyService;
 import taco.klkl.domain.user.domain.User;
 import taco.klkl.global.common.constants.UserConstants;
 import taco.klkl.global.common.response.PagedResponseDto;
+import taco.klkl.global.util.FilterUtil;
 import taco.klkl.global.util.UserUtil;
 
 class ProductServiceTest {
@@ -87,10 +87,10 @@ class ProductServiceTest {
 	private SubcategoryService subcategoryService;
 
 	@Mock
-	private FilterService filterService;
+	private UserUtil userUtil;
 
 	@Mock
-	private UserUtil userUtil;
+	private FilterUtil filterUtil;
 
 	@InjectMocks
 	private ProductService productService;
@@ -211,7 +211,7 @@ class ProductServiceTest {
 		Filter mockFilter = mock(Filter.class);
 		when(cityService.isCitiesMappedToSameCountry(anySet())).thenReturn(true);
 		when(subcategoryService.getSubcategoryEntityById(anyLong())).thenReturn(mockSubcategory);
-		when(filterService.getFilterEntityById(anyLong())).thenReturn(mockFilter);
+		when(filterUtil.getFilterEntityById(anyLong())).thenReturn(mockFilter);
 
 		// When
 		PagedResponseDto<ProductSimpleResponse> result = productService
@@ -245,7 +245,7 @@ class ProductServiceTest {
 		// Verify that validation methods were called
 		verify(cityService).isCitiesMappedToSameCountry(cityIds);
 		verify(subcategoryService, times(3)).getSubcategoryEntityById(anyLong());
-		verify(filterService, times(2)).getFilterEntityById(anyLong());
+		verify(filterUtil, times(2)).getFilterEntityById(anyLong());
 	}
 
 	@Test

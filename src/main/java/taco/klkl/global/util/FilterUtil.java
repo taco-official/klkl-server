@@ -1,19 +1,15 @@
-package taco.klkl.domain.category.service;
+package taco.klkl.global.util;
 
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import taco.klkl.domain.category.dao.FilterRepository;
 import taco.klkl.domain.category.domain.Filter;
 import taco.klkl.domain.category.exception.FilterNotFoundException;
 
-@Slf4j
-@Service
-@Transactional(readOnly = true)
+@Component
 @RequiredArgsConstructor
-public class FilterService {
+public class FilterUtil {
 
 	private final FilterRepository filterRepository;
 

@@ -27,7 +27,6 @@ import taco.klkl.domain.category.domain.QFilter;
 import taco.klkl.domain.category.domain.QSubcategory;
 import taco.klkl.domain.category.domain.Subcategory;
 import taco.klkl.domain.category.exception.SubcategoryNotFoundException;
-import taco.klkl.domain.category.service.FilterService;
 import taco.klkl.domain.category.service.SubcategoryService;
 import taco.klkl.domain.product.dao.ProductRepository;
 import taco.klkl.domain.product.domain.Product;
@@ -53,6 +52,7 @@ import taco.klkl.domain.region.service.CurrencyService;
 import taco.klkl.domain.user.domain.User;
 import taco.klkl.global.common.constants.ProductConstants;
 import taco.klkl.global.common.response.PagedResponseDto;
+import taco.klkl.global.util.FilterUtil;
 import taco.klkl.global.util.UserUtil;
 
 @Service
@@ -66,9 +66,9 @@ public class ProductService {
 	private final CityService cityService;
 	private final CurrencyService currencyService;
 	private final SubcategoryService subcategoryService;
-	private final FilterService filterService;
 
 	private final UserUtil userUtil;
+	private final FilterUtil filterUtil;
 
 	public PagedResponseDto<ProductSimpleResponse> getProductsByFilterOptions(
 		final Pageable pageable,
@@ -228,7 +228,7 @@ public class ProductService {
 
 	private Set<Filter> getFiltersByFilterIds(final Set<Long> filterIds) {
 		return filterIds.stream()
-			.map(filterService::getFilterEntityById)
+			.map(filterUtil::getFilterEntityById)
 			.collect(Collectors.toSet());
 	}
 
@@ -315,6 +315,6 @@ public class ProductService {
 	}
 
 	private void validateFilterIds(final Set<Long> filterIds) {
-		filterIds.forEach(filterService::getFilterEntityById);
+		filterIds.forEach(filterUtil::getFilterEntityById);
 	}
 }
