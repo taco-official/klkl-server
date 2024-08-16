@@ -25,12 +25,13 @@ import taco.klkl.domain.category.exception.SubcategoryNotFoundException;
 
 @ExtendWith(MockitoExtension.class)
 @Transactional
-public class SubcategoryServiceTest {
-	@Mock
-	private SubcategoryRepository subcategoryRepository;
+public class SubcategoryServiceImplTest {
 
 	@InjectMocks
-	private SubcategoryService subcategoryService;
+	private SubcategoryServiceImpl subcategoryService;
+
+	@Mock
+	private SubcategoryRepository subcategoryRepository;
 
 	private final Category category = Category.of(CategoryName.FOOD);
 	private final Subcategory subcategory1 = Subcategory.of(category, SubcategoryName.SNACK);
