@@ -22,9 +22,10 @@ import taco.klkl.domain.category.domain.TagName;
 import taco.klkl.domain.category.dto.response.TagWithSubcategoryResponse;
 
 @ExtendWith(MockitoExtension.class)
-public class SubcategoryTagServiceTest {
+public class SubcategoryTagServiceImplTest {
+
 	@InjectMocks
-	private SubcategoryTagService subcategoryTagService;
+	private SubcategoryTagServiceImpl subcategoryTagService;
 
 	@Mock
 	private Subcategory subcategory1;
@@ -55,12 +56,12 @@ public class SubcategoryTagServiceTest {
 
 	@Test
 	@DisplayName("해당 서비스가 SubcategoryWithFilterResponseDto를 반환하는지 테스트")
-	public void testGetTags() {
+	public void testGetTagsBySubcategoryList() {
 		// given
 		final List<Subcategory> subcategoryList = Arrays.asList(subcategory1);
 
 		// when
-		final List<TagWithSubcategoryResponse> result = subcategoryTagService.getTags(subcategoryList);
+		final List<TagWithSubcategoryResponse> result = subcategoryTagService.getTagsBySubcategoryList(subcategoryList);
 
 		// then
 		assertNotNull(result);

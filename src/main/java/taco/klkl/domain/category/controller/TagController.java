@@ -30,6 +30,6 @@ public class TagController {
 	public List<TagWithSubcategoryResponse> getTagsBySubcategoryIds(
 		@RequestParam("subcategories") List<Long> subcategoryIds) {
 		List<Subcategory> subcategoryList = subcategoryService.getSubcategoryList(subcategoryIds);
-		return subcategoryTagService.getTags(subcategoryList);
+		return subcategoryTagService.getTagsBySubcategoryList(subcategoryList);
 	}
 }

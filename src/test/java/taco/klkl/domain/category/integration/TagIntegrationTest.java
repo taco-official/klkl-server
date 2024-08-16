@@ -48,7 +48,7 @@ public class TagIntegrationTest {
 				.map(Long::parseLong)
 				.toList()
 		);
-		List<TagWithSubcategoryResponse> response = subcategoryTagService.getTags(subcategoryList);
+		List<TagWithSubcategoryResponse> response = subcategoryTagService.getTagsBySubcategoryList(subcategoryList);
 
 		//then
 		mockMvc.perform(get("/v1/tags")
@@ -73,7 +73,7 @@ public class TagIntegrationTest {
 				.map(Long::parseLong)
 				.toList()
 		);
-		List<TagWithSubcategoryResponse> response = subcategoryTagService.getTags(subcategoryList);
+		List<TagWithSubcategoryResponse> response = subcategoryTagService.getTagsBySubcategoryList(subcategoryList);
 
 		//then
 		mockMvc.perform(get("/v1/tags")

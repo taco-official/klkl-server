@@ -81,7 +81,7 @@ public class TagControllerTest {
 			.toList();
 
 		when(subcategoryService.getSubcategoryList(subcategoryIds)).thenReturn(mockSubcategoryList);
-		when(subcategoryTagService.getTags(anyList())).thenReturn(mockResponse);
+		when(subcategoryTagService.getTagsBySubcategoryList(anyList())).thenReturn(mockResponse);
 
 		// when & then
 		mockMvc.perform(get("/v1/tags")
@@ -141,7 +141,7 @@ public class TagControllerTest {
 			.toList();
 
 		when(subcategoryService.getSubcategoryList(subcategoryIds)).thenReturn(mockSubcategoryList);
-		when(subcategoryTagService.getTags(anyList())).thenReturn(mockResponse);
+		when(subcategoryTagService.getTagsBySubcategoryList(anyList())).thenReturn(mockResponse);
 
 		// when & then
 		mockMvc.perform(get("/v1/tags")
