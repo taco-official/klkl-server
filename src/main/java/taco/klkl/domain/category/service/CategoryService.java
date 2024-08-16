@@ -14,36 +14,12 @@ import taco.klkl.domain.category.dto.response.CategoryResponse;
 import taco.klkl.domain.category.dto.response.CategoryWithSubcategoryResponse;
 import taco.klkl.domain.category.exception.CategoryNotFoundException;
 
-@Slf4j
 @Service
-@Transactional(readOnly = true)
-@RequiredArgsConstructor
-public class CategoryService {
-	private final CategoryRepository categoryRepository;
+public interface CategoryService {
 
-	public List<CategoryResponse> getCategories() {
-		List<Category> categories = categoryRepository.findAll();
-		return categories.stream()
-			.map(category -> CategoryResponse.from(category))
-			.toList();
-	}
+	List<CategoryResponse> getCategories();
 
-	public CategoryWithSubcategoryResponse getSubcategories(Long id) {
-		Category category = categoryRepository.findById(id)
-			.orElseThrow(CategoryNotFoundException::new);
-		return CategoryWithSubcategoryResponse.from(category);
-	}
+	CategoryWithSubcategoryResponse getSubcategories(Long id);
 
-	public List<CategoryResponse> getCategoriesByCategoryNames(List<CategoryName> categoryNames) {
-
-		if (categoryNames == null || categoryNames.isEmpty()) {
-			return List.of();
-		}
-
-		List<Category> categories = categoryRepository.findAllByNameIn(categoryNames);
-
-		return categories.stream()
-			.map(CategoryResponse::from)
-			.toList();
-	}
+	List<CategoryResponse> getCategoriesByCategoryNames(List<CategoryName> categoryNames);
 }

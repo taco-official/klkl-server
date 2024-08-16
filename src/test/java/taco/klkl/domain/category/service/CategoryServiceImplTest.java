@@ -25,15 +25,15 @@ import taco.klkl.domain.category.dto.response.CategoryResponse;
 import taco.klkl.domain.category.dto.response.CategoryWithSubcategoryResponse;
 import taco.klkl.domain.category.exception.CategoryNotFoundException;
 
-@ExtendWith(MockitoExtension.class)
 @Transactional
-class CategoryServiceTest {
+@ExtendWith(MockitoExtension.class)
+class CategoryServiceImplTest {
+
+	@InjectMocks
+	private CategoryServiceImpl categoryService;
 
 	@Mock
 	private CategoryRepository categoryRepository;
-
-	@InjectMocks
-	private CategoryService categoryService;
 
 	private final Category category = Category.of(CategoryName.FOOD);
 	private final Category category2 = Category.of(CategoryName.CLOTHES);
