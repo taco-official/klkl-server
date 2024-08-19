@@ -3,7 +3,6 @@ package taco.klkl.domain.product.controller;
 import java.util.Set;
 
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import taco.klkl.domain.product.dto.request.ProductCreateUpdateRequest;
 import taco.klkl.domain.product.dto.request.ProductFilterOptions;
@@ -61,6 +61,21 @@ public class ProductController {
 		return productService.findProductsByFilterOptionsAndSortOptions(pageable, filterOptions, sortOptions);
 	}
 
+	@GetMapping("/search")
+	@Operation(summary = "제목으로 상품 목록 조회", description = "제목으로 상품 목록을 조회합니다.")
+	public PagedResponseDto<ProductSimpleResponse> findProductsByPartialNameAndSorting(
+		@RequestParam(value = "name") @NotBlank String partialName,
+		@PageableDefault(size = ProductConstants.DEFAULT_PAGE_SIZE) Pageable pageable,
+		@RequestParam(name = "sort_by", required = false, defaultValue = "created_at") String sortBy,
+		@RequestParam(name = "sort_direction", required = false, defaultValue = "DESC") String sortDirection
+	) {
+		ProductSortOptions sortOptions = new ProductSortOptions(
+			sortBy,
+			sortDirection
+		);
+		return productService.findProductsByPartialName(partialName, pageable, sortOptions);
+	}
+
 	@GetMapping("/{productId}")
 	@Operation(summary = "상품 상세 조회", description = "상품 상세 정보를 조회합니다.")
 	public ProductDetailResponse findProductById(
@@ -95,4 +110,5 @@ public class ProductController {
 		productService.deleteProduct(productId);
 		return ResponseEntity.noContent().build();
 	}
+
 }

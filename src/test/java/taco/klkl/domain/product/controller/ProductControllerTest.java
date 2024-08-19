@@ -3,7 +3,6 @@ package taco.klkl.domain.product.controller;
 import static org.assertj.core.api.Assertions.*;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -194,6 +193,64 @@ public class ProductControllerTest {
 	}
 
 	@Test
+	@DisplayName("제목으로 상품 목록 조회 - 성공")
+	void testFindProductsByPartialNameAndSortOption() throws Exception {
+		// Given
+		List<ProductSimpleResponse> products = List.of(productSimpleResponse);
+		PagedResponseDto<ProductSimpleResponse> pagedResponse = new PagedResponseDto<>(
+			products, 0, 10, 1, 1, true
+		);
+		when(productService.findProductsByPartialName(
+			any(String.class),
+			any(Pageable.class),
+			any(ProductSortOptions.class)))
+			.thenReturn(pagedResponse);
+
+		// When & Then
+		mockMvc.perform(get("/v1/products/search")
+				.param("page", "0")
+				.param("size", "10")
+				.param("name", "name")
+				.param("sort_by", "rating")
+				.param("sort_direction", "DESC"))
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.isSuccess", is(true)))
+			.andExpect(jsonPath("$.data.content", hasSize(1)))
+			.andExpect(jsonPath("$.data.content[0].id",
+				is(productSimpleResponse.id().intValue())))
+			.andExpect(jsonPath("$.data.content[0].name", is(productSimpleResponse.name())))
+			.andExpect(jsonPath("$.data.content[0].likeCount", is(productSimpleResponse.likeCount())))
+			.andExpect(jsonPath("$.data.content[0].rating", is(productSimpleResponse.rating())))
+			.andExpect(jsonPath("$.data.content[0].countryName", is(productSimpleResponse.countryName())))
+			.andExpect(jsonPath("$.data.content[0].categoryName",
+				is(productSimpleResponse.categoryName())))
+			.andExpect(jsonPath("$.data.content[0].tags",
+				hasSize(productSimpleResponse.tags().size())))
+			.andExpect(jsonPath("$.data.pageNumber", is(0)))
+			.andExpect(jsonPath("$.data.pageSize", is(10)))
+			.andExpect(jsonPath("$.data.totalElements", is(1)))
+			.andExpect(jsonPath("$.data.totalPages", is(1)))
+			.andExpect(jsonPath("$.data.last", is(true)))
+			.andExpect(jsonPath("$.timestamp", notNullValue()));
+
+		// Verify that the service method was called with correct parameters
+		ArgumentCaptor<Pageable> pageableCaptor = ArgumentCaptor.forClass(Pageable.class);
+		ArgumentCaptor<ProductSortOptions> sortOptionsCaptor = ArgumentCaptor.forClass(ProductSortOptions.class);
+
+		verify(productService).findProductsByPartialName(any(String.class), pageableCaptor.capture(),
+			sortOptionsCaptor.capture());
+
+		Pageable capturedPageable = pageableCaptor.getValue();
+		ProductSortOptions capturedSortOptions = sortOptionsCaptor.getValue();
+
+		assertThat(capturedPageable.getPageNumber()).isEqualTo(0);
+		assertThat(capturedPageable.getPageSize()).isEqualTo(10);
+		assertThat(capturedSortOptions.sortBy()).isEqualTo("rating");
+		assertThat(capturedSortOptions.sortDirection()).isEqualTo("DESC");
+
+	}
+
+	@Test
 	@DisplayName("상품 상세 조회 - 성공")
 	void testFindProductById_ShouldReturnProduct() throws Exception {
 		// Given
@@ -280,7 +337,7 @@ public class ProductControllerTest {
 	@DisplayName("상품 정보 수정 - 성공")
 	void testUpdateProduct_ShouldReturnUpdatedProduct() throws Exception {
 		// Given
-		when(productService.updateProduct(eq(1L), any(ProductCreateUpdateRequest.class)))
+		when(productService.updateProduct(any(Long.class), any(ProductCreateUpdateRequest.class)))
 			.thenReturn(productDetailResponse);
 
 		// When & Then

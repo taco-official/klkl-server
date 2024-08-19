@@ -23,10 +23,10 @@ public class WebConfigTest {
 	@DisplayName("CORS헤더 확인 테스트")
 	void testCorsHeaderResponse() throws Exception {
 		mockMvc.perform(options("/v1/regions")
-				.header("Origin", "http://localhost:8080")
+				.header("Origin", "http://localhost:3000")
 				.header("Access-Control-Request-Method", "GET")
 				.header("Access-Control-Request-Headers", "Authorization, Content-Type"))
-			.andExpect(header().string("Access-Control-Allow-Origin", "http://localhost:8080"))
+			.andExpect(header().string("Access-Control-Allow-Origin", "http://localhost:3000"))
 			.andExpect(header().string("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,HEAD,OPTIONS"))
 			.andExpect(header().string("Access-Control-Allow-Headers", "Authorization, Content-Type"))
 			.andExpect(header().string("Access-Control-Max-Age", "7200"));
