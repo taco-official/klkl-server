@@ -1,17 +1,17 @@
 /* User */
-INSERT INTO User(user_id, profile, name, gender, age, description, created_at)
+INSERT INTO user(user_id, profile, name, gender, age, description, created_at)
 VALUES (1, 'image/test.jpg', 'testUser', '남', 20, '테스트입니다.', now());
 
 /* Like */
 
 
 /* Region */
-INSERT INTO Region(region_id, name)
+INSERT INTO region(region_id, name)
 VALUES (400, '동북아시아'),
        (401, '동남아시아'),
        (402, '기타');
 
-INSERT INTO Currency (currency_id, code, flag)
+INSERT INTO currency (currency_id, code, flag)
 VALUES (438, 'JPY', 'japan_flag.png'),
        (439, 'CNY', 'china_flag.png'),
        (440, 'TWD', 'taiwan_flag.png'),
@@ -23,7 +23,7 @@ VALUES (438, 'JPY', 'japan_flag.png'),
        (446, 'MYR', 'malaysia_flag.png'),
        (447, 'USD', 'usa_flag.png');
 
-INSERT INTO Country(country_id, region_id, name, flag, photo, currency_id)
+INSERT INTO country(country_id, region_id, name, flag, photo, currency_id)
 VALUES (403, 400, '일본', 'image/sample', 'image/sample', 438),
        (404, 400, '중국', 'image/sample', 'image/sample', 439),
        (405, 400, '대만', 'image/sample', 'image/sample', 440),
@@ -36,7 +36,7 @@ VALUES (403, 400, '일본', 'image/sample', 'image/sample', 438),
        (412, 402, '괌', 'image/sample', 'image/sample', 447),
        (413, 402, '미국', 'image/sample', 'image/sample', 447);
 
-INSERT INTO City (city_id, country_id, name)
+INSERT INTO city (city_id, country_id, name)
 VALUES (414, 403, '오사카'),
        (415, 403, '교토'),
        (416, 403, '도쿄'),
@@ -68,13 +68,13 @@ VALUES (414, 403, '오사카'),
 
 /* Category */
 INSERT
-INTO Category(category_id, name)
+INTO category(category_id, name)
 VALUES (300, '식품'),
        (301, '의류'),
        (302, '잡화'),
        (303, '화장품');
 
-INSERT INTO Subcategory (subcategory_id, name, category_id)
+INSERT INTO subcategory (subcategory_id, name, category_id)
 VALUES
     -- 식품 카테고리 (category_id: 300)
     (310, '라면 및 즉석식품', 300),
@@ -107,11 +107,11 @@ VALUES
     (344, '위생용품', 303);
 
 /* Filter */
-INSERT INTO Filter (filter_id, name)
+INSERT INTO filter (filter_id, name)
 VALUES (350, '편의점'),
        (351, '고수');
 
-INSERT INTO Subcategory_Filter (subcategory_filter_id, subcategory_id, filter_id)
+INSERT INTO subcategory_filter (subcategory_filter_id, subcategory_id, filter_id)
 VALUES
     --서브카테고리 필터 관계 테이블
     -- 라면 및 즉석식품 - 필터
@@ -131,20 +131,20 @@ VALUES
     (368, 315, 350);
 
 /* Product */
-INSERT INTO Product(product_id, user_id, name, description, address, price, like_count, rating,
+INSERT INTO product(product_id, user_id, name, description, address, price, like_count, rating,
                     city_id, subcategory_id, currency_id, created_at)
 VALUES (101, 1, '곤약젤리', '탱글탱글 맛있는 곤약젤리', '신사이바시 메가돈키호테', 1000, 100, 5.0, 414, 311, 438, now()),
        (102, 1, '여름 원피스', '시원하고 여름 휴양지 느낌의 원피스', '방콕 짜뚜짝 시장', 300, 333, 4.5, 425, 323, 441, now()),
        (390, 1, '왕족발 보쌈 과자', '맛있는 왕족발 보쌈 과자', '상하이 장충동', 3000, 10, 3.0, 422, 311, 439, now());
 
 /* Comment */
-INSERT INTO Comment(comment_id, product_id, user_id, content, created_at)
+INSERT INTO comment(comment_id, product_id, user_id, content, created_at)
 VALUES (500, 390, 1, '이거 정말 맛있는데 표현할 방법이 읎네.', now()),
        (501, 390, 1, '이거 정말 맛없는데 표현할 방법이 읎네.', now()),
        (502, 390, 1, '이거 정말 좋은데 표현할 방법이 읎네.', now());
 
 /* Notification */
-INSERT INTO Notification(notification_id, is_read, created_at, comment_id)
+INSERT INTO notification(notification_id, is_read, created_at, comment_id)
 VALUES (700, false, now(), 500),
        (701, false, now(), 501),
        (702, false, now(), 502);
