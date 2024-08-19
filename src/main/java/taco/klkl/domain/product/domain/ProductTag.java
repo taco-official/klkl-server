@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 import taco.klkl.domain.category.domain.Tag;
 
 @Getter
-@Entity(name = "product_filter")
+@Entity(name = "product_tag")
 @DynamicInsert
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ProductTag {

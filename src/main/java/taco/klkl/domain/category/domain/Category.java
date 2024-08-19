@@ -14,7 +14,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@Entity
+@Entity(name = "category")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Category {
 	@Id

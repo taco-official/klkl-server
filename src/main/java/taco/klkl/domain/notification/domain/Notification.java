@@ -19,7 +19,7 @@ import taco.klkl.domain.comment.domain.Comment;
 import taco.klkl.global.common.constants.NotificationConstants;
 
 @Getter
-@Entity
+@Entity(name = "notification")
 @DynamicInsert
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Notification {

@@ -1,0 +1,22 @@
+spring:
+  config:
+    activate:
+      on-profile: "mysql"
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${MYSQL_HOST}:${MYSQL_PORT}/${MYSQL_DATABASE}
+    username: ${MYSQL_USER}
+    password: ${MYSQL_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+    defer-datasource-initialization: true
+    database-platform: org.hibernate.dialect.MySQLDialect
+  sql:
+    init:
+      data-locations: classpath:database/data.sql
+      mode: always

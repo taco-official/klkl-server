@@ -10,7 +10,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@Entity
+@Entity(name = "currency")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Currency {
 

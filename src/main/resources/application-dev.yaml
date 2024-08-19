@@ -1,0 +1,7 @@
+spring:
+  config:
+    activate:
+      on-profile: "dev"
+
+api:
+  main-url: ${DEV_URL}
