@@ -1,6 +1,7 @@
 package taco.klkl.domain.category.controller;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,12 +13,12 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import taco.klkl.domain.category.domain.Subcategory;
-import taco.klkl.domain.category.dto.response.SubcategoryWithTagsResponse;
+import taco.klkl.domain.category.dto.response.TagResponse;
 import taco.klkl.domain.category.service.SubcategoryService;
 import taco.klkl.domain.category.service.SubcategoryTagService;
 
 @Slf4j
-@Tag(name = "7. 서브카테고리", description = "서브카테고리 관련 API")
+@Tag(name = "7. 태그", description = "태그 관련 API")
 @RestController
 @RequestMapping("/v1/tags")
 @RequiredArgsConstructor
@@ -26,10 +27,11 @@ public class TagController {
 	private final SubcategoryTagService subcategoryTagService;
 
 	@GetMapping
-	@Operation(summary = "선택된 소분류의 태그 목록 조회", description = "Subcategory 포함된 Tag 반환")
-	public List<SubcategoryWithTagsResponse> findAllTagsBySubcategoryIds(
-		@RequestParam(value = "subcategory_id") List<Long> subcategoryIds) {
+	@Operation(summary = "선택된 소분류의 태그 목록 조회", description = "선택된 소분류의 태그 목록을 조회합니다.")
+	public Set<TagResponse> findAllTagsBySubcategoryIds(
+		@RequestParam(value = "subcategory_id") final List<Long> subcategoryIds
+	) {
 		final List<Subcategory> subcategoryList = subcategoryService.findSubcategoriesBySubcategoryIds(subcategoryIds);
-		return subcategoryTagService.findSubcategoryTagsBySubcategoryList(subcategoryList);
+		return subcategoryTagService.findTagsBySubcategoryList(subcategoryList);
 	}
 }
