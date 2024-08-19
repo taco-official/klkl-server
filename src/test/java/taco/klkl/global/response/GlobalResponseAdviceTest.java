@@ -54,7 +54,7 @@ class GlobalResponseAdviceTest {
 		// Then
 		assertTrue(result instanceof GlobalResponse);
 		GlobalResponse globalResponse = (GlobalResponse)result;
-		assertEquals("C000", globalResponse.code());
+		assertEquals(HttpStatus.OK.value(), globalResponse.status());
 		assertEquals(body, globalResponse.data());
 	}
 

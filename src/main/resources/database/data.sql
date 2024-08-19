@@ -106,12 +106,12 @@ VALUES
     (343, '바디케어', 303),
     (344, '위생용품', 303);
 
-/* Filter */
-INSERT INTO filter (filter_id, name)
+/* tag */
+INSERT INTO tag (tag_id, name)
 VALUES (350, '편의점'),
        (351, '고수');
 
-INSERT INTO subcategory_filter (subcategory_filter_id, subcategory_id, filter_id)
+INSERT INTO subcategory_tag (subcategory_tag_id, subcategory_id, tag_id)
 VALUES
     --서브카테고리 필터 관계 테이블
     -- 라면 및 즉석식품 - 필터

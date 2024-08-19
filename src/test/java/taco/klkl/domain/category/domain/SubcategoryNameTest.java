@@ -11,12 +11,12 @@ class SubcategoryNameTest {
 
 	@Test
 	@DisplayName("부분 문자열을 포함하는 SubcategoryName 찾기 - 정상 케이스")
-	void testGetSubcategoryNamesByPartialString() {
+	void testFindByPartialString() {
 		// given
 		String partialString = "라면";
 
 		// when
-		List<SubcategoryName> result = SubcategoryName.getSubcategoryNamesByPartialString(partialString);
+		List<SubcategoryName> result = SubcategoryName.findByPartialString(partialString);
 
 		// then
 		assertThat(result).containsExactly(SubcategoryName.INSTANT_FOOD);
@@ -24,12 +24,12 @@ class SubcategoryNameTest {
 
 	@Test
 	@DisplayName("부분 문자열을 포함하는 SubcategoryName 찾기 - 여러 결과")
-	void testGetSubcategoryNamesByPartialStringMultipleResults() {
+	void testFindByPartialStringMultipleResults() {
 		// given
 		String partialString = "잡화";
 
 		// when
-		List<SubcategoryName> result = SubcategoryName.getSubcategoryNamesByPartialString(partialString);
+		List<SubcategoryName> result = SubcategoryName.findByPartialString(partialString);
 
 		// then
 		assertThat(result).containsExactlyInAnyOrder(SubcategoryName.KITCHEN_SUPPLIES,
@@ -38,12 +38,12 @@ class SubcategoryNameTest {
 
 	@Test
 	@DisplayName("부분 문자열을 포함하는 SubcategoryName 찾기 - 결과 없음")
-	void testGetSubcategoryNamesByPartialStringNoResults() {
+	void testFindByPartialStringNoResults() {
 		// given
 		String partialString = "없음";
 
 		// when
-		List<SubcategoryName> result = SubcategoryName.getSubcategoryNamesByPartialString(partialString);
+		List<SubcategoryName> result = SubcategoryName.findByPartialString(partialString);
 
 		// then
 		assertThat(result).isEmpty();
@@ -51,12 +51,12 @@ class SubcategoryNameTest {
 
 	@Test
 	@DisplayName("부분 문자열을 포함하는 SubcategoryName 찾기 - 빈 문자열")
-	void testGetSubcategoryNamesByPartialStringEmpty() {
+	void testFindByPartialStringEmpty() {
 		// given
 		String partialString = "";
 
 		// when
-		List<SubcategoryName> result = SubcategoryName.getSubcategoryNamesByPartialString(partialString);
+		List<SubcategoryName> result = SubcategoryName.findByPartialString(partialString);
 
 		// then
 		assertThat(result).isEmpty();
@@ -64,12 +64,12 @@ class SubcategoryNameTest {
 
 	@Test
 	@DisplayName("부분 문자열을 포함하는 SubcategoryName 찾기 - null 입력")
-	void testGetSubcategoryNamesByPartialStringNull() {
+	void testFindByPartialStringNull() {
 		// given
 		String partialString = null;
 
 		// when
-		List<SubcategoryName> result = SubcategoryName.getSubcategoryNamesByPartialString(partialString);
+		List<SubcategoryName> result = SubcategoryName.findByPartialString(partialString);
 
 		// then
 		assertThat(result).isEmpty();

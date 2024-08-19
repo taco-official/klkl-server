@@ -2,9 +2,9 @@ package taco.klkl.domain.search.service;
 
 import org.springframework.stereotype.Service;
 
-import taco.klkl.domain.search.dto.response.SearchResponseDto;
+import taco.klkl.domain.search.dto.response.SearchResponse;
 
 @Service
 public interface SearchService {
-	SearchResponseDto getSearchResult(String queryParam);
+	SearchResponse findSearchResult(final String queryParam);
 }

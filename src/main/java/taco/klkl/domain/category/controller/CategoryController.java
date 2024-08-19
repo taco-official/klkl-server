@@ -11,8 +11,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import taco.klkl.domain.category.dto.response.CategoryResponseDto;
-import taco.klkl.domain.category.dto.response.CategoryWithSubcategoryDto;
+import taco.klkl.domain.category.dto.response.CategoryResponse;
+import taco.klkl.domain.category.dto.response.CategoryWithSubcategoryResponse;
 import taco.klkl.domain.category.service.CategoryService;
 
 @Slf4j
@@ -25,16 +25,14 @@ public class CategoryController {
 	private final CategoryService categoryService;
 
 	@GetMapping
-	@Operation(description = "전체 Category 반환")
-	public List<CategoryResponseDto> getCategory() {
-		List<CategoryResponseDto> categoryResponseDto = categoryService.getCategories();
-		return categoryResponseDto;
+	@Operation(summary = "대분류 목록 조회", description = "전체 Category 반환")
+	public List<CategoryResponse> findAllCategories() {
+		return categoryService.findAllCategories();
 	}
 
-	@GetMapping("/{id}/subcategories")
-	@Operation(description = "Category에 포함된 Subcategory 반환")
-	public CategoryWithSubcategoryDto getSubCategory(@PathVariable Long id) {
-		CategoryWithSubcategoryDto categoryWithSubcategoryDto = categoryService.getSubcategories(id);
-		return categoryWithSubcategoryDto;
+	@GetMapping("/{categoryId}/subcategories")
+	@Operation(summary = "대분류의 소분류 목록 조회", description = "Category에 포함된 Subcategory 반환")
+	public CategoryWithSubcategoryResponse findSubCategoriesByCategoryId(@PathVariable Long categoryId) {
+		return categoryService.findSubCategoriesByCategoryId(categoryId);
 	}
 }

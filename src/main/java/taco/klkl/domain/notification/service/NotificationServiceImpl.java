@@ -32,11 +32,9 @@ public class NotificationServiceImpl implements NotificationService {
 	private final UserUtil userUtil;
 
 	@Override
-	public List<NotificationResponse> getNotifications() {
-
-		final User receiver = getReceiver();
+	public List<NotificationResponse> findAllNotifications() {
+		final User receiver = findReceiver();
 		final List<Notification> notifications = notificationRepository.findAllByComment_Product_User(receiver);
-
 		return notifications.stream()
 			.map(NotificationResponse::from)
 			.toList();
@@ -45,21 +43,17 @@ public class NotificationServiceImpl implements NotificationService {
 	@Override
 	@Transactional
 	public List<NotificationResponse> readAllNotifications() {
-
-		final User receiver = getReceiver();
+		final User receiver = findReceiver();
 		final List<Notification> notifications = notificationRepository.findAllByComment_Product_User(receiver);
-
+		notifications.forEach(Notification::read);
 		return notifications.stream()
-			.map(n -> {
-				n.read();
-				return NotificationResponse.from(n);
-			}).toList();
+			.map(NotificationResponse::from)
+			.toList();
 	}
 
 	@Override
 	@Transactional
 	public NotificationResponse readNotificationById(final Long id) {
-
 		final Notification notification = notificationRepository.findById(id)
 			.orElseThrow(NotificationNotFoundException::new);
 		notification.read();
@@ -68,14 +62,13 @@ public class NotificationServiceImpl implements NotificationService {
 
 	@Override
 	@Transactional
-	public void createNotification(final Comment comment) {
-
+	public void createNotificationByComment(final Comment comment) {
 		final Notification notification = Notification.of(comment);
 		notificationRepository.save(notification);
 	}
 
 	// TODO: 토큰으로 유저 가져오는 방식으로 수정하기
-	private User getReceiver() {
+	private User findReceiver() {
 		return userUtil.findTestUser();
 	}
 }

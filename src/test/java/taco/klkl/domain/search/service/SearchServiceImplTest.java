@@ -17,25 +17,25 @@ import taco.klkl.domain.category.domain.Category;
 import taco.klkl.domain.category.domain.CategoryName;
 import taco.klkl.domain.category.domain.Subcategory;
 import taco.klkl.domain.category.domain.SubcategoryName;
-import taco.klkl.domain.category.dto.response.CategoryResponseDto;
-import taco.klkl.domain.category.dto.response.SubcategoryResponseDto;
+import taco.klkl.domain.category.dto.response.CategoryResponse;
+import taco.klkl.domain.category.dto.response.SubcategoryResponse;
 import taco.klkl.domain.category.service.CategoryService;
 import taco.klkl.domain.category.service.SubcategoryService;
 import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.product.domain.Rating;
-import taco.klkl.domain.product.dto.response.ProductSimpleResponseDto;
+import taco.klkl.domain.product.dto.response.ProductSimpleResponse;
 import taco.klkl.domain.product.service.ProductService;
 import taco.klkl.domain.region.domain.City;
+import taco.klkl.domain.region.domain.CityType;
 import taco.klkl.domain.region.domain.Country;
+import taco.klkl.domain.region.domain.CountryType;
 import taco.klkl.domain.region.domain.Currency;
 import taco.klkl.domain.region.domain.Region;
-import taco.klkl.domain.region.dto.response.CityResponseDto;
-import taco.klkl.domain.region.dto.response.CountrySimpleResponseDto;
-import taco.klkl.domain.region.enums.CityType;
-import taco.klkl.domain.region.enums.CountryType;
+import taco.klkl.domain.region.dto.response.CityResponse;
+import taco.klkl.domain.region.dto.response.CountrySimpleResponse;
 import taco.klkl.domain.region.service.CityService;
 import taco.klkl.domain.region.service.CountryService;
-import taco.klkl.domain.search.dto.response.SearchResponseDto;
+import taco.klkl.domain.search.dto.response.SearchResponse;
 import taco.klkl.domain.user.domain.User;
 import taco.klkl.global.common.constants.UserConstants;
 
@@ -85,26 +85,26 @@ class SearchServiceImplTest {
 
 	@Test
 	@DisplayName("SearchService 테스트")
-	void testGetSearchResult() {
+	void testFindSearchResult() {
 		// given
 		String queryParam = "Test";
 
-		List<CountrySimpleResponseDto> mockCountries = Collections.singletonList(
-			CountrySimpleResponseDto.from(country));
-		List<CityResponseDto> mockCities = Collections.singletonList(CityResponseDto.from(city));
-		List<CategoryResponseDto> mockCategories = Collections.singletonList(CategoryResponseDto.from(category));
-		List<SubcategoryResponseDto> mockSubcategories = Collections.singletonList(
-			SubcategoryResponseDto.from(subcategory));
-		List<ProductSimpleResponseDto> mockProducts = Collections.singletonList(ProductSimpleResponseDto.from(product));
+		List<CountrySimpleResponse> mockCountries = Collections.singletonList(
+			CountrySimpleResponse.from(country));
+		List<CityResponse> mockCities = Collections.singletonList(CityResponse.from(city));
+		List<CategoryResponse> mockCategories = Collections.singletonList(CategoryResponse.from(category));
+		List<SubcategoryResponse> mockSubcategories = Collections.singletonList(
+			SubcategoryResponse.from(subcategory));
+		List<ProductSimpleResponse> mockProducts = Collections.singletonList(ProductSimpleResponse.from(product));
 
 		when(countryService.getAllCountriesByCountryTypes(any(List.class))).thenReturn(mockCountries);
 		when(cityService.getAllCitiesByCityTypes(any(List.class))).thenReturn(mockCities);
-		when(categoryService.getCategoriesByCategoryNames(any(List.class))).thenReturn(mockCategories);
-		when(subcategoryService.getSubcategoriesBySubcategoryNames(any(List.class))).thenReturn(mockSubcategories);
+		when(categoryService.findCategoriesByCategoryNames(any(List.class))).thenReturn(mockCategories);
+		when(subcategoryService.findSubcategoriesBySubcategoryNames(any(List.class))).thenReturn(mockSubcategories);
 		when(productService.getProductsByPartialName(queryParam)).thenReturn(mockProducts);
 
 		// when
-		SearchResponseDto result = searchService.getSearchResult(queryParam);
+		SearchResponse result = searchService.findSearchResult(queryParam);
 
 		// then
 		assertThat(result).isNotNull();

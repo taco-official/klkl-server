@@ -18,8 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import taco.klkl.domain.product.dao.ProductRepository;
-import taco.klkl.domain.product.dto.request.ProductCreateUpdateRequestDto;
-import taco.klkl.domain.product.dto.response.ProductDetailResponseDto;
+import taco.klkl.domain.product.dto.request.ProductCreateUpdateRequest;
+import taco.klkl.domain.product.dto.response.ProductDetailResponse;
 import taco.klkl.domain.product.service.ProductService;
 import taco.klkl.global.common.constants.ProductConstants;
 
@@ -42,7 +42,7 @@ public class ProductIntegrationTest {
 	@DisplayName("상품 상세 조회 API 테스트")
 	public void testGetProductById() throws Exception {
 		// given
-		ProductCreateUpdateRequestDto createRequest = new ProductCreateUpdateRequestDto(
+		ProductCreateUpdateRequest createRequest = new ProductCreateUpdateRequest(
 			"name",
 			"description",
 			"address",
@@ -53,14 +53,13 @@ public class ProductIntegrationTest {
 			438L,
 			Set.of(350L, 351L)
 		);
-		ProductDetailResponseDto productDto = productService.createProduct(createRequest);
+		ProductDetailResponse productDto = productService.createProduct(createRequest);
 
 		// when & then
 		mockMvc.perform(get("/v1/products/" + productDto.id())
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
-			.andExpect(jsonPath("$.code", is("C000")))
 			.andExpect(jsonPath("$.data.id", notNullValue()))
 			.andExpect(jsonPath("$.data.name", is(createRequest.name())))
 			.andExpect(jsonPath("$.data.description", is(createRequest.description())))
@@ -69,9 +68,9 @@ public class ProductIntegrationTest {
 			.andExpect(jsonPath("$.data.likeCount", is(ProductConstants.DEFAULT_LIKE_COUNT)))
 			.andExpect(jsonPath("$.data.rating", is(createRequest.rating())))
 			.andExpect(jsonPath("$.data.user.id", notNullValue()))
-			.andExpect(jsonPath("$.data.city.cityId", is(createRequest.cityId().intValue())))
-			.andExpect(jsonPath("$.data.subcategory.subcategoryId", is(createRequest.subcategoryId().intValue())))
-			.andExpect(jsonPath("$.data.currency.currencyId", is(createRequest.currencyId().intValue())))
+			.andExpect(jsonPath("$.data.city.id", is(createRequest.cityId().intValue())))
+			.andExpect(jsonPath("$.data.subcategory.id", is(createRequest.subcategoryId().intValue())))
+			.andExpect(jsonPath("$.data.currency.id", is(createRequest.currencyId().intValue())))
 			.andExpect(jsonPath("$.data.createdAt", notNullValue()))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
 	}
@@ -80,7 +79,7 @@ public class ProductIntegrationTest {
 	@DisplayName("상품 등록 API 테스트")
 	public void testCreateProduct() throws Exception {
 		// given
-		ProductCreateUpdateRequestDto createRequest = new ProductCreateUpdateRequestDto(
+		ProductCreateUpdateRequest createRequest = new ProductCreateUpdateRequest(
 			"name",
 			"description",
 			"address",
@@ -98,7 +97,6 @@ public class ProductIntegrationTest {
 				.content(new ObjectMapper().writeValueAsString(createRequest)))
 			.andExpect(status().isCreated())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
-			.andExpect(jsonPath("$.code", is("C000")))
 			.andExpect(jsonPath("$.data.id", notNullValue()))
 			.andExpect(jsonPath("$.data.name", is(createRequest.name())))
 			.andExpect(jsonPath("$.data.description", is(createRequest.description())))
@@ -107,9 +105,9 @@ public class ProductIntegrationTest {
 			.andExpect(jsonPath("$.data.likeCount", is(ProductConstants.DEFAULT_LIKE_COUNT)))
 			.andExpect(jsonPath("$.data.rating", is(createRequest.rating())))
 			.andExpect(jsonPath("$.data.user.id", notNullValue()))
-			.andExpect(jsonPath("$.data.city.cityId", is(createRequest.cityId().intValue())))
-			.andExpect(jsonPath("$.data.subcategory.subcategoryId", is(createRequest.subcategoryId().intValue())))
-			.andExpect(jsonPath("$.data.currency.currencyId", is(createRequest.currencyId().intValue())))
+			.andExpect(jsonPath("$.data.city.id", is(createRequest.cityId().intValue())))
+			.andExpect(jsonPath("$.data.subcategory.id", is(createRequest.subcategoryId().intValue())))
+			.andExpect(jsonPath("$.data.currency.id", is(createRequest.currencyId().intValue())))
 			.andExpect(jsonPath("$.data.createdAt", notNullValue()))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
 	}
@@ -118,7 +116,7 @@ public class ProductIntegrationTest {
 	@DisplayName("페이지네이션으로 상품 목록 조회 API 테스트")
 	public void testGetProductsByPagination() throws Exception {
 		// given
-		ProductCreateUpdateRequestDto createRequest1 = new ProductCreateUpdateRequestDto(
+		ProductCreateUpdateRequest createRequest1 = new ProductCreateUpdateRequest(
 			"name1",
 			"description1",
 			"address1",
@@ -129,7 +127,7 @@ public class ProductIntegrationTest {
 			438L,
 			null
 		);
-		ProductCreateUpdateRequestDto createRequest2 = new ProductCreateUpdateRequestDto(
+		ProductCreateUpdateRequest createRequest2 = new ProductCreateUpdateRequest(
 			"name2",
 			"description2",
 			"address2",
@@ -150,7 +148,6 @@ public class ProductIntegrationTest {
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
-			.andExpect(jsonPath("$.code", is("C000")))
 			.andExpect(jsonPath("$.data.content", hasSize(5)))
 			.andExpect(jsonPath("$.data.content[0].name", is(createRequest2.name())))
 			.andExpect(jsonPath("$.data.content[1].name", is(createRequest1.name())))
@@ -164,9 +161,9 @@ public class ProductIntegrationTest {
 
 	@Test
 	@DisplayName("단일 도시 ID로 필터링된 상품 목록 조회 API 테스트")
-	public void testGetProductsBySingleCityId() throws Exception {
+	public void testGetProductsBySingleid() throws Exception {
 		// given
-		ProductCreateUpdateRequestDto createOsakaRequest1 = new ProductCreateUpdateRequestDto(
+		ProductCreateUpdateRequest createOsakaRequest1 = new ProductCreateUpdateRequest(
 			"name1",
 			"description1",
 			"address1",
@@ -177,7 +174,7 @@ public class ProductIntegrationTest {
 			438L,
 			null
 		);
-		ProductCreateUpdateRequestDto createOsakaRequest2 = new ProductCreateUpdateRequestDto(
+		ProductCreateUpdateRequest createOsakaRequest2 = new ProductCreateUpdateRequest(
 			"name2",
 			"description2",
 			"address2",
@@ -188,7 +185,7 @@ public class ProductIntegrationTest {
 			438L,
 			null
 		);
-		ProductCreateUpdateRequestDto createTokyoRequest = new ProductCreateUpdateRequestDto(
+		ProductCreateUpdateRequest createTokyoRequest = new ProductCreateUpdateRequest(
 			"name3",
 			"description3",
 			"address3",
@@ -206,12 +203,11 @@ public class ProductIntegrationTest {
 		// when & then
 		mockMvc.perform(get("/v1/products")
 				.param("city_id", "416")  // 도쿄
-				.param("sort_by", "createdAt")
+				.param("sort_by", "created_at")
 				.param("sort_direction", "ASC")
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
-			.andExpect(jsonPath("$.code", is("C000")))
 			.andExpect(jsonPath("$.data.content", hasSize(1)))
 			.andExpect(jsonPath("$.data.content[0].name", is(createTokyoRequest.name())))
 			.andExpect(jsonPath("$.data.pageNumber", is(0)))
@@ -224,9 +220,9 @@ public class ProductIntegrationTest {
 
 	@Test
 	@DisplayName("여러 도시 ID로 필터링된 상품 목록 조회 API 테스트")
-	public void testGetProductsByMultipleCityIds() throws Exception {
+	public void testGetProductsByMultipleIds() throws Exception {
 		// given
-		ProductCreateUpdateRequestDto createKyotoRequest1 = new ProductCreateUpdateRequestDto(
+		ProductCreateUpdateRequest createKyotoRequest1 = new ProductCreateUpdateRequest(
 			"name1",
 			"description1",
 			"address1",
@@ -237,7 +233,7 @@ public class ProductIntegrationTest {
 			438L,
 			null
 		);
-		ProductCreateUpdateRequestDto createKyotoRequest2 = new ProductCreateUpdateRequestDto(
+		ProductCreateUpdateRequest createKyotoRequest2 = new ProductCreateUpdateRequest(
 			"name2",
 			"description2",
 			"address2",
@@ -248,7 +244,7 @@ public class ProductIntegrationTest {
 			438L,
 			null
 		);
-		ProductCreateUpdateRequestDto createTokyoRequest = new ProductCreateUpdateRequestDto(
+		ProductCreateUpdateRequest createTokyoRequest = new ProductCreateUpdateRequest(
 			"name3",
 			"description3",
 			"address3",
@@ -266,12 +262,11 @@ public class ProductIntegrationTest {
 		// when & then
 		mockMvc.perform(get("/v1/products")
 				.param("city_id", "415", "416")  // 교토, 도쿄
-				.param("sort_by", "createdAt")
+				.param("sort_by", "created_at")
 				.param("sort_direction", "ASC")
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
-			.andExpect(jsonPath("$.code", is("C000")))
 			.andExpect(jsonPath("$.data.content", hasSize(3)))
 			.andExpect(jsonPath("$.data.content[0].name", is(createKyotoRequest1.name())))
 			.andExpect(jsonPath("$.data.content[1].name", is(createKyotoRequest2.name())))
@@ -288,7 +283,7 @@ public class ProductIntegrationTest {
 	@DisplayName("단일 소분류 ID로 필터링된 상품 목록 조회 API 테스트")
 	public void testGetProductsBySingleSubcategoryId() throws Exception {
 		// given
-		ProductCreateUpdateRequestDto createRamenRequest1 = new ProductCreateUpdateRequestDto(
+		ProductCreateUpdateRequest createRamenRequest1 = new ProductCreateUpdateRequest(
 			"name1",
 			"description1",
 			"address1",
@@ -299,7 +294,7 @@ public class ProductIntegrationTest {
 			438L,
 			null
 		);
-		ProductCreateUpdateRequestDto createRamenRequest2 = new ProductCreateUpdateRequestDto(
+		ProductCreateUpdateRequest createRamenRequest2 = new ProductCreateUpdateRequest(
 			"name2",
 			"description2",
 			"address2",
@@ -310,7 +305,7 @@ public class ProductIntegrationTest {
 			442L,
 			null
 		);
-		ProductCreateUpdateRequestDto createShoeRequest = new ProductCreateUpdateRequestDto(
+		ProductCreateUpdateRequest createShoeRequest = new ProductCreateUpdateRequest(
 			"name3",
 			"description3",
 			"address3",
@@ -321,7 +316,7 @@ public class ProductIntegrationTest {
 			438L,
 			null
 		);
-		ProductCreateUpdateRequestDto createAlcoholRequest = new ProductCreateUpdateRequestDto(
+		ProductCreateUpdateRequest createAlcoholRequest = new ProductCreateUpdateRequest(
 			"name4",
 			"description4",
 			"address4",
@@ -340,12 +335,11 @@ public class ProductIntegrationTest {
 		// when & then
 		mockMvc.perform(get("/v1/products")
 				.param("subcategory_id", "310")  // 라면
-				.param("sort_by", "createdAt")
+				.param("sort_by", "created_at")
 				.param("sort_direction", "ASC")
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
-			.andExpect(jsonPath("$.code", is("C000")))
 			.andExpect(jsonPath("$.data.content", hasSize(2)))
 			.andExpect(jsonPath("$.data.content[0].name", is(createRamenRequest1.name())))
 			.andExpect(jsonPath("$.data.content[1].name", is(createRamenRequest2.name())))
@@ -361,7 +355,7 @@ public class ProductIntegrationTest {
 	@DisplayName("여러 소분류 ID로 필터링된 상품 목록 조회 API 테스트")
 	public void testGetProductsByMultipleSubcategoryIds() throws Exception {
 		// given
-		ProductCreateUpdateRequestDto createRamenRequest1 = new ProductCreateUpdateRequestDto(
+		ProductCreateUpdateRequest createRamenRequest1 = new ProductCreateUpdateRequest(
 			"name1",
 			"description1",
 			"address1",
@@ -372,7 +366,7 @@ public class ProductIntegrationTest {
 			438L,
 			null
 		);
-		ProductCreateUpdateRequestDto createRamenRequest2 = new ProductCreateUpdateRequestDto(
+		ProductCreateUpdateRequest createRamenRequest2 = new ProductCreateUpdateRequest(
 			"name2",
 			"description2",
 			"address2",
@@ -383,7 +377,7 @@ public class ProductIntegrationTest {
 			442L,
 			null
 		);
-		ProductCreateUpdateRequestDto createShoeRequest = new ProductCreateUpdateRequestDto(
+		ProductCreateUpdateRequest createShoeRequest = new ProductCreateUpdateRequest(
 			"name3",
 			"description3",
 			"address3",
@@ -394,7 +388,7 @@ public class ProductIntegrationTest {
 			438L,
 			null
 		);
-		ProductCreateUpdateRequestDto createAlcoholRequest = new ProductCreateUpdateRequestDto(
+		ProductCreateUpdateRequest createAlcoholRequest = new ProductCreateUpdateRequest(
 			"name4",
 			"description4",
 			"address4",
@@ -413,12 +407,11 @@ public class ProductIntegrationTest {
 		// when & then
 		mockMvc.perform(get("/v1/products")
 				.param("subcategory_id", "310", "324")  // 라면, 신발
-				.param("sort_by", "createdAt")
+				.param("sort_by", "created_at")
 				.param("sort_direction", "ASC")
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
-			.andExpect(jsonPath("$.code", is("C000")))
 			.andExpect(jsonPath("$.data.content", hasSize(3)))
 			.andExpect(jsonPath("$.data.content[0].name", is(createRamenRequest1.name())))
 			.andExpect(jsonPath("$.data.content[1].name", is(createRamenRequest2.name())))
@@ -432,10 +425,10 @@ public class ProductIntegrationTest {
 	}
 
 	@Test
-	@DisplayName("단일 필터 ID로 필터링된 상품 목록 조회 API 테스트")
-	public void testGetProductsBySingleFilterId() throws Exception {
+	@DisplayName("단일 태그 ID로 필터링된 상품 목록 조회 API 테스트")
+	public void testGetProductsBySingleTagId() throws Exception {
 		// given
-		ProductCreateUpdateRequestDto createCilantroRequest1 = new ProductCreateUpdateRequestDto(
+		ProductCreateUpdateRequest createCilantroRequest1 = new ProductCreateUpdateRequest(
 			"name1",
 			"description1",
 			"address1",
@@ -446,7 +439,7 @@ public class ProductIntegrationTest {
 			438L,
 			Set.of(351L)
 		);
-		ProductCreateUpdateRequestDto createCilantroRequest2 = new ProductCreateUpdateRequestDto(
+		ProductCreateUpdateRequest createCilantroRequest2 = new ProductCreateUpdateRequest(
 			"name2",
 			"description2",
 			"address2",
@@ -457,7 +450,7 @@ public class ProductIntegrationTest {
 			442L,
 			Set.of(351L)
 		);
-		ProductCreateUpdateRequestDto createRequest = new ProductCreateUpdateRequestDto(
+		ProductCreateUpdateRequest createRequest = new ProductCreateUpdateRequest(
 			"name3",
 			"description3",
 			"address3",
@@ -468,7 +461,7 @@ public class ProductIntegrationTest {
 			438L,
 			null
 		);
-		ProductCreateUpdateRequestDto createConvenienceStoreRequest = new ProductCreateUpdateRequestDto(
+		ProductCreateUpdateRequest createConvenienceStoreRequest = new ProductCreateUpdateRequest(
 			"name4",
 			"description4",
 			"address4",
@@ -486,13 +479,12 @@ public class ProductIntegrationTest {
 
 		// when & then
 		mockMvc.perform(get("/v1/products")
-				.param("filter_id", "351")  // 고수
-				.param("sort_by", "createdAt")
+				.param("tag_id", "351")  // 고수
+				.param("sort_by", "created_at")
 				.param("sort_direction", "ASC")
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
-			.andExpect(jsonPath("$.code", is("C000")))
 			.andExpect(jsonPath("$.data.content", hasSize(2)))
 			.andExpect(jsonPath("$.data.content[0].name", is(createCilantroRequest1.name())))
 			.andExpect(jsonPath("$.data.content[1].name", is(createCilantroRequest2.name())))
@@ -505,10 +497,10 @@ public class ProductIntegrationTest {
 	}
 
 	@Test
-	@DisplayName("다중 필터 ID로 필터링된 상품 목록 조회 API 테스트")
-	public void testGetProductsByMultipleFilterIds() throws Exception {
+	@DisplayName("다중 태그 ID로 필터링된 상품 목록 조회 API 테스트")
+	public void testGetProductsByMultipleTagIds() throws Exception {
 		// given
-		ProductCreateUpdateRequestDto createCilantroRequest1 = new ProductCreateUpdateRequestDto(
+		ProductCreateUpdateRequest createCilantroRequest1 = new ProductCreateUpdateRequest(
 			"name1",
 			"description1",
 			"address1",
@@ -519,7 +511,7 @@ public class ProductIntegrationTest {
 			438L,
 			Set.of(351L)
 		);
-		ProductCreateUpdateRequestDto createCilantroRequest2 = new ProductCreateUpdateRequestDto(
+		ProductCreateUpdateRequest createCilantroRequest2 = new ProductCreateUpdateRequest(
 			"name2",
 			"description2",
 			"address2",
@@ -530,7 +522,7 @@ public class ProductIntegrationTest {
 			442L,
 			Set.of(351L)
 		);
-		ProductCreateUpdateRequestDto createRequest = new ProductCreateUpdateRequestDto(
+		ProductCreateUpdateRequest createRequest = new ProductCreateUpdateRequest(
 			"name3",
 			"description3",
 			"address3",
@@ -541,7 +533,7 @@ public class ProductIntegrationTest {
 			438L,
 			null
 		);
-		ProductCreateUpdateRequestDto createConvenienceStoreRequest = new ProductCreateUpdateRequestDto(
+		ProductCreateUpdateRequest createConvenienceStoreRequest = new ProductCreateUpdateRequest(
 			"name4",
 			"description4",
 			"address4",
@@ -559,13 +551,12 @@ public class ProductIntegrationTest {
 
 		// when & then
 		mockMvc.perform(get("/v1/products")
-				.param("filter_id", "351", "350")  // 고수, 편의점
-				.param("sort_by", "createdAt")
+				.param("tag_id", "351", "350")  // 고수, 편의점
+				.param("sort_by", "created_at")
 				.param("sort_direction", "ASC")
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
-			.andExpect(jsonPath("$.code", is("C000")))
 			.andExpect(jsonPath("$.data.content", hasSize(3)))
 			.andExpect(jsonPath("$.data.content[0].name", is(createCilantroRequest1.name())))
 			.andExpect(jsonPath("$.data.content[1].name", is(createCilantroRequest2.name())))
@@ -582,7 +573,7 @@ public class ProductIntegrationTest {
 	@DisplayName("생성된 날짜로 오름차순 정렬된 상품 목록 조회 API 테스트")
 	public void testSortProductsByCreatedAtAsc() throws Exception {
 		// given
-		ProductCreateUpdateRequestDto createRequest1 = new ProductCreateUpdateRequestDto(
+		ProductCreateUpdateRequest createRequest1 = new ProductCreateUpdateRequest(
 			"name1",
 			"description1",
 			"address1",
@@ -593,7 +584,7 @@ public class ProductIntegrationTest {
 			438L,
 			Set.of(351L)
 		);
-		ProductCreateUpdateRequestDto createRequest2 = new ProductCreateUpdateRequestDto(
+		ProductCreateUpdateRequest createRequest2 = new ProductCreateUpdateRequest(
 			"name2",
 			"description2",
 			"address2",
@@ -604,7 +595,7 @@ public class ProductIntegrationTest {
 			442L,
 			Set.of(351L)
 		);
-		ProductCreateUpdateRequestDto createRequest3 = new ProductCreateUpdateRequestDto(
+		ProductCreateUpdateRequest createRequest3 = new ProductCreateUpdateRequest(
 			"name3",
 			"description3",
 			"address3",
@@ -615,7 +606,7 @@ public class ProductIntegrationTest {
 			438L,
 			Set.of(350L, 351L)
 		);
-		ProductCreateUpdateRequestDto createRequest4 = new ProductCreateUpdateRequestDto(
+		ProductCreateUpdateRequest createRequest4 = new ProductCreateUpdateRequest(
 			"name4",
 			"description4",
 			"address4",
@@ -633,13 +624,12 @@ public class ProductIntegrationTest {
 
 		// when & then
 		mockMvc.perform(get("/v1/products")
-				.param("filter_id", "351", "350")
-				.param("sort_by", "createdAt")
+				.param("tag_id", "351", "350")
+				.param("sort_by", "created_at")
 				.param("sort_direction", "ASC")
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
-			.andExpect(jsonPath("$.code", is("C000")))
 			.andExpect(jsonPath("$.data.content", hasSize(4)))
 			.andExpect(jsonPath("$.data.content[0].name", is(createRequest1.name())))
 			.andExpect(jsonPath("$.data.content[1].name", is(createRequest2.name())))
@@ -657,7 +647,7 @@ public class ProductIntegrationTest {
 	@DisplayName("생성된 날짜로 내림차순 정렬된 상품 목록 조회 API 테스트")
 	public void testSortProductsByCreatedAtDesc() throws Exception {
 		// given
-		ProductCreateUpdateRequestDto createRequest1 = new ProductCreateUpdateRequestDto(
+		ProductCreateUpdateRequest createRequest1 = new ProductCreateUpdateRequest(
 			"name1",
 			"description1",
 			"address1",
@@ -668,7 +658,7 @@ public class ProductIntegrationTest {
 			438L,
 			Set.of(351L)
 		);
-		ProductCreateUpdateRequestDto createRequest2 = new ProductCreateUpdateRequestDto(
+		ProductCreateUpdateRequest createRequest2 = new ProductCreateUpdateRequest(
 			"name2",
 			"description2",
 			"address2",
@@ -679,7 +669,7 @@ public class ProductIntegrationTest {
 			442L,
 			Set.of(351L)
 		);
-		ProductCreateUpdateRequestDto createRequest3 = new ProductCreateUpdateRequestDto(
+		ProductCreateUpdateRequest createRequest3 = new ProductCreateUpdateRequest(
 			"name3",
 			"description3",
 			"address3",
@@ -690,7 +680,7 @@ public class ProductIntegrationTest {
 			438L,
 			Set.of(350L, 351L)
 		);
-		ProductCreateUpdateRequestDto createRequest4 = new ProductCreateUpdateRequestDto(
+		ProductCreateUpdateRequest createRequest4 = new ProductCreateUpdateRequest(
 			"name4",
 			"description4",
 			"address4",
@@ -708,13 +698,12 @@ public class ProductIntegrationTest {
 
 		// when & then
 		mockMvc.perform(get("/v1/products")
-				.param("filter_id", "351", "350")
-				.param("sort_by", "createdAt")
+				.param("tag_id", "351", "350")
+				.param("sort_by", "created_at")
 				.param("sort_direction", "DESC")
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
-			.andExpect(jsonPath("$.code", is("C000")))
 			.andExpect(jsonPath("$.data.content", hasSize(4)))
 			.andExpect(jsonPath("$.data.content[0].name", is(createRequest1.name())))
 			.andExpect(jsonPath("$.data.content[1].name", is(createRequest2.name())))
@@ -732,7 +721,7 @@ public class ProductIntegrationTest {
 	@DisplayName("평점으로 오름차순 정렬된 상품 목록 조회 API 테스트")
 	public void testSortProductsByRatingAsc() throws Exception {
 		// given
-		ProductCreateUpdateRequestDto createRequest1 = new ProductCreateUpdateRequestDto(
+		ProductCreateUpdateRequest createRequest1 = new ProductCreateUpdateRequest(
 			"name1",
 			"description1",
 			"address1",
@@ -743,7 +732,7 @@ public class ProductIntegrationTest {
 			438L,
 			Set.of(351L)
 		);
-		ProductCreateUpdateRequestDto createRequest2 = new ProductCreateUpdateRequestDto(
+		ProductCreateUpdateRequest createRequest2 = new ProductCreateUpdateRequest(
 			"name2",
 			"description2",
 			"address2",
@@ -754,7 +743,7 @@ public class ProductIntegrationTest {
 			442L,
 			Set.of(351L)
 		);
-		ProductCreateUpdateRequestDto createRequest3 = new ProductCreateUpdateRequestDto(
+		ProductCreateUpdateRequest createRequest3 = new ProductCreateUpdateRequest(
 			"name3",
 			"description3",
 			"address3",
@@ -765,7 +754,7 @@ public class ProductIntegrationTest {
 			438L,
 			Set.of(350L, 351L)
 		);
-		ProductCreateUpdateRequestDto createRequest4 = new ProductCreateUpdateRequestDto(
+		ProductCreateUpdateRequest createRequest4 = new ProductCreateUpdateRequest(
 			"name4",
 			"description4",
 			"address4",
@@ -783,13 +772,12 @@ public class ProductIntegrationTest {
 
 		// when & then
 		mockMvc.perform(get("/v1/products")
-				.param("filter_id", "351", "350")
+				.param("tag_id", "351", "350")
 				.param("sort_by", "rating")
 				.param("sort_direction", "ASC")
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
-			.andExpect(jsonPath("$.code", is("C000")))
 			.andExpect(jsonPath("$.data.content", hasSize(4)))
 			.andExpect(jsonPath("$.data.content[0].name", is(createRequest1.name())))
 			.andExpect(jsonPath("$.data.content[1].name", is(createRequest2.name())))
@@ -807,7 +795,7 @@ public class ProductIntegrationTest {
 	@DisplayName("평점으로 내림차순 정렬된 상품 목록 조회 API 테스트")
 	public void testSortProductsByRatingDesc() throws Exception {
 		// given
-		ProductCreateUpdateRequestDto createRequest1 = new ProductCreateUpdateRequestDto(
+		ProductCreateUpdateRequest createRequest1 = new ProductCreateUpdateRequest(
 			"name1",
 			"description1",
 			"address1",
@@ -818,7 +806,7 @@ public class ProductIntegrationTest {
 			438L,
 			Set.of(351L)
 		);
-		ProductCreateUpdateRequestDto createRequest2 = new ProductCreateUpdateRequestDto(
+		ProductCreateUpdateRequest createRequest2 = new ProductCreateUpdateRequest(
 			"name2",
 			"description2",
 			"address2",
@@ -829,7 +817,7 @@ public class ProductIntegrationTest {
 			442L,
 			Set.of(351L)
 		);
-		ProductCreateUpdateRequestDto createRequest3 = new ProductCreateUpdateRequestDto(
+		ProductCreateUpdateRequest createRequest3 = new ProductCreateUpdateRequest(
 			"name3",
 			"description3",
 			"address3",
@@ -840,7 +828,7 @@ public class ProductIntegrationTest {
 			438L,
 			Set.of(350L, 351L)
 		);
-		ProductCreateUpdateRequestDto createRequest4 = new ProductCreateUpdateRequestDto(
+		ProductCreateUpdateRequest createRequest4 = new ProductCreateUpdateRequest(
 			"name4",
 			"description4",
 			"address4",
@@ -858,13 +846,12 @@ public class ProductIntegrationTest {
 
 		// when & then
 		mockMvc.perform(get("/v1/products")
-				.param("filter_id", "351", "350")
+				.param("tag_id", "351", "350")
 				.param("sort_by", "rating")
 				.param("sort_direction", "DESC")
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
-			.andExpect(jsonPath("$.code", is("C000")))
 			.andExpect(jsonPath("$.data.content", hasSize(4)))
 			.andExpect(jsonPath("$.data.content[0].name", is(createRequest4.name())))
 			.andExpect(jsonPath("$.data.content[1].name", is(createRequest3.name())))
@@ -883,12 +870,11 @@ public class ProductIntegrationTest {
 	public void testSortProductsByLikeCountAsc() throws Exception {
 		// when & then
 		mockMvc.perform(get("/v1/products")
-				.param("sort_by", "likeCount")
+				.param("sort_by", "like_count")
 				.param("sort_direction", "ASC")
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
-			.andExpect(jsonPath("$.code", is("C000")))
 			.andExpect(jsonPath("$.data.content", hasSize(3)))
 			.andExpect(jsonPath("$.data.content[0].name", is("왕족발 보쌈 과자")))
 			.andExpect(jsonPath("$.data.content[1].name", is("곤약젤리")))
@@ -906,12 +892,11 @@ public class ProductIntegrationTest {
 	public void testSortProductsByLikeCountDesc() throws Exception {
 		// when & then
 		mockMvc.perform(get("/v1/products")
-				.param("sort_by", "likeCount")
+				.param("sort_by", "like_count")
 				.param("sort_direction", "DESC")
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
-			.andExpect(jsonPath("$.code", is("C000")))
 			.andExpect(jsonPath("$.data.content", hasSize(3)))
 			.andExpect(jsonPath("$.data.content[0].name", is("여름 원피스")))
 			.andExpect(jsonPath("$.data.content[1].name", is("곤약젤리")))
@@ -928,7 +913,7 @@ public class ProductIntegrationTest {
 	@DisplayName("상품 수정 API 테스트")
 	public void testUpdateProduct() throws Exception {
 		// given
-		ProductCreateUpdateRequestDto createRequest = new ProductCreateUpdateRequestDto(
+		ProductCreateUpdateRequest createRequest = new ProductCreateUpdateRequest(
 			"name",
 			"description",
 			"address",
@@ -939,9 +924,9 @@ public class ProductIntegrationTest {
 			438L,
 			null
 		);
-		ProductDetailResponseDto productDto = productService.createProduct(createRequest);
+		ProductDetailResponse productDto = productService.createProduct(createRequest);
 
-		ProductCreateUpdateRequestDto updateRequest = new ProductCreateUpdateRequestDto(
+		ProductCreateUpdateRequest updateRequest = new ProductCreateUpdateRequest(
 			"Updated Name",
 			"Updated Description",
 			"Updated Address",
@@ -959,7 +944,6 @@ public class ProductIntegrationTest {
 				.content(new ObjectMapper().writeValueAsString(updateRequest)))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
-			.andExpect(jsonPath("$.code", is("C000")))
 			.andExpect(jsonPath("$.data.id", is(productDto.id().intValue())))
 			.andExpect(jsonPath("$.data.name", is(updateRequest.name())))
 			.andExpect(jsonPath("$.data.description", is(updateRequest.description())))
@@ -968,10 +952,10 @@ public class ProductIntegrationTest {
 			.andExpect(jsonPath("$.data.likeCount", is(ProductConstants.DEFAULT_LIKE_COUNT)))
 			.andExpect(jsonPath("$.data.rating", is(updateRequest.rating())))
 			.andExpect(jsonPath("$.data.user.id", is(productDto.user().id().intValue())))
-			.andExpect(jsonPath("$.data.city.cityId", is(updateRequest.cityId().intValue())))
-			.andExpect(jsonPath("$.data.subcategory.subcategoryId",
+			.andExpect(jsonPath("$.data.city.id", is(updateRequest.cityId().intValue())))
+			.andExpect(jsonPath("$.data.subcategory.id",
 				is(updateRequest.subcategoryId().intValue())))
-			.andExpect(jsonPath("$.data.currency.currencyId", is(updateRequest.currencyId().intValue())))
+			.andExpect(jsonPath("$.data.currency.id", is(updateRequest.currencyId().intValue())))
 			.andExpect(jsonPath("$.data.createdAt", notNullValue()))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
 	}
@@ -980,7 +964,7 @@ public class ProductIntegrationTest {
 	@DisplayName("상품 삭제 API 테스트")
 	public void testDeleteProduct() throws Exception {
 		// given
-		ProductCreateUpdateRequestDto createRequest = new ProductCreateUpdateRequestDto(
+		ProductCreateUpdateRequest createRequest = new ProductCreateUpdateRequest(
 			"name",
 			"description",
 			"address",
@@ -991,14 +975,13 @@ public class ProductIntegrationTest {
 			438L,
 			Set.of(350L, 351L)
 		);
-		ProductDetailResponseDto productDto = productService.createProduct(createRequest);
+		ProductDetailResponse productDto = productService.createProduct(createRequest);
 
 		// when & then
 		mockMvc.perform(delete("/v1/products/" + productDto.id())
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isNoContent())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
-			.andExpect(jsonPath("$.code", is("C000")))
 			.andExpect(jsonPath("$.data", nullValue()))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
 	}

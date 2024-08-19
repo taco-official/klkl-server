@@ -9,10 +9,10 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
-import taco.klkl.domain.category.dto.response.FilterResponseDto;
+import taco.klkl.domain.category.dto.response.TagResponse;
 import taco.klkl.domain.product.dao.ProductRepository;
 import taco.klkl.domain.product.domain.Product;
-import taco.klkl.domain.product.domain.ProductFilter;
+import taco.klkl.domain.product.domain.ProductTag;
 import taco.klkl.domain.product.exception.ProductNotFoundException;
 
 @Component
@@ -21,21 +21,24 @@ public class ProductUtil {
 
 	private final ProductRepository productRepository;
 
-	public Product getProductEntityById(final Long id) {
+	public Product findProductEntityById(final Long id) {
 		return productRepository.findById(id)
 			.orElseThrow(ProductNotFoundException::new);
 	}
 
-	public boolean existsProductById(final Long id) {
-		return productRepository.existsById(id);
+	public void validateProductId(final Long id) {
+		final boolean existsById = productRepository.existsById(id);
+		if (!existsById) {
+			throw new ProductNotFoundException();
+		}
 	}
 
-	public static Set<FilterResponseDto> createFiltersByProduct(final Product product) {
-		return Optional.ofNullable(product.getProductFilters())
-			.map(productFilters -> productFilters.stream()
-				.map(ProductFilter::getFilter)
+	public static Set<TagResponse> createTagsByProduct(final Product product) {
+		return Optional.ofNullable(product.getProductTags())
+			.map(productTag -> productTag.stream()
+				.map(ProductTag::getTag)
 				.filter(Objects::nonNull)
-				.map(FilterResponseDto::from)
+				.map(TagResponse::from)
 				.collect(Collectors.toSet()))
 			.orElse(Collections.emptySet());
 	}

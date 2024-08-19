@@ -5,11 +5,11 @@ import java.time.LocalDateTime;
 import taco.klkl.domain.notification.domain.Notification;
 
 public record NotificationInfo(
-	long notificationId,
+	long id,
 	boolean isRead,
 	LocalDateTime createdAt
 ) {
-	public static NotificationInfo from(Notification notification) {
+	public static NotificationInfo from(final Notification notification) {
 		return new NotificationInfo(
 			notification.getId(),
 			notification.getIsRead(),

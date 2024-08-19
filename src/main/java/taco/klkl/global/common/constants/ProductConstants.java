@@ -17,9 +17,6 @@ public final class ProductConstants {
 	public static final String RATING_MIN_VALUE = "0.5";
 	public static final String RATING_MAX_VALUE = "5.0";
 
-	public static final Set<String> ALLOWED_SORT_BY = Set.of("likeCount", "rating", "createdAt");
-	public static final Set<String> ALLOWED_SORT_DIRECTION = Set.of("ASC", "DESC");
-
 	private ProductConstants() {
 	}
 }

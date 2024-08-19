@@ -48,10 +48,9 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
 		final ErrorCode errorCode = ErrorCode.METHOD_ARGUMENT_INVALID;
 		final String errorMessage = String.join(ERROR_MESSAGE_DELIMITER, errorCode.getMessage(), errors.toString());
-		final ErrorResponse errorResponse = ErrorResponse.of(errorCode.getCode(), errorMessage);
-		final GlobalResponse globalResponse = GlobalResponse.error(errorCode.getCode(), errorResponse);
-
-		return ResponseEntity.status(errorCode.getStatus()).body(globalResponse);
+		final ErrorResponse errorResponse = ErrorResponse.of(ex.getClass().getSimpleName(), errorMessage);
+		final GlobalResponse globalResponse = GlobalResponse.error(errorCode.getHttpStatus().value(), errorResponse);
+		return ResponseEntity.status(errorCode.getHttpStatus()).body(globalResponse);
 	}
 
 	@Override
@@ -63,19 +62,18 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 	) {
 		log.error("HttpRequestMethodNotSupported : {}", ex.getMessage(), ex);
 		final ErrorCode errorCode = ErrorCode.METHOD_NOT_SUPPORTED;
-		final ErrorResponse errorResponse = ErrorResponse.of(errorCode.getCode(), errorCode.getMessage());
-		final GlobalResponse globalResponse = GlobalResponse.error(errorCode.getCode(), errorResponse);
-		return ResponseEntity.status(errorCode.getStatus()).body(globalResponse);
+		return createErrorResponseEntity(ex, errorCode);
 	}
 
 	@Override
 	protected ResponseEntity<Object> handleHandlerMethodValidationException(HandlerMethodValidationException ex,
-		HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+		HttpHeaders headers,
+		HttpStatusCode status,
+		WebRequest request
+	) {
 		log.error("HandlerMethodValidationException : {}", ex.getMessage(), ex);
 		final ErrorCode errorCode = ErrorCode.QUERY_PARAM_INVALID;
-		final ErrorResponse errorResponse = ErrorResponse.of(errorCode.getCode(), errorCode.getMessage());
-		final GlobalResponse globalResponse = GlobalResponse.error(errorCode.getCode(), errorResponse);
-		return ResponseEntity.status(errorCode.getStatus()).body(globalResponse);
+		return createErrorResponseEntity(ex, errorCode);
 	}
 
 	@Override
@@ -83,9 +81,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 		HttpHeaders headers, HttpStatusCode status, WebRequest request) {
 		log.error("MissingServletRequestParameter : {}", ex.getMessage(), ex);
 		final ErrorCode errorCode = ErrorCode.QUERY_PARAM_NOT_FOUND;
-		final ErrorResponse errorResponse = ErrorResponse.of(errorCode.getCode(), errorCode.getMessage());
-		final GlobalResponse globalResponse = GlobalResponse.error(errorCode.getCode(), errorResponse);
-		return ResponseEntity.status(errorCode.getStatus()).body(globalResponse);
+		return createErrorResponseEntity(ex, errorCode);
 	}
 
 	@Override
@@ -98,9 +94,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 	) {
 		log.error("ExceptionInternal : {}", ex.getMessage(), ex);
 		final ErrorCode errorCode = ErrorCode.INTERNAL_SERVER_ERROR;
-		final ErrorResponse errorResponse = ErrorResponse.of(errorCode.getCode(), errorCode.getMessage());
-		final GlobalResponse globalResponse = GlobalResponse.error(errorCode.getCode(), errorResponse);
-		return ResponseEntity.status(errorCode.getStatus()).body(globalResponse);
+		return createErrorResponseEntity(ex, errorCode);
 	}
 
 	@Override
@@ -112,35 +106,33 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 	) {
 		log.error("HttpMessageNotReadable : {}", ex.getMessage(), ex);
 		final ErrorCode errorCode = ErrorCode.HTTP_MESSAGE_NOT_READABLE;
-		final ErrorResponse errorResponse = ErrorResponse.of(errorCode.getCode(), errorCode.getMessage());
-		final GlobalResponse globalResponse = GlobalResponse.error(errorCode.getCode(), errorResponse);
-		return ResponseEntity.status(errorCode.getStatus()).body(globalResponse);
+		return createErrorResponseEntity(ex, errorCode);
 	}
 
 	@ExceptionHandler(CustomException.class)
 	public ResponseEntity<Object> handleCustomException(CustomException ex) {
 		log.error("CustomException : {}", ex.getMessage(), ex);
 		final ErrorCode errorCode = ex.getErrorCode();
-		final ErrorResponse errorResponse = ErrorResponse.of(errorCode.getCode(), errorCode.getMessage());
-		final GlobalResponse globalResponse = GlobalResponse.error(errorCode.getCode(), errorResponse);
-		return ResponseEntity.status(errorCode.getStatus()).body(globalResponse);
+		return createErrorResponseEntity(ex, errorCode);
 	}
 
 	@ExceptionHandler(MethodArgumentTypeMismatchException.class)
 	public ResponseEntity<Object> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException ex) {
 		log.error("MethodArgumentTypeMismatchException : {}", ex.getMessage(), ex);
 		final ErrorCode errorCode = ErrorCode.QUERY_TYPE_MISMATCH;
-		final ErrorResponse errorResponse = ErrorResponse.of(errorCode.getCode(), errorCode.getMessage());
-		final GlobalResponse globalResponse = GlobalResponse.error(errorCode.getCode(), errorResponse);
-		return ResponseEntity.status(errorCode.getStatus()).body(globalResponse);
+		return createErrorResponseEntity(ex, errorCode);
 	}
 
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<Object> handleException(Exception ex) {
 		log.error("InternalServerError : {}", ex.getMessage(), ex);
 		final ErrorCode errorCode = ErrorCode.INTERNAL_SERVER_ERROR;
-		final ErrorResponse errorResponse = ErrorResponse.of(errorCode.getCode(), errorCode.getMessage());
-		final GlobalResponse globalResponse = GlobalResponse.error(errorCode.getCode(), errorResponse);
-		return ResponseEntity.status(errorCode.getStatus()).body(globalResponse);
+		return createErrorResponseEntity(ex, errorCode);
+	}
+
+	private ResponseEntity<Object> createErrorResponseEntity(final Exception ex, final ErrorCode errorCode) {
+		final ErrorResponse errorResponse = ErrorResponse.of(ex.getClass().getSimpleName(), errorCode.getMessage());
+		final GlobalResponse globalResponse = GlobalResponse.error(errorCode.getHttpStatus().value(), errorResponse);
+		return ResponseEntity.status(errorCode.getHttpStatus()).body(globalResponse);
 	}
 }

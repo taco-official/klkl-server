@@ -4,20 +4,18 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import taco.klkl.domain.region.dto.response.CityResponseDto;
-import taco.klkl.domain.region.dto.response.CountryResponseDto;
-import taco.klkl.domain.region.dto.response.CountrySimpleResponseDto;
-import taco.klkl.domain.region.enums.CountryType;
+import taco.klkl.domain.region.domain.CountryType;
+import taco.klkl.domain.region.dto.response.CityResponse;
+import taco.klkl.domain.region.dto.response.CountryResponse;
+import taco.klkl.domain.region.dto.response.CountrySimpleResponse;
 
 @Service
 public interface CountryService {
-	List<CountryResponseDto> getAllCountries();
+	List<CountryResponse> findAllCountries();
 
-	CountryResponseDto getCountryById(final Long countryId);
+	CountryResponse findCountryById(final Long countryId);
 
-	List<CityResponseDto> getCitiesByCountryId(final Long countryId);
+	List<CityResponse> findCitiesByCountryId(final Long countryId);
 
-	List<CountrySimpleResponseDto> getAllCountriesByCountryTypes(final List<CountryType> countryTypes);
-
-	boolean existsCountryById(final Long countryId);
+	List<CountrySimpleResponse> getAllCountriesByCountryTypes(final List<CountryType> countryTypes);
 }

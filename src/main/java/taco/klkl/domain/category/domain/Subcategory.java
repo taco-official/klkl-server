@@ -30,17 +30,17 @@ public class Subcategory {
 	private Category category;
 
 	@OneToMany(mappedBy = "subcategory")
-	List<SubcategoryFilter> subcategoryFilters = new ArrayList<>();
+	List<SubcategoryTag> subcategoryTags = new ArrayList<>();
 
 	@Column(name = "name")
 	private SubcategoryName name;
 
-	private Subcategory(Category category, SubcategoryName name) {
+	private Subcategory(final Category category, final SubcategoryName name) {
 		this.category = category;
 		this.name = name;
 	}
 
-	public static Subcategory of(Category category, SubcategoryName name) {
+	public static Subcategory of(final Category category, final SubcategoryName name) {
 		return new Subcategory(category, name);
 	}
 }

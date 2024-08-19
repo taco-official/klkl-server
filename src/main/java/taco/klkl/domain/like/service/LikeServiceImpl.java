@@ -9,7 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import taco.klkl.domain.like.dao.LikeRepository;
 import taco.klkl.domain.like.domain.Like;
-import taco.klkl.domain.like.dto.response.LikeResponseDto;
+import taco.klkl.domain.like.dto.response.LikeResponse;
 import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.product.service.ProductService;
 import taco.klkl.domain.user.domain.User;
@@ -24,46 +24,43 @@ import taco.klkl.global.util.UserUtil;
 public class LikeServiceImpl implements LikeService {
 
 	private final LikeRepository likeRepository;
+
 	private final ProductService productService;
+
 	private final UserUtil userUtil;
 	private final ProductUtil productUtil;
 
 	@Override
-	public LikeResponseDto createLike(Long productId) {
-		Product product = getProductById(productId);
-		User user = getCurrentUser();
-
+	public LikeResponse createLike(final Long productId) {
+		final Product product = findProductById(productId);
+		final User user = findCurrentUser();
 		if (isLikePresent(product, user)) {
-			return LikeResponseDto.of(true, product.getLikeCount());
+			return LikeResponse.of(true, product.getLikeCount());
 		}
-
 		Like like = Like.of(product, user);
 		likeRepository.save(like);
 		int likeCount = productService.increaseLikeCount(product);
-
-		return LikeResponseDto.of(true, likeCount);
+		return LikeResponse.of(true, likeCount);
 	}
 
 	@Override
-	public LikeResponseDto deleteLike(Long productId) {
-		Product product = getProductById(productId);
-		User user = getCurrentUser();
-
+	public LikeResponse deleteLike(final Long productId) {
+		final Product product = findProductById(productId);
+		final User user = findCurrentUser();
 		if (isLikePresent(product, user)) {
 			likeRepository.deleteByProductAndUser(product, user);
 			int likeCount = productService.decreaseLikeCount(product);
-			return LikeResponseDto.of(false, likeCount);
+			return LikeResponse.of(false, likeCount);
 		}
-
-		return LikeResponseDto.of(false, product.getLikeCount());
+		return LikeResponse.of(false, product.getLikeCount());
 	}
 
-	private Product getProductById(Long productId) {
-		return productUtil.getProductEntityById(productId);
+	private Product findProductById(final Long productId) {
+		return productUtil.findProductEntityById(productId);
 	}
 
-	private User getCurrentUser() {
-		return userUtil.getCurrentUser();
+	private User findCurrentUser() {
+		return userUtil.findCurrentUser();
 	}
 
 	@Override

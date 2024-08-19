@@ -28,11 +28,11 @@ public class Category {
 	@OneToMany(mappedBy = "category")
 	private List<Subcategory> subcategories = new ArrayList<>();
 
-	private Category(CategoryName name) {
+	private Category(final CategoryName name) {
 		this.name = name;
 	}
 
-	public static Category of(CategoryName name) {
+	public static Category of(final CategoryName name) {
 		return new Category(name);
 	}
 }

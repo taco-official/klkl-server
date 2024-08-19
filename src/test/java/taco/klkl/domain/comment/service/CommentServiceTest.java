@@ -17,8 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import taco.klkl.domain.comment.dao.CommentRepository;
 import taco.klkl.domain.comment.domain.Comment;
-import taco.klkl.domain.comment.dto.request.CommentCreateUpdateRequestDto;
-import taco.klkl.domain.comment.dto.response.CommentResponseDto;
+import taco.klkl.domain.comment.dto.request.CommentCreateUpdateRequest;
+import taco.klkl.domain.comment.dto.response.CommentResponse;
 import taco.klkl.domain.comment.exception.CommentNotFoundException;
 import taco.klkl.domain.comment.exception.CommentProductNotMatch;
 import taco.klkl.domain.notification.service.NotificationService;
@@ -26,7 +26,7 @@ import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.product.exception.ProductNotFoundException;
 import taco.klkl.domain.user.domain.Gender;
 import taco.klkl.domain.user.domain.User;
-import taco.klkl.domain.user.dto.request.UserCreateRequestDto;
+import taco.klkl.domain.user.dto.request.UserCreateRequest;
 import taco.klkl.global.util.ProductUtil;
 import taco.klkl.global.util.UserUtil;
 
@@ -48,7 +48,7 @@ public class CommentServiceTest {
 	@InjectMocks
 	private CommentService commentService;
 
-	private final UserCreateRequestDto userRequestDto = new UserCreateRequestDto(
+	private final UserCreateRequest userRequestDto = new UserCreateRequest(
 		"이상화",
 		"남",
 		19,
@@ -66,17 +66,17 @@ public class CommentServiceTest {
 
 	private final Product product = mock(Product.class);
 
-	private final CommentCreateUpdateRequestDto commentCreateRequestDto = new CommentCreateUpdateRequestDto(
+	private final CommentCreateUpdateRequest commentCreateRequestDto = new CommentCreateUpdateRequest(
 		"이거 진짜에요?"
 	);
 
-	private final CommentCreateUpdateRequestDto commentUpdateRequestDto = new CommentCreateUpdateRequestDto(
+	private final CommentCreateUpdateRequest commentUpdateRequestDto = new CommentCreateUpdateRequest(
 		"윤상정은 바보다, 반박시 님 말이 틀림."
 	);
 
 	@Test
 	@DisplayName("상품에 있는 모든 댓글 반환 테스트")
-	public void testGetComments() {
+	public void testFindCommentsByProductId() {
 		//given
 		Long productId = 1L;
 		Comment comment1 = Comment.of(product, user, "쎄마 네이이이이이암 마");
@@ -84,15 +84,14 @@ public class CommentServiceTest {
 		List<Comment> comments = List.of(comment1, comment2);
 
 		when(product.getId()).thenReturn(productId);
-		when(productUtil.existsProductById(productId)).thenReturn(true);
 		when(commentRepository.findAllByProduct_Id(productId)).thenReturn(comments);
 
 		//when
-		List<CommentResponseDto> result = commentService.getComments(productId);
+		List<CommentResponse> result = commentService.findCommentsByProductId(productId);
 
 		//then
-		assertThat(result.get(0).commentId()).isEqualTo(comment1.getId());
-		assertThat(result.get(1).commentId()).isEqualTo(comment2.getId());
+		assertThat(result.get(0).id()).isEqualTo(comment1.getId());
+		assertThat(result.get(1).id()).isEqualTo(comment2.getId());
 		assertThat(result.get(0).content()).isEqualTo(comment1.getContent());
 		assertThat(result.get(1).content()).isEqualTo(comment2.getContent());
 		assertThat(result.get(0).createdAt()).isEqualTo(comment1.getCreatedAt());
@@ -112,10 +111,10 @@ public class CommentServiceTest {
 		when(commentRepository.save(any(Comment.class))).thenReturn(comment);
 
 		//when
-		CommentResponseDto result = commentService.createComment(productId, commentCreateRequestDto);
+		CommentResponse result = commentService.createComment(productId, commentCreateRequestDto);
 
 		//then
-		assertThat(result.commentId()).isEqualTo(comment.getId());
+		assertThat(result.id()).isEqualTo(comment.getId());
 		assertThat(result.user().id()).isEqualTo(user.getId());
 		assertThat(result.content()).isEqualTo(comment.getContent());
 	}
@@ -130,14 +129,13 @@ public class CommentServiceTest {
 		Comment comment = Comment.of(product, user, "이거 진짜에요?");
 
 		when(product.getId()).thenReturn(productId);
-		when(productUtil.existsProductById(productId)).thenReturn(true);
 		when(commentRepository.findById(commentId)).thenReturn(Optional.of(comment));
 
 		//when
-		CommentResponseDto result = commentService.updateComment(productId, commentId, commentUpdateRequestDto);
+		CommentResponse result = commentService.updateComment(productId, commentId, commentUpdateRequestDto);
 
 		//then
-		assertThat(result.commentId()).isEqualTo(comment.getId());
+		assertThat(result.id()).isEqualTo(comment.getId());
 		assertThat(result.user().id()).isEqualTo(user.getId());
 		assertThat(result.content()).isEqualTo(commentUpdateRequestDto.content());
 		assertThat(result.createdAt()).isEqualTo(comment.getCreatedAt());
@@ -153,7 +151,6 @@ public class CommentServiceTest {
 		Comment comment = Comment.of(product, user, "이거 진짜에요?");
 
 		when(product.getId()).thenReturn(productId);
-		when(productUtil.existsProductById(productId)).thenReturn(true);
 
 		//when & then
 		assertThrows(CommentNotFoundException.class, () -> commentService.deleteComment(productId, commentId));
@@ -168,6 +165,7 @@ public class CommentServiceTest {
 		Long commentId = 1L;
 
 		when(product.getId()).thenReturn(productId);
+		doThrow(ProductNotFoundException.class).when(productUtil).validateProductId(productId);
 
 		//when & then
 		assertThrows(ProductNotFoundException.class,
@@ -185,7 +183,6 @@ public class CommentServiceTest {
 		Comment comment = Comment.of(product, user, "이거 진짜에요?");
 
 		when(product.getId()).thenReturn(wrongProductId);
-		when(productUtil.existsProductById(productId)).thenReturn(true);
 		when(commentRepository.findById(commentId)).thenReturn(Optional.of(comment));
 
 		//when & then
@@ -204,7 +201,6 @@ public class CommentServiceTest {
 		Comment comment = Comment.of(product, user, "이거 진짜에요?");
 
 		when(product.getId()).thenReturn(productId);
-		when(productUtil.existsProductById(productId)).thenReturn(true);
 		when(commentRepository.findById(commentId)).thenReturn(Optional.of(comment));
 
 		commentService.deleteComment(productId, commentId);
@@ -222,7 +218,6 @@ public class CommentServiceTest {
 		Comment comment = Comment.of(product, user, "이거 진짜에요?");
 
 		when(product.getId()).thenReturn(productId);
-		when(productUtil.existsProductById(productId)).thenReturn(true);
 		when(commentRepository.findById(commentID)).thenReturn(Optional.empty());
 
 		//when & then
@@ -235,6 +230,8 @@ public class CommentServiceTest {
 	public void testDeleteCommentWhenProductNotFound() {
 		Long productId = 1L;
 		Long commentID = 1L;
+
+		doThrow(ProductNotFoundException.class).when(productUtil).validateProductId(productId);
 
 		//when & then
 		assertThrows(ProductNotFoundException.class, () -> commentService.deleteComment(productId, commentID));
@@ -251,7 +248,6 @@ public class CommentServiceTest {
 		Comment comment = Comment.of(product, user, "이거 진짜에요?");
 
 		when(product.getId()).thenReturn(wrongProductId);
-		when(productUtil.existsProductById(productId)).thenReturn(true);
 		when(commentRepository.findById(commentId)).thenReturn(Optional.of(comment));
 
 		//when & then

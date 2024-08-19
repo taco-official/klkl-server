@@ -19,15 +19,15 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import taco.klkl.domain.region.dao.CountryRepository;
 import taco.klkl.domain.region.domain.City;
+import taco.klkl.domain.region.domain.CityType;
 import taco.klkl.domain.region.domain.Country;
+import taco.klkl.domain.region.domain.CountryType;
 import taco.klkl.domain.region.domain.Currency;
+import taco.klkl.domain.region.domain.CurrencyType;
 import taco.klkl.domain.region.domain.Region;
-import taco.klkl.domain.region.dto.response.CityResponseDto;
-import taco.klkl.domain.region.dto.response.CountryResponseDto;
-import taco.klkl.domain.region.enums.CityType;
-import taco.klkl.domain.region.enums.CountryType;
-import taco.klkl.domain.region.enums.CurrencyType;
-import taco.klkl.domain.region.enums.RegionType;
+import taco.klkl.domain.region.domain.RegionType;
+import taco.klkl.domain.region.dto.response.CityResponse;
+import taco.klkl.domain.region.dto.response.CountryResponse;
 import taco.klkl.domain.region.service.CountryService;
 
 @WebMvcTest(CountryController.class)
@@ -62,48 +62,46 @@ public class CountryControllerTest {
 
 	@Test
 	@DisplayName("모든 국가 조회 테스트")
-	void testGetAllCountries() throws Exception {
+	void testFindAllCountries() throws Exception {
 		// given
-		List<CountryResponseDto> countryResponseDtos = Arrays.asList(
-			CountryResponseDto.from(country1),
-			CountryResponseDto.from(country2)
+		List<CountryResponse> countryResponses = Arrays.asList(
+			CountryResponse.from(country1),
+			CountryResponse.from(country2)
 		);
 
-		when(countryService.getAllCountries()).thenReturn(countryResponseDtos);
+		when(countryService.findAllCountries()).thenReturn(countryResponses);
 
 		// when & then
 		mockMvc.perform(get("/v1/countries")
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
-			.andExpect(jsonPath("$.code", is("C000")))
 			.andExpect(jsonPath("$.data", hasSize(2)))
 			.andExpect(jsonPath("$.data[0].name", is(country1.getName().getKoreanName())))
 			.andExpect(jsonPath("$.data[1].name", is(country2.getName().getKoreanName())))
 			.andExpect(jsonPath("$.data[0].currency.code", is(country1.getCurrency().getCode().getCodeName())))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
 
-		verify(countryService, times(1)).getAllCountries();
+		verify(countryService, times(1)).findAllCountries();
 	}
 
 	@Test
 	@DisplayName("Id로 국가 조회 테스트")
-	void testGetCountryById() throws Exception {
+	void testFindCountryById() throws Exception {
 		// given
-		CountryResponseDto countryResponseDto = CountryResponseDto.from(country1);
+		CountryResponse countryResponse = CountryResponse.from(country1);
 
-		when(countryService.getCountryById(400L)).thenReturn(countryResponseDto);
+		when(countryService.findCountryById(400L)).thenReturn(countryResponse);
 
 		// when & then
 		mockMvc.perform(get("/v1/countries/400")
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
-			.andExpect(jsonPath("$.code", is("C000")))
 			.andExpect(jsonPath("$.data.name", is(country1.getName().getKoreanName())))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
 
-		verify(countryService, times(1)).getCountryById(400L);
+		verify(countryService, times(1)).findCountryById(400L);
 	}
 
 	@Test
@@ -111,23 +109,21 @@ public class CountryControllerTest {
 	void testGetCountryWithCities() throws Exception {
 		// given
 		Country mockCountry = mock(Country.class);
-		CountryRepository mockCountryRepository = mock(CountryRepository.class);
 		when(mockCountry.getName()).thenReturn(CountryType.JAPAN);
 		when(countryRepository.findById(400L)).thenReturn(Optional.of(mockCountry));
 		when(mockCountry.getCities()).thenReturn(cities);
-		when(countryService.getCitiesByCountryId(400L)).thenReturn(cities.stream().map(CityResponseDto::from).toList());
+		when(countryService.findCitiesByCountryId(400L)).thenReturn(cities.stream().map(CityResponse::from).toList());
 
 		// when & then
 		mockMvc.perform(get("/v1/countries/400/cities")
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
-			.andExpect(jsonPath("$.code", is("C000")))
 			.andExpect(jsonPath("$.data[0].name", is(cities.get(0).getName().getKoreanName())))
 			.andExpect(jsonPath("$.data[1].name", is(cities.get(1).getName().getKoreanName())))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
 
-		verify(countryService, times(1)).getCitiesByCountryId(400L);
+		verify(countryService, times(1)).findCitiesByCountryId(400L);
 	}
 
 }

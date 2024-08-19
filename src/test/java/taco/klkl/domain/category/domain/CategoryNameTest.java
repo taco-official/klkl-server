@@ -11,12 +11,12 @@ class CategoryNameTest {
 
 	@Test
 	@DisplayName("부분 문자열을 포함하는 CategoryName 찾기 - 정상 케이스")
-	void testGetCategoryNamesByPartialString() {
+	void testFindByPartialString() {
 		// given
 		String partialString = "식품";
 
 		// when
-		List<CategoryName> result = CategoryName.getCategoryNamesByPartialString(partialString);
+		List<CategoryName> result = CategoryName.findByPartialString(partialString);
 
 		// then
 		assertThat(result).containsExactly(CategoryName.FOOD);
@@ -24,12 +24,12 @@ class CategoryNameTest {
 
 	@Test
 	@DisplayName("부분 문자열을 포함하는 CategoryName 찾기 - 여러 결과")
-	void testGetCategoryNamesByPartialStringMultipleResults() {
+	void testFindByPartialStringMultipleResults() {
 		// given
 		String partialString = "화";
 
 		// when
-		List<CategoryName> result = CategoryName.getCategoryNamesByPartialString(partialString);
+		List<CategoryName> result = CategoryName.findByPartialString(partialString);
 
 		// then
 		assertThat(result).containsExactlyInAnyOrder(CategoryName.COSMETICS, CategoryName.SUNDRIES);
@@ -37,12 +37,12 @@ class CategoryNameTest {
 
 	@Test
 	@DisplayName("부분 문자열을 포함하는 CategoryName 찾기 - 결과 없음")
-	void testGetCategoryNamesByPartialStringNoResults() {
+	void testFindByPartialStringNoResults() {
 		// given
 		String partialString = "없음";
 
 		// when
-		List<CategoryName> result = CategoryName.getCategoryNamesByPartialString(partialString);
+		List<CategoryName> result = CategoryName.findByPartialString(partialString);
 
 		// then
 		assertThat(result).isEmpty();
@@ -50,12 +50,12 @@ class CategoryNameTest {
 
 	@Test
 	@DisplayName("부분 문자열을 포함하는 CategoryName 찾기 - 빈 문자열")
-	void testGetCategoryNamesByPartialStringEmpty() {
+	void testFindByPartialStringEmpty() {
 		// given
 		String partialString = "";
 
 		// when
-		List<CategoryName> result = CategoryName.getCategoryNamesByPartialString(partialString);
+		List<CategoryName> result = CategoryName.findByPartialString(partialString);
 
 		// then
 		assertThat(result).isEmpty();
@@ -63,12 +63,12 @@ class CategoryNameTest {
 
 	@Test
 	@DisplayName("부분 문자열을 포함하는 CategoryName 찾기 - null 입력")
-	void testGetCategoryNamesByPartialStringNull() {
+	void testFindByPartialStringNull() {
 		// given
 		String partialString = null;
 
 		// when
-		List<CategoryName> result = CategoryName.getCategoryNamesByPartialString(partialString);
+		List<CategoryName> result = CategoryName.findByPartialString(partialString);
 
 		// then
 		assertThat(result).isEmpty();

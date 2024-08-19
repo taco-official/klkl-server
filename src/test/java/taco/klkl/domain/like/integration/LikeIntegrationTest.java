@@ -17,8 +17,8 @@ import jakarta.transaction.Transactional;
 import taco.klkl.domain.like.dao.LikeRepository;
 import taco.klkl.domain.like.service.LikeService;
 import taco.klkl.domain.product.domain.Product;
-import taco.klkl.domain.product.dto.request.ProductCreateUpdateRequestDto;
-import taco.klkl.domain.product.dto.response.ProductDetailResponseDto;
+import taco.klkl.domain.product.dto.request.ProductCreateUpdateRequest;
+import taco.klkl.domain.product.dto.response.ProductDetailResponse;
 import taco.klkl.domain.product.service.ProductService;
 import taco.klkl.global.util.ProductUtil;
 import taco.klkl.global.util.UserUtil;
@@ -50,7 +50,7 @@ public class LikeIntegrationTest {
 
 	@BeforeEach
 	void setUp() {
-		ProductCreateUpdateRequestDto createDto = new ProductCreateUpdateRequestDto(
+		ProductCreateUpdateRequest createDto = new ProductCreateUpdateRequest(
 			"name",
 			"description",
 			"address",
@@ -61,8 +61,8 @@ public class LikeIntegrationTest {
 			438L,
 			null
 		);
-		ProductDetailResponseDto productResponseDto = productService.createProduct(createDto);
-		product = productUtil.getProductEntityById(productResponseDto.id());
+		ProductDetailResponse productResponseDto = productService.createProduct(createDto);
+		product = productUtil.findProductEntityById(productResponseDto.id());
 	}
 
 	@AfterEach

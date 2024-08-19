@@ -22,8 +22,8 @@ import jakarta.persistence.PrePersist;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import taco.klkl.domain.category.domain.Filter;
 import taco.klkl.domain.category.domain.Subcategory;
+import taco.klkl.domain.category.domain.Tag;
 import taco.klkl.domain.like.exception.LikeCountBelowMinimumException;
 import taco.klkl.domain.like.exception.LikeCountOverMaximumException;
 import taco.klkl.domain.product.converter.RatingConverter;
@@ -134,7 +134,7 @@ public class Product {
 		cascade = CascadeType.ALL,
 		orphanRemoval = true
 	)
-	private Set<ProductFilter> productFilters = new HashSet<>();
+	private Set<ProductTag> productTags = new HashSet<>();
 
 	@Column(
 		name = "created_at",
@@ -211,18 +211,18 @@ public class Product {
 		this.currency = currency;
 	}
 
-	public void addFilters(final Set<Filter> filters) {
-		filters.forEach(this::addFilter);
+	public void addTags(final Set<Tag> tags) {
+		tags.forEach(this::addTag);
 	}
 
-	public void updateFilters(final Set<Filter> updatedFilters) {
-		this.productFilters.clear();
-		updatedFilters.forEach(this::addFilter);
+	public void updateTags(final Set<Tag> updatedTags) {
+		this.productTags.clear();
+		updatedTags.forEach(this::addTag);
 	}
 
-	public void addFilter(final Filter filter) {
-		ProductFilter productFilter = ProductFilter.of(this, filter);
-		this.productFilters.add(productFilter);
+	public void addTag(final Tag tag) {
+		final ProductTag productTag = ProductTag.of(this, tag);
+		this.productTags.add(productTag);
 	}
 
 	public int increaseLikeCount() throws LikeCountOverMaximumException {

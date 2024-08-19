@@ -13,7 +13,7 @@ import org.mockito.MockitoAnnotations;
 
 import taco.klkl.domain.like.dao.LikeRepository;
 import taco.klkl.domain.like.domain.Like;
-import taco.klkl.domain.like.dto.response.LikeResponseDto;
+import taco.klkl.domain.like.dto.response.LikeResponse;
 import taco.klkl.domain.like.exception.LikeCountBelowMinimumException;
 import taco.klkl.domain.like.exception.LikeCountOverMaximumException;
 import taco.klkl.domain.product.domain.Product;
@@ -56,19 +56,19 @@ class LikeServiceImplTest {
 		// given
 		Long productId = 1L;
 
-		when(productUtil.getProductEntityById(productId)).thenReturn(product);
-		when(userUtil.getCurrentUser()).thenReturn(user);
+		when(productUtil.findProductEntityById(productId)).thenReturn(product);
+		when(userUtil.findCurrentUser()).thenReturn(user);
 		when(likeRepository.existsByProductAndUser(product, user)).thenReturn(false);
 		when(productService.increaseLikeCount(product)).thenReturn(1);
-		LikeResponseDto likeResponseDto = LikeResponseDto.of(true, 1);
+		LikeResponse likeResponse = LikeResponse.of(true, 1);
 
 		// when
-		LikeResponseDto returnLikeResponseDto = likeService.createLike(productId);
+		LikeResponse returnLikeResponse = likeService.createLike(productId);
 
 		// then
 		verify(likeRepository).save(any(Like.class));
 		verify(productService).increaseLikeCount(product);
-		assertThat(returnLikeResponseDto).isEqualTo(likeResponseDto);
+		assertThat(returnLikeResponse).isEqualTo(likeResponse);
 
 	}
 
@@ -78,23 +78,23 @@ class LikeServiceImplTest {
 		// given
 		Long productId = 1L;
 
-		when(productUtil.getProductEntityById(productId)).thenReturn(product);
-		when(userUtil.getCurrentUser()).thenReturn(user);
+		when(productUtil.findProductEntityById(productId)).thenReturn(product);
+		when(userUtil.findCurrentUser()).thenReturn(user);
 		when(likeRepository.existsByProductAndUser(product, user)).thenReturn(true);
 		when(product.getLikeCount()).thenReturn(1);
-		LikeResponseDto likeResponseDto = LikeResponseDto.of(true, product.getLikeCount());
+		LikeResponse likeResponse = LikeResponse.of(true, product.getLikeCount());
 
 		// when
-		LikeResponseDto returnLikeResponseDto1 = likeService.createLike(productId);
-		LikeResponseDto returnLikeResponseDto2 = likeService.createLike(productId);
-		LikeResponseDto returnLikeResponseDto3 = likeService.createLike(productId);
+		LikeResponse returnLikeResponse1 = likeService.createLike(productId);
+		LikeResponse returnLikeResponse2 = likeService.createLike(productId);
+		LikeResponse returnLikeResponse3 = likeService.createLike(productId);
 
 		// then
 		verify(likeRepository, never()).save(any(Like.class));
 		verify(productService, never()).increaseLikeCount(product);
-		assertThat(returnLikeResponseDto1).isEqualTo(likeResponseDto);
-		assertThat(returnLikeResponseDto2).isEqualTo(likeResponseDto);
-		assertThat(returnLikeResponseDto3).isEqualTo(likeResponseDto);
+		assertThat(returnLikeResponse1).isEqualTo(likeResponse);
+		assertThat(returnLikeResponse2).isEqualTo(likeResponse);
+		assertThat(returnLikeResponse3).isEqualTo(likeResponse);
 	}
 
 	@Test
@@ -103,20 +103,20 @@ class LikeServiceImplTest {
 		// given
 		Long productId = 1L;
 
-		when(productUtil.getProductEntityById(productId)).thenReturn(product);
-		when(userUtil.getCurrentUser()).thenReturn(user);
+		when(productUtil.findProductEntityById(productId)).thenReturn(product);
+		when(userUtil.findCurrentUser()).thenReturn(user);
 		when(likeRepository.existsByProductAndUser(product, user)).thenReturn(true);
 		when(productService.decreaseLikeCount(product)).thenReturn(0);
 		when(product.getLikeCount()).thenReturn(0);
-		LikeResponseDto likeResponseDto = LikeResponseDto.of(false, product.getLikeCount());
+		LikeResponse likeResponse = LikeResponse.of(false, product.getLikeCount());
 
 		// when
-		LikeResponseDto returnLikeResponseDto = likeService.deleteLike(productId);
+		LikeResponse returnLikeResponse = likeService.deleteLike(productId);
 
 		// then
 		verify(likeRepository).deleteByProductAndUser(product, user);
 		verify(productService).decreaseLikeCount(product);
-		assertThat(returnLikeResponseDto).isEqualTo(likeResponseDto);
+		assertThat(returnLikeResponse).isEqualTo(likeResponse);
 	}
 
 	@Test
@@ -125,23 +125,23 @@ class LikeServiceImplTest {
 		// given
 		Long productId = 1L;
 
-		when(productUtil.getProductEntityById(productId)).thenReturn(product);
-		when(userUtil.getCurrentUser()).thenReturn(user);
+		when(productUtil.findProductEntityById(productId)).thenReturn(product);
+		when(userUtil.findCurrentUser()).thenReturn(user);
 		when(likeRepository.existsByProductAndUser(product, user)).thenReturn(false);
 		when(product.getLikeCount()).thenReturn(1);
-		LikeResponseDto likeResponseDto = LikeResponseDto.of(false, product.getLikeCount());
+		LikeResponse likeResponse = LikeResponse.of(false, product.getLikeCount());
 
 		// when
-		LikeResponseDto returnLikeResponseDto1 = likeService.deleteLike(productId);
-		LikeResponseDto returnLikeResponseDto2 = likeService.deleteLike(productId);
-		LikeResponseDto returnLikeResponseDto3 = likeService.deleteLike(productId);
+		LikeResponse returnLikeResponse1 = likeService.deleteLike(productId);
+		LikeResponse returnLikeResponse2 = likeService.deleteLike(productId);
+		LikeResponse returnLikeResponse3 = likeService.deleteLike(productId);
 
 		// then
 		verify(likeRepository, never()).deleteByProductAndUser(product, user);
 		verify(productService, never()).decreaseLikeCount(product);
-		assertThat(returnLikeResponseDto1).isEqualTo(likeResponseDto);
-		assertThat(returnLikeResponseDto2).isEqualTo(likeResponseDto);
-		assertThat(returnLikeResponseDto3).isEqualTo(likeResponseDto);
+		assertThat(returnLikeResponse1).isEqualTo(likeResponse);
+		assertThat(returnLikeResponse2).isEqualTo(likeResponse);
+		assertThat(returnLikeResponse3).isEqualTo(likeResponse);
 	}
 
 	@Test
@@ -150,8 +150,8 @@ class LikeServiceImplTest {
 		// given
 		Long productId = 1L;
 
-		when(productUtil.getProductEntityById(productId)).thenReturn(product);
-		when(userUtil.getCurrentUser()).thenReturn(user);
+		when(productUtil.findProductEntityById(productId)).thenReturn(product);
+		when(userUtil.findCurrentUser()).thenReturn(user);
 		when(likeRepository.existsByProductAndUser(product, user)).thenReturn(false);
 		when(productService.increaseLikeCount(product)).thenThrow(LikeCountOverMaximumException.class);
 		doThrow(LikeCountOverMaximumException.class).when(product).increaseLikeCount();
@@ -168,8 +168,8 @@ class LikeServiceImplTest {
 		// given
 		Long productId = 1L;
 
-		when(productUtil.getProductEntityById(productId)).thenReturn(product);
-		when(userUtil.getCurrentUser()).thenReturn(user);
+		when(productUtil.findProductEntityById(productId)).thenReturn(product);
+		when(userUtil.findCurrentUser()).thenReturn(user);
 		when(likeRepository.existsByProductAndUser(product, user)).thenReturn(true);
 		when(productService.decreaseLikeCount(product)).thenThrow(LikeCountBelowMinimumException.class);
 		doThrow(LikeCountBelowMinimumException.class).when(product).decreaseLikeCount();

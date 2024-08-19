@@ -40,7 +40,7 @@ public class GlobalResponseAdvice implements ResponseBodyAdvice<Object> {
 			return body;
 		}
 		if (resolve.is2xxSuccessful()) {
-			return GlobalResponse.ok("C000", body);
+			return GlobalResponse.ok(status, body);
 		}
 		return body;
 	}

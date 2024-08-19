@@ -11,7 +11,6 @@ import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import taco.klkl.domain.region.enums.CityType;
 
 @Getter
 @Entity(name = "city")
@@ -21,7 +20,7 @@ public class City {
 	@Id
 	@Column(name = "city_id")
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long cityId;
+	private Long id;
 
 	@ManyToOne(
 		fetch = FetchType.LAZY,
