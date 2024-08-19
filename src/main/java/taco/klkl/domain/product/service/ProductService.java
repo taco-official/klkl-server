@@ -1,7 +1,5 @@
 package taco.klkl.domain.product.service;
 
-import java.util.List;
-
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -35,6 +33,7 @@ public interface ProductService {
 
 	void deleteProduct(final Long id) throws ProductNotFoundException;
 
-	List<ProductSimpleResponse> getProductsByPartialName(String partialName);
+	PagedResponseDto<ProductSimpleResponse> findProductsByPartialName(String partialName, Pageable pageable,
+		ProductSortOptions sortOptions);
 
 }

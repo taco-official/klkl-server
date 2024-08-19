@@ -13,7 +13,7 @@ VALUES (400, '동북아시아'),
 
 INSERT INTO currency (currency_id, code, flag)
 VALUES (438, 'JPY', 'japan_flag.png'),
-       (439, 'CNY', 'china_flag.png'),
+       (439, 'CNH', 'china_flag.png'),
        (440, 'TWD', 'taiwan_flag.png'),
        (441, 'THB', 'thailand_flag.png'),
        (442, 'VND', 'vietnam_flag.png'),

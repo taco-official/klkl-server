@@ -20,9 +20,6 @@ import taco.klkl.domain.category.domain.Subcategory;
 import taco.klkl.domain.category.domain.SubcategoryName;
 import taco.klkl.domain.category.dto.response.CategoryResponse;
 import taco.klkl.domain.category.dto.response.SubcategoryResponse;
-import taco.klkl.domain.product.domain.Product;
-import taco.klkl.domain.product.domain.Rating;
-import taco.klkl.domain.product.dto.response.ProductSimpleResponse;
 import taco.klkl.domain.region.domain.City;
 import taco.klkl.domain.region.domain.CityType;
 import taco.klkl.domain.region.domain.Country;
@@ -58,17 +55,6 @@ public class SearchControllerTest {
 	private final City city = City.of(country, CityType.BORACAY);
 	private final Category category = Category.of(CategoryName.CLOTHES);
 	private final Subcategory subcategory = Subcategory.of(category, SubcategoryName.MAKEUP);
-	private final Product product = Product.of(
-		"name",
-		"description",
-		"address",
-		1000,
-		Rating.FIVE,
-		user,
-		city,
-		subcategory,
-		currency
-	);
 
 	@BeforeEach
 	void setUp() {
@@ -77,8 +63,7 @@ public class SearchControllerTest {
 			Collections.singletonList(CountrySimpleResponse.from(country)),
 			Collections.singletonList(CityResponse.from(city)),
 			Collections.singletonList(CategoryResponse.from(category)),
-			Collections.singletonList(SubcategoryResponse.from(subcategory)),
-			Collections.singletonList(ProductSimpleResponse.from(product))
+			Collections.singletonList(SubcategoryResponse.from(subcategory))
 		);
 	}
 
@@ -96,7 +81,6 @@ public class SearchControllerTest {
 			.andExpect(jsonPath("$.data.countries").isArray())
 			.andExpect(jsonPath("$.data.cities").isArray())
 			.andExpect(jsonPath("$.data.categories").isArray())
-			.andExpect(jsonPath("$.data.subcategories").isArray())
-			.andExpect(jsonPath("$.data.products").isArray());
+			.andExpect(jsonPath("$.data.subcategories").isArray());
 	}
 }
