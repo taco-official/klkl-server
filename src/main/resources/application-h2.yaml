@@ -1,18 +1,7 @@
 spring:
-  # H2 Setting Info (H2 Console에 접속하기 위한 설정정보 입력)
-  h2:
-    console:
-      enabled: true  # H2 Console을 사용할지 여부 (H2 Console은 H2 Database를 UI로 제공해주는 기능)
-      path: /h2-console  # H2 Console의 Path
-      settings:
-        web-allow-others: true
-  # Database Setting Info (Database를 H2로 사용하기 위해 H2연결 정보 입력)
-  datasource:
-    driver-class-name: org.h2.Driver
-    url: jdbc:h2:mem:klkldb;NON_KEYWORDS=USER;MODE=MySQL
-
-    username: sa
-    password:
+  config:
+    activate:
+      on-profile: "h2"
   jpa:
     show-sql: true
     database-platform: org.hibernate.dialect.H2Dialect
@@ -23,9 +12,19 @@ spring:
       hibernate:
         show_sql: true
         format_sql: true
-
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:klkldb;NON_KEYWORDS=USER;MODE=MySQL
+    username: sa
+    password:
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+      settings:
+        web-allow-others: true
   sql:
     init:
-      data-locations: classpath:database/data.sql  # 더미데이터 파일 연결
+      data-locations: classpath:database/data.sql
       mode: always
       platform: h2
