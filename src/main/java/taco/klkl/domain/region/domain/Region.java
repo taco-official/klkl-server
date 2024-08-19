@@ -14,7 +14,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@Entity
+@Entity(name = "region")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Region {
 

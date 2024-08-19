@@ -16,7 +16,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@Entity
+@Entity(name = "country")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Country {
 

@@ -13,7 +13,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@Entity
+@Entity(name = "subcategory_tag")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class SubcategoryTag {
 	@Id

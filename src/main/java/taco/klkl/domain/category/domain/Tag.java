@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 import taco.klkl.domain.product.domain.ProductTag;
 
 @Getter
-@Entity
+@Entity(name = "tag")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Tag {
 

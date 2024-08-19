@@ -1,19 +1,13 @@
 spring:
+  config:
+    import: optional:file:.env[.properties]
   profiles:
+    group:
+      test: "test, h2"
+      local: "local, h2"
+      dev: "dev, mysql"
     include:
-      - h2
       - swagger
 
   application:
     name: klkl
-
-logging:
-  level:
-    root: INFO
-    org.springframework.web: DEBUG
-    org.hibernate.SQL: DEBUG
-    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
-
-  pattern:
-    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
-    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
