@@ -26,7 +26,7 @@ public class WebConfigTest {
 				.header("Origin", "http://localhost:3000")
 				.header("Access-Control-Request-Method", "GET")
 				.header("Access-Control-Request-Headers", "Authorization, Content-Type"))
-			.andExpect(header().string("Access-Control-Allow-Origin", "http://localhost:8080"))
+			.andExpect(header().string("Access-Control-Allow-Origin", "http://localhost:3000"))
 			.andExpect(header().string("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,HEAD,OPTIONS"))
 			.andExpect(header().string("Access-Control-Allow-Headers", "Authorization, Content-Type"))
 			.andExpect(header().string("Access-Control-Max-Age", "7200"));

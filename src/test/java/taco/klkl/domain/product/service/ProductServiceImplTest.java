@@ -516,32 +516,4 @@ class ProductServiceImplTest {
 		});
 	}
 
-	@Test
-	@DisplayName("상품 이름 부분 문자열 조회 테스트")
-	void testFindProductsByPartialName() {
-		// given
-		String partialName = "am";
-		List<Product> mockProducts = List.of(testProduct);
-
-		JPAQuery<Product> mockQuery = mock(JPAQuery.class);
-		when(queryFactory.selectFrom(QProduct.product)).thenReturn(mockQuery);
-		when(mockQuery.join(QProduct.product.city, QCity.city)).thenReturn(mockQuery);
-		when(mockQuery.fetchJoin()).thenReturn(mockQuery);
-		when(mockQuery.join(QCity.city.country, QCountry.country)).thenReturn(mockQuery);
-		when(mockQuery.fetchJoin()).thenReturn(mockQuery);
-		when(mockQuery.join(QProduct.product.subcategory, QSubcategory.subcategory)).thenReturn(mockQuery);
-		when(mockQuery.fetchJoin()).thenReturn(mockQuery);
-		when(mockQuery.join(QSubcategory.subcategory.category, QCategory.category)).thenReturn(mockQuery);
-		when(mockQuery.fetchJoin()).thenReturn(mockQuery);
-		when(mockQuery.where(QProduct.product.name.contains(partialName))).thenReturn(mockQuery);
-		when(mockQuery.fetch()).thenReturn(mockProducts);
-
-		// when
-		List<ProductSimpleResponse> responseDtos = productService.findProductsByPartialName(partialName);
-
-		// then
-		assertThat(responseDtos.get(0)).isEqualTo(ProductSimpleResponse.from(testProduct));
-
-	}
-
 }

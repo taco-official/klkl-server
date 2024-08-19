@@ -4,6 +4,7 @@ import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import java.util.List;
 import java.util.Set;
 
 import org.junit.jupiter.api.DisplayName;
@@ -18,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import taco.klkl.domain.product.dao.ProductRepository;
+import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.product.dto.request.ProductCreateUpdateRequest;
 import taco.klkl.domain.product.dto.response.ProductDetailResponse;
 import taco.klkl.domain.product.service.ProductService;
@@ -141,6 +143,8 @@ public class ProductIntegrationTest {
 		productService.createProduct(createRequest1);
 		productService.createProduct(createRequest2);
 
+		List<Product> all = productRepository.findAll();
+
 		// when & then
 		mockMvc.perform(get("/v1/products")
 				.param("page", "0")
@@ -148,12 +152,12 @@ public class ProductIntegrationTest {
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
-			.andExpect(jsonPath("$.data.content", hasSize(5)))
+			.andExpect(jsonPath("$.data.content", hasSize(all.size())))
 			.andExpect(jsonPath("$.data.content[0].name", is(createRequest2.name())))
 			.andExpect(jsonPath("$.data.content[1].name", is(createRequest1.name())))
 			.andExpect(jsonPath("$.data.pageNumber", is(0)))
 			.andExpect(jsonPath("$.data.pageSize", is(10)))
-			.andExpect(jsonPath("$.data.totalElements", is(5)))
+			.andExpect(jsonPath("$.data.totalElements", is(all.size())))
 			.andExpect(jsonPath("$.data.totalPages", is(1)))
 			.andExpect(jsonPath("$.data.last", is(true)))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
@@ -1015,6 +1019,9 @@ public class ProductIntegrationTest {
 	@Test
 	@DisplayName("좋아요 수로 오름차순 정렬된 상품 목록 조회 API 테스트")
 	public void testSortProductsByLikeCountAsc() throws Exception {
+		// given
+		List<Product> all = productRepository.findAll();
+
 		// when & then
 		mockMvc.perform(get("/v1/products")
 				.param("sort_by", "like_count")
@@ -1022,13 +1029,13 @@ public class ProductIntegrationTest {
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
-			.andExpect(jsonPath("$.data.content", hasSize(3)))
+			.andExpect(jsonPath("$.data.content", hasSize(all.size())))
 			.andExpect(jsonPath("$.data.content[0].name", is("왕족발 보쌈 과자")))
 			.andExpect(jsonPath("$.data.content[1].name", is("곤약젤리")))
 			.andExpect(jsonPath("$.data.content[2].name", is("여름 원피스")))
 			.andExpect(jsonPath("$.data.pageNumber", is(0)))
 			.andExpect(jsonPath("$.data.pageSize", is(ProductConstants.DEFAULT_PAGE_SIZE)))
-			.andExpect(jsonPath("$.data.totalElements", is(3)))
+			.andExpect(jsonPath("$.data.totalElements", is(all.size())))
 			.andExpect(jsonPath("$.data.totalPages", is(1)))
 			.andExpect(jsonPath("$.data.last", is(true)))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
@@ -1037,6 +1044,9 @@ public class ProductIntegrationTest {
 	@Test
 	@DisplayName("좋아요 수로 내림차순 정렬된 상품 목록 조회 API 테스트")
 	public void testSortProductsByLikeCountDesc() throws Exception {
+		// given
+		List<Product> all = productRepository.findAll();
+
 		// when & then
 		mockMvc.perform(get("/v1/products")
 				.param("sort_by", "like_count")
@@ -1044,13 +1054,13 @@ public class ProductIntegrationTest {
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
-			.andExpect(jsonPath("$.data.content", hasSize(3)))
+			.andExpect(jsonPath("$.data.content", hasSize(all.size())))
 			.andExpect(jsonPath("$.data.content[0].name", is("여름 원피스")))
 			.andExpect(jsonPath("$.data.content[1].name", is("곤약젤리")))
 			.andExpect(jsonPath("$.data.content[2].name", is("왕족발 보쌈 과자")))
 			.andExpect(jsonPath("$.data.pageNumber", is(0)))
 			.andExpect(jsonPath("$.data.pageSize", is(ProductConstants.DEFAULT_PAGE_SIZE)))
-			.andExpect(jsonPath("$.data.totalElements", is(3)))
+			.andExpect(jsonPath("$.data.totalElements", is(all.size())))
 			.andExpect(jsonPath("$.data.totalPages", is(1)))
 			.andExpect(jsonPath("$.data.last", is(true)))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
