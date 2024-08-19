@@ -6,6 +6,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,7 +18,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
 import taco.klkl.domain.category.domain.Subcategory;
-import taco.klkl.domain.category.dto.response.SubcategoryWithTagsResponse;
+import taco.klkl.domain.category.dto.response.TagResponse;
 import taco.klkl.domain.category.service.SubcategoryService;
 import taco.klkl.domain.category.service.SubcategoryTagService;
 import taco.klkl.global.error.exception.ErrorCode;
@@ -48,8 +49,8 @@ public class TagIntegrationTest {
 				.map(Long::parseLong)
 				.toList()
 		);
-		List<SubcategoryWithTagsResponse> response =
-			subcategoryTagService.findSubcategoryTagsBySubcategoryList(subcategoryList);
+		Set<TagResponse> response =
+			subcategoryTagService.findTagsBySubcategoryList(subcategoryList);
 
 		//then
 		mockMvc.perform(get("/v1/tags")
@@ -73,8 +74,8 @@ public class TagIntegrationTest {
 				.map(Long::parseLong)
 				.toList()
 		);
-		List<SubcategoryWithTagsResponse> response =
-			subcategoryTagService.findSubcategoryTagsBySubcategoryList(subcategoryList);
+		Set<TagResponse> response =
+			subcategoryTagService.findTagsBySubcategoryList(subcategoryList);
 
 		//then
 		mockMvc.perform(get("/v1/tags")
