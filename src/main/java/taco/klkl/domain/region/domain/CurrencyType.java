@@ -11,7 +11,7 @@ import taco.klkl.domain.region.exception.CurrencyTypeNotFoundException;
 public enum CurrencyType {
 	JAPANESE_YEN("JPY"),
 
-	CHINESE_YUAN("CNY"),
+	CHINESE_YUAN("CNH"),
 
 	NEW_TAIWAN_DOLLAR("TWD"),
 
