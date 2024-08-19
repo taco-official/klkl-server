@@ -1,0 +1,23 @@
+spring:
+  config:
+    activate:
+      on-profile: "local"
+  jpa:
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+
+api:
+  main-url: ${LOCAL_URL}
+
+logging:
+  level:
+    root: INFO
+    org.springframework.web: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
