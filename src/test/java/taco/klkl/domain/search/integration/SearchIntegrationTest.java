@@ -39,7 +39,6 @@ public class SearchIntegrationTest {
 			.andExpect(jsonPath("$.data.countries", hasSize(searchResponse.countries().size())))
 			.andExpect(jsonPath("$.data.cities", hasSize(searchResponse.cities().size())))
 			.andExpect(jsonPath("$.data.categories", hasSize(searchResponse.categories().size())))
-			.andExpect(jsonPath("$.data.subcategories", hasSize(searchResponse.subcategories().size())))
-			.andExpect(jsonPath("$.data.products", hasSize(searchResponse.products().size())));
+			.andExpect(jsonPath("$.data.subcategories", hasSize(searchResponse.subcategories().size())));
 	}
 }

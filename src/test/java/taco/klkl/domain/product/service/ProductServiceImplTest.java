@@ -23,6 +23,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.PathBuilder;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -244,8 +245,78 @@ class ProductServiceImplTest {
 
 		// Verify that validation methods were called
 		verify(cityUtil).isCitiesMappedToSameCountry(cityIds);
-		verify(subcategoryUtil, times(3)).findSubcategoryEntityById(anyLong());
 		verify(tagUtil, times(2)).findTagEntityById(anyLong());
+		verify(subcategoryUtil, times(3)).findSubcategoryEntityById(anyLong());
+	}
+
+	@Test
+	@DisplayName("제목으로 상품 조회 - 성공")
+	void testFindProductsByPartialNameAndSortOption() {
+		// Given
+		ProductSortOptions sortOptions = new ProductSortOptions(
+			"rating",
+			"DESC"
+		);
+		Pageable pageable = PageRequest.of(0, 10);
+
+		// Mocking QueryDSL behavior
+		List<Product> productList = List.of(testProduct);
+
+		JPAQuery<Product> baseQuery = mock(JPAQuery.class);
+		JPAQuery<Product> productQuery = mock(JPAQuery.class);
+		JPAQuery<Long> countQuery = mock(JPAQuery.class);
+
+		QProduct product = QProduct.product;
+		final QCity city = QCity.city;
+		final QCountry country = QCountry.country;
+		final QSubcategory subcategory = QSubcategory.subcategory;
+		final QCategory category = QCategory.category;
+
+		when(queryFactory.from(product)).thenReturn((JPAQuery)baseQuery);
+		when(baseQuery.where(product.name.contains("name"))).thenReturn(baseQuery);
+
+		when(baseQuery.where(any(BooleanBuilder.class))).thenReturn(baseQuery);
+		when(baseQuery.where(any(BooleanExpression.class))).thenReturn(baseQuery);
+		when(baseQuery.fetchJoin()).thenReturn(baseQuery);
+		when(baseQuery.join(product.city, city)).thenReturn(baseQuery);
+		when(baseQuery.join(product.subcategory, subcategory)).thenReturn(baseQuery);
+		when(baseQuery.join(city.country, country)).thenReturn(baseQuery);
+		when(baseQuery.join(subcategory.category, category)).thenReturn(baseQuery);
+
+		when(baseQuery.select(QProduct.product.countDistinct())).thenReturn(countQuery);
+		when(countQuery.fetchOne()).thenReturn((long)productList.size());
+
+		when(baseQuery.select(QProduct.product)).thenReturn(productQuery);
+		when(productQuery.distinct()).thenReturn(productQuery);
+		when(productQuery.offset(pageable.getOffset())).thenReturn(productQuery);
+		when(productQuery.limit(pageable.getPageSize())).thenReturn(productQuery);
+		when(productQuery.fetch()).thenReturn(productList);
+
+		// Mocking sorting behavior
+		when(productQuery.orderBy(any(OrderSpecifier.class))).thenReturn(productQuery);
+
+		// When
+		PagedResponseDto<ProductSimpleResponse> result = productService
+			.findProductsByPartialName("name", pageable, sortOptions);
+
+		// Then
+		assertThat(result.content()).hasSize(1);
+		assertThat(result.content().get(0).id()).isEqualTo(testProduct.getId());
+		assertThat(result.totalElements()).isEqualTo(1);
+		assertThat(result.totalPages()).isEqualTo(1);
+		assertThat(result.pageNumber()).isEqualTo(0);
+		assertThat(result.pageSize()).isEqualTo(10);
+		assertThat(result.last()).isTrue();
+
+		// Verify that the query methods were called
+		verify(queryFactory).from(product);
+
+		verify(baseQuery).select(QProduct.product);
+		verify(productQuery).distinct();
+		verify(productQuery).offset(pageable.getOffset());
+		verify(productQuery).limit(pageable.getPageSize());
+		verify(productQuery).orderBy(any(OrderSpecifier.class));
+		verify(productQuery).fetch();
 	}
 
 	@Test
@@ -447,7 +518,7 @@ class ProductServiceImplTest {
 
 	@Test
 	@DisplayName("상품 이름 부분 문자열 조회 테스트")
-	void testGetProductsByPartialName() {
+	void testFindProductsByPartialName() {
 		// given
 		String partialName = "am";
 		List<Product> mockProducts = List.of(testProduct);
@@ -466,7 +537,7 @@ class ProductServiceImplTest {
 		when(mockQuery.fetch()).thenReturn(mockProducts);
 
 		// when
-		List<ProductSimpleResponse> responseDtos = productService.getProductsByPartialName(partialName);
+		List<ProductSimpleResponse> responseDtos = productService.findProductsByPartialName(partialName);
 
 		// then
 		assertThat(responseDtos.get(0)).isEqualTo(ProductSimpleResponse.from(testProduct));

@@ -160,6 +160,153 @@ public class ProductIntegrationTest {
 	}
 
 	@Test
+	@DisplayName("제목으로 상품 목록 조회 테스트")
+	void testGetProductsByPartialName() throws Exception {
+		ProductCreateUpdateRequest createRequest1 = new ProductCreateUpdateRequest(
+			"name1",
+			"description1",
+			"address1",
+			1000,
+			5.0,
+			414L,
+			310L,
+			438L,
+			null
+		);
+		ProductCreateUpdateRequest createRequest2 = new ProductCreateUpdateRequest(
+			"name2",
+			"description2",
+			"address2",
+			2000,
+			5.0,
+			415L,
+			311L,
+			438L,
+			null
+		);
+		productService.createProduct(createRequest1);
+		productService.createProduct(createRequest2);
+
+		// when & then
+		mockMvc.perform(get("/v1/products/search")
+				.param("name", "name")
+				.param("page", "0")
+				.param("size", "10")
+				.contentType(MediaType.APPLICATION_JSON))
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.isSuccess", is(true)))
+			.andExpect(jsonPath("$.data.content", hasSize(2)))
+			.andExpect(jsonPath("$.data.content[0].name", is(createRequest2.name())))
+			.andExpect(jsonPath("$.data.content[1].name", is(createRequest1.name())))
+			.andExpect(jsonPath("$.data.pageNumber", is(0)))
+			.andExpect(jsonPath("$.data.pageSize", is(10)))
+			.andExpect(jsonPath("$.data.totalElements", is(2)))
+			.andExpect(jsonPath("$.data.totalPages", is(1)))
+			.andExpect(jsonPath("$.data.last", is(true)))
+			.andExpect(jsonPath("$.timestamp", notNullValue()));
+	}
+
+	@Test
+	@DisplayName("제목으로 상품 목록 조회 좋아요 정렬 테스트")
+	void testGetProductsByPartialNameAndLikeSortOption() throws Exception {
+		ProductCreateUpdateRequest createRequest1 = new ProductCreateUpdateRequest(
+			"name1",
+			"description1",
+			"address1",
+			1000,
+			5.0,
+			414L,
+			310L,
+			438L,
+			null
+		);
+		ProductCreateUpdateRequest createRequest2 = new ProductCreateUpdateRequest(
+			"name2",
+			"description2",
+			"address2",
+			2000,
+			5.0,
+			415L,
+			311L,
+			438L,
+			null
+		);
+		ProductDetailResponse product1 = productService.createProduct(createRequest1);
+		productService.createProduct(createRequest2);
+		productService.increaseLikeCount(productRepository.getReferenceById(product1.id()));
+
+		// when & then
+		mockMvc.perform(get("/v1/products/search")
+				.param("name", "name")
+				.param("page", "0")
+				.param("size", "10")
+				.param("sort_by", "like_count")
+				.param("sort_direction", "desc")
+				.contentType(MediaType.APPLICATION_JSON))
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.isSuccess", is(true)))
+			.andExpect(jsonPath("$.data.content", hasSize(2)))
+			.andExpect(jsonPath("$.data.content[0].name", is(createRequest1.name())))
+			.andExpect(jsonPath("$.data.content[1].name", is(createRequest2.name())))
+			.andExpect(jsonPath("$.data.pageNumber", is(0)))
+			.andExpect(jsonPath("$.data.pageSize", is(10)))
+			.andExpect(jsonPath("$.data.totalElements", is(2)))
+			.andExpect(jsonPath("$.data.totalPages", is(1)))
+			.andExpect(jsonPath("$.data.last", is(true)))
+			.andExpect(jsonPath("$.timestamp", notNullValue()));
+	}
+
+	@Test
+	@DisplayName("제목으로 상품 목록 조회 평점 정렬 테스트")
+	void testGetProductsByPartialNameAndRatingSortOption() throws Exception {
+		ProductCreateUpdateRequest createRequest1 = new ProductCreateUpdateRequest(
+			"name1",
+			"description1",
+			"address1",
+			1000,
+			4.0,
+			414L,
+			310L,
+			438L,
+			null
+		);
+		ProductCreateUpdateRequest createRequest2 = new ProductCreateUpdateRequest(
+			"name2",
+			"description2",
+			"address2",
+			2000,
+			5.0,
+			415L,
+			311L,
+			438L,
+			null
+		);
+		ProductDetailResponse product1 = productService.createProduct(createRequest1);
+		productService.createProduct(createRequest2);
+		productService.increaseLikeCount(productRepository.getReferenceById(product1.id()));
+
+		// when & then
+		mockMvc.perform(get("/v1/products/search")
+				.param("name", "name")
+				.param("page", "0")
+				.param("size", "10")
+				.param("sort_by", "rating")
+				.param("sort_direction", "desc")
+				.contentType(MediaType.APPLICATION_JSON))
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.isSuccess", is(true)))
+			.andExpect(jsonPath("$.data.content", hasSize(2)))
+			.andExpect(jsonPath("$.data.content[0].name", is(createRequest2.name())))
+			.andExpect(jsonPath("$.data.content[1].name", is(createRequest1.name())))
+			.andExpect(jsonPath("$.data.pageNumber", is(0)))
+			.andExpect(jsonPath("$.data.pageSize", is(10)))
+			.andExpect(jsonPath("$.data.totalElements", is(2)))
+			.andExpect(jsonPath("$.data.totalPages", is(1)))
+			.andExpect(jsonPath("$.data.last", is(true)))
+			.andExpect(jsonPath("$.timestamp", notNullValue()));
+	}
+
+	@Test
 	@DisplayName("단일 도시 ID로 필터링된 상품 목록 조회 API 테스트")
 	public void testGetProductsBySingleid() throws Exception {
 		// given
