@@ -143,25 +143,32 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public List<ProductSimpleResponse> getProductsByPartialName(final String partialName) {
+	public PagedResponseDto<ProductSimpleResponse> findProductsByPartialName(
+		final String partialName,
+		final Pageable pageable,
+		final ProductSortOptions sortOptions
+	) {
 		final QProduct product = QProduct.product;
 		final QCity city = QCity.city;
 		final QCountry country = QCountry.country;
 		final QSubcategory subcategory = QSubcategory.subcategory;
 		final QCategory category = QCategory.category;
 
-		final List<Product> products = queryFactory
-			.selectFrom(product)
-			.join(product.city, city).fetchJoin()
-			.join(city.country, country).fetchJoin()
-			.join(product.subcategory, subcategory).fetchJoin()
-			.join(subcategory.category, category).fetchJoin()
-			.where(product.name.contains(partialName))
-			.fetch();
+		final JPAQuery<?> baseQuery = queryFactory
+			.from(product)
+			.where(product.name.contains(partialName));
 
-		return products.stream()
-			.map(ProductSimpleResponse::from)
-			.toList();
+		final long total = getCount(baseQuery);
+
+		baseQuery.join(product.city, city).fetchJoin()
+			.join(product.subcategory, subcategory).fetchJoin()
+			.join(city.country, country).fetchJoin()
+			.join(subcategory.category, category).fetchJoin();
+
+		final List<Product> products = fetchProducts(baseQuery, pageable, sortOptions);
+		final Page<Product> productPage = new PageImpl<>(products, pageable, total);
+
+		return PagedResponseDto.of(productPage, ProductSimpleResponse::from);
 	}
 
 	private JPAQuery<?> createBaseQuery(final ProductFilterOptions filterOptions) {

@@ -14,8 +14,6 @@ import taco.klkl.domain.category.dto.response.CategoryResponse;
 import taco.klkl.domain.category.dto.response.SubcategoryResponse;
 import taco.klkl.domain.category.service.CategoryService;
 import taco.klkl.domain.category.service.SubcategoryService;
-import taco.klkl.domain.product.dto.response.ProductSimpleResponse;
-import taco.klkl.domain.product.service.ProductService;
 import taco.klkl.domain.region.domain.CityType;
 import taco.klkl.domain.region.domain.CountryType;
 import taco.klkl.domain.region.dto.response.CityResponse;
@@ -35,7 +33,6 @@ public class SearchServiceImpl implements SearchService {
 	private final CityService cityService;
 	private final CategoryService categoryService;
 	private final SubcategoryService subcategoryService;
-	private final ProductService productService;
 
 	@Override
 	public SearchResponse findSearchResult(final String queryParam) {
@@ -43,8 +40,7 @@ public class SearchServiceImpl implements SearchService {
 		final List<CityResponse> findCities = getCitiesByQueryParam(queryParam);
 		final List<CategoryResponse> findCategories = getCategoriesByQueryParam(queryParam);
 		final List<SubcategoryResponse> findSubcategories = getSubcategoriesByQueryParam(queryParam);
-		final List<ProductSimpleResponse> findProducts = getProductsByQueryParam(queryParam);
-		return SearchResponse.of(findCountries, findCities, findCategories, findSubcategories, findProducts);
+		return SearchResponse.of(findCountries, findCities, findCategories, findSubcategories);
 	}
 
 	private List<CountrySimpleResponse> getCountriesByQueryParam(final String queryParam) {
@@ -65,10 +61,6 @@ public class SearchServiceImpl implements SearchService {
 	private List<SubcategoryResponse> getSubcategoriesByQueryParam(final String queryParam) {
 		final List<SubcategoryName> subcategoryNames = SubcategoryName.findByPartialString(queryParam);
 		return subcategoryService.findSubcategoriesBySubcategoryNames(subcategoryNames);
-	}
-
-	private List<ProductSimpleResponse> getProductsByQueryParam(final String queryParam) {
-		return productService.getProductsByPartialName(queryParam);
 	}
 
 }
