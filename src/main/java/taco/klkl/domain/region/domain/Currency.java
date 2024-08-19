@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 import taco.klkl.domain.region.enums.CurrencyType;
 
 @Getter
-@Entity
+@Entity(name = "currency")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Currency {
 

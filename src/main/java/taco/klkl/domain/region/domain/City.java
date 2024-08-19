@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 import taco.klkl.domain.region.enums.CityType;
 
 @Getter
-@Entity
+@Entity(name = "city")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class City {
 

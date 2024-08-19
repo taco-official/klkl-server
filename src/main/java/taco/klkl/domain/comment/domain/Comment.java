@@ -17,7 +17,7 @@ import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.user.domain.User;
 
 @Getter
-@Entity
+@Entity(name = "comment")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Comment {
 	@Id

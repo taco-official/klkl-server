@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 import taco.klkl.domain.region.enums.CountryType;
 
 @Getter
-@Entity
+@Entity(name = "country")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Country {
 

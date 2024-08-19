@@ -13,7 +13,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@Entity
+@Entity(name = "subcategory_filter")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class SubcategoryFilter {
 	@Id

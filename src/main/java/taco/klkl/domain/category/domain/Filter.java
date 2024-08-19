@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 import taco.klkl.domain.product.domain.ProductFilter;
 
 @Getter
-@Entity
+@Entity(name = "filter")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Filter {
 
