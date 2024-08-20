@@ -6,13 +6,17 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.querydsl.jpa.impl.JPAQueryFactory;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import taco.klkl.domain.comment.domain.Comment;
 import taco.klkl.domain.notification.dao.NotificationRepository;
 import taco.klkl.domain.notification.domain.Notification;
+import taco.klkl.domain.notification.domain.QNotification;
 import taco.klkl.domain.notification.dto.response.NotificationResponse;
 import taco.klkl.domain.notification.exception.NotificationNotFoundException;
+import taco.klkl.domain.user.domain.QUser;
 import taco.klkl.domain.user.domain.User;
 import taco.klkl.global.util.UserUtil;
 
@@ -29,12 +33,25 @@ import taco.klkl.global.util.UserUtil;
 public class NotificationServiceImpl implements NotificationService {
 
 	private final NotificationRepository notificationRepository;
+	private final JPAQueryFactory queryFactory;
 	private final UserUtil userUtil;
 
 	@Override
 	public List<NotificationResponse> findAllNotifications() {
+		final QNotification notification = QNotification.notification;
+		final QUser user = QUser.user;
 		final User receiver = findReceiver();
-		final List<Notification> notifications = notificationRepository.findAllByComment_Product_User(receiver);
+
+		System.out.println(receiver);
+
+		final List<Notification> notifications = queryFactory
+			.selectFrom(notification)
+			.join(notification.comment.product.user, user)
+			.where(user.id.eq(receiver.getId()))
+			.orderBy(notification.createdAt.desc(),
+				notification.id.desc())
+			.fetch();
+
 		return notifications.stream()
 			.map(NotificationResponse::from)
 			.toList();
