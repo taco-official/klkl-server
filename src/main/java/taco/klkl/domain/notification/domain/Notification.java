@@ -5,6 +5,8 @@ import java.time.LocalDateTime;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 
+import com.querydsl.core.annotations.QueryInit;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -38,6 +40,7 @@ public class Notification {
 
 	@OneToOne
 	@JoinColumn(name = "comment_id")
+	@QueryInit("product.user")
 	private Comment comment;
 
 	private Notification(final Comment comment) {
