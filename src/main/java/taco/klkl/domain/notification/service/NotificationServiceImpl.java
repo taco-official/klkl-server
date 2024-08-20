@@ -42,8 +42,6 @@ public class NotificationServiceImpl implements NotificationService {
 		final QUser user = QUser.user;
 		final User receiver = findReceiver();
 
-		System.out.println(receiver);
-
 		final List<Notification> notifications = queryFactory
 			.selectFrom(notification)
 			.join(notification.comment.product.user, user)
