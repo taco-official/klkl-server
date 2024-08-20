@@ -8,6 +8,7 @@ spring:
       dev: "dev, mysql"
     include:
       - swagger
+      - oauth2
 
   application:
     name: klkl
