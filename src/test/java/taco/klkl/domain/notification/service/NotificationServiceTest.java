@@ -18,6 +18,11 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.impl.JPAQuery;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+
 import taco.klkl.domain.category.domain.Category;
 import taco.klkl.domain.category.domain.CategoryName;
 import taco.klkl.domain.category.domain.Subcategory;
@@ -25,6 +30,7 @@ import taco.klkl.domain.category.domain.SubcategoryName;
 import taco.klkl.domain.comment.domain.Comment;
 import taco.klkl.domain.notification.dao.NotificationRepository;
 import taco.klkl.domain.notification.domain.Notification;
+import taco.klkl.domain.notification.domain.QNotification;
 import taco.klkl.domain.notification.dto.response.NotificationResponse;
 import taco.klkl.domain.notification.exception.NotificationNotFoundException;
 import taco.klkl.domain.product.domain.Product;
@@ -38,6 +44,7 @@ import taco.klkl.domain.region.domain.CurrencyType;
 import taco.klkl.domain.region.domain.Region;
 import taco.klkl.domain.region.domain.RegionType;
 import taco.klkl.domain.user.domain.Gender;
+import taco.klkl.domain.user.domain.QUser;
 import taco.klkl.domain.user.domain.User;
 import taco.klkl.global.util.UserUtil;
 
@@ -47,6 +54,9 @@ public class NotificationServiceTest {
 
 	@Mock
 	private NotificationRepository notificationRepository;
+
+	@Mock
+	private JPAQueryFactory queryFactory;
 
 	@Mock
 	private UserUtil userUtil;
@@ -113,14 +123,22 @@ public class NotificationServiceTest {
 	@DisplayName("댓글 알림이 비어있지 않을경우 조회 성공")
 	public void testFindAllNotifications() {
 		//given
+		JPAQuery<Notification> mockQuery = mock(JPAQuery.class);
+		List<Notification> notificationList = List.of(mockNotification);
+		QNotification notification = QNotification.notification;
+		QUser user = QUser.user;
+
 		when(userUtil.findTestUser()).thenReturn(mockUser);
 		when(mockNotification.getId()).thenReturn(1L);
 		when(mockNotification.getIsRead()).thenReturn(false);
 		when(mockNotification.getCreatedAt()).thenReturn(LocalDateTime.now());
 		when(mockNotification.getComment()).thenReturn(comment);
 
-		List<Notification> notificationList = List.of(mockNotification);
-		when(notificationRepository.findAllByComment_Product_User(mockUser)).thenReturn(notificationList);
+		when(queryFactory.selectFrom(any(QNotification.class))).thenReturn(mockQuery);
+		when(mockQuery.join(notification.comment.product.user, user)).thenReturn(mockQuery);
+		when(mockQuery.where(any(BooleanExpression.class))).thenReturn(mockQuery);
+		when(mockQuery.orderBy(any(OrderSpecifier.class), any(OrderSpecifier.class))).thenReturn(mockQuery);
+		when(mockQuery.fetch()).thenReturn(notificationList);
 
 		//when
 		List<NotificationResponse> response = notificationService.findAllNotifications();
@@ -135,10 +153,18 @@ public class NotificationServiceTest {
 	@DisplayName("댓글 알림이 빈경우 조회 성공")
 	public void testGetBlankNotifications() {
 		//given
+		JPAQuery<Notification> mockQuery = mock(JPAQuery.class);
+		List<Notification> notificationList = Collections.emptyList();
+		QNotification notification = QNotification.notification;
+		QUser user = QUser.user;
+
 		when(userUtil.findTestUser()).thenReturn(mockUser);
 
-		List<Notification> notificationList = Collections.emptyList();
-		when(notificationRepository.findAllByComment_Product_User(mockUser)).thenReturn(notificationList);
+		when(queryFactory.selectFrom(any(QNotification.class))).thenReturn(mockQuery);
+		when(mockQuery.join(notification.comment.product.user, user)).thenReturn(mockQuery);
+		when(mockQuery.where(any(BooleanExpression.class))).thenReturn(mockQuery);
+		when(mockQuery.orderBy(any(OrderSpecifier.class), any(OrderSpecifier.class))).thenReturn(mockQuery);
+		when(mockQuery.fetch()).thenReturn(notificationList);
 
 		//when
 		List<NotificationResponse> response = notificationService.findAllNotifications();
