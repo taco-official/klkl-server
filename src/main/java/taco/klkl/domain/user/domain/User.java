@@ -14,7 +14,7 @@ import taco.klkl.global.common.constants.UserConstants;
 
 @Getter
 @NoArgsConstructor
-@Entity(name = "user")
+@Entity(name = "klkl_user")
 public class User {
 
 	@Id
