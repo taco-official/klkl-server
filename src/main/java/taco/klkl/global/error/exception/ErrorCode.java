@@ -57,6 +57,9 @@ public enum ErrorCode {
 
 	// Search
 
+	// Image
+	FILE_EXTENSION_INVALID(HttpStatus.BAD_REQUEST, "유효하지 않은 파일 확장자입니다."),
+
 	// Sample
 	SAMPLE_ERROR(HttpStatus.BAD_REQUEST, "샘플 에러입니다."),
 	;
