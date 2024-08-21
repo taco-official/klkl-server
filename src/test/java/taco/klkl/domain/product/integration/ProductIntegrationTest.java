@@ -98,6 +98,7 @@ public class ProductIntegrationTest {
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(new ObjectMapper().writeValueAsString(createRequest)))
 			.andExpect(status().isCreated())
+			.andExpect(header().string("Location", containsString("/v1/products/")))
 			.andExpect(jsonPath("$.isSuccess", is(true)))
 			.andExpect(jsonPath("$.data.id", notNullValue()))
 			.andExpect(jsonPath("$.data.name", is(createRequest.name())))
