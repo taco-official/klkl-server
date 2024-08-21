@@ -28,23 +28,52 @@ public class Oauth2KakaoController {
 	@Value("${spring.security.oauth2.client.registration.kakao.client-id}")
 	private String clientId;
 
+	@Value("${spring.security.oauth2.client.provider.kakao.authorization-uri}")
+	private String authorizationUri;
+
 	@Value("${spring.security.oauth2.client.registration.kakao.redirect-uri}")
 	private String redirectUri;
 
+	@Value("${api.main-url}")
+	private String mainUrl;
+
+	/**
+	 * 클라이언트를 Kakao Oauth URL로 리다이렉트합니다.
+	 * @return
+	 */
 	@GetMapping()
 	public ResponseEntity<Void> oauthKakao() {
-		String location =
-			"https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=" + clientId + "&redirect_uri="
-				+ redirectUri;
+		String location = getKakaoOauthLocation();
 
 		return ResponseEntity.status(HttpStatus.FOUND).location(URI.create(location)).build();
 	}
 
+	/**
+	 * Kakao 리다이렉트 받은 code값으로 사용자 로그인처리를 합니다.
+	 * @param code
+	 * @return
+	 * @throws JsonProcessingException
+	 */
+	// TODO: JWT적용시 토큰 관리 로직 추가
 	@GetMapping("/code")
 	public UserDetailResponse processKakaoOauth2(@RequestParam("code") String code) throws
 		JsonProcessingException {
 
 		return oauth2KakaoService.processOauth2(code);
+	}
+
+	/**
+	 * Kakao Oauth 요청 URL을 구성합니다.
+	 * @return
+	 */
+	private String getKakaoOauthLocation() {
+		StringBuilder location = new StringBuilder();
+		location.append(authorizationUri)
+			.append("?response_type=").append("code")
+			.append("&client_id=").append(clientId)
+			.append("&redirect_uri=").append(mainUrl).append(redirectUri);
+
+		return location.toString();
 	}
 
 }
