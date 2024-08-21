@@ -1,4 +1,7 @@
 spring:
+  config:
+    activate:
+      on-profile: "oauth2"
   security:
     oauth2:
       client:
