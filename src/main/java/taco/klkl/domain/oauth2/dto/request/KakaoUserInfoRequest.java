@@ -1,4 +1,4 @@
-package taco.klkl.domain.oauth.dto.request;
+package taco.klkl.domain.oauth2.dto.request;
 
 import lombok.extern.slf4j.Slf4j;
 

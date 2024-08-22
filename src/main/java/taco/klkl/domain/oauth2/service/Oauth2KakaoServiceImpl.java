@@ -1,4 +1,4 @@
-package taco.klkl.domain.oauth.service;
+package taco.klkl.domain.oauth2.service;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Primary;
@@ -16,7 +16,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import taco.klkl.domain.oauth.dto.request.KakaoUserInfoRequest;
+import taco.klkl.domain.oauth2.dto.request.KakaoUserInfoRequest;
 import taco.klkl.domain.user.dto.response.UserDetailResponse;
 import taco.klkl.global.util.StringUtil;
 

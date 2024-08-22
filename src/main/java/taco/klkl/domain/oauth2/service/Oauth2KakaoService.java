@@ -1,4 +1,4 @@
-package taco.klkl.domain.oauth.service;
+package taco.klkl.domain.oauth2.service;
 
 import org.springframework.stereotype.Service;
 

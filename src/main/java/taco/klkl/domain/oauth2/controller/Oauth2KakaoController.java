@@ -1,4 +1,4 @@
-package taco.klkl.domain.oauth.controller;
+package taco.klkl.domain.oauth2.controller;
 
 import java.net.URI;
 
@@ -14,7 +14,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import taco.klkl.domain.oauth.service.Oauth2KakaoService;
+import taco.klkl.domain.oauth2.service.Oauth2KakaoService;
 import taco.klkl.domain.user.dto.response.UserDetailResponse;
 
 @Slf4j
