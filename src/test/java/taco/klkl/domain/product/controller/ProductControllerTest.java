@@ -302,6 +302,7 @@ public class ProductControllerTest {
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(productCreateUpdateRequest)))
 			.andExpect(status().isCreated())
+			.andExpect(header().string("Location", containsString("/v1/products/")))
 			.andExpect(jsonPath("$.isSuccess", is(true)))
 			.andExpect(jsonPath("$.data.id", is(productDetailResponse.id().intValue())))
 			.andExpect(jsonPath("$.data.name", is(productDetailResponse.name())))
