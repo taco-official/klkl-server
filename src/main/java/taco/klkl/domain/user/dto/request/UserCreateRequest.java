@@ -11,11 +11,11 @@ public record UserCreateRequest(
 	String description
 ) {
 	public static UserCreateRequest of(
-		String name,
-		String gender,
-		Integer age,
-		String profile,
-		String description
+		final String name,
+		final String gender,
+		final Integer age,
+		final String profile,
+		final String description
 	) {
 		return new UserCreateRequest(name, gender, age, profile, description);
 	}
