@@ -24,6 +24,7 @@ import taco.klkl.domain.category.domain.Subcategory;
 import taco.klkl.domain.category.domain.SubcategoryName;
 import taco.klkl.domain.category.dto.response.CategoryResponse;
 import taco.klkl.domain.category.dto.response.CategoryWithSubcategoryResponse;
+import taco.klkl.domain.category.dto.response.SubcategoryResponse;
 import taco.klkl.domain.category.exception.CategoryNotFoundException;
 import taco.klkl.domain.category.service.CategoryService;
 import taco.klkl.global.error.exception.ErrorCode;
@@ -41,14 +42,19 @@ public class CategoryControllerTest {
 	private final Subcategory subcategory1 = Subcategory.of(category, SubcategoryName.DRESS);
 	private final Subcategory subcategory2 = Subcategory.of(category, SubcategoryName.HAIR_CARE);
 	private final List<Subcategory> subcategories = Arrays.asList(subcategory1, subcategory2);
+	private final List<Subcategory> subcategories2 = Arrays.asList(subcategory1, subcategory2);
 
 	@Test
 	@DisplayName("카테고리 컨트롤러 GlobalResponse로 Wrapping되어 나오는지 Test")
 	public void testFindAllCategories() throws Exception {
 		// given
 		List<CategoryResponse> categoryResponse = Arrays.asList(
-			new CategoryResponse(1L, "Category1"),
-			new CategoryResponse(2L, "Category2")
+			new CategoryResponse(1L, "Category1", subcategories.stream()
+				.map(SubcategoryResponse::from)
+				.toList()),
+			new CategoryResponse(2L, "Category2", subcategories2.stream()
+				.map(SubcategoryResponse::from)
+				.toList())
 		);
 
 		// when
