@@ -41,21 +41,21 @@ public class UserUtil {
 		return userRepository.findFirstByName(name);
 	}
 
-	public String createUsername(final String name, final Long id) {
+	public String createUsername(final String name, final Long oauthMemberId) {
 
-		String createdName = generateUsername(name, id);
+		String createdName = generateUsername(name, oauthMemberId);
 
 		while (userRepository.existsByName(createdName)) {
-			createdName = generateUsername(name, id);
+			createdName = generateUsername(name, oauthMemberId);
 		}
 
 		return createdName;
 	}
 
-	private String generateUsername(final String name, final Long id) {
+	private String generateUsername(final String name, final Long oauthMemberId) {
 
 		final Long currentTimeMillis = Instant.now().toEpochMilli();
-		final int hashCode = Objects.hash(name, id, currentTimeMillis);
+		final int hashCode = Objects.hash(name, oauthMemberId, currentTimeMillis);
 
 		final String suffix = String.format("%04d", Math.abs(hashCode) % UserConstants.USERNAME_SUFFiX_MOD);
 
