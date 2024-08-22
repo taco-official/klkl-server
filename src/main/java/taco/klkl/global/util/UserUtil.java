@@ -57,7 +57,7 @@ public class UserUtil {
 		final Long currentTimeMillis = Instant.now().toEpochMilli();
 		final int hashCode = Objects.hash(name, oauthMemberId, currentTimeMillis);
 
-		final String suffix = String.format("%04d", Math.abs(hashCode) % UserConstants.USERNAME_SUFFiX_MOD);
+		final String suffix = String.format("%04d", Math.abs(hashCode) % UserConstants.USERNAME_SUFFIX_MOD);
 
 		return name + suffix;
 	}
