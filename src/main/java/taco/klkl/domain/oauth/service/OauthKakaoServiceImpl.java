@@ -1,4 +1,4 @@
-package taco.klkl.domain.oauth2.service;
+package taco.klkl.domain.oauth.service;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Primary;
@@ -16,7 +16,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import taco.klkl.domain.oauth2.dto.request.KakaoUserInfoRequest;
+import taco.klkl.domain.oauth.dto.request.KakaoUserInfoRequest;
 import taco.klkl.domain.user.dto.response.UserDetailResponse;
 import taco.klkl.global.util.StringUtil;
 
@@ -24,9 +24,9 @@ import taco.klkl.global.util.StringUtil;
 @Primary
 @Service
 @RequiredArgsConstructor
-public class Oauth2KakaoServiceImpl implements Oauth2KakaoService {
+public class OauthKakaoServiceImpl implements OauthKakaoService {
 
-	private final Oauth2KakaoLoginServiceImpl oauth2KakaoLoginService;
+	private final OauthKakaoLoginService oauthKakaoLoginService;
 
 	private final RestTemplate restTemplate = new RestTemplate();
 
@@ -60,7 +60,7 @@ public class Oauth2KakaoServiceImpl implements Oauth2KakaoService {
 		final HttpHeaders headers = getRequestUserInfoHeader(accessToken);
 
 		final HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
-		return oauth2KakaoLoginService.loginUser(requestPostUserInfo(httpEntity));
+		return oauthKakaoLoginService.loginUser(requestPostUserInfo(httpEntity));
 	}
 
 	/**

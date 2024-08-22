@@ -1,7 +1,7 @@
 spring:
   config:
     activate:
-      on-profile: "oauth2"
+      on-profile: "oauth"
   security:
     oauth2:
       client:

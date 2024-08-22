@@ -1,4 +1,4 @@
-package taco.klkl.domain.oauth2.controller;
+package taco.klkl.domain.oauth.controller;
 
 import java.net.URI;
 
@@ -16,7 +16,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import taco.klkl.domain.oauth2.service.Oauth2KakaoService;
+import taco.klkl.domain.oauth.service.OauthKakaoService;
 import taco.klkl.domain.user.dto.response.UserDetailResponse;
 
 @Slf4j
@@ -24,9 +24,9 @@ import taco.klkl.domain.user.dto.response.UserDetailResponse;
 @RequestMapping("/v1/oauth/kakao")
 @RequiredArgsConstructor
 @Tag(name = "9. 인증/인가", description = "인증/인가 API")
-public class Oauth2KakaoController {
+public class OauthKakaoController {
 
-	private final Oauth2KakaoService oauth2KakaoService;
+	private final OauthKakaoService oauthKakaoService;
 
 	@Value("${spring.security.oauth2.client.registration.kakao.client-id}")
 	private String clientId;
@@ -45,7 +45,7 @@ public class Oauth2KakaoController {
 	 * @return
 	 */
 	@GetMapping()
-	@Operation(summary = "kakao 간편로그인 요청", description = "카카오 oauth2를 사용하여 로그인 처리합니다.")
+	@Operation(summary = "kakao 간편로그인 요청", description = "카카오 oauth를 사용하여 로그인 처리합니다.")
 	public ResponseEntity<Void> oauthKakao() {
 		final String location = getKakaoOauthLocation();
 		final URI locationUri = URI.create(location);
@@ -68,7 +68,7 @@ public class Oauth2KakaoController {
 	public UserDetailResponse processKakaoOauth2(@RequestParam("code") final String code) throws
 		JsonProcessingException {
 
-		return oauth2KakaoService.kakaoOauthLogin(code);
+		return oauthKakaoService.kakaoOauthLogin(code);
 	}
 
 	/**

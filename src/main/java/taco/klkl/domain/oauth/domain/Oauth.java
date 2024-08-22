@@ -1,4 +1,4 @@
-package taco.klkl.domain.oauth2.domain;
+package taco.klkl.domain.oauth.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -13,12 +13,12 @@ import lombok.NoArgsConstructor;
 import taco.klkl.domain.user.domain.User;
 
 @Getter
-@Entity(name = "oauth2")
+@Entity(name = "oauth")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Oauth2 {
+public class Oauth {
 
 	@Id
-	@Column(name = "oauth2_id")
+	@Column(name = "oauth_id")
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	Long id;
 
@@ -26,17 +26,17 @@ public class Oauth2 {
 	private User user;
 
 	@Column(
-		name = "oauth2_member_id",
+		name = "oauth_member_id",
 		nullable = false
 	)
-	private Long oauth2MemberId;
+	private Long oauthMemberId;
 
-	private Oauth2(final User user, final Long oauth2MemberId) {
+	private Oauth(final User user, final Long oauthMemberId) {
 		this.user = user;
-		this.oauth2MemberId = oauth2MemberId;
+		this.oauthMemberId = oauthMemberId;
 	}
 
-	public static Oauth2 of(final User user, final Long oauth2MemberId) {
-		return new Oauth2(user, oauth2MemberId);
+	public static Oauth of(final User user, final Long oauth2MemberId) {
+		return new Oauth(user, oauth2MemberId);
 	}
 }
