@@ -55,7 +55,7 @@ public class Oauth2KakaoServiceImpl implements Oauth2KakaoService {
 	 * @throws JsonProcessingException
 	 */
 	@Override
-	public UserDetailResponse kakaoOauthLogin(String code) throws JsonProcessingException {
+	public UserDetailResponse kakaoOauthLogin(final String code) throws JsonProcessingException {
 		final String accessToken = requestAccessToken(code);
 		final HttpHeaders headers = getRequestUserInfoHeader(accessToken);
 
@@ -69,7 +69,7 @@ public class Oauth2KakaoServiceImpl implements Oauth2KakaoService {
 	 * @return
 	 * @throws JsonProcessingException
 	 */
-	private String requestAccessToken(String code) throws JsonProcessingException {
+	private String requestAccessToken(final String code) throws JsonProcessingException {
 		final HttpHeaders headers = getRequestTokenHeader();
 		final String requestBody = getRequestTokenBody(code);
 
@@ -100,7 +100,7 @@ public class Oauth2KakaoServiceImpl implements Oauth2KakaoService {
 	 * @param code
 	 * @return
 	 */
-	private String getRequestTokenBody(String code) {
+	private String getRequestTokenBody(final String code) {
 		return "grant_type=" + grantType
 			+ "&client_id=" + clientId
 			+ "&code=" + code
@@ -112,7 +112,7 @@ public class Oauth2KakaoServiceImpl implements Oauth2KakaoService {
 	 * @param httpEntity
 	 * @return
 	 */
-	private ResponseEntity<String> requestPostAccessToken(HttpEntity<String> httpEntity) {
+	private ResponseEntity<String> requestPostAccessToken(final HttpEntity<String> httpEntity) {
 		return restTemplate.exchange(tokenUri, HttpMethod.POST, httpEntity,
 			String.class);
 	}
@@ -122,7 +122,7 @@ public class Oauth2KakaoServiceImpl implements Oauth2KakaoService {
 	 * @param accessToken
 	 * @returnx
 	 */
-	private HttpHeaders getRequestUserInfoHeader(String accessToken) {
+	private HttpHeaders getRequestUserInfoHeader(final String accessToken) {
 		final HttpHeaders headers = new HttpHeaders();
 		headers.set("Authorization", "Bearer " + accessToken);
 		headers.set("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
@@ -135,7 +135,8 @@ public class Oauth2KakaoServiceImpl implements Oauth2KakaoService {
 	 * @return
 	 * @throws JsonProcessingException
 	 */
-	private KakaoUserInfoRequest requestPostUserInfo(HttpEntity<Object> httpEntity) throws JsonProcessingException {
+	private KakaoUserInfoRequest requestPostUserInfo(final HttpEntity<Object> httpEntity)
+		throws JsonProcessingException {
 		final ResponseEntity<String> exchange = restTemplate.exchange(userInfoUri, HttpMethod.POST, httpEntity,
 			String.class);
 

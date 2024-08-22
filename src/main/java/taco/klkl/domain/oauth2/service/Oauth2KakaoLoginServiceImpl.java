@@ -33,13 +33,13 @@ public class Oauth2KakaoLoginServiceImpl implements Oauth2KakaoLoginService {
 	 * @param userInfoRequest
 	 * @return
 	 */
-	public UserDetailResponse loginUser(KakaoUserInfoRequest userInfoRequest) {
+	public UserDetailResponse loginUser(final KakaoUserInfoRequest userInfoRequest) {
 
-		final Long oauthId = userInfoRequest.id();
+		final Long oauth2MemberId = userInfoRequest.id();
 
 		// 이미 oauth로그인 기록이 있는 유저를 처리합니다.
-		if (oauth2Repository.existsByOauthId(oauthId)) {
-			final Oauth2 oauth2 = oauth2Repository.findFirstByOauthId(oauthId);
+		if (oauth2Repository.existsByOauth2MemberId(oauth2MemberId)) {
+			final Oauth2 oauth2 = oauth2Repository.findFirstByOauth2MemberId(oauth2MemberId);
 			final User user = oauth2.getUser();
 			return UserDetailResponse.from(user);
 		}
@@ -51,9 +51,9 @@ public class Oauth2KakaoLoginServiceImpl implements Oauth2KakaoLoginService {
 		return UserDetailResponse.from(user);
 	}
 
-	private User registerUser(KakaoUserInfoRequest userInfoRequest) {
+	private User registerUser(final KakaoUserInfoRequest userInfoRequest) {
 
-		final String name = userUtil.createUserName(userInfoRequest.nickname(), userInfoRequest.id());
+		final String name = userUtil.createUsername(userInfoRequest.nickname(), userInfoRequest.id());
 
 		// TODO: 성별, 나이는 기본값으로 넣고 있습니다.
 		final UserCreateRequest userCreateRequest = UserCreateRequest.of(

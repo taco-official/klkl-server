@@ -18,7 +18,7 @@ import taco.klkl.domain.user.domain.User;
 public class Oauth2 {
 
 	@Id
-	@Column(name = "oauth_id")
+	@Column(name = "oauth2_id")
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	Long id;
 
@@ -26,17 +26,17 @@ public class Oauth2 {
 	private User user;
 
 	@Column(
-		name = "user_oauth_id",
+		name = "oauth2_member_id",
 		nullable = false
 	)
-	private Long oauthId;
+	private Long oauth2MemberId;
 
-	private Oauth2(User user, Long oauthId) {
+	private Oauth2(final User user, final Long oauth2MemberId) {
 		this.user = user;
-		this.oauthId = oauthId;
+		this.oauth2MemberId = oauth2MemberId;
 	}
 
-	public static Oauth2 of(User user, Long oauthId) {
-		return new Oauth2(user, oauthId);
+	public static Oauth2 of(final User user, final Long oauth2MemberId) {
+		return new Oauth2(user, oauth2MemberId);
 	}
 }
