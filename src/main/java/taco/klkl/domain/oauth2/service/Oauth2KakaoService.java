@@ -8,5 +8,5 @@ import taco.klkl.domain.user.dto.response.UserDetailResponse;
 
 @Service
 public interface Oauth2KakaoService {
-	UserDetailResponse kakaoOauthLogin(String code) throws JsonProcessingException;
+	UserDetailResponse kakaoOauthLogin(final String code) throws JsonProcessingException;
 }
