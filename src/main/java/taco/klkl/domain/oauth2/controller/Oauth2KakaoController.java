@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import taco.klkl.domain.oauth2.service.Oauth2KakaoService;
@@ -21,6 +23,7 @@ import taco.klkl.domain.user.dto.response.UserDetailResponse;
 @RestController
 @RequestMapping("/v1/oauth/kakao")
 @RequiredArgsConstructor
+@Tag(name = "9. 인증/인가", description = "인증/인가 API")
 public class Oauth2KakaoController {
 
 	private final Oauth2KakaoService oauth2KakaoService;
@@ -42,6 +45,7 @@ public class Oauth2KakaoController {
 	 * @return
 	 */
 	@GetMapping()
+	@Operation(summary = "kakao 간편로그인 요청", description = "카카오 oauth2를 사용하여 로그인 처리합니다.")
 	public ResponseEntity<Void> oauthKakao() {
 		String location = getKakaoOauthLocation();
 
@@ -56,6 +60,7 @@ public class Oauth2KakaoController {
 	 */
 	// TODO: JWT적용시 토큰 관리 로직 추가
 	@GetMapping("/code")
+	@Operation(summary = "kakao 사용자 정보 가져오기", description = "카카오 API를 사용하여 사용자 정보를 가져옵니다.")
 	public UserDetailResponse processKakaoOauth2(@RequestParam("code") String code) throws
 		JsonProcessingException {
 
