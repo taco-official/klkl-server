@@ -42,11 +42,19 @@ class CategoryIntegrationTest {
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.data", hasSize(categoryResponse.size())))
-			.andExpect(jsonPath("$.isSuccess", is(true)));
+			.andExpect(jsonPath("$.isSuccess", is(true)))
+			.andExpect(jsonPath("$.data[0].subcategories",
+				hasSize(categoryResponse.get(0).subcategories().size())))
+			.andExpect(jsonPath("$.data[1].subcategories",
+				hasSize(categoryResponse.get(1).subcategories().size())))
+			.andExpect(jsonPath("$.data[2].subcategories",
+				hasSize(categoryResponse.get(2).subcategories().size())))
+			.andExpect(jsonPath("$.data[3].subcategories",
+				hasSize(categoryResponse.get(3).subcategories().size())));
 	}
 
 	@Test
-	@DisplayName("valid한 id값이 들어왔을 때 반환값이 제대로 전달되는지 테스트")
+	@DisplayName("valid한 id값이 들어왔을 때 테스트")
 	public void testGetCategoriesWithValidId() throws Exception {
 		//given
 		CategoryWithSubcategoryResponse categoryWithSubcategoryResponse =
@@ -70,7 +78,7 @@ class CategoryIntegrationTest {
 	}
 
 	@Test
-	@DisplayName("invalid한 id값이 들어왔을 때 오류가 전달되는지 테스트")
+	@DisplayName("invalid한 id값이 들어왔을 때 테스트")
 	public void testGetCategoriesWithInvalidId() throws Exception {
 		//given
 
