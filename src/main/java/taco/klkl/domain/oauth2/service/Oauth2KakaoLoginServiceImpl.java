@@ -65,8 +65,6 @@ public class Oauth2KakaoLoginServiceImpl implements Oauth2KakaoLoginService {
 		);
 
 		// 유저를 DB에 생성합니다.
-		final UserDetailResponse userDetailResponse = userService.registerUser(userCreateRequest);
-
-		return userUtil.findUserByName(userDetailResponse.name());
+		return userService.createUser(userCreateRequest);
 	}
 }

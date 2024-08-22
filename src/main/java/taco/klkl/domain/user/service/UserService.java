@@ -31,9 +31,9 @@ public class UserService {
 	/**
 	 *
 	 * @param userDto
-	 * @return UserDetailResponse
+	 * @return User
 	 */
-	public UserDetailResponse registerUser(UserCreateRequest userDto) {
+	public User createUser(UserCreateRequest userDto) {
 		final User user = User.of(
 			userDto.profile(),
 			userDto.name(),
@@ -41,8 +41,8 @@ public class UserService {
 			userDto.age(),
 			userDto.description()
 		);
-		userRepository.save(user);
-		return UserDetailResponse.from(user);
+
+		return userRepository.save(user);
 	}
 
 }
