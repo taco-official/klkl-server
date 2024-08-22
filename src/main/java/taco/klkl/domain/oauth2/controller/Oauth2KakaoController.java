@@ -48,8 +48,12 @@ public class Oauth2KakaoController {
 	@Operation(summary = "kakao 간편로그인 요청", description = "카카오 oauth2를 사용하여 로그인 처리합니다.")
 	public ResponseEntity<Void> oauthKakao() {
 		final String location = getKakaoOauthLocation();
+		final URI locationUri = URI.create(location);
 
-		return ResponseEntity.status(HttpStatus.FOUND).location(URI.create(location)).build();
+		return ResponseEntity
+			.status(HttpStatus.FOUND)
+			.location(locationUri)
+			.build();
 	}
 
 	/**
