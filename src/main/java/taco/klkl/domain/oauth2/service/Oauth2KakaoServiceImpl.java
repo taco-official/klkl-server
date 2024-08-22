@@ -143,11 +143,15 @@ public class Oauth2KakaoServiceImpl implements Oauth2KakaoService {
 		final ObjectMapper objectMapper = new ObjectMapper();
 		final JsonNode jsonNode = objectMapper.readTree(exchange.getBody());
 
-		final Long id = Long.parseLong((jsonNode.get("id").toString()));
+		final Long oauthMemberId = Long.parseLong((jsonNode.get("id").toString()));
 		final String nickname = (jsonNode.get("properties").get("nickname").toString());
 		final String profile = (jsonNode.get("properties").get("profile_image").toString());
 
-		return KakaoUserInfoRequest.of(id, StringUtil.trimDoubleQuote(nickname), StringUtil.trimDoubleQuote(profile));
+		return KakaoUserInfoRequest.of(
+			oauthMemberId,
+			StringUtil.trimDoubleQuote(nickname),
+			StringUtil.trimDoubleQuote(profile)
+		);
 	}
 
 }
