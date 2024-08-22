@@ -32,32 +32,32 @@ public class UserUtil {
 		return userRepository.findFirstByName(UserConstants.TEST_USER_NAME);
 	}
 
-	public User findUserById(Long id) {
+	public User findUserById(final Long id) {
 		return userRepository.findById(id)
 			.orElseThrow(UserNotFoundException::new);
 	}
 
-	public User findUserByName(String name) {
+	public User findUserByName(final String name) {
 		return userRepository.findFirstByName(name);
 	}
 
-	public String createUserName(String name, Long id) {
+	public String createUsername(final String name, Long id) {
 
-		String createdName = generateUserName(name, id);
+		String createdName = generateUsername(name, id);
 
 		while (userRepository.existsByName(createdName)) {
-			createdName = generateUserName(name, id);
+			createdName = generateUsername(name, id);
 		}
 
 		return createdName;
 	}
 
-	private String generateUserName(String name, Long id) {
+	private String generateUsername(final String name, final Long id) {
 
-		Long currentTimeMillis = Instant.now().toEpochMilli();
-		int hashCode = Objects.hash(name, id, currentTimeMillis);
+		final Long currentTimeMillis = Instant.now().toEpochMilli();
+		final int hashCode = Objects.hash(name, id, currentTimeMillis);
 
-		String suffix = String.format("%04d", Math.abs(hashCode) % 9973);
+		final String suffix = String.format("%04d", Math.abs(hashCode) % UserConstants.USERNAME_SUFFiX_MOD);
 
 		return name + suffix;
 	}
