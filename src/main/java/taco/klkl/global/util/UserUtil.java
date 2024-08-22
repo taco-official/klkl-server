@@ -41,7 +41,7 @@ public class UserUtil {
 		return userRepository.findFirstByName(name);
 	}
 
-	public String createUsername(final String name, Long id) {
+	public String createUsername(final String name, final Long id) {
 
 		String createdName = generateUsername(name, id);
 
