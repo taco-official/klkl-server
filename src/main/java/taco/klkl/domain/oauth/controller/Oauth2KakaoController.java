@@ -59,7 +59,7 @@ public class Oauth2KakaoController {
 	public UserDetailResponse processKakaoOauth2(@RequestParam("code") String code) throws
 		JsonProcessingException {
 
-		return oauth2KakaoService.processOauth2(code);
+		return oauth2KakaoService.kakaoOauthLogin(code);
 	}
 
 	/**
