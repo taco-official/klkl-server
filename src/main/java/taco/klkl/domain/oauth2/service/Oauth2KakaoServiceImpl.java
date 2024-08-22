@@ -56,10 +56,10 @@ public class Oauth2KakaoServiceImpl implements Oauth2KakaoService {
 	 */
 	@Override
 	public UserDetailResponse kakaoOauthLogin(String code) throws JsonProcessingException {
-		String accessToken = requestAccessToken(code);
-		HttpHeaders headers = getRequestUserInfoHeader(accessToken);
+		final String accessToken = requestAccessToken(code);
+		final HttpHeaders headers = getRequestUserInfoHeader(accessToken);
 
-		HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
+		final HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
 		return oauth2KakaoLoginService.loginUser(requestPostUserInfo(httpEntity));
 	}
 
@@ -70,16 +70,16 @@ public class Oauth2KakaoServiceImpl implements Oauth2KakaoService {
 	 * @throws JsonProcessingException
 	 */
 	private String requestAccessToken(String code) throws JsonProcessingException {
-		HttpHeaders headers = getRequestTokenHeader();
-		String requestBody = getRequestTokenBody(code);
+		final HttpHeaders headers = getRequestTokenHeader();
+		final String requestBody = getRequestTokenBody(code);
 
-		HttpEntity<String> httpEntity = new HttpEntity<>(requestBody, headers);
+		final HttpEntity<String> httpEntity = new HttpEntity<>(requestBody, headers);
 
-		ResponseEntity<String> response = requestPostAccessToken(httpEntity);
+		final ResponseEntity<String> response = requestPostAccessToken(httpEntity);
 
 		// 응답을 json형식의 객체로 구성합니다.
-		ObjectMapper objectMapper = new ObjectMapper();
-		JsonNode jsonNode = objectMapper.readTree(response.getBody());
+		final ObjectMapper objectMapper = new ObjectMapper();
+		final JsonNode jsonNode = objectMapper.readTree(response.getBody());
 
 		return jsonNode.get("access_token").toString();
 	}
@@ -89,7 +89,7 @@ public class Oauth2KakaoServiceImpl implements Oauth2KakaoService {
 	 * @return
 	 */
 	private HttpHeaders getRequestTokenHeader() {
-		HttpHeaders headers = new HttpHeaders();
+		final HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
 		return headers;
@@ -123,7 +123,7 @@ public class Oauth2KakaoServiceImpl implements Oauth2KakaoService {
 	 * @returnx
 	 */
 	private HttpHeaders getRequestUserInfoHeader(String accessToken) {
-		HttpHeaders headers = new HttpHeaders();
+		final HttpHeaders headers = new HttpHeaders();
 		headers.set("Authorization", "Bearer " + accessToken);
 		headers.set("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 		return headers;
@@ -136,14 +136,15 @@ public class Oauth2KakaoServiceImpl implements Oauth2KakaoService {
 	 * @throws JsonProcessingException
 	 */
 	private KakaoUserInfoRequest requestPostUserInfo(HttpEntity<Object> httpEntity) throws JsonProcessingException {
-		ResponseEntity<String> exchange = restTemplate.exchange(userInfoUri, HttpMethod.POST, httpEntity, String.class);
+		final ResponseEntity<String> exchange = restTemplate.exchange(userInfoUri, HttpMethod.POST, httpEntity,
+			String.class);
 
-		ObjectMapper objectMapper = new ObjectMapper();
-		JsonNode jsonNode = objectMapper.readTree(exchange.getBody());
+		final ObjectMapper objectMapper = new ObjectMapper();
+		final JsonNode jsonNode = objectMapper.readTree(exchange.getBody());
 
-		Long id = Long.parseLong((jsonNode.get("id").toString()));
-		String nickname = (jsonNode.get("properties").get("nickname").toString());
-		String profile = (jsonNode.get("properties").get("profile_image").toString());
+		final Long id = Long.parseLong((jsonNode.get("id").toString()));
+		final String nickname = (jsonNode.get("properties").get("nickname").toString());
+		final String profile = (jsonNode.get("properties").get("profile_image").toString());
 
 		return KakaoUserInfoRequest.of(id, StringUtil.trimDoubleQuote(nickname), StringUtil.trimDoubleQuote(profile));
 	}

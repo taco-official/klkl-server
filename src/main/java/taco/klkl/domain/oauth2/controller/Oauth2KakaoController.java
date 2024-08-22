@@ -47,7 +47,7 @@ public class Oauth2KakaoController {
 	@GetMapping()
 	@Operation(summary = "kakao 간편로그인 요청", description = "카카오 oauth2를 사용하여 로그인 처리합니다.")
 	public ResponseEntity<Void> oauthKakao() {
-		String location = getKakaoOauthLocation();
+		final String location = getKakaoOauthLocation();
 
 		return ResponseEntity.status(HttpStatus.FOUND).location(URI.create(location)).build();
 	}
@@ -61,7 +61,7 @@ public class Oauth2KakaoController {
 	// TODO: JWT적용시 토큰 관리 로직 추가
 	@GetMapping("/code")
 	@Operation(summary = "kakao 사용자 정보 가져오기", description = "카카오 API를 사용하여 사용자 정보를 가져옵니다.")
-	public UserDetailResponse processKakaoOauth2(@RequestParam("code") String code) throws
+	public UserDetailResponse processKakaoOauth2(@RequestParam("code") final String code) throws
 		JsonProcessingException {
 
 		return oauth2KakaoService.kakaoOauthLogin(code);

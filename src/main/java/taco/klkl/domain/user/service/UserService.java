@@ -34,7 +34,7 @@ public class UserService {
 	 * @return UserDetailResponse
 	 */
 	public UserDetailResponse registerUser(UserCreateRequest userDto) {
-		User user = User.of(
+		final User user = User.of(
 			userDto.profile(),
 			userDto.name(),
 			Gender.getGenderByDescription(userDto.description()),
