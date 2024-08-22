@@ -7,7 +7,7 @@ import taco.klkl.domain.category.domain.Category;
 public record CategoryResponse(
 	Long id,
 	String name,
-	List<SubcategoryResponse> subcategory
+	List<SubcategoryResponse> subcategories
 ) {
 	public static CategoryResponse from(final Category category) {
 		return new CategoryResponse(
