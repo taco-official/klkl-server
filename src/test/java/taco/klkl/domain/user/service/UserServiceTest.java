@@ -48,7 +48,7 @@ class UserServiceTest {
 
 	@Test
 	@DisplayName("사용자 등록 서비스 테스트")
-	public void testRegisterUser() {
+	public void testCreateUser() {
 		// given
 		UserCreateRequest requestDto = new UserCreateRequest(
 			"이상화",
@@ -67,7 +67,8 @@ class UserServiceTest {
 		when(userRepository.save(any(User.class))).thenReturn(user);
 
 		// when
-		UserDetailResponse responseDto = userService.registerUser(requestDto);
+		User user1 = userService.createUser(requestDto);
+		UserDetailResponse responseDto = UserDetailResponse.from(user1);
 
 		// then
 		assertThat(responseDto.name()).isEqualTo(requestDto.name());

@@ -18,14 +18,10 @@ public class GenderConverter implements AttributeConverter<Gender, String> {
 
 	@Override
 	public Gender convertToEntityAttribute(String dbData) {
-		if (dbData == null || dbData.isEmpty()) {
-			throw new IllegalArgumentException("Unknown value" + dbData);
+		if (dbData == null) {
+			return null;
 		}
 
-		return switch (dbData) {
-			case "남" -> Gender.MALE;
-			case "여" -> Gender.FEMALE;
-			default -> throw new IllegalArgumentException("Unknown value" + dbData);
-		};
+		return Gender.getGenderByDescription(dbData);
 	}
 }

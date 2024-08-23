@@ -12,6 +12,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.HandlerMethodValidationException;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
@@ -123,6 +124,12 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 		return createErrorResponseEntity(ex, errorCode);
 	}
 
+	@ExceptionHandler(HttpClientErrorException.class)
+	protected ResponseEntity<Object> handleClientErrorException(HttpClientErrorException ex) {
+		log.error("HttpClientError : {}", ex.getMessage(), ex);
+		return createHttpClientErrorResponseEntity(ex);
+	}
+
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<Object> handleException(Exception ex) {
 		log.error("InternalServerError : {}", ex.getMessage(), ex);
@@ -134,5 +141,12 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 		final ErrorResponse errorResponse = ErrorResponse.of(ex.getClass().getSimpleName(), errorCode.getMessage());
 		final GlobalResponse globalResponse = GlobalResponse.error(errorCode.getHttpStatus().value(), errorResponse);
 		return ResponseEntity.status(errorCode.getHttpStatus()).body(globalResponse);
+	}
+
+	private ResponseEntity<Object> createHttpClientErrorResponseEntity(final HttpClientErrorException ex) {
+		final ErrorResponse errorResponse = ErrorResponse.of(ex.getClass().getSimpleName(),
+			ex.getResponseBodyAsString());
+		final GlobalResponse globalResponse = GlobalResponse.error(ex.getStatusCode().value(), errorResponse);
+		return ResponseEntity.status(ex.getStatusCode()).body(globalResponse);
 	}
 }

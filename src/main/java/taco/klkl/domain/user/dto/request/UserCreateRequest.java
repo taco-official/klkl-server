@@ -10,4 +10,13 @@ public record UserCreateRequest(
 	String profile,
 	String description
 ) {
+	public static UserCreateRequest of(
+		final String name,
+		final String gender,
+		final Integer age,
+		final String profile,
+		final String description
+	) {
+		return new UserCreateRequest(name, gender, age, profile, description);
+	}
 }
