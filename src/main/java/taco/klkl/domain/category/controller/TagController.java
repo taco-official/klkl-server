@@ -18,7 +18,7 @@ import taco.klkl.domain.category.service.SubcategoryService;
 import taco.klkl.domain.category.service.SubcategoryTagService;
 
 @Slf4j
-@Tag(name = "7. 태그", description = "태그 관련 API")
+@Tag(name = "6. 카테고리", description = "카테고리 관련 API")
 @RestController
 @RequestMapping("/v1/tags")
 @RequiredArgsConstructor

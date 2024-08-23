@@ -17,7 +17,7 @@ import taco.klkl.domain.search.service.SearchService;
 @RestController
 @RequestMapping("/v1/search")
 @RequiredArgsConstructor
-@Tag(name = "6. 검색", description = "검색 관련 API")
+@Tag(name = "8. 검색", description = "검색 관련 API")
 public class SearchController {
 
 	private final SearchService searchService;
