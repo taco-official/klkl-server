@@ -4,7 +4,9 @@ import java.time.Duration;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,49 +19,62 @@ import software.amazon.awssdk.services.s3.presigner.model.PutObjectPresignReques
 import taco.klkl.domain.image.dao.ImageRepository;
 import taco.klkl.domain.image.domain.FileExtension;
 import taco.klkl.domain.image.domain.Image;
-import taco.klkl.domain.image.dto.request.ImageCreateRequest;
+import taco.klkl.domain.image.domain.ImageType;
+import taco.klkl.domain.image.dto.request.UserProfileUploadRequest;
 import taco.klkl.domain.image.dto.response.PresignedUrlResponse;
+import taco.klkl.domain.user.domain.User;
+import taco.klkl.global.util.UserUtil;
 
 @Slf4j
+@Primary
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class ImageServiceImpl implements ImageService {
+
+	private static final Duration SIGNATURE_DURATION = Duration.ofMinutes(5);
+	private static final ObjectCannedACL REQUEST_ACL = ObjectCannedACL.PRIVATE;
 
 	private final S3Client s3Client;
 	private final S3Presigner s3Presigner;
 
 	private final ImageRepository imageRepository;
 
+	private final UserUtil userUtil;
+
 	@Value("${cloud.aws.s3.bucket}")
 	private String bucketName;
 
 	@Override
-	public PresignedUrlResponse createImagePresignedUrl(final ImageCreateRequest createRequest) {
+	@Transactional
+	public PresignedUrlResponse createUserProfileUploadPresignedUrl(final UserProfileUploadRequest createRequest) {
+		final User currentUser = userUtil.findCurrentUser();
 		final String imageUUID = generateUUID();
-		final String fileName = createFileName(imageUUID, createRequest.fileExtension());
+		final FileExtension fileExtension = FileExtension.from(createRequest.fileExtension());
+		final String fileName = createFileName(
+			ImageType.USER_PROFILE,
+			currentUser.getId(),
+			imageUUID,
+			fileExtension
+		);
 
-		final PutObjectRequest objectRequest = PutObjectRequest.builder()
-			.bucket(bucketName)
-			.key(fileName)
-			.contentType("image/" + createRequest.fileExtension().getValue())
-			.acl(ObjectCannedACL.PUBLIC_READ)
-			.build();
+		final PutObjectRequest putObjectRequest = createPutObjectRequest(
+			fileName,
+			fileExtension
+		);
+		final PutObjectPresignRequest putObjectPresignRequest = createPutObjectPresignRequest(putObjectRequest);
 
-		final PutObjectPresignRequest presignRequest = PutObjectPresignRequest.builder()
-			.signatureDuration(Duration.ofMinutes(30))
-			.putObjectRequest(objectRequest)
-			.build();
-
-		final PresignedPutObjectRequest presignedRequest = s3Presigner.presignPutObject(presignRequest);
+		final PresignedPutObjectRequest presignedRequest = s3Presigner.presignPutObject(putObjectPresignRequest);
 		final String presignedUrl = presignedRequest.url().toString();
 
-		final Image image = createImageEntity(imageUUID, createRequest.fileExtension());
+		final Image image = createImageEntity(
+			ImageType.USER_PROFILE,
+			currentUser.getId(),
+			imageUUID,
+			fileExtension
+		);
 		imageRepository.save(image);
 
-		System.out.println("Generated Presigned URL: " + presignedUrl);
-		System.out.println("Bucket: " + bucketName);
-		System.out.println("Key: " + fileName);
-		System.out.println("Content-Type: image/" + createRequest.fileExtension().getValue());
 		return PresignedUrlResponse.from(presignedUrl);
 	}
 
@@ -68,17 +83,46 @@ public class ImageServiceImpl implements ImageService {
 	}
 
 	private String createFileName(
-		String imageUUID,
-		FileExtension fileExtension
+		final ImageType imageType,
+		final Long targetId,
+		final String imageUUID,
+		final FileExtension fileExtension
 	) {
 		StringBuilder sb = new StringBuilder();
-		sb.append(imageUUID)
-			.append(".")
+		sb.append(imageType.getValue()).append("/")
+			.append(targetId).append("/")
+			.append(imageUUID).append(".")
 			.append(fileExtension.getValue());
 		return sb.toString();
 	}
 
-	private Image createImageEntity(final String imageUUID, final FileExtension fileExtension) {
-		return Image.of(imageUUID, fileExtension);
+	private PutObjectRequest createPutObjectRequest(
+		final String fileName,
+		final FileExtension fileExtension
+	) {
+		return PutObjectRequest.builder()
+			.bucket(bucketName)
+			.key(fileName)
+			.contentType("image/" + fileExtension.getValue())
+			.acl(REQUEST_ACL)
+			.build();
+	}
+
+	private PutObjectPresignRequest createPutObjectPresignRequest(
+		final PutObjectRequest putObjectRequest
+	) {
+		return PutObjectPresignRequest.builder()
+			.signatureDuration(SIGNATURE_DURATION)
+			.putObjectRequest(putObjectRequest)
+			.build();
+	}
+
+	private Image createImageEntity(
+		final ImageType imageType,
+		final Long targetId,
+		final String imageUUID,
+		final FileExtension fileExtension
+	) {
+		return Image.of(imageType, targetId, imageUUID, fileExtension);
 	}
 }

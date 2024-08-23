@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import taco.klkl.domain.image.exception.FileExtensionInvalidException;
+import taco.klkl.domain.image.exception.FileExtensionNotFoundException;
 
 @Getter
 @RequiredArgsConstructor
@@ -16,10 +16,10 @@ public enum FileExtension {
 
 	private final String value;
 
-	public static FileExtension from(final String value) throws FileExtensionInvalidException {
+	public static FileExtension from(final String fileExtension) throws FileExtensionNotFoundException {
 		return Arrays.stream(FileExtension.values())
-			.filter(extension -> extension.getValue().equals(value))
+			.filter(extension -> extension.toString().equals(fileExtension))
 			.findFirst()
-			.orElseThrow(FileExtensionInvalidException::new);
+			.orElseThrow(FileExtensionNotFoundException::new);
 	}
 }

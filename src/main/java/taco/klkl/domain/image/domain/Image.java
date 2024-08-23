@@ -1,5 +1,7 @@
 package taco.klkl.domain.image.domain;
 
+import java.time.LocalDateTime;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -16,29 +18,64 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Image {
 	@Id
-	@Column(name = "image_id")
+	@Column(name = "image_id",
+		nullable = false
+	)
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
-	@Column(name = "image_uuid")
+	@Enumerated(EnumType.STRING)
+	@Column(
+		name = "image_type",
+		nullable = false
+	)
+	private ImageType imageType;
+
+	@Column(
+		name = "target_id",
+		nullable = false
+	)
+	private Long targetId;
+
+	@Column(
+		name = "image_uuid",
+		nullable = false
+	)
 	private String imageUuid;
 
 	@Enumerated(EnumType.STRING)
-	@Column(name = "file_extension")
+	@Column(
+		name = "file_extension",
+		nullable = false
+	)
 	private FileExtension fileExtension;
 
+	@Column(
+		name = "created_at",
+		nullable = false,
+		updatable = false
+	)
+	private LocalDateTime createdAt;
+
 	private Image(
+		final ImageType imageType,
+		final Long targetId,
 		final String imageUuid,
 		final FileExtension fileExtension
 	) {
+		this.imageType = imageType;
+		this.targetId = targetId;
 		this.imageUuid = imageUuid;
 		this.fileExtension = fileExtension;
+		this.createdAt = LocalDateTime.now();
 	}
 
 	public static Image of(
+		final ImageType imageType,
+		final Long targetId,
 		final String imageUuid,
 		final FileExtension fileExtension
 	) {
-		return new Image(imageUuid, fileExtension);
+		return new Image(imageType, targetId, imageUuid, fileExtension);
 	}
 }
