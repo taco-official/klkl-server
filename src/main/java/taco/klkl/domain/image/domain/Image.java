@@ -32,16 +32,10 @@ public class Image {
 	private ImageType imageType;
 
 	@Column(
-		name = "target_id",
+		name = "image_key",
 		nullable = false
 	)
-	private Long targetId;
-
-	@Column(
-		name = "image_uuid",
-		nullable = false
-	)
-	private String imageUuid;
+	private String imageKey;
 
 	@Enumerated(EnumType.STRING)
 	@Column(
@@ -59,23 +53,20 @@ public class Image {
 
 	private Image(
 		final ImageType imageType,
-		final Long targetId,
-		final String imageUuid,
+		final String imageKey,
 		final FileExtension fileExtension
 	) {
 		this.imageType = imageType;
-		this.targetId = targetId;
-		this.imageUuid = imageUuid;
+		this.imageKey = imageKey;
 		this.fileExtension = fileExtension;
 		this.createdAt = LocalDateTime.now();
 	}
 
 	public static Image of(
 		final ImageType imageType,
-		final Long targetId,
 		final String imageUuid,
 		final FileExtension fileExtension
 	) {
-		return new Image(imageType, targetId, imageUuid, fileExtension);
+		return new Image(imageType, imageUuid, fileExtension);
 	}
 }

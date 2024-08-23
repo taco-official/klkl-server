@@ -20,7 +20,7 @@ import taco.klkl.domain.image.dao.ImageRepository;
 import taco.klkl.domain.image.domain.FileExtension;
 import taco.klkl.domain.image.domain.Image;
 import taco.klkl.domain.image.domain.ImageType;
-import taco.klkl.domain.image.dto.request.UserProfileUploadRequest;
+import taco.klkl.domain.image.dto.request.UserProfileImageUploadRequest;
 import taco.klkl.domain.image.dto.response.PresignedUrlResponse;
 import taco.klkl.domain.user.domain.User;
 import taco.klkl.global.util.UserUtil;
@@ -47,14 +47,14 @@ public class ImageServiceImpl implements ImageService {
 
 	@Override
 	@Transactional
-	public PresignedUrlResponse createUserProfileUploadPresignedUrl(final UserProfileUploadRequest createRequest) {
+	public PresignedUrlResponse generateProfileImageUploadUrl(final UserProfileImageUploadRequest uploadRequest) {
 		final User currentUser = userUtil.findCurrentUser();
-		final String imageUUID = generateUUID();
-		final FileExtension fileExtension = FileExtension.from(createRequest.fileExtension());
+		final String imageKey = generateImageKey();
+		final FileExtension fileExtension = FileExtension.from(uploadRequest.fileExtension());
 		final String fileName = createFileName(
 			ImageType.USER_PROFILE,
 			currentUser.getId(),
-			imageUUID,
+			imageKey,
 			fileExtension
 		);
 
@@ -69,8 +69,7 @@ public class ImageServiceImpl implements ImageService {
 
 		final Image image = createImageEntity(
 			ImageType.USER_PROFILE,
-			currentUser.getId(),
-			imageUUID,
+			imageKey,
 			fileExtension
 		);
 		imageRepository.save(image);
@@ -78,20 +77,20 @@ public class ImageServiceImpl implements ImageService {
 		return PresignedUrlResponse.from(presignedUrl);
 	}
 
-	private String generateUUID() {
+	private String generateImageKey() {
 		return UUID.randomUUID().toString();
 	}
 
 	private String createFileName(
 		final ImageType imageType,
-		final Long targetId,
-		final String imageUUID,
+		final Long currentUserId,
+		final String imageKey,
 		final FileExtension fileExtension
 	) {
 		StringBuilder sb = new StringBuilder();
 		sb.append(imageType.getValue()).append("/")
-			.append(targetId).append("/")
-			.append(imageUUID).append(".")
+			.append(currentUserId).append("/")
+			.append(imageKey).append(".")
 			.append(fileExtension.getValue());
 		return sb.toString();
 	}
@@ -119,10 +118,9 @@ public class ImageServiceImpl implements ImageService {
 
 	private Image createImageEntity(
 		final ImageType imageType,
-		final Long targetId,
-		final String imageUUID,
+		final String imageKey,
 		final FileExtension fileExtension
 	) {
-		return Image.of(imageType, targetId, imageUUID, fileExtension);
+		return Image.of(imageType, imageKey, fileExtension);
 	}
 }

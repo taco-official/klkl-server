@@ -1,4 +1,4 @@
-package taco.klkl.global.config.S3;
+package taco.klkl.global.config.s3;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
