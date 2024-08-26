@@ -59,7 +59,9 @@ public enum ErrorCode {
 
 	// Image
 	FILE_EXTENSION_NOT_FOUND(HttpStatus.NOT_FOUND, "유효하지 않은 파일 확장자입니다."),
-	IMAGE_TYPE_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 이미지 타입입니다."),
+	IMAGE_TYPE_NOT_FOUND(HttpStatus.NOT_FOUND, "유효하지 않은 이미지 타입입니다."),
+	UPLOAD_STATE_NOT_FOUND(HttpStatus.NOT_FOUND, "유효하지 않은 업로드 상태입니다."),
+	USER_IMAGE_NOT_FOUND(HttpStatus.FOUND, "존재하지 않는 유저 이미지입니다."),
 
 	// Sample
 	SAMPLE_ERROR(HttpStatus.BAD_REQUEST, "샘플 에러입니다."),
