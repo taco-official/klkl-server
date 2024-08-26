@@ -12,6 +12,7 @@ public enum FileExtension {
 	JPEG("jpeg"),
 	JPG("jpg"),
 	PNG("png"),
+	WEBP("webp"),
 	;
 
 	private final String value;
