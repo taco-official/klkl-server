@@ -6,17 +6,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import taco.klkl.domain.image.domain.Image;
-import taco.klkl.domain.image.domain.ImageType;
-import taco.klkl.domain.image.domain.UploadState;
-import taco.klkl.domain.image.exception.ImageUploadNotCompleteException;
 import taco.klkl.domain.user.dao.UserRepository;
 import taco.klkl.domain.user.domain.Gender;
 import taco.klkl.domain.user.domain.User;
 import taco.klkl.domain.user.dto.request.UserCreateRequest;
 import taco.klkl.domain.user.dto.request.UserUpdateRequest;
 import taco.klkl.domain.user.dto.response.UserDetailResponse;
-import taco.klkl.global.util.ImageUtil;
 import taco.klkl.global.util.UserUtil;
 
 @Slf4j
@@ -25,9 +20,10 @@ import taco.klkl.global.util.UserUtil;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
+
 	private final UserRepository userRepository;
+
 	private final UserUtil userUtil;
-	private final ImageUtil imageUtil;
 
 	/**
 	 * 임시 나의 정보 조회
@@ -87,12 +83,4 @@ public class UserServiceImpl implements UserService {
 			description
 		);
 	}
-
-	private void validateProfileImageUrl(final String profileImageUrl) {
-		final Image image = imageUtil.findImageByImageUrl(ImageType.USER_IMAGE, profileImageUrl);
-		if (image.getUploadState() != UploadState.COMPLETE) {
-			throw new ImageUploadNotCompleteException();
-		}
-	}
-
 }
