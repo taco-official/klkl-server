@@ -3,8 +3,6 @@ package taco.klkl.domain.user.service;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-import java.util.Optional;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,8 +25,8 @@ import taco.klkl.global.util.ImageUtil;
 import taco.klkl.global.util.UserUtil;
 
 @ExtendWith(MockitoExtension.class)
-class UserServiceTest {
-	private static final Logger log = LoggerFactory.getLogger(UserServiceTest.class);
+class UserServiceImplTest {
+	private static final Logger log = LoggerFactory.getLogger(UserServiceImplTest.class);
 
 	@Mock
 	UserRepository userRepository;
@@ -40,7 +38,7 @@ class UserServiceTest {
 	ImageUtil imageUtil;
 
 	@InjectMocks
-	UserService userService;
+	UserServiceImpl userServiceImpl;
 
 	@Test
 	@DisplayName("내 정보 조회 서비스 테스트")
@@ -55,7 +53,7 @@ class UserServiceTest {
 		when(user.getDescription()).thenReturn("테스트입니다.");
 
 		// when
-		UserDetailResponse userDto = userService.getCurrentUser();
+		UserDetailResponse userDto = userServiceImpl.getCurrentUser();
 
 		// then
 		assertThat(userDto.id()).isEqualTo(user.getId());
@@ -91,7 +89,7 @@ class UserServiceTest {
 		when(imageUtil.findImageByImageUrl(any(ImageType.class), anyString())).thenReturn(mockImage);
 
 		// when
-		UserDetailResponse responseDto = userService.createUser(requestDto);
+		UserDetailResponse responseDto = userServiceImpl.createUser(requestDto);
 
 		// then
 		assertThat(responseDto.name()).isEqualTo(requestDto.name());
