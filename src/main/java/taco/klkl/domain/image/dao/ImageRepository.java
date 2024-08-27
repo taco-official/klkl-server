@@ -9,5 +9,7 @@ import taco.klkl.domain.image.domain.ImageType;
 
 public interface ImageRepository extends JpaRepository<Image, Long> {
 	Optional<Image> findByImageTypeAndTargetId(final ImageType imageType, final Long targetId);
-	Optional<Image> findByImageTypeAndTargetIdAndImageKey(final ImageType imageType, final Long targetId, final String imageKey);
+
+	Optional<Image> findByImageTypeAndTargetIdAndImageKey(
+		final ImageType imageType, final Long targetId, final String imageKey);
 }

@@ -23,7 +23,7 @@ public class User {
 
 	@Column(
 		name = "profile_image_url",
-		length= 500,
+		length = 500,
 		nullable = false
 	)
 	private String profileImageUrl;
