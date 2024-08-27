@@ -17,4 +17,4 @@ cloud:
     s3:
       bucket: ${S3_BUCKET_NAME}
     cloudfront:
-      domain: ${CLOUDFRONT_DOMAIN}
+      domain: ${S3_CLOUDFRONT_DOMAIN}
