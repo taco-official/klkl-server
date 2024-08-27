@@ -122,6 +122,19 @@ public class ImageServiceImpl implements ImageService {
 		return PresignedUrlResponse.from(presignedUrl);
 	}
 
+	@Override
+	@Transactional
+	public ImageUrlResponse uploadCompleteProductImage(final Long productId) {
+		final ImageType imageType = ImageType.PRODUCT_IMAGE;
+
+		final Image image = imageRepository.findByImageTypeAndTargetId(imageType, productId)
+			.orElseThrow(ImageNotFoundException::new);
+
+		image.uploadComplete();
+		final String imageUrl = createImageUrl(image);
+		return ImageUrlResponse.from(imageUrl);
+	}
+
 	private PutObjectRequest createPutObjectRequest(
 		final String fileName,
 		final FileExtension fileExtension

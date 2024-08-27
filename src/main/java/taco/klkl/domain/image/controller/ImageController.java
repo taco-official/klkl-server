@@ -55,4 +55,15 @@ public class ImageController {
 	) {
 		return imageService.createProductImageUploadUrl(productId, request);
 	}
+
+	@Operation(
+		summary = "상품 이미지 업로드 완료 처리",
+		description = "상품 이미지 업로드를 완료 처리합니다."
+	)
+	@PostMapping("/v1/products/{productId}/upload-complete")
+	public ImageUrlResponse uploadCompleteProductImage(
+		@PathVariable final Long productId
+	) {
+		return imageService.uploadCompleteProductImage(productId);
+	}
 }

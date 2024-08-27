@@ -14,6 +14,11 @@ public interface ImageService {
 
 	ImageUrlResponse uploadCompleteUserImage();
 
-	PresignedUrlResponse createProductImageUploadUrl(final Long productId, final ProductImageUploadRequest uploadRequest);
+	PresignedUrlResponse createProductImageUploadUrl(
+		final Long productId,
+		final ProductImageUploadRequest uploadRequest
+	);
+
+	ImageUrlResponse uploadCompleteProductImage(final Long productId);
 
 }
