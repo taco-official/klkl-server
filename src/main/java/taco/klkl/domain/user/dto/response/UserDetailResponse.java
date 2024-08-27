@@ -4,15 +4,15 @@ import taco.klkl.domain.user.domain.User;
 
 public record UserDetailResponse(
 	Long id,
-	String profile,
+	String profileImageUrl,
 	String name,
 	String description,
 	int totalLikeCount
 ) {
-	public static UserDetailResponse from(User user) {
+	public static UserDetailResponse from(final User user) {
 		return new UserDetailResponse(
 			user.getId(),
-			user.getProfile(),
+			user.getProfileImageUrl(),
 			user.getName(),
 			user.getDescription(),
 			0
