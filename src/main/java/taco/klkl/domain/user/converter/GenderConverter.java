@@ -8,24 +8,18 @@ import taco.klkl.domain.user.domain.Gender;
 public class GenderConverter implements AttributeConverter<Gender, String> {
 
 	@Override
-	public String convertToDatabaseColumn(Gender gender) {
+	public String convertToDatabaseColumn(final Gender gender) {
 		if (gender == null) {
 			return null;
 		}
-
-		return gender.getDescription();
+		return gender.getValue();
 	}
 
 	@Override
-	public Gender convertToEntityAttribute(String dbData) {
+	public Gender convertToEntityAttribute(final String dbData) {
 		if (dbData == null || dbData.isEmpty()) {
-			throw new IllegalArgumentException("Unknown value" + dbData);
+			return null;
 		}
-
-		return switch (dbData) {
-			case "남" -> Gender.MALE;
-			case "여" -> Gender.FEMALE;
-			default -> throw new IllegalArgumentException("Unknown value" + dbData);
-		};
+		return Gender.from(dbData);
 	}
 }
