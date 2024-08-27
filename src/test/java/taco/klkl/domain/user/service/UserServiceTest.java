@@ -3,6 +3,8 @@ package taco.klkl.domain.user.service;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import java.util.Optional;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -31,16 +33,16 @@ class UserServiceTest {
 
 	@Test
 	@DisplayName("내 정보 조회 서비스 테스트")
-	public void testGetMyInfo() {
+	public void testGetCurrentUser() {
 		// given
 		User user = UserConstants.TEST_USER;
-		when(userRepository.findFirstByName(UserConstants.TEST_USER_NAME)).thenReturn(user);
+		when(userRepository.findById(1L)).thenReturn(Optional.of(user));
 
 		// when
-		UserDetailResponse userDto = userService.getMyInfo();
+		UserDetailResponse userDto = userService.getCurrentUser();
 
 		// then
-		assertThat(userDto.profile()).isEqualTo(user.getProfile());
+		assertThat(userDto.profileImageUrl()).isEqualTo(user.getProfileImageUrl());
 		assertThat(userDto.name()).isEqualTo(user.getName());
 		assertThat(userDto.description()).isEqualTo(user.getDescription());
 		assertThat(userDto.totalLikeCount()).isEqualTo(UserConstants.DEFAULT_TOTAL_LIKE_COUNT);
@@ -48,7 +50,7 @@ class UserServiceTest {
 
 	@Test
 	@DisplayName("사용자 등록 서비스 테스트")
-	public void testRegisterUser() {
+	public void testCreateUser() {
 		// given
 		UserCreateRequest requestDto = new UserCreateRequest(
 			"이상화",
@@ -58,20 +60,20 @@ class UserServiceTest {
 			"저는 이상화입니다."
 		);
 		User user = User.of(
-			requestDto.profile(),
+			requestDto.profileImageUrl(),
 			requestDto.name(),
-			Gender.getGenderByDescription(requestDto.description()),
+			Gender.from(requestDto.description()),
 			requestDto.age(),
 			requestDto.description()
 		);
 		when(userRepository.save(any(User.class))).thenReturn(user);
 
 		// when
-		UserDetailResponse responseDto = userService.registerUser(requestDto);
+		UserDetailResponse responseDto = userService.createUser(requestDto);
 
 		// then
 		assertThat(responseDto.name()).isEqualTo(requestDto.name());
-		assertThat(responseDto.profile()).isEqualTo(requestDto.profile());
+		assertThat(responseDto.profileImageUrl()).isEqualTo(requestDto.profileImageUrl());
 		assertThat(responseDto.description()).isEqualTo(requestDto.description());
 		assertThat(responseDto.totalLikeCount()).isEqualTo(UserConstants.DEFAULT_TOTAL_LIKE_COUNT);
 	}

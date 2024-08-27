@@ -40,7 +40,7 @@ class UserControllerTest {
 	@DisplayName("내 정보 조회 API 테스트")
 	public void testGetMe() throws Exception {
 		// given
-		Mockito.when(userService.getMyInfo()).thenReturn(responseDto);
+		Mockito.when(userService.getCurrentUser()).thenReturn(responseDto);
 
 		// when & then
 		mockMvc.perform(get("/v1/users/me")

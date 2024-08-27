@@ -73,9 +73,9 @@ public class CommentControllerTest {
 	);
 
 	private final User user = User.of(
-		requestDto.profile(),
+		requestDto.profileImageUrl(),
 		requestDto.name(),
-		Gender.getGenderByDescription(requestDto.description()),
+		Gender.from(requestDto.description()),
 		requestDto.age(),
 		requestDto.description()
 	);

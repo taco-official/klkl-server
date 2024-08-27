@@ -14,7 +14,7 @@ class UserSimpleResponseTest {
 	public void testUserSimpleResponseDto() {
 		// given
 		Long id = 1L;
-		String profile = "image/profile.png";
+		String profile = "image/profileImageUrl.png";
 		String name = "이름";
 
 		// when
@@ -22,7 +22,7 @@ class UserSimpleResponseTest {
 
 		// then
 		assertThat(userSimple.id()).isEqualTo(id);
-		assertThat(userSimple.profile()).isEqualTo(profile);
+		assertThat(userSimple.profileImageUrl()).isEqualTo(profile);
 		assertThat(userSimple.name()).isEqualTo(name);
 	}
 
@@ -30,7 +30,7 @@ class UserSimpleResponseTest {
 	@DisplayName("User 객체로부터 UserSimpleResponse 생성 테스트")
 	public void testFrom() {
 		// given
-		String profile = "image/profile.png";
+		String profile = "image/profileImageUrl.png";
 		String name = "이름";
 		Gender gender = Gender.MALE;
 		int age = 20;
@@ -41,7 +41,7 @@ class UserSimpleResponseTest {
 		UserSimpleResponse userSimple = UserSimpleResponse.from(user);
 
 		// then
-		assertThat(userSimple.profile()).isEqualTo(profile);
+		assertThat(userSimple.profileImageUrl()).isEqualTo(profile);
 		assertThat(userSimple.name()).isEqualTo(name);
 	}
 }

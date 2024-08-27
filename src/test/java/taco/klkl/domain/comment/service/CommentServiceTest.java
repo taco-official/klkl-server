@@ -57,9 +57,9 @@ public class CommentServiceTest {
 	);
 
 	private final User user = User.of(
-		userRequestDto.profile(),
+		userRequestDto.profileImageUrl(),
 		userRequestDto.name(),
-		Gender.getGenderByDescription(userRequestDto.description()),
+		Gender.from(userRequestDto.description()),
 		userRequestDto.age(),
 		userRequestDto.description()
 	);

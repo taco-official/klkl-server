@@ -76,7 +76,7 @@ public class NotificationServiceTest {
 
 	@BeforeEach
 	public void setUp() {
-		commentUser = User.of("profile",
+		commentUser = User.of("profileImageUrl",
 			"윤상정",
 			Gender.FEMALE,
 			26,
