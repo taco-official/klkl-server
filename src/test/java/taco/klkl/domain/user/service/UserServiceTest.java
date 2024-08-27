@@ -14,12 +14,17 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import taco.klkl.domain.image.domain.Image;
+import taco.klkl.domain.image.domain.ImageType;
+import taco.klkl.domain.image.domain.UploadState;
 import taco.klkl.domain.user.dao.UserRepository;
 import taco.klkl.domain.user.domain.Gender;
 import taco.klkl.domain.user.domain.User;
 import taco.klkl.domain.user.dto.request.UserCreateRequest;
 import taco.klkl.domain.user.dto.response.UserDetailResponse;
 import taco.klkl.global.common.constants.UserConstants;
+import taco.klkl.global.util.ImageUtil;
+import taco.klkl.global.util.UserUtil;
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {
@@ -28,6 +33,12 @@ class UserServiceTest {
 	@Mock
 	UserRepository userRepository;
 
+	@Mock
+	UserUtil userUtil;
+
+	@Mock
+	ImageUtil imageUtil;
+
 	@InjectMocks
 	UserService userService;
 
@@ -35,15 +46,21 @@ class UserServiceTest {
 	@DisplayName("내 정보 조회 서비스 테스트")
 	public void testGetCurrentUser() {
 		// given
-		User user = UserConstants.TEST_USER;
-		when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+
+		User user = mock(User.class);
+		when(userUtil.findCurrentUser()).thenReturn(user);
+		when(user.getId()).thenReturn(1L);
+		when(user.getName()).thenReturn("testUser");
+		when(user.getProfileImageUrl()).thenReturn("image/test.jpg");
+		when(user.getDescription()).thenReturn("테스트입니다.");
 
 		// when
 		UserDetailResponse userDto = userService.getCurrentUser();
 
 		// then
-		assertThat(userDto.profileImageUrl()).isEqualTo(user.getProfileImageUrl());
+		assertThat(userDto.id()).isEqualTo(user.getId());
 		assertThat(userDto.name()).isEqualTo(user.getName());
+		assertThat(userDto.profileImageUrl()).isEqualTo(user.getProfileImageUrl());
 		assertThat(userDto.description()).isEqualTo(user.getDescription());
 		assertThat(userDto.totalLikeCount()).isEqualTo(UserConstants.DEFAULT_TOTAL_LIKE_COUNT);
 	}
@@ -62,11 +79,16 @@ class UserServiceTest {
 		User user = User.of(
 			requestDto.profileImageUrl(),
 			requestDto.name(),
-			Gender.from(requestDto.description()),
+			Gender.from(requestDto.gender()),
 			requestDto.age(),
 			requestDto.description()
 		);
 		when(userRepository.save(any(User.class))).thenReturn(user);
+
+		// ImageUtil mock 설정
+		Image mockImage = mock(Image.class);
+		when(mockImage.getUploadState()).thenReturn(UploadState.COMPLETE);
+		when(imageUtil.findImageByImageUrl(any(ImageType.class), anyString())).thenReturn(mockImage);
 
 		// when
 		UserDetailResponse responseDto = userService.createUser(requestDto);
