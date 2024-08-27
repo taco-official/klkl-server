@@ -80,7 +80,7 @@ public class ImageServiceImpl implements ImageService {
 
 	@Override
 	@Transactional
-	public ImageUrlResponse uploadCompleteUserImage() {
+	public void uploadCompleteUserImage() {
 		final ImageType imageType = ImageType.USER_IMAGE;
 		final User currentUser = userUtil.findCurrentUser();
 
@@ -89,7 +89,7 @@ public class ImageServiceImpl implements ImageService {
 
 		image.uploadComplete();
 		final String imageUrl = createImageUrl(image);
-		return ImageUrlResponse.from(imageUrl);
+		currentUser.updateProfileImageUrl(imageUrl);
 	}
 
 	@Override

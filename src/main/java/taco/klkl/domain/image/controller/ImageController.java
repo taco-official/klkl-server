@@ -1,5 +1,6 @@
 package taco.klkl.domain.image.controller;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -40,8 +41,9 @@ public class ImageController {
 		description = "유저 이미지 업로드를 완료 처리합니다."
 	)
 	@PostMapping("/v1/users/me/upload-complete")
-	public ImageUrlResponse uploadCompleteUserImage() {
-		return imageService.uploadCompleteUserImage();
+	public ResponseEntity<Void> uploadCompleteUserImage() {
+		imageService.uploadCompleteUserImage();
+		return ResponseEntity.ok().build();
 	}
 
 	@Operation(

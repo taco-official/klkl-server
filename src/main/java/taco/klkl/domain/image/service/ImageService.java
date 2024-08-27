@@ -12,7 +12,7 @@ public interface ImageService {
 
 	PresignedUrlResponse createUserImageUploadUrl(final UserImageUploadRequest createRequest);
 
-	ImageUrlResponse uploadCompleteUserImage();
+	void uploadCompleteUserImage();
 
 	PresignedUrlResponse createProductImageUploadUrl(
 		final Long productId,

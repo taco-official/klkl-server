@@ -7,7 +7,6 @@ public final class UserConstants {
 
 	public static final String TEST_USER_NAME = "testUser";
 	public static final User TEST_USER = User.of(
-		"image/test.jpg",
 		TEST_USER_NAME,
 		Gender.MALE,
 		20,

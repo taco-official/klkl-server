@@ -47,7 +47,6 @@ public class UserServiceImpl implements UserService {
 	@Override
 	@Transactional
 	public UserDetailResponse createUser(final UserCreateRequest createRequest) {
-		validateProfileImageUrl(createRequest.profileImageUrl());
 		final User user = createUserEntity(createRequest);
 		userRepository.save(user);
 		return UserDetailResponse.from(user);
@@ -56,21 +55,18 @@ public class UserServiceImpl implements UserService {
 	@Override
 	@Transactional
 	public UserDetailResponse updateUser(final UserUpdateRequest updateRequest) {
-		validateProfileImageUrl(updateRequest.profileImageUrl());
 		User user = userUtil.findCurrentUser();
 		updateUserEntity(user, updateRequest);
 		return UserDetailResponse.from(user);
 	}
 
 	private User createUserEntity(final UserCreateRequest createRequest) {
-		final String profileImageUrl = createRequest.profileImageUrl();
 		final String name = createRequest.name();
 		final Gender gender = Gender.from(createRequest.gender());
 		final Integer age = createRequest.age();
 		final String description = createRequest.description();
 
 		return User.of(
-			profileImageUrl,
 			name,
 			gender,
 			age,
@@ -79,14 +75,12 @@ public class UserServiceImpl implements UserService {
 	}
 
 	private void updateUserEntity(final User user, final UserUpdateRequest updateRequest) {
-		final String profileImageUrl = updateRequest.profileImageUrl();
 		final String name = updateRequest.name();
 		final Gender gender = Gender.from(updateRequest.gender());
 		final Integer age = updateRequest.age();
 		final String description = updateRequest.description();
 
 		user.update(
-			profileImageUrl,
 			name,
 			gender,
 			age,

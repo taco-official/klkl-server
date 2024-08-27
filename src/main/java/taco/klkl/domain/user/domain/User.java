@@ -10,6 +10,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.PrePersist;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import taco.klkl.global.common.constants.UserConstants;
 
 @Getter
 @NoArgsConstructor
@@ -69,13 +70,12 @@ public class User {
 	}
 
 	private User(
-		final String profileImageUrl,
 		final String name,
 		final Gender gender,
 		final Integer age,
 		final String description
 	) {
-		this.profileImageUrl = profileImageUrl;
+		this.profileImageUrl = UserConstants.DEFAULT_PROFILE;
 		this.name = name;
 		this.gender = gender;
 		this.age = age;
@@ -83,26 +83,27 @@ public class User {
 	}
 
 	public static User of(
-		final String profileImageUrl,
 		final String name,
 		final Gender gender,
 		final Integer age,
 		final String description
 	) {
-		return new User(profileImageUrl, name, gender, age, description);
+		return new User(name, gender, age, description);
 	}
 
 	public void update(
-		final String profileImageUrl,
 		final String name,
 		final Gender gender,
 		final Integer age,
 		final String description
 	) {
-		this.profileImageUrl = profileImageUrl;
 		this.name = name;
 		this.gender = gender;
 		this.age = age;
 		this.description = description;
+	}
+
+	public void updateProfileImageUrl(final String profileImageUrl) {
+		this.profileImageUrl = profileImageUrl;
 	}
 }
