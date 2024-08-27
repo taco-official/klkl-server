@@ -10,6 +10,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import taco.klkl.domain.image.dto.request.UserImageUploadRequest;
+import taco.klkl.domain.image.dto.response.ImageUrlResponse;
 import taco.klkl.domain.image.dto.response.PresignedUrlResponse;
 import taco.klkl.domain.image.service.ImageService;
 
@@ -22,13 +23,22 @@ public class ImageController {
 	private final ImageService imageService;
 
 	@Operation(
-		summary = "유저 이미지 업로드를 위한 Presigned URL 생성",
+		summary = "유저 이미지 업로드 Presigned URL 생성",
 		description = "유저 이미지 업로드를 위한 Presigned URL를 생성합니다."
 	)
-	@PostMapping("/me/image/upload-url")
+	@PostMapping("/v1/users/me/upload-url")
 	public PresignedUrlResponse createUserImageUploadUrl(
 		@Valid @RequestBody UserImageUploadRequest request
 	) {
 		return imageService.createUserImageUploadUrl(request);
+	}
+
+	@Operation(
+		summary = "유저 이미지 업로드 완료 처리",
+		description = "유저 이미지 업로드를 완료 처리합니다."
+	)
+	@PostMapping("/v1/users/me/upload-complete")
+	public ImageUrlResponse uploadCompleteUserImage() {
+		return imageService.uploadCompleteUserImage();
 	}
 }

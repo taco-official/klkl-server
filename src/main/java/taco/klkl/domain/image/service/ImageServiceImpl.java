@@ -1,7 +1,6 @@
 package taco.klkl.domain.image.service;
 
 import java.time.Duration;
-import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Primary;
@@ -20,8 +19,10 @@ import taco.klkl.domain.image.dao.ImageRepository;
 import taco.klkl.domain.image.domain.FileExtension;
 import taco.klkl.domain.image.domain.Image;
 import taco.klkl.domain.image.domain.ImageType;
-import taco.klkl.domain.image.dto.request.UserProfileImageUploadRequest;
+import taco.klkl.domain.image.dto.request.UserImageUploadRequest;
+import taco.klkl.domain.image.dto.response.ImageUrlResponse;
 import taco.klkl.domain.image.dto.response.PresignedUrlResponse;
+import taco.klkl.domain.image.exception.ImageNotFoundException;
 import taco.klkl.domain.user.domain.User;
 import taco.klkl.global.util.UserUtil;
 
@@ -45,54 +46,49 @@ public class ImageServiceImpl implements ImageService {
 	@Value("${cloud.aws.s3.bucket}")
 	private String bucketName;
 
+	@Value("${cloud.aws.cloudfront.domain}")
+	private String cloudFrontDomain;
+
 	@Override
 	@Transactional
-	public PresignedUrlResponse generateProfileImageUploadUrl(final UserProfileImageUploadRequest uploadRequest) {
+	public PresignedUrlResponse createUserImageUploadUrl(final UserImageUploadRequest uploadRequest) {
+		final ImageType imageType = ImageType.USER_IMAGE;
 		final User currentUser = userUtil.findCurrentUser();
-		final String imageKey = generateImageKey();
+		final String imageKey = ImageKeyGenerator.generate();
 		final FileExtension fileExtension = FileExtension.from(uploadRequest.fileExtension());
-		final String fileName = createFileName(
-			ImageType.USER_PROFILE,
+
+		final Image image = createImageEntity(
+			imageType,
 			currentUser.getId(),
 			imageKey,
 			fileExtension
 		);
+		imageRepository.save(image);
 
 		final PutObjectRequest putObjectRequest = createPutObjectRequest(
-			fileName,
-			fileExtension
+			image.createFileName(),
+			image.getFileExtension()
 		);
 		final PutObjectPresignRequest putObjectPresignRequest = createPutObjectPresignRequest(putObjectRequest);
 
 		final PresignedPutObjectRequest presignedRequest = s3Presigner.presignPutObject(putObjectPresignRequest);
 		final String presignedUrl = presignedRequest.url().toString();
 
-		final Image image = createImageEntity(
-			ImageType.USER_PROFILE,
-			imageKey,
-			fileExtension
-		);
-		imageRepository.save(image);
-
 		return PresignedUrlResponse.from(presignedUrl);
 	}
 
-	private String generateImageKey() {
-		return UUID.randomUUID().toString();
-	}
+	@Override
+	@Transactional
+	public ImageUrlResponse uploadCompleteUserImage() {
+		final ImageType imageType = ImageType.USER_IMAGE;
+		final User currentUser = userUtil.findCurrentUser();
 
-	private String createFileName(
-		final ImageType imageType,
-		final Long currentUserId,
-		final String imageKey,
-		final FileExtension fileExtension
-	) {
-		StringBuilder sb = new StringBuilder();
-		sb.append(imageType.getValue()).append("/")
-			.append(currentUserId).append("/")
-			.append(imageKey).append(".")
-			.append(fileExtension.getValue());
-		return sb.toString();
+		final Image image = imageRepository.findByImageTypeAndTargetId(imageType, currentUser.getId())
+			.orElseThrow(ImageNotFoundException::new);
+
+		image.uploadComplete();
+		final String imageUrl = createImageUrl(image);
+		return ImageUrlResponse.from(imageUrl);
 	}
 
 	private PutObjectRequest createPutObjectRequest(
@@ -118,9 +114,14 @@ public class ImageServiceImpl implements ImageService {
 
 	private Image createImageEntity(
 		final ImageType imageType,
+		final Long targetId,
 		final String imageKey,
 		final FileExtension fileExtension
 	) {
-		return Image.of(imageType, imageKey, fileExtension);
+		return Image.of(imageType, targetId, imageKey, fileExtension);
+	}
+
+	private String createImageUrl(final Image image) {
+		return "https://" + cloudFrontDomain + "/" + image.createFileName();
 	}
 }
