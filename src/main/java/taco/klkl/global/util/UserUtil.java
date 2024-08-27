@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 import lombok.RequiredArgsConstructor;
 import taco.klkl.domain.user.dao.UserRepository;
 import taco.klkl.domain.user.domain.User;
-import taco.klkl.global.common.constants.UserConstants;
+import taco.klkl.domain.user.exception.UserNotFoundException;
 
 @Component
 @RequiredArgsConstructor
@@ -14,7 +14,8 @@ public class UserUtil {
 	private final UserRepository userRepository;
 
 	public User findTestUser() {
-		return userRepository.findFirstByName(UserConstants.TEST_USER_NAME);
+		return userRepository.findById(1L)
+			.orElseThrow(UserNotFoundException::new);
 	}
 
 	/**
@@ -23,6 +24,6 @@ public class UserUtil {
 	 * @return
 	 */
 	public User findCurrentUser() {
-		return userRepository.findFirstByName(UserConstants.TEST_USER_NAME);
+		return findTestUser();
 	}
 }
