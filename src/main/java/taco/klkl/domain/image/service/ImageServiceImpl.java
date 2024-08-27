@@ -1,6 +1,7 @@
 package taco.klkl.domain.image.service;
 
 import java.time.Duration;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Primary;
@@ -19,12 +20,14 @@ import taco.klkl.domain.image.dao.ImageRepository;
 import taco.klkl.domain.image.domain.FileExtension;
 import taco.klkl.domain.image.domain.Image;
 import taco.klkl.domain.image.domain.ImageType;
+import taco.klkl.domain.image.domain.UploadState;
 import taco.klkl.domain.image.dto.request.ProductImageUploadRequest;
 import taco.klkl.domain.image.dto.request.UserImageUploadRequest;
-import taco.klkl.domain.image.dto.response.ImageUrlResponse;
 import taco.klkl.domain.image.dto.response.PresignedUrlResponse;
 import taco.klkl.domain.image.exception.ImageNotFoundException;
+import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.user.domain.User;
+import taco.klkl.global.util.ProductUtil;
 import taco.klkl.global.util.UserUtil;
 
 @Slf4j
@@ -43,6 +46,7 @@ public class ImageServiceImpl implements ImageService {
 	private final ImageRepository imageRepository;
 
 	private final UserUtil userUtil;
+	private final ProductUtil productUtil;
 
 	@Value("${cloud.aws.s3.bucket}")
 	private String bucketName;
@@ -124,15 +128,24 @@ public class ImageServiceImpl implements ImageService {
 
 	@Override
 	@Transactional
-	public ImageUrlResponse uploadCompleteProductImage(final Long productId) {
+	public void uploadCompleteProductImage(final Long productId) {
 		final ImageType imageType = ImageType.PRODUCT_IMAGE;
 
-		final Image image = imageRepository.findByImageTypeAndTargetId(imageType, productId)
-			.orElseThrow(ImageNotFoundException::new);
+		final List<Image> images = imageRepository.findAllByImageTypeAndTargetId(imageType, productId);
 
-		image.uploadComplete();
-		final String imageUrl = createImageUrl(image);
-		return ImageUrlResponse.from(imageUrl);
+		images.stream()
+			.filter(image -> image.getUploadState() == UploadState.COMPLETE)
+			.forEach(this::deleteImageEntity);
+
+		final List<Image> newImages = images.stream()
+			.filter(image -> image.getUploadState() == UploadState.PENDING)
+			.toList();
+		newImages.forEach(Image::uploadComplete);
+		final List<String> imageUrls = newImages.stream()
+			.map(this::createImageUrl)
+			.toList();
+		Product product = productUtil.findProductEntityById(productId);
+		product.updateImages(imageUrls);
 	}
 
 	private PutObjectRequest createPutObjectRequest(
@@ -163,6 +176,10 @@ public class ImageServiceImpl implements ImageService {
 		final FileExtension fileExtension
 	) {
 		return Image.of(imageType, targetId, imageKey, fileExtension);
+	}
+
+	private void deleteImageEntity(final Image image) {
+		imageRepository.delete(image);
 	}
 
 	private String createImageUrl(final Image image) {

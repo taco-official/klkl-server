@@ -13,7 +13,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import taco.klkl.domain.image.dto.request.ProductImageUploadRequest;
 import taco.klkl.domain.image.dto.request.UserImageUploadRequest;
-import taco.klkl.domain.image.dto.response.ImageUrlResponse;
 import taco.klkl.domain.image.dto.response.PresignedUrlResponse;
 import taco.klkl.domain.image.service.ImageService;
 
@@ -63,9 +62,10 @@ public class ImageController {
 		description = "상품 이미지 업로드를 완료 처리합니다."
 	)
 	@PostMapping("/v1/products/{productId}/upload-complete")
-	public ImageUrlResponse uploadCompleteProductImage(
+	public ResponseEntity<Void> uploadCompleteProductImage(
 		@PathVariable final Long productId
 	) {
-		return imageService.uploadCompleteProductImage(productId);
+		imageService.uploadCompleteProductImage(productId);
+		return ResponseEntity.ok().build();
 	}
 }

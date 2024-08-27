@@ -4,7 +4,6 @@ import org.springframework.stereotype.Service;
 
 import taco.klkl.domain.image.dto.request.ProductImageUploadRequest;
 import taco.klkl.domain.image.dto.request.UserImageUploadRequest;
-import taco.klkl.domain.image.dto.response.ImageUrlResponse;
 import taco.klkl.domain.image.dto.response.PresignedUrlResponse;
 
 @Service
@@ -19,6 +18,6 @@ public interface ImageService {
 		final ProductImageUploadRequest uploadRequest
 	);
 
-	ImageUrlResponse uploadCompleteProductImage(final Long productId);
+	void uploadCompleteProductImage(final Long productId);
 
 }
