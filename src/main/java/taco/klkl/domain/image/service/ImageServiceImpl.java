@@ -19,6 +19,7 @@ import taco.klkl.domain.image.dao.ImageRepository;
 import taco.klkl.domain.image.domain.FileExtension;
 import taco.klkl.domain.image.domain.Image;
 import taco.klkl.domain.image.domain.ImageType;
+import taco.klkl.domain.image.dto.request.ProductImageUploadRequest;
 import taco.klkl.domain.image.dto.request.UserImageUploadRequest;
 import taco.klkl.domain.image.dto.response.ImageUrlResponse;
 import taco.klkl.domain.image.dto.response.PresignedUrlResponse;
@@ -89,6 +90,36 @@ public class ImageServiceImpl implements ImageService {
 		image.uploadComplete();
 		final String imageUrl = createImageUrl(image);
 		return ImageUrlResponse.from(imageUrl);
+	}
+
+	@Override
+	@Transactional
+	public PresignedUrlResponse createProductImageUploadUrl(
+		final Long productId,
+		final ProductImageUploadRequest uploadRequest
+	) {
+		final ImageType imageType = ImageType.PRODUCT_IMAGE;
+		final String imageKey = ImageKeyGenerator.generate();
+		final FileExtension fileExtension = FileExtension.from(uploadRequest.fileExtension());
+
+		final Image image = createImageEntity(
+			imageType,
+			productId,
+			imageKey,
+			fileExtension
+		);
+		imageRepository.save(image);
+
+		final PutObjectRequest putObjectRequest = createPutObjectRequest(
+			image.createFileName(),
+			image.getFileExtension()
+		);
+		final PutObjectPresignRequest putObjectPresignRequest = createPutObjectPresignRequest(putObjectRequest);
+
+		final PresignedPutObjectRequest presignedRequest = s3Presigner.presignPutObject(putObjectPresignRequest);
+		final String presignedUrl = presignedRequest.url().toString();
+
+		return PresignedUrlResponse.from(presignedUrl);
 	}
 
 	private PutObjectRequest createPutObjectRequest(
