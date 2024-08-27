@@ -268,7 +268,8 @@ public class ProductControllerTest {
 			.andExpect(jsonPath("$.data.likeCount", is(productDetailResponse.likeCount())))
 			.andExpect(jsonPath("$.data.rating", is(productSimpleResponse.rating())))
 			.andExpect(jsonPath("$.data.user.id", is(productDetailResponse.user().id().intValue())))
-			.andExpect(jsonPath("$.data.user.profile", is(productDetailResponse.user().profileImageUrl())))
+			.andExpect(jsonPath("$.data.user.profileImageUrl",
+				is(productDetailResponse.user().profileImageUrl())))
 			.andExpect(jsonPath("$.data.user.name", is(productDetailResponse.user().name())))
 			.andExpect(jsonPath("$.data.user.description",
 				is(productDetailResponse.user().description())))
@@ -311,7 +312,8 @@ public class ProductControllerTest {
 			.andExpect(jsonPath("$.data.likeCount", is(productDetailResponse.likeCount())))
 			.andExpect(jsonPath("$.data.rating", is(productSimpleResponse.rating())))
 			.andExpect(jsonPath("$.data.user.id", is(productDetailResponse.user().id().intValue())))
-			.andExpect(jsonPath("$.data.user.profile", is(productDetailResponse.user().profileImageUrl())))
+			.andExpect(jsonPath("$.data.user.profileImageUrl",
+				is(productDetailResponse.user().profileImageUrl())))
 			.andExpect(jsonPath("$.data.user.name", is(productDetailResponse.user().name())))
 			.andExpect(jsonPath("$.data.user.description",
 				is(productDetailResponse.user().description())))
@@ -354,7 +356,8 @@ public class ProductControllerTest {
 			.andExpect(jsonPath("$.data.likeCount", is(productDetailResponse.likeCount())))
 			.andExpect(jsonPath("$.data.rating", is(productSimpleResponse.rating())))
 			.andExpect(jsonPath("$.data.user.id", is(productDetailResponse.user().id().intValue())))
-			.andExpect(jsonPath("$.data.user.profile", is(productDetailResponse.user().profileImageUrl())))
+			.andExpect(jsonPath("$.data.user.profileImageUrl",
+				is(productDetailResponse.user().profileImageUrl())))
 			.andExpect(jsonPath("$.data.user.name", is(productDetailResponse.user().name())))
 			.andExpect(jsonPath("$.data.user.description",
 				is(productDetailResponse.user().description())))
