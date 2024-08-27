@@ -38,7 +38,7 @@ public class UserIntegrationTest {
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
 			.andExpect(jsonPath("$.data.id", is(userDto.id().intValue())))
-			.andExpect(jsonPath("$.data.profile", is(userDto.profileImageUrl())))
+			.andExpect(jsonPath("$.data.profileImageUrl", is(userDto.profileImageUrl())))
 			.andExpect(jsonPath("$.data.name", is(userDto.name())))
 			.andExpect(jsonPath("$.data.description", is(userDto.description())))
 			.andExpect(jsonPath("$.timestamp", notNullValue()))

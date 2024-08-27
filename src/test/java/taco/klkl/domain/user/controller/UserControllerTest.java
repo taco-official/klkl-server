@@ -48,7 +48,7 @@ class UserControllerTest {
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
 			.andExpect(jsonPath("$.data.id", is(nullValue())))
-			.andExpect(jsonPath("$.data.profile", is(notNullValue())))
+			.andExpect(jsonPath("$.data.profileImageUrl", is(notNullValue())))
 			.andExpect(jsonPath("$.data.name", is(responseDto.name())))
 			.andExpect(jsonPath("$.data.description", is(responseDto.description())))
 			.andExpect(jsonPath("$.data.totalLikeCount", is(UserConstants.DEFAULT_TOTAL_LIKE_COUNT)))
