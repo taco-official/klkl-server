@@ -3,6 +3,7 @@ package taco.klkl.domain.product.dto.response;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -30,6 +31,7 @@ import taco.klkl.domain.region.domain.CurrencyType;
 import taco.klkl.domain.region.domain.Region;
 import taco.klkl.domain.region.domain.RegionType;
 import taco.klkl.domain.user.domain.User;
+import taco.klkl.global.util.ProductUtil;
 
 class ProductSimpleResponseTest {
 
@@ -109,28 +111,33 @@ class ProductSimpleResponseTest {
 	@Test
 	@DisplayName("생성자를 통해 ProductSimpleResponse 생성 테스트")
 	void testConstructor() {
-		// when
-		Set<TagResponse> filters = product.getProductTags().stream()
-			.map(ProductTag::getTag)
-			.map(TagResponse::from)
-			.collect(Collectors.toSet());
+		// given
+		List<ProductImageResponse> images = product.getImages().stream()
+			.map(ProductImageResponse::from)
+			.toList();
 
+		Set<TagResponse> tags = ProductUtil.createTagsByProduct(product);
+
+		// when
 		ProductSimpleResponse dto = new ProductSimpleResponse(
 			product.getId(),
+			images,
 			product.getName(),
 			product.getLikeCount(),
 			product.getRating().getValue(),
-			city.getCountry().getName().getKoreanName(),
+			product.getCity().getCountry().getName().getKoreanName(),
 			product.getSubcategory().getCategory().getName().getKoreanName(),
-			filters
+			tags
 		);
 
 		// then
 		assertThat(dto.id()).isEqualTo(product.getId());
+		assertThat(dto.images()).isEqualTo(images);
 		assertThat(dto.name()).isEqualTo(product.getName());
 		assertThat(dto.likeCount()).isEqualTo(product.getLikeCount());
 		assertThat(dto.rating()).isEqualTo(product.getRating().getValue());
-		assertThat(dto.countryName()).isEqualTo(city.getCountry().getName().getKoreanName());
+		assertThat(dto.countryName()).isEqualTo(product.getCity().getCountry().getName().getKoreanName());
 		assertThat(dto.categoryName()).isEqualTo(product.getSubcategory().getCategory().getName().getKoreanName());
+		assertThat(dto.tags()).isEqualTo(tags);
 	}
 }

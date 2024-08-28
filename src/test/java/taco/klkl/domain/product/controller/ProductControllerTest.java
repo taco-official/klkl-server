@@ -32,6 +32,7 @@ import taco.klkl.domain.product.dto.request.ProductCreateUpdateRequest;
 import taco.klkl.domain.product.dto.request.ProductFilterOptions;
 import taco.klkl.domain.product.dto.request.ProductSortOptions;
 import taco.klkl.domain.product.dto.response.ProductDetailResponse;
+import taco.klkl.domain.product.dto.response.ProductImageResponse;
 import taco.klkl.domain.product.dto.response.ProductSimpleResponse;
 import taco.klkl.domain.product.service.ProductService;
 import taco.klkl.domain.region.domain.CountryType;
@@ -87,8 +88,14 @@ public class ProductControllerTest {
 			"tagName2"
 		);
 
+		List<ProductImageResponse> imageResponses = List.of(
+			new ProductImageResponse("image/product1.jpg", 0),
+			new ProductImageResponse("image/product2.jpg", 1)
+		);
+
 		productSimpleResponse = new ProductSimpleResponse(
 			1L,
+			imageResponses,
 			"productName",
 			10,
 			Rating.FIVE.getValue(),
@@ -98,6 +105,7 @@ public class ProductControllerTest {
 		);
 		productDetailResponse = new ProductDetailResponse(
 			1L,
+			imageResponses,
 			"productName",
 			"Description",
 			"123 Street",
