@@ -42,9 +42,7 @@ public class ImageServiceImpl implements ImageService {
 
 	private final S3Client s3Client;
 	private final S3Presigner s3Presigner;
-
 	private final ImageRepository imageRepository;
-
 	private final UserUtil userUtil;
 	private final ProductUtil productUtil;
 
@@ -57,50 +55,8 @@ public class ImageServiceImpl implements ImageService {
 	@Override
 	@Transactional
 	public PresignedUrlResponse createUserImageUploadUrl(final UserImageUploadRequest uploadRequest) {
-		final ImageType imageType = ImageType.USER_IMAGE;
 		final User currentUser = userUtil.findCurrentUser();
-		final String imageKey = ImageKeyGenerator.generate();
-		final FileExtension fileExtension = FileExtension.from(uploadRequest.fileExtension());
-
-		final Image image = createImageEntity(
-			imageType,
-			currentUser.getId(),
-			imageKey,
-			fileExtension
-		);
-		imageRepository.save(image);
-
-		final PutObjectRequest putObjectRequest = createPutObjectRequest(
-			image.createFileName(),
-			image.getFileExtension()
-		);
-		final PutObjectPresignRequest putObjectPresignRequest = createPutObjectPresignRequest(putObjectRequest);
-
-		final PresignedPutObjectRequest presignedRequest = s3Presigner.presignPutObject(putObjectPresignRequest);
-		final String presignedUrl = presignedRequest.url().toString();
-
-		return PresignedUrlResponse.from(presignedUrl);
-	}
-
-	@Override
-	@Transactional
-	public void uploadCompleteUserImage() {
-		final ImageType imageType = ImageType.USER_IMAGE;
-		final User currentUser = userUtil.findCurrentUser();
-
-		final List<Image> images = imageRepository.findAllByImageTypeAndTargetId(imageType, currentUser.getId());
-
-		images.stream()
-			.filter(image -> image.getUploadState() == UploadState.COMPLETE)
-			.forEach(this::deleteImageEntity);
-
-		final Image newImage = images.stream()
-			.filter(image -> image.getUploadState() == UploadState.PENDING)
-			.findFirst()
-			.orElseThrow(ImageNotFoundException::new);
-		newImage.uploadComplete();
-		final String imageUrl = createImageUrl(newImage);
-		currentUser.updateProfileImageUrl(imageUrl);
+		return createImageUploadUrl(ImageType.USER_IMAGE, currentUser.getId(), uploadRequest.fileExtension());
 	}
 
 	@Override
@@ -109,22 +65,44 @@ public class ImageServiceImpl implements ImageService {
 		final Long productId,
 		final ProductImageUploadRequest uploadRequest
 	) {
-		final ImageType imageType = ImageType.PRODUCT_IMAGE;
+		return createImageUploadUrl(ImageType.PRODUCT_IMAGE, productId, uploadRequest.fileExtension());
+	}
+
+	@Override
+	@Transactional
+	public void uploadCompleteUserImage() {
+		final User currentUser = userUtil.findCurrentUser();
+		final List<Image> images = uploadCompleteImage(ImageType.USER_IMAGE, currentUser.getId());
+
+		final Image newImage = images.stream()
+			.filter(image -> image.getUploadState() == UploadState.COMPLETE)
+			.findFirst()
+			.orElseThrow(ImageNotFoundException::new);
+
+		final String imageUrl = createImageUrl(newImage);
+		currentUser.updateProfileImageUrl(imageUrl);
+	}
+
+	@Override
+	@Transactional
+	public void uploadCompleteProductImage(final Long productId) {
+		final List<Image> newImages = uploadCompleteImage(ImageType.PRODUCT_IMAGE, productId);
+
+		final List<String> imageUrls = newImages.stream()
+			.map(this::createImageUrl)
+			.toList();
+
+		Product product = productUtil.findProductEntityById(productId);
+		product.updateImages(imageUrls);
+	}
+
+	private PresignedUrlResponse createImageUploadUrl(ImageType imageType, Long targetId, String fileExtensionStr) {
 		final String imageKey = ImageKeyGenerator.generate();
-		final FileExtension fileExtension = FileExtension.from(uploadRequest.fileExtension());
+		final FileExtension fileExtension = FileExtension.from(fileExtensionStr);
 
-		final Image image = createImageEntity(
-			imageType,
-			productId,
-			imageKey,
-			fileExtension
-		);
-		imageRepository.save(image);
+		final Image image = createAndSaveImageEntity(imageType, targetId, imageKey, fileExtension);
 
-		final PutObjectRequest putObjectRequest = createPutObjectRequest(
-			image.createFileName(),
-			image.getFileExtension()
-		);
+		final PutObjectRequest putObjectRequest = createPutObjectRequest(image.createFileName(), image.getFileExtension());
 		final PutObjectPresignRequest putObjectPresignRequest = createPutObjectPresignRequest(putObjectRequest);
 
 		final PresignedPutObjectRequest presignedRequest = s3Presigner.presignPutObject(putObjectPresignRequest);
@@ -133,32 +111,27 @@ public class ImageServiceImpl implements ImageService {
 		return PresignedUrlResponse.from(presignedUrl);
 	}
 
-	@Override
-	@Transactional
-	public void uploadCompleteProductImage(final Long productId) {
-		final ImageType imageType = ImageType.PRODUCT_IMAGE;
+	private Image createAndSaveImageEntity(ImageType imageType, Long targetId, String imageKey, FileExtension fileExtension) {
+		final Image image = Image.of(imageType, targetId, imageKey, fileExtension);
+		return imageRepository.save(image);
+	}
 
-		final List<Image> images = imageRepository.findAllByImageTypeAndTargetId(imageType, productId);
+	private List<Image> uploadCompleteImage(ImageType imageType, Long targetId) {
+		final List<Image> images = imageRepository.findAllByImageTypeAndTargetId(imageType, targetId);
 
 		images.stream()
 			.filter(image -> image.getUploadState() == UploadState.COMPLETE)
-			.forEach(this::deleteImageEntity);
+			.forEach(Image::markAsDeprecated);
 
 		final List<Image> newImages = images.stream()
 			.filter(image -> image.getUploadState() == UploadState.PENDING)
 			.toList();
 		newImages.forEach(Image::uploadComplete);
-		final List<String> imageUrls = newImages.stream()
-			.map(this::createImageUrl)
-			.toList();
-		Product product = productUtil.findProductEntityById(productId);
-		product.updateImages(imageUrls);
+
+		return newImages;
 	}
 
-	private PutObjectRequest createPutObjectRequest(
-		final String fileName,
-		final FileExtension fileExtension
-	) {
+	private PutObjectRequest createPutObjectRequest(final String fileName, final FileExtension fileExtension) {
 		return PutObjectRequest.builder()
 			.bucket(bucketName)
 			.key(fileName)
@@ -167,26 +140,11 @@ public class ImageServiceImpl implements ImageService {
 			.build();
 	}
 
-	private PutObjectPresignRequest createPutObjectPresignRequest(
-		final PutObjectRequest putObjectRequest
-	) {
+	private PutObjectPresignRequest createPutObjectPresignRequest(final PutObjectRequest putObjectRequest) {
 		return PutObjectPresignRequest.builder()
 			.signatureDuration(SIGNATURE_DURATION)
 			.putObjectRequest(putObjectRequest)
 			.build();
-	}
-
-	private Image createImageEntity(
-		final ImageType imageType,
-		final Long targetId,
-		final String imageKey,
-		final FileExtension fileExtension
-	) {
-		return Image.of(imageType, targetId, imageKey, fileExtension);
-	}
-
-	private void deleteImageEntity(final Image image) {
-		imageRepository.delete(image);
 	}
 
 	private String createImageUrl(final Image image) {

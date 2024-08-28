@@ -92,6 +92,10 @@ public class Image {
 		this.uploadState = UploadState.COMPLETE;
 	}
 
+	public void markAsDeprecated() {
+		this.uploadState = UploadState.DEPRECATED;
+	}
+
 	public String createFileName() {
 		return imageType.getValue() + "/"
 			+ targetId + "/"
