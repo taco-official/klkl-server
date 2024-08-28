@@ -11,7 +11,7 @@ import taco.klkl.domain.image.exception.UploadStateNotFoundException;
 public enum UploadState {
 	PENDING("대기중"),
 	COMPLETE("완료"),
-	DEPRECATED("폐기예정"),
+	OUTDATED("폐기예정"),
 	;
 
 	private final String value;

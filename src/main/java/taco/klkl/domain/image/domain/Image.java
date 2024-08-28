@@ -92,8 +92,8 @@ public class Image {
 		this.uploadState = UploadState.COMPLETE;
 	}
 
-	public void markAsDeprecated() {
-		this.uploadState = UploadState.DEPRECATED;
+	public void markAsOutdated() {
+		this.uploadState = UploadState.OUTDATED;
 	}
 
 	public String createFileName() {

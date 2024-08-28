@@ -130,7 +130,7 @@ public class ImageServiceImpl implements ImageService {
 
 		images.stream()
 			.filter(image -> image.getUploadState() == UploadState.COMPLETE)
-			.forEach(Image::markAsDeprecated);
+			.forEach(Image::markAsOutdated);
 
 		final List<Image> newImages = images.stream()
 			.filter(image -> image.getUploadState() == UploadState.PENDING)
