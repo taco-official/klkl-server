@@ -13,7 +13,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import taco.klkl.domain.image.domain.Image;
-import taco.klkl.domain.image.domain.ImageType;
 import taco.klkl.domain.image.domain.UploadState;
 import taco.klkl.domain.user.dao.UserRepository;
 import taco.klkl.domain.user.domain.Gender;
@@ -21,7 +20,6 @@ import taco.klkl.domain.user.domain.User;
 import taco.klkl.domain.user.dto.request.UserCreateRequest;
 import taco.klkl.domain.user.dto.response.UserDetailResponse;
 import taco.klkl.global.common.constants.UserConstants;
-import taco.klkl.global.util.ImageUtil;
 import taco.klkl.global.util.UserUtil;
 
 @ExtendWith(MockitoExtension.class)
@@ -33,9 +31,6 @@ class UserServiceImplTest {
 
 	@Mock
 	UserUtil userUtil;
-
-	@Mock
-	ImageUtil imageUtil;
 
 	@InjectMocks
 	UserServiceImpl userServiceImpl;
@@ -71,11 +66,9 @@ class UserServiceImplTest {
 			"이상화",
 			"남",
 			19,
-			"image/ideal-flower.jpg",
 			"저는 이상화입니다."
 		);
 		User user = User.of(
-			requestDto.profileImageUrl(),
 			requestDto.name(),
 			Gender.from(requestDto.gender()),
 			requestDto.age(),
@@ -83,17 +76,11 @@ class UserServiceImplTest {
 		);
 		when(userRepository.save(any(User.class))).thenReturn(user);
 
-		// ImageUtil mock 설정
-		Image mockImage = mock(Image.class);
-		when(mockImage.getUploadState()).thenReturn(UploadState.COMPLETE);
-		when(imageUtil.findImageByImageUrl(any(ImageType.class), anyString())).thenReturn(mockImage);
-
 		// when
 		UserDetailResponse responseDto = userServiceImpl.createUser(requestDto);
 
 		// then
 		assertThat(responseDto.name()).isEqualTo(requestDto.name());
-		assertThat(responseDto.profileImageUrl()).isEqualTo(requestDto.profileImageUrl());
 		assertThat(responseDto.description()).isEqualTo(requestDto.description());
 		assertThat(responseDto.totalLikeCount()).isEqualTo(UserConstants.DEFAULT_TOTAL_LIKE_COUNT);
 	}

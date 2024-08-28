@@ -35,18 +35,16 @@ public class UserDetailResponseTest {
 	@DisplayName("User 객체로부터 UserDetailResponse 생성 테스트")
 	public void testFrom() {
 		// given
-		String profile = "image/profileImageUrl.png";
 		String name = "이름";
 		Gender gender = Gender.MALE;
 		int age = 20;
 		String description = "자기소개";
 
 		// when
-		User user = User.of(profile, name, gender, age, description);
+		User user = User.of(name, gender, age, description);
 		UserDetailResponse userDetail = UserDetailResponse.from(user);
 
 		// then
-		assertThat(userDetail.profileImageUrl()).isEqualTo(profile);
 		assertThat(userDetail.name()).isEqualTo(name);
 		assertThat(userDetail.description()).isEqualTo(description);
 		assertThat(userDetail.totalLikeCount()).isEqualTo(UserConstants.DEFAULT_TOTAL_LIKE_COUNT);

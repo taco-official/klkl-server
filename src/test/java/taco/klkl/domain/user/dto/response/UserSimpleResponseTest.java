@@ -30,18 +30,16 @@ class UserSimpleResponseTest {
 	@DisplayName("User 객체로부터 UserSimpleResponse 생성 테스트")
 	public void testFrom() {
 		// given
-		String profile = "image/profileImageUrl.png";
 		String name = "이름";
 		Gender gender = Gender.MALE;
 		int age = 20;
 		String description = "자기소개";
 
 		// when
-		User user = User.of(profile, name, gender, age, description);
+		User user = User.of(name, gender, age, description);
 		UserSimpleResponse userSimple = UserSimpleResponse.from(user);
 
 		// then
-		assertThat(userSimple.profileImageUrl()).isEqualTo(profile);
 		assertThat(userSimple.name()).isEqualTo(name);
 	}
 }
