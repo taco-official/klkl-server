@@ -42,18 +42,6 @@ public class UserServiceImpl implements UserService {
 		return userRepository.save(user);
 	}
 
-	// public User createUser(UserCreateRequest userDto) {
-	// 	final User user = User.of(
-	// 		userDto.profile(),
-	// 		userDto.name(),
-	// 		Gender.getGenderByDescription(userDto.description()),
-	// 		userDto.age(),
-	// 		userDto.description()
-	// 	);
-	//
-	// 	return userRepository.save(user);
-	// }
-
 	@Override
 	@Transactional
 	public UserDetailResponse updateUser(final UserUpdateRequest updateRequest) {
