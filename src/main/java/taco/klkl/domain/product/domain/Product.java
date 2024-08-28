@@ -233,9 +233,11 @@ public class Product {
 
 	public void updateImages(final List<String> imageUrls) {
 		this.images.clear();
-		this.images = IntStream.range(0, imageUrls.size())
-			.mapToObj(i -> ProductImage.of(this, imageUrls.get(i), i))
-			.toList();
+		IntStream.range(0, imageUrls.size())
+			.forEach(i -> {
+				ProductImage newImage = ProductImage.of(this, imageUrls.get(i), i);
+				this.images.add(newImage);
+			});
 	}
 
 	private Product(

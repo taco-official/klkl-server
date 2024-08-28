@@ -1,23 +1,15 @@
 package taco.klkl.domain.product.dto.response;
 
+import java.util.List;
 import java.util.Set;
 
 import taco.klkl.domain.category.dto.response.TagResponse;
 import taco.klkl.domain.product.domain.Product;
 import taco.klkl.global.util.ProductUtil;
 
-/**
- * TODO: 상품필터속성 추가 해야함 (상품필터속성 테이블 개발 후)
- * TODO: 상품필터속성 추가 해야함 (상품필터속성 테이블 개발 후)
- * @param id
- * @param name
- * @param likeCount
- * @param rating
- * @param countryName
- * @param categoryName
- */
 public record ProductSimpleResponse(
 	Long id,
+	List<ProductImageResponse> images,
 	String name,
 	Integer likeCount,
 	Double rating,
@@ -25,10 +17,14 @@ public record ProductSimpleResponse(
 	String categoryName,
 	Set<TagResponse> tags
 ) {
-
 	public static ProductSimpleResponse from(final Product product) {
+		List<ProductImageResponse> images = product.getImages().stream()
+			.map(ProductImageResponse::from)
+			.toList();
+
 		return new ProductSimpleResponse(
 			product.getId(),
+			images,
 			product.getName(),
 			product.getLikeCount(),
 			product.getRating().getValue(),
