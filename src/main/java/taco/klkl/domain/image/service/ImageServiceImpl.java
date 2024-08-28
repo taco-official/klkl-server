@@ -88,11 +88,18 @@ public class ImageServiceImpl implements ImageService {
 		final ImageType imageType = ImageType.USER_IMAGE;
 		final User currentUser = userUtil.findCurrentUser();
 
-		final Image image = imageRepository.findByImageTypeAndTargetId(imageType, currentUser.getId())
-			.orElseThrow(ImageNotFoundException::new);
+		final List<Image> images = imageRepository.findAllByImageTypeAndTargetId(imageType, currentUser.getId());
 
-		image.uploadComplete();
-		final String imageUrl = createImageUrl(image);
+		images.stream()
+			.filter(image -> image.getUploadState() == UploadState.COMPLETE)
+			.forEach(this::deleteImageEntity);
+
+		final Image newImage = images.stream()
+			.filter(image -> image.getUploadState() == UploadState.PENDING)
+			.findFirst()
+			.orElseThrow(ImageNotFoundException::new);
+		newImage.uploadComplete();
+		final String imageUrl = createImageUrl(newImage);
 		currentUser.updateProfileImageUrl(imageUrl);
 	}
 
