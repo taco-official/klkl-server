@@ -58,7 +58,7 @@ dependencies {
     runtimeOnly 'com.mysql:mysql-connector-j'
 
     // S3
-    implementation platform('software.amazon.awssdk:bom:2.20.56')
+    implementation platform('software.amazon.awssdk:bom:2.21.1')
     implementation 'software.amazon.awssdk:s3'
 }
 
