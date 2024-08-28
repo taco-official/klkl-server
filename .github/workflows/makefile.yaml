@@ -53,6 +53,8 @@ jobs:
         run: make build
 
       - name: Run test code
+        env:
+          SPRING_PROFILES_ACTIVE: test
         run: make test
 
       - name: Run docker
