@@ -33,15 +33,6 @@ public class UserUtil {
 		return findTestUser();
 	}
 
-	public User findUserById(final Long id) {
-		return userRepository.findById(id)
-			.orElseThrow(UserNotFoundException::new);
-	}
-
-	public User findUserByName(final String name) {
-		return userRepository.findFirstByName(name);
-	}
-
 	public String createUsername(final String name, final Long oauthMemberId) {
 
 		String createdName = generateUsername(name, oauthMemberId);
