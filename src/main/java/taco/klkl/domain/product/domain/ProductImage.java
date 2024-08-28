@@ -39,7 +39,7 @@ public class ProductImage {
 
 	@Column(
 		name = "order_index",
-		nullable= false
+		nullable = false
 	)
 	private Integer orderIndex;
 

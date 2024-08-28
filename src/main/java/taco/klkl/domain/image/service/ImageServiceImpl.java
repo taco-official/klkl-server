@@ -96,13 +96,18 @@ public class ImageServiceImpl implements ImageService {
 		product.updateImages(imageUrls);
 	}
 
-	private PresignedUrlResponse createImageUploadUrl(ImageType imageType, Long targetId, String fileExtensionStr) {
+	private PresignedUrlResponse createImageUploadUrl(
+		final ImageType imageType,
+		final Long targetId,
+		final String fileExtensionStr
+	) {
 		final String imageKey = ImageKeyGenerator.generate();
 		final FileExtension fileExtension = FileExtension.from(fileExtensionStr);
 
 		final Image image = createAndSaveImageEntity(imageType, targetId, imageKey, fileExtension);
 
-		final PutObjectRequest putObjectRequest = createPutObjectRequest(image.createFileName(), image.getFileExtension());
+		final PutObjectRequest putObjectRequest
+			= createPutObjectRequest(image.createFileName(), image.getFileExtension());
 		final PutObjectPresignRequest putObjectPresignRequest = createPutObjectPresignRequest(putObjectRequest);
 
 		final PresignedPutObjectRequest presignedRequest = s3Presigner.presignPutObject(putObjectPresignRequest);
@@ -111,12 +116,17 @@ public class ImageServiceImpl implements ImageService {
 		return PresignedUrlResponse.from(presignedUrl);
 	}
 
-	private Image createAndSaveImageEntity(ImageType imageType, Long targetId, String imageKey, FileExtension fileExtension) {
+	private Image createAndSaveImageEntity(
+		final ImageType imageType,
+		final Long targetId,
+		final String imageKey,
+		final FileExtension fileExtension
+	) {
 		final Image image = Image.of(imageType, targetId, imageKey, fileExtension);
 		return imageRepository.save(image);
 	}
 
-	private List<Image> uploadCompleteImage(ImageType imageType, Long targetId) {
+	private List<Image> uploadCompleteImage(final ImageType imageType, Long targetId) {
 		final List<Image> images = imageRepository.findAllByImageTypeAndTargetId(imageType, targetId);
 
 		images.stream()
