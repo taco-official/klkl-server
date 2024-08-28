@@ -19,7 +19,7 @@ public enum FileExtension {
 
 	public static FileExtension from(final String fileExtension) throws FileExtensionNotFoundException {
 		return Arrays.stream(FileExtension.values())
-			.filter(extension -> extension.toString().equals(fileExtension))
+			.filter(extension -> extension.getValue().equals(fileExtension))
 			.findFirst()
 			.orElseThrow(FileExtensionNotFoundException::new);
 	}
