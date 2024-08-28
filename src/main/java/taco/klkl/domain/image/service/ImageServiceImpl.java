@@ -21,8 +21,7 @@ import taco.klkl.domain.image.domain.FileExtension;
 import taco.klkl.domain.image.domain.Image;
 import taco.klkl.domain.image.domain.ImageType;
 import taco.klkl.domain.image.domain.UploadState;
-import taco.klkl.domain.image.dto.request.ProductImageUploadRequest;
-import taco.klkl.domain.image.dto.request.UserImageUploadRequest;
+import taco.klkl.domain.image.dto.request.ImageUploadRequest;
 import taco.klkl.domain.image.dto.response.PresignedUrlResponse;
 import taco.klkl.domain.image.exception.ImageNotFoundException;
 import taco.klkl.domain.product.domain.Product;
@@ -54,7 +53,7 @@ public class ImageServiceImpl implements ImageService {
 
 	@Override
 	@Transactional
-	public PresignedUrlResponse createUserImageUploadUrl(final UserImageUploadRequest uploadRequest) {
+	public PresignedUrlResponse createUserImageUploadUrl(final ImageUploadRequest uploadRequest) {
 		final User currentUser = userUtil.findCurrentUser();
 		return createImageUploadUrl(ImageType.USER_IMAGE, currentUser.getId(), uploadRequest.fileExtension());
 	}
@@ -63,7 +62,7 @@ public class ImageServiceImpl implements ImageService {
 	@Transactional
 	public PresignedUrlResponse createProductImageUploadUrl(
 		final Long productId,
-		final ProductImageUploadRequest uploadRequest
+		final ImageUploadRequest uploadRequest
 	) {
 		return createImageUploadUrl(ImageType.PRODUCT_IMAGE, productId, uploadRequest.fileExtension());
 	}

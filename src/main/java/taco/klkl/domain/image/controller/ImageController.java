@@ -11,8 +11,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import taco.klkl.domain.image.dto.request.ProductImageUploadRequest;
-import taco.klkl.domain.image.dto.request.UserImageUploadRequest;
+import taco.klkl.domain.image.dto.request.ImageUploadRequest;
 import taco.klkl.domain.image.dto.response.PresignedUrlResponse;
 import taco.klkl.domain.image.service.ImageService;
 
@@ -30,7 +29,7 @@ public class ImageController {
 	)
 	@PostMapping("/v1/users/me/upload-url")
 	public PresignedUrlResponse createUserImageUploadUrl(
-		@Valid @RequestBody final UserImageUploadRequest request
+		@Valid @RequestBody final ImageUploadRequest request
 	) {
 		return imageService.createUserImageUploadUrl(request);
 	}
@@ -52,7 +51,7 @@ public class ImageController {
 	@PostMapping("/v1/products/{productId}/upload-url")
 	public PresignedUrlResponse createProductImageUploadUrl(
 		@PathVariable final Long productId,
-		@Valid @RequestBody final ProductImageUploadRequest request
+		@Valid @RequestBody final ImageUploadRequest request
 	) {
 		return imageService.createProductImageUploadUrl(productId, request);
 	}
