@@ -9,4 +9,12 @@ public record UserCreateRequest(
 	@PositiveOrZero(message = "나이는 0 이상이어야 합니다.") Integer age,
 	String description
 ) {
+	public static UserCreateRequest of(
+		final String name,
+		final String gender,
+		final Integer age,
+		final String description
+	) {
+		return new UserCreateRequest(name, gender, age, description);
+	}
 }

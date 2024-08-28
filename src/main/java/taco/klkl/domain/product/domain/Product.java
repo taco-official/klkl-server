@@ -28,6 +28,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import taco.klkl.domain.category.domain.Subcategory;
 import taco.klkl.domain.category.domain.Tag;
+import taco.klkl.domain.comment.domain.Comment;
 import taco.klkl.domain.like.exception.LikeCountBelowMinimumException;
 import taco.klkl.domain.like.exception.LikeCountOverMaximumException;
 import taco.klkl.domain.product.converter.RatingConverter;
@@ -147,6 +148,13 @@ public class Product {
 		orphanRemoval = true
 	)
 	private Set<ProductTag> productTags = new HashSet<>();
+
+	@OneToMany(
+		mappedBy = "product",
+		cascade = CascadeType.ALL,
+		orphanRemoval = true
+	)
+	private List<Comment> comments = new ArrayList<>();
 
 	@Column(
 		name = "created_at",

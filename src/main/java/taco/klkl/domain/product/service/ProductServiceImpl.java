@@ -93,7 +93,7 @@ public class ProductServiceImpl implements ProductService {
 	public ProductDetailResponse findProductById(final Long id) throws ProductNotFoundException {
 		final Product product = productRepository.findById(id)
 			.orElseThrow(ProductNotFoundException::new);
-		return taco.klkl.domain.product.dto.response.ProductDetailResponse.from(product);
+		return ProductDetailResponse.from(product);
 	}
 
 	@Override
@@ -105,7 +105,7 @@ public class ProductServiceImpl implements ProductService {
 			Set<Tag> tags = createTagsByTagIds(createRequest.tagIds());
 			product.addTags(tags);
 		}
-		return taco.klkl.domain.product.dto.response.ProductDetailResponse.from(product);
+		return ProductDetailResponse.from(product);
 	}
 
 	@Override

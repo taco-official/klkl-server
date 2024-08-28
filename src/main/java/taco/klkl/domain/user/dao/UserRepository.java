@@ -7,4 +7,7 @@ import taco.klkl.domain.user.domain.User;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
+	User findFirstByName(String name);
+
+	boolean existsByName(String name);
 }

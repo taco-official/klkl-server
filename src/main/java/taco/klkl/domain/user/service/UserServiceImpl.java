@@ -35,18 +35,24 @@ public class UserServiceImpl implements UserService {
 		return UserDetailResponse.from(currentUser);
 	}
 
-	/**
-	 *
-	 * @param createRequest
-	 * @return UserDetailResponse
-	 */
 	@Override
 	@Transactional
-	public UserDetailResponse createUser(final UserCreateRequest createRequest) {
+	public User createUser(final UserCreateRequest createRequest) {
 		final User user = createUserEntity(createRequest);
-		userRepository.save(user);
-		return UserDetailResponse.from(user);
+		return userRepository.save(user);
 	}
+
+	// public User createUser(UserCreateRequest userDto) {
+	// 	final User user = User.of(
+	// 		userDto.profile(),
+	// 		userDto.name(),
+	// 		Gender.getGenderByDescription(userDto.description()),
+	// 		userDto.age(),
+	// 		userDto.description()
+	// 	);
+	//
+	// 	return userRepository.save(user);
+	// }
 
 	@Override
 	@Transactional

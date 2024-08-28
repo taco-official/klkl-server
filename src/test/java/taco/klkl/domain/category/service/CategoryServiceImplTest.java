@@ -37,8 +37,8 @@ class CategoryServiceImplTest {
 
 	private final Category category = Category.of(CategoryName.FOOD);
 	private final Category category2 = Category.of(CategoryName.CLOTHES);
-	private final Subcategory subcategory1 = Subcategory.of(category, SubcategoryName.DRESS);
-	private final Subcategory subcategory2 = Subcategory.of(category, SubcategoryName.HAIR_CARE);
+	private final Subcategory subcategory1 = Subcategory.of(category, SubcategoryName.SNACK);
+	private final Subcategory subcategory2 = Subcategory.of(category, SubcategoryName.INSTANT_FOOD);
 	private final List<Subcategory> subcategories = Arrays.asList(subcategory1, subcategory2);
 
 	@Test
@@ -79,8 +79,8 @@ class CategoryServiceImplTest {
 
 		//then
 		assertNotNull(response);
-		assertEquals(SubcategoryName.DRESS.getKoreanName(), response.subcategories().get(0).name());
-		assertEquals(SubcategoryName.HAIR_CARE.getKoreanName(), response.subcategories().get(1).name());
+		assertEquals(SubcategoryName.SNACK.getKoreanName(), response.subcategories().get(0).name());
+		assertEquals(SubcategoryName.INSTANT_FOOD.getKoreanName(), response.subcategories().get(1).name());
 
 		verify(categoryRepository, times(1)).findById(1L);
 	}

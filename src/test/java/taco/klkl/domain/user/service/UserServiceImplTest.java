@@ -12,8 +12,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import taco.klkl.domain.image.domain.Image;
-import taco.klkl.domain.image.domain.UploadState;
 import taco.klkl.domain.user.dao.UserRepository;
 import taco.klkl.domain.user.domain.Gender;
 import taco.klkl.domain.user.domain.User;
@@ -77,7 +75,8 @@ class UserServiceImplTest {
 		when(userRepository.save(any(User.class))).thenReturn(user);
 
 		// when
-		UserDetailResponse responseDto = userServiceImpl.createUser(requestDto);
+		User user1 = userServiceImpl.createUser(requestDto);
+		UserDetailResponse responseDto = UserDetailResponse.from(user1);
 
 		// then
 		assertThat(responseDto.name()).isEqualTo(requestDto.name());
