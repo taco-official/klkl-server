@@ -14,23 +14,26 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Currency {
 
+	private CurrencyType currencyType;
+
 	@Id
 	@Column(name = "currency_id")
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
 	@Column(name = "code", length = 3, nullable = false)
-	private CurrencyType code;
+	private String code;
 
-	@Column(name = "korean_unit", length = 3, nullable = false)
-	private String koreanUnit;
+	@Column(name = "unit", length = 3, nullable = false)
+	private String unit;
 
-	private Currency(final CurrencyType code) {
-		this.code = code;
-		this.koreanUnit = code.getKoreanUnit();
+	private Currency(final CurrencyType currencyType) {
+		this.currencyType = currencyType;
+		this.code = currencyType.getCode();
+		this.unit = currencyType.getUnit();
 	}
 
-	public static Currency of(final CurrencyType code) {
-		return new Currency(code);
+	public static Currency of(final CurrencyType currencyType) {
+		return new Currency(currencyType);
 	}
 }

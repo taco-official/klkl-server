@@ -11,7 +11,7 @@ VALUES (400, '동북아시아'),
        (401, '동남아시아'),
        (402, '기타');
 
-INSERT INTO currency (currency_id, code, korean_unit)
+INSERT INTO currency (currency_id, code, unit)
 VALUES (438, 'JPY', '엔'),
        (439, 'CNH', '위안'),
        (440, 'TWD', '달러'),
@@ -23,7 +23,7 @@ VALUES (438, 'JPY', '엔'),
        (446, 'MYR', '링깃'),
        (447, 'USD', '달러');
 
-INSERT INTO country(country_id, region_id, name, country_code, photo, currency_id)
+INSERT INTO country(country_id, region_id, name, code, photo, currency_id)
 VALUES (403, 400, '일본', 'JP', 'image/sample', 438),
        (404, 400, '중국', 'CN', 'image/sample', 439),
        (405, 400, '대만', 'TW', 'image/sample', 440),

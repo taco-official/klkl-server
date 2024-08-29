@@ -45,11 +45,11 @@ public class Country {
 	private String name;
 
 	@Column(
-		name = "country_code",
+		name = "code",
 		length = 2,
 		nullable = false
 	)
-	private String countryCode;
+	private String code;
 
 	@Column(
 		name = "photo",
@@ -83,7 +83,7 @@ public class Country {
 		this.countryType = countryType;
 		this.region = region;
 		this.name = countryType.getName();
-		this.countryCode = countryType.getCode();
+		this.code = countryType.getCode();
 		this.photo = photo;
 		this.currency = currency;
 	}

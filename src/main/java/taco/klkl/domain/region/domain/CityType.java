@@ -1,8 +1,6 @@
 package taco.klkl.domain.region.domain;
 
 import java.util.Arrays;
-import java.util.List;
-import java.util.regex.Pattern;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -66,12 +64,12 @@ public enum CityType {
 
 	/**
 	 *
-	 * @param koreanName City 이름
+	 * @param name City 이름
 	 * @return CityType
 	 */
-	public static CityType getCityTypeByKoreanName(String koreanName) {
+	public static CityType from(final String name) {
 		return Arrays.stream(CityType.values())
-			.filter(c -> c.getName().equals(koreanName))
+			.filter(c -> c.getName().equals(name))
 			.findFirst()
 			.orElseThrow(CityTypeNotFoundException::new);
 	}

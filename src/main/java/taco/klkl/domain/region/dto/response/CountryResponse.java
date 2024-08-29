@@ -27,7 +27,7 @@ public record CountryResponse(
 		return new CountryResponse(
 			country.getId(),
 			country.getName(),
-			FlagUrlGenerator.generateSvgUrlByCountryCode(country.getCountryCode()),
+			FlagUrlGenerator.generateSvgUrlByCountryCode(country.getCode()),
 			country.getPhoto(),
 			CurrencyResponse.from(country.getCurrency()));
 	}

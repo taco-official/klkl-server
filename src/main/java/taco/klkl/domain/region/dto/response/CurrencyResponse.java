@@ -7,21 +7,21 @@ import taco.klkl.domain.region.domain.FlagUrlGenerator;
  *
  * @param id
  * @param code
- * @param koreanUnit
+ * @param unit
  * @param flagUrl
  */
 public record CurrencyResponse(
 	Long id,
 	String code,
-	String koreanUnit,
+	String unit,
 	String flagUrl
 ) {
 	public static CurrencyResponse from(final Currency currency) {
 		return new CurrencyResponse(
 			currency.getId(),
-			currency.getCode().getCode(),
-			currency.getKoreanUnit(),
-			FlagUrlGenerator.generateSvgUrlByCurrencyCode(currency.getCode().getCode())
+			currency.getCode(),
+			currency.getUnit(),
+			FlagUrlGenerator.generateSvgUrlByCurrencyCode(currency.getCode())
 		);
 	}
 }

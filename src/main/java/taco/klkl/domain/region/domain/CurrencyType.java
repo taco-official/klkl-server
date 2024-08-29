@@ -31,16 +31,16 @@ public enum CurrencyType {
 	;
 
 	private final String code;
-	private final String koreanUnit;
+	private final String unit;
 
 	/**
 	 *
-	 * @param codeName CurrencyType code
+	 * @param code CurrencyType code
 	 * @return CurrencyType
 	 */
-	public static CurrencyType getCurrencyTypeByCodeName(String codeName) {
+	public static CurrencyType from(final String code) {
 		return Arrays.stream(CurrencyType.values())
-			.filter(c -> c.getCode().equals(codeName))
+			.filter(c -> c.getCode().equals(code))
 			.findFirst()
 			.orElseThrow(CurrencyTypeNotFoundException::new);
 	}
