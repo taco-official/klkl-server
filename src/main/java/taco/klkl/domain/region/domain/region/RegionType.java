@@ -10,9 +10,7 @@ import taco.klkl.domain.region.exception.region.RegionTypeNotFoundException;
 @AllArgsConstructor
 public enum RegionType {
 	NORTHEAST_ASIA("동북아시아"),
-
 	SOUTHEAST_ASIA("동남아시아"),
-
 	ETC("기타"),
 	;
 
@@ -25,7 +23,7 @@ public enum RegionType {
 	 */
 	public static RegionType from(final String name) {
 		return Arrays.stream(RegionType.values())
-			.filter(r -> r.getName().equals(name))
+			.filter(type -> type.getName().equals(name))
 			.findFirst()
 			.orElseThrow(RegionTypeNotFoundException::new);
 	}

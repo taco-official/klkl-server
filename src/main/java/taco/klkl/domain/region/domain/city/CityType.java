@@ -69,7 +69,7 @@ public enum CityType {
 	 */
 	public static CityType from(final String name) {
 		return Arrays.stream(CityType.values())
-			.filter(c -> c.getName().equals(name))
+			.filter(type -> type.getName().equals(name))
 			.findFirst()
 			.orElseThrow(CityTypeNotFoundException::new);
 	}
