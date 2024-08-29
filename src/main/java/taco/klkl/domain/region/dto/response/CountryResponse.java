@@ -1,19 +1,20 @@
 package taco.klkl.domain.region.dto.response;
 
 import taco.klkl.domain.region.domain.Country;
+import taco.klkl.domain.region.domain.FlagUrlGenerator;
 
 /**
  *
  * @param id
  * @param name
- * @param flag
+ * @param flagUrl
  * @param photo
  * @param currency
  */
 public record CountryResponse(
 	Long id,
 	String name,
-	String flag,
+	String flagUrl,
 	String photo,
 	CurrencyResponse currency
 ) {
@@ -26,7 +27,7 @@ public record CountryResponse(
 		return new CountryResponse(
 			country.getId(),
 			country.getName().getKoreanName(),
-			country.getFlag(),
+			FlagUrlGenerator.generateSvgUrl(country.getCountryCode()),
 			country.getPhoto(),
 			CurrencyResponse.from(country.getCurrency()));
 	}

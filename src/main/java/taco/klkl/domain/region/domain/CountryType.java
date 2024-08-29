@@ -11,30 +11,31 @@ import taco.klkl.domain.region.exception.CountryTypeNotFoundException;
 @Getter
 @AllArgsConstructor
 public enum CountryType {
-	JAPAN("일본"),
+	JAPAN("일본", "JP"),
 
-	CHINA("중국"),
+	CHINA("중국", "CN"),
 
-	TAIWAN("대만"),
+	TAIWAN("대만", "TW"),
 
-	THAILAND("태국"),
+	THAILAND("태국", "TH"),
 
-	VIETNAM("베트남"),
+	VIETNAM("베트남", "VN"),
 
-	PHILIPPINES("필리핀"),
+	PHILIPPINES("필리핀", "PH"),
 
-	SINGAPORE("싱가포르"),
+	SINGAPORE("싱가포르", "SG"),
 
-	INDONESIA("인도네시아"),
+	INDONESIA("인도네시아", "ID"),
 
-	MALAYSIA("말레이시아"),
+	MALAYSIA("말레이시아", "MY"),
 
-	GUAM("괌"),
+	GUAM("괌", "GU"),
 
-	USA("미국"),
+	USA("미국", "US"),
 	;
 
 	private final String koreanName;
+	private final String code;
 
 	/**
 	 *

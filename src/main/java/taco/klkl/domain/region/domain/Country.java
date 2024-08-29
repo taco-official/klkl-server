@@ -43,11 +43,11 @@ public class Country {
 	private CountryType name;
 
 	@Column(
-		name = "flag",
-		length = 500,
+		name = "country_code",
+		length = 2,
 		nullable = false
 	)
-	private String flag;
+	private String countryCode;
 
 	@Column(
 		name = "photo",
@@ -75,13 +75,12 @@ public class Country {
 	private Country(
 		final CountryType countryType,
 		final Region region,
-		final String flag,
 		final String photo,
 		final Currency currency
 	) {
 		this.region = region;
 		this.name = countryType;
-		this.flag = flag;
+		this.countryCode = name.getCode();
 		this.photo = photo;
 		this.currency = currency;
 	}
@@ -89,11 +88,10 @@ public class Country {
 	public static Country of(
 		final CountryType countryType,
 		final Region region,
-		final String flag,
 		final String photo,
 		final Currency currency
 	) {
-		return new Country(countryType, region, flag, photo, currency);
+		return new Country(countryType, region, photo, currency);
 	}
 
 }
