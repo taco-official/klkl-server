@@ -15,8 +15,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import jakarta.transaction.Transactional;
-import taco.klkl.domain.category.dto.response.CategoryResponse;
-import taco.klkl.domain.category.service.CategoryService;
+import taco.klkl.domain.category.dto.response.category.CategoryResponse;
+import taco.klkl.domain.category.service.category.CategoryService;
 import taco.klkl.global.error.exception.ErrorCode;
 
 @SpringBootTest

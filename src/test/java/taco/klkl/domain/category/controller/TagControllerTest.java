@@ -20,16 +20,17 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
+import taco.klkl.domain.category.controller.tag.TagController;
 import taco.klkl.domain.category.dao.SubcategoryTagRepository;
-import taco.klkl.domain.category.domain.Subcategory;
 import taco.klkl.domain.category.domain.SubcategoryTag;
-import taco.klkl.domain.category.domain.SubcategoryType;
-import taco.klkl.domain.category.domain.Tag;
-import taco.klkl.domain.category.domain.TagType;
-import taco.klkl.domain.category.dto.response.TagResponse;
-import taco.klkl.domain.category.exception.SubcategoryNotFoundException;
-import taco.klkl.domain.category.service.SubcategoryService;
+import taco.klkl.domain.category.domain.subcategory.Subcategory;
+import taco.klkl.domain.category.domain.subcategory.SubcategoryType;
+import taco.klkl.domain.category.domain.tag.Tag;
+import taco.klkl.domain.category.domain.tag.TagType;
+import taco.klkl.domain.category.dto.response.tag.TagResponse;
+import taco.klkl.domain.category.exception.subcategory.SubcategoryNotFoundException;
 import taco.klkl.domain.category.service.SubcategoryTagService;
+import taco.klkl.domain.category.service.subcategory.SubcategoryService;
 import taco.klkl.global.error.exception.ErrorCode;
 
 @WebMvcTest(TagController.class)

@@ -15,13 +15,14 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.transaction.annotation.Transactional;
 
-import taco.klkl.domain.category.dao.SubcategoryRepository;
-import taco.klkl.domain.category.domain.Category;
-import taco.klkl.domain.category.domain.CategoryType;
-import taco.klkl.domain.category.domain.Subcategory;
-import taco.klkl.domain.category.domain.SubcategoryType;
-import taco.klkl.domain.category.dto.response.SubcategoryResponse;
-import taco.klkl.domain.category.exception.SubcategoryNotFoundException;
+import taco.klkl.domain.category.dao.subcategory.SubcategoryRepository;
+import taco.klkl.domain.category.domain.category.Category;
+import taco.klkl.domain.category.domain.category.CategoryType;
+import taco.klkl.domain.category.domain.subcategory.Subcategory;
+import taco.klkl.domain.category.domain.subcategory.SubcategoryType;
+import taco.klkl.domain.category.dto.response.subcategory.SubcategoryResponse;
+import taco.klkl.domain.category.exception.subcategory.SubcategoryNotFoundException;
+import taco.klkl.domain.category.service.subcategory.SubcategoryServiceImpl;
 
 @ExtendWith(MockitoExtension.class)
 @Transactional

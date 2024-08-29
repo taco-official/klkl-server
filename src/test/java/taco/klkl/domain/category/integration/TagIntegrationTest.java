@@ -17,10 +17,10 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
-import taco.klkl.domain.category.domain.Subcategory;
-import taco.klkl.domain.category.dto.response.TagResponse;
-import taco.klkl.domain.category.service.SubcategoryService;
+import taco.klkl.domain.category.domain.subcategory.Subcategory;
+import taco.klkl.domain.category.dto.response.tag.TagResponse;
 import taco.klkl.domain.category.service.SubcategoryTagService;
+import taco.klkl.domain.category.service.subcategory.SubcategoryService;
 import taco.klkl.global.error.exception.ErrorCode;
 
 @SpringBootTest

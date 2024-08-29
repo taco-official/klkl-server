@@ -15,11 +15,11 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import taco.klkl.domain.category.dao.SubcategoryTagRepository;
-import taco.klkl.domain.category.domain.Subcategory;
 import taco.klkl.domain.category.domain.SubcategoryTag;
-import taco.klkl.domain.category.domain.Tag;
-import taco.klkl.domain.category.domain.TagType;
-import taco.klkl.domain.category.dto.response.TagResponse;
+import taco.klkl.domain.category.domain.subcategory.Subcategory;
+import taco.klkl.domain.category.domain.tag.Tag;
+import taco.klkl.domain.category.domain.tag.TagType;
+import taco.klkl.domain.category.dto.response.tag.TagResponse;
 
 @ExtendWith(MockitoExtension.class)
 public class SubcategoryTagServiceImplTest {

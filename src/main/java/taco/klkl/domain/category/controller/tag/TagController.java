@@ -14,8 +14,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import taco.klkl.domain.category.domain.subcategory.Subcategory;
 import taco.klkl.domain.category.dto.response.tag.TagResponse;
+import taco.klkl.domain.category.service.SubcategoryTagService;
 import taco.klkl.domain.category.service.subcategory.SubcategoryService;
-import taco.klkl.domain.category.service.tag.SubcategoryTagService;
 
 @Slf4j
 @Tag(name = "6. 카테고리", description = "카테고리 관련 API")

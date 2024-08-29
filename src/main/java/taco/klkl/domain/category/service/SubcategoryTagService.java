@@ -1,4 +1,4 @@
-package taco.klkl.domain.category.service.tag;
+package taco.klkl.domain.category.service;
 
 import java.util.List;
 import java.util.Set;

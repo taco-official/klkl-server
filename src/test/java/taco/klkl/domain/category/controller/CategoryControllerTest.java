@@ -17,15 +17,16 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import taco.klkl.domain.category.dao.CategoryRepository;
-import taco.klkl.domain.category.domain.Category;
-import taco.klkl.domain.category.domain.CategoryType;
-import taco.klkl.domain.category.domain.Subcategory;
-import taco.klkl.domain.category.domain.SubcategoryType;
-import taco.klkl.domain.category.dto.response.CategoryResponse;
-import taco.klkl.domain.category.dto.response.SubcategoryResponse;
-import taco.klkl.domain.category.exception.CategoryNotFoundException;
-import taco.klkl.domain.category.service.CategoryService;
+import taco.klkl.domain.category.controller.category.CategoryController;
+import taco.klkl.domain.category.dao.category.CategoryRepository;
+import taco.klkl.domain.category.domain.category.Category;
+import taco.klkl.domain.category.domain.category.CategoryType;
+import taco.klkl.domain.category.domain.subcategory.Subcategory;
+import taco.klkl.domain.category.domain.subcategory.SubcategoryType;
+import taco.klkl.domain.category.dto.response.category.CategoryResponse;
+import taco.klkl.domain.category.dto.response.subcategory.SubcategoryResponse;
+import taco.klkl.domain.category.exception.category.CategoryNotFoundException;
+import taco.klkl.domain.category.service.category.CategoryService;
 import taco.klkl.global.error.exception.ErrorCode;
 
 @WebMvcTest(CategoryController.class)
