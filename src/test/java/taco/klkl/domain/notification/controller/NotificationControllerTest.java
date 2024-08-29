@@ -26,12 +26,12 @@ import taco.klkl.domain.notification.dto.response.NotificationResponse;
 import taco.klkl.domain.notification.service.NotificationService;
 import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.product.domain.Rating;
-import taco.klkl.domain.region.domain.City;
-import taco.klkl.domain.region.domain.CityType;
-import taco.klkl.domain.region.domain.Country;
-import taco.klkl.domain.region.domain.CountryType;
-import taco.klkl.domain.region.domain.Currency;
-import taco.klkl.domain.region.domain.Region;
+import taco.klkl.domain.region.domain.city.City;
+import taco.klkl.domain.region.domain.city.CityType;
+import taco.klkl.domain.region.domain.country.Country;
+import taco.klkl.domain.region.domain.country.CountryType;
+import taco.klkl.domain.region.domain.currency.Currency;
+import taco.klkl.domain.region.domain.region.Region;
 import taco.klkl.domain.user.domain.User;
 import taco.klkl.global.common.constants.UserConstants;
 

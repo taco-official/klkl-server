@@ -14,10 +14,10 @@ import taco.klkl.domain.category.dto.response.CategoryResponse;
 import taco.klkl.domain.category.dto.response.SubcategoryResponse;
 import taco.klkl.domain.category.service.CategoryService;
 import taco.klkl.domain.category.service.SubcategoryService;
-import taco.klkl.domain.region.dto.response.CityResponse;
-import taco.klkl.domain.region.dto.response.CountrySimpleResponse;
-import taco.klkl.domain.region.service.CityService;
-import taco.klkl.domain.region.service.CountryService;
+import taco.klkl.domain.region.dto.response.city.CityResponse;
+import taco.klkl.domain.region.dto.response.country.CountrySimpleResponse;
+import taco.klkl.domain.region.service.city.CityService;
+import taco.klkl.domain.region.service.country.CountryService;
 import taco.klkl.domain.search.dto.response.SearchResponse;
 
 @Slf4j

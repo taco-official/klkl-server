@@ -13,10 +13,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import taco.klkl.domain.region.dao.CurrencyRepository;
-import taco.klkl.domain.region.domain.Currency;
-import taco.klkl.domain.region.domain.CurrencyType;
-import taco.klkl.domain.region.dto.response.CurrencyResponse;
+import taco.klkl.domain.region.dao.currency.CurrencyRepository;
+import taco.klkl.domain.region.domain.currency.Currency;
+import taco.klkl.domain.region.domain.currency.CurrencyType;
+import taco.klkl.domain.region.dto.response.currency.CurrencyResponse;
+import taco.klkl.domain.region.service.currency.CurrencyServiceImpl;
 
 @ExtendWith(MockitoExtension.class)
 public class CurrencyServiceImplTest {

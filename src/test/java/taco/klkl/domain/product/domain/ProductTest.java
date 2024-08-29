@@ -12,8 +12,8 @@ import org.mockito.Mockito;
 import taco.klkl.domain.category.domain.Subcategory;
 import taco.klkl.domain.like.exception.LikeCountBelowMinimumException;
 import taco.klkl.domain.like.exception.LikeCountOverMaximumException;
-import taco.klkl.domain.region.domain.City;
-import taco.klkl.domain.region.domain.Currency;
+import taco.klkl.domain.region.domain.city.City;
+import taco.klkl.domain.region.domain.currency.Currency;
 import taco.klkl.domain.user.domain.User;
 import taco.klkl.global.common.constants.ProductConstants;
 

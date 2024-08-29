@@ -16,16 +16,17 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import taco.klkl.domain.region.dao.RegionRepository;
-import taco.klkl.domain.region.domain.Country;
-import taco.klkl.domain.region.domain.CountryType;
-import taco.klkl.domain.region.domain.Currency;
-import taco.klkl.domain.region.domain.CurrencyType;
-import taco.klkl.domain.region.domain.Region;
-import taco.klkl.domain.region.domain.RegionType;
-import taco.klkl.domain.region.dto.response.CountryResponse;
-import taco.klkl.domain.region.dto.response.RegionResponse;
-import taco.klkl.domain.region.exception.RegionNotFoundException;
+import taco.klkl.domain.region.dao.region.RegionRepository;
+import taco.klkl.domain.region.domain.country.Country;
+import taco.klkl.domain.region.domain.country.CountryType;
+import taco.klkl.domain.region.domain.currency.Currency;
+import taco.klkl.domain.region.domain.currency.CurrencyType;
+import taco.klkl.domain.region.domain.region.Region;
+import taco.klkl.domain.region.domain.region.RegionType;
+import taco.klkl.domain.region.dto.response.country.CountryResponse;
+import taco.klkl.domain.region.dto.response.region.RegionResponse;
+import taco.klkl.domain.region.exception.region.RegionNotFoundException;
+import taco.klkl.domain.region.service.region.RegionServiceImpl;
 
 @ExtendWith(MockitoExtension.class)
 class RegionServiceImplTest {

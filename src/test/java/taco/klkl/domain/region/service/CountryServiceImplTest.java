@@ -17,19 +17,20 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import taco.klkl.domain.region.dao.CountryRepository;
-import taco.klkl.domain.region.domain.City;
-import taco.klkl.domain.region.domain.CityType;
-import taco.klkl.domain.region.domain.Country;
-import taco.klkl.domain.region.domain.CountryType;
-import taco.klkl.domain.region.domain.Currency;
-import taco.klkl.domain.region.domain.CurrencyType;
-import taco.klkl.domain.region.domain.Region;
-import taco.klkl.domain.region.domain.RegionType;
-import taco.klkl.domain.region.dto.response.CityResponse;
-import taco.klkl.domain.region.dto.response.CountryResponse;
-import taco.klkl.domain.region.dto.response.CountrySimpleResponse;
-import taco.klkl.domain.region.exception.CountryNotFoundException;
+import taco.klkl.domain.region.dao.country.CountryRepository;
+import taco.klkl.domain.region.domain.city.City;
+import taco.klkl.domain.region.domain.city.CityType;
+import taco.klkl.domain.region.domain.country.Country;
+import taco.klkl.domain.region.domain.country.CountryType;
+import taco.klkl.domain.region.domain.currency.Currency;
+import taco.klkl.domain.region.domain.currency.CurrencyType;
+import taco.klkl.domain.region.domain.region.Region;
+import taco.klkl.domain.region.domain.region.RegionType;
+import taco.klkl.domain.region.dto.response.city.CityResponse;
+import taco.klkl.domain.region.dto.response.country.CountryResponse;
+import taco.klkl.domain.region.dto.response.country.CountrySimpleResponse;
+import taco.klkl.domain.region.exception.country.CountryNotFoundException;
+import taco.klkl.domain.region.service.country.CountryServiceImpl;
 
 @ExtendWith(MockitoExtension.class)
 public class CountryServiceImplTest {

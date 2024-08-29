@@ -21,19 +21,17 @@ import taco.klkl.domain.category.dto.response.CategoryResponse;
 import taco.klkl.domain.category.dto.response.SubcategoryResponse;
 import taco.klkl.domain.category.service.CategoryService;
 import taco.klkl.domain.category.service.SubcategoryService;
-import taco.klkl.domain.region.domain.City;
-import taco.klkl.domain.region.domain.CityType;
-import taco.klkl.domain.region.domain.Country;
-import taco.klkl.domain.region.domain.CountryType;
-import taco.klkl.domain.region.domain.Currency;
-import taco.klkl.domain.region.domain.Region;
-import taco.klkl.domain.region.dto.response.CityResponse;
-import taco.klkl.domain.region.dto.response.CountrySimpleResponse;
-import taco.klkl.domain.region.service.CityService;
-import taco.klkl.domain.region.service.CountryService;
+import taco.klkl.domain.region.domain.city.City;
+import taco.klkl.domain.region.domain.city.CityType;
+import taco.klkl.domain.region.domain.country.Country;
+import taco.klkl.domain.region.domain.country.CountryType;
+import taco.klkl.domain.region.domain.currency.Currency;
+import taco.klkl.domain.region.domain.region.Region;
+import taco.klkl.domain.region.dto.response.city.CityResponse;
+import taco.klkl.domain.region.dto.response.country.CountrySimpleResponse;
+import taco.klkl.domain.region.service.city.CityService;
+import taco.klkl.domain.region.service.country.CountryService;
 import taco.klkl.domain.search.dto.response.SearchResponse;
-import taco.klkl.domain.user.domain.User;
-import taco.klkl.global.common.constants.UserConstants;
 
 @ExtendWith(MockitoExtension.class)
 class SearchServiceImplTest {

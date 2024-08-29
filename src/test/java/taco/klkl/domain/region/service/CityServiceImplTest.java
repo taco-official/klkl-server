@@ -13,11 +13,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import taco.klkl.domain.region.dao.CityRepository;
-import taco.klkl.domain.region.domain.City;
-import taco.klkl.domain.region.domain.CityType;
-import taco.klkl.domain.region.domain.Country;
-import taco.klkl.domain.region.dto.response.CityResponse;
+import taco.klkl.domain.region.dao.city.CityRepository;
+import taco.klkl.domain.region.domain.city.City;
+import taco.klkl.domain.region.domain.city.CityType;
+import taco.klkl.domain.region.domain.country.Country;
+import taco.klkl.domain.region.dto.response.city.CityResponse;
+import taco.klkl.domain.region.service.city.CityServiceImpl;
 
 @ExtendWith(MockitoExtension.class)
 public class CityServiceImplTest {

@@ -18,16 +18,17 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import taco.klkl.domain.region.dao.RegionRepository;
-import taco.klkl.domain.region.domain.Country;
-import taco.klkl.domain.region.domain.CountryType;
-import taco.klkl.domain.region.domain.Currency;
-import taco.klkl.domain.region.domain.CurrencyType;
-import taco.klkl.domain.region.domain.Region;
-import taco.klkl.domain.region.domain.RegionType;
-import taco.klkl.domain.region.dto.response.CountryResponse;
-import taco.klkl.domain.region.dto.response.RegionResponse;
-import taco.klkl.domain.region.service.RegionService;
+import taco.klkl.domain.region.controller.region.RegionController;
+import taco.klkl.domain.region.dao.region.RegionRepository;
+import taco.klkl.domain.region.domain.country.Country;
+import taco.klkl.domain.region.domain.country.CountryType;
+import taco.klkl.domain.region.domain.currency.Currency;
+import taco.klkl.domain.region.domain.currency.CurrencyType;
+import taco.klkl.domain.region.domain.region.Region;
+import taco.klkl.domain.region.domain.region.RegionType;
+import taco.klkl.domain.region.dto.response.country.CountryResponse;
+import taco.klkl.domain.region.dto.response.region.RegionResponse;
+import taco.klkl.domain.region.service.region.RegionService;
 import taco.klkl.global.error.exception.ErrorCode;
 
 @WebMvcTest(RegionController.class)

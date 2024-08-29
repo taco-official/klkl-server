@@ -15,9 +15,9 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import jakarta.transaction.Transactional;
-import taco.klkl.domain.region.dto.response.CountryResponse;
-import taco.klkl.domain.region.dto.response.RegionResponse;
-import taco.klkl.domain.region.service.RegionService;
+import taco.klkl.domain.region.dto.response.country.CountryResponse;
+import taco.klkl.domain.region.dto.response.region.RegionResponse;
+import taco.klkl.domain.region.service.region.RegionService;
 
 @SpringBootTest
 @AutoConfigureMockMvc

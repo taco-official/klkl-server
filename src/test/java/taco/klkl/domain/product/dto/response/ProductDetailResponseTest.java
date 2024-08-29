@@ -13,12 +13,12 @@ import taco.klkl.domain.category.domain.SubcategoryName;
 import taco.klkl.domain.category.dto.response.SubcategoryResponse;
 import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.product.domain.Rating;
-import taco.klkl.domain.region.domain.City;
-import taco.klkl.domain.region.domain.CityType;
-import taco.klkl.domain.region.domain.Currency;
-import taco.klkl.domain.region.domain.CurrencyType;
-import taco.klkl.domain.region.dto.response.CityResponse;
-import taco.klkl.domain.region.dto.response.CurrencyResponse;
+import taco.klkl.domain.region.domain.city.City;
+import taco.klkl.domain.region.domain.city.CityType;
+import taco.klkl.domain.region.domain.currency.Currency;
+import taco.klkl.domain.region.domain.currency.CurrencyType;
+import taco.klkl.domain.region.dto.response.city.CityResponse;
+import taco.klkl.domain.region.dto.response.currency.CurrencyResponse;
 import taco.klkl.domain.user.domain.User;
 import taco.klkl.domain.user.dto.response.UserDetailResponse;
 

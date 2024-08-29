@@ -3,9 +3,9 @@ package taco.klkl.global.util;
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
-import taco.klkl.domain.region.dao.CurrencyRepository;
-import taco.klkl.domain.region.domain.Currency;
-import taco.klkl.domain.region.exception.CurrencyNotFoundException;
+import taco.klkl.domain.region.dao.currency.CurrencyRepository;
+import taco.klkl.domain.region.domain.currency.Currency;
+import taco.klkl.domain.region.exception.currency.CurrencyNotFoundException;
 
 @Component
 @RequiredArgsConstructor
