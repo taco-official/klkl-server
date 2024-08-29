@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import taco.klkl.domain.category.domain.Subcategory;
+import taco.klkl.domain.category.domain.subcategory.Subcategory;
 import taco.klkl.domain.category.domain.SubcategoryTag;
 
 @Repository

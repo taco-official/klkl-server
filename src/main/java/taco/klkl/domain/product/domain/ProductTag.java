@@ -13,7 +13,7 @@ import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import taco.klkl.domain.category.domain.Tag;
+import taco.klkl.domain.category.domain.tag.Tag;
 
 @Getter
 @Entity(name = "product_tag")

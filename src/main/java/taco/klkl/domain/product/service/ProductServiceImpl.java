@@ -23,12 +23,12 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import taco.klkl.domain.category.domain.QCategory;
-import taco.klkl.domain.category.domain.QSubcategory;
-import taco.klkl.domain.category.domain.QTag;
-import taco.klkl.domain.category.domain.Subcategory;
-import taco.klkl.domain.category.domain.Tag;
-import taco.klkl.domain.category.exception.SubcategoryNotFoundException;
+import taco.klkl.domain.category.domain.category.QCategory;
+import taco.klkl.domain.category.domain.subcategory.Subcategory;
+import taco.klkl.domain.category.domain.subcategory.QSubcategory;
+import taco.klkl.domain.category.domain.tag.QTag;
+import taco.klkl.domain.category.domain.tag.Tag;
+import taco.klkl.domain.category.exception.subcategory.SubcategoryNotFoundException;
 import taco.klkl.domain.product.dao.ProductRepository;
 import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.product.domain.QProduct;

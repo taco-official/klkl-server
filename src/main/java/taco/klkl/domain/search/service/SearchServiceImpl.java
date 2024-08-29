@@ -8,10 +8,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import taco.klkl.domain.category.dto.response.CategoryResponse;
-import taco.klkl.domain.category.dto.response.SubcategoryResponse;
-import taco.klkl.domain.category.service.CategoryService;
-import taco.klkl.domain.category.service.SubcategoryService;
+import taco.klkl.domain.category.dto.response.category.CategoryResponse;
+import taco.klkl.domain.category.dto.response.subcategory.SubcategoryResponse;
+import taco.klkl.domain.category.service.category.CategoryService;
+import taco.klkl.domain.category.service.subcategory.SubcategoryService;
 import taco.klkl.domain.region.dto.response.city.CityResponse;
 import taco.klkl.domain.region.dto.response.country.CountrySimpleResponse;
 import taco.klkl.domain.region.service.city.CityService;

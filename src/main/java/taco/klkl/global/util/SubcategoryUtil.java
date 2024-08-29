@@ -3,9 +3,9 @@ package taco.klkl.global.util;
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
-import taco.klkl.domain.category.dao.SubcategoryRepository;
-import taco.klkl.domain.category.domain.Subcategory;
-import taco.klkl.domain.category.exception.SubcategoryNotFoundException;
+import taco.klkl.domain.category.dao.subcategory.SubcategoryRepository;
+import taco.klkl.domain.category.domain.subcategory.Subcategory;
+import taco.klkl.domain.category.exception.subcategory.SubcategoryNotFoundException;
 
 @Component
 @RequiredArgsConstructor
