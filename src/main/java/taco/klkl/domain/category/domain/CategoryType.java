@@ -21,7 +21,7 @@ public enum CategoryType {
 
 	public static CategoryType from(final String name) {
 		return Arrays.stream(values())
-			.filter(categoryName -> categoryName.getName().equals(name))
+			.filter(type -> type.getName().equals(name))
 			.findFirst()
 			.orElseThrow(CategoryNameNotFoundException::new);
 	}

@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import taco.klkl.domain.category.dao.SubcategoryRepository;
 import taco.klkl.domain.category.domain.Subcategory;
-import taco.klkl.domain.category.domain.SubcategoryName;
 import taco.klkl.domain.category.dto.response.SubcategoryResponse;
 import taco.klkl.domain.category.exception.SubcategoryNotFoundException;
 
@@ -24,13 +23,11 @@ public class SubcategoryServiceImpl implements SubcategoryService {
 	private final SubcategoryRepository subcategoryRepository;
 
 	@Override
-	public List<SubcategoryResponse> findAllSubcategoriesBySubcategoryNames(
-		final List<SubcategoryName> subcategoryNames
-	) {
-		if (subcategoryNames == null || subcategoryNames.isEmpty()) {
+	public List<SubcategoryResponse> findAllSubcategoriesByPartialString(final String partialString) {
+		if (partialString == null || partialString.isEmpty()) {
 			return List.of();
 		}
-		final List<Subcategory> subcategories = subcategoryRepository.findAllByNameIn(subcategoryNames);
+		final List<Subcategory> subcategories = subcategoryRepository.findAllByNameLike(partialString);
 		return subcategories.stream()
 			.map(SubcategoryResponse::from)
 			.toList();

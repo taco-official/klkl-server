@@ -20,6 +20,9 @@ import lombok.NoArgsConstructor;
 @Entity(name = "subcategory")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Subcategory {
+
+	private SubcategoryType subcategoryType;
+
 	@Id
 	@Column(name = "subcategory_id")
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -29,18 +32,19 @@ public class Subcategory {
 	@JoinColumn(name = "category_id")
 	private Category category;
 
+	@Column(name = "name")
+	private String name;
+
 	@OneToMany(mappedBy = "subcategory")
 	List<SubcategoryTag> subcategoryTags = new ArrayList<>();
 
-	@Column(name = "name")
-	private SubcategoryName name;
-
-	private Subcategory(final Category category, final SubcategoryName name) {
+	private Subcategory(final Category category, final SubcategoryType subcategoryType) {
 		this.category = category;
-		this.name = name;
+		this.subcategoryType = subcategoryType;
+		this.name = subcategoryType.getName();
 	}
 
-	public static Subcategory of(final Category category, final SubcategoryName name) {
-		return new Subcategory(category, name);
+	public static Subcategory of(final Category category, final SubcategoryType subcategoryType) {
+		return new Subcategory(category, subcategoryType);
 	}
 }
