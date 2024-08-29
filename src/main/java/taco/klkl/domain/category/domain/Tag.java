@@ -21,10 +21,15 @@ import taco.klkl.domain.product.domain.ProductTag;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Tag {
 
+	private TagType tagType;
+
 	@Id
 	@Column(name = "tag_id")
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
+
+	@Column(name = "name")
+	private String name;
 
 	@OneToMany(mappedBy = "tag")
 	List<SubcategoryTag> subcategoryTags = new ArrayList<>();
@@ -32,14 +37,12 @@ public class Tag {
 	@OneToMany(mappedBy = "tag")
 	Set<ProductTag> productTags = new HashSet<>();
 
-	@Column(name = "name")
-	private TagName name;
-
-	private Tag(final TagName tagName) {
-		this.name = tagName;
+	private Tag(final TagType tagType) {
+		this.tagType = tagType;
+		this.name = tagType.getName();
 	}
 
-	public static Tag of(final TagName tagName) {
-		return new Tag(tagName);
+	public static Tag of(final TagType tagType) {
+		return new Tag(tagType);
 	}
 }

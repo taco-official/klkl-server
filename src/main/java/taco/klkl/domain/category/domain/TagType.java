@@ -8,17 +8,16 @@ import taco.klkl.domain.category.exception.TagNameNotFoundException;
 
 @Getter
 @AllArgsConstructor
-public enum TagName {
-
+public enum TagType {
 	CONVENIENCE_STORE("편의점"),
 	CILANTRO("고수"),
 	;
 
-	private final String koreanName;
+	private final String name;
 
-	public static TagName fromKoreanName(final String koreanName) {
+	public static TagType from(final String name) {
 		return Arrays.stream(values())
-			.filter(tagName -> tagName.getKoreanName().equals(koreanName))
+			.filter(type -> type.getName().equals(name))
 			.findFirst()
 			.orElseThrow(TagNameNotFoundException::new);
 	}

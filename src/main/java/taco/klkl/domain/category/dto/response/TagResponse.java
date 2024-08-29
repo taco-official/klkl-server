@@ -7,6 +7,6 @@ public record TagResponse(
 	String name
 ) {
 	public static TagResponse from(final Tag tag) {
-		return new TagResponse(tag.getId(), tag.getName().getKoreanName());
+		return new TagResponse(tag.getId(), tag.getName());
 	}
 }
