@@ -46,7 +46,7 @@ public class RegionServiceImpl implements RegionService {
 
 	@Override
 	public RegionResponse findRegionByName(final String name) throws RegionNotFoundException {
-		final Region region = regionRepository.findFirstByName(RegionType.getRegionTypeByKoreanName(name));
+		final Region region = regionRepository.findFirstByName(name);
 		if (region == null) {
 			throw new RegionNotFoundException();
 		}

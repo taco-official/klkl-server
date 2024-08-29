@@ -16,16 +16,16 @@ public enum RegionType {
 	ETC("기타"),
 	;
 
-	private final String koreanName;
+	private final String name;
 
 	/**
 	 *
-	 * @param koreanName RegionType koreanName
+	 * @param name RegionType koreanName
 	 * @return RegionType
 	 */
-	public static RegionType getRegionTypeByKoreanName(String koreanName) {
+	public static RegionType from(final String name) {
 		return Arrays.stream(RegionType.values())
-			.filter(r -> r.getKoreanName().equals(koreanName))
+			.filter(r -> r.getName().equals(name))
 			.findFirst()
 			.orElseThrow(RegionTypeNotFoundException::new);
 	}

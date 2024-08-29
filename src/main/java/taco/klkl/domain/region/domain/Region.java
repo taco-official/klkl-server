@@ -18,6 +18,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Region {
 
+	private RegionType region;
+
 	@Id
 	@Column(name = "region_id")
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -28,7 +30,7 @@ public class Region {
 		length = 20,
 		nullable = false
 	)
-	private RegionType name;
+	private String name;
 
 	@OneToMany(
 		mappedBy = "region",
@@ -37,10 +39,11 @@ public class Region {
 	private List<Country> countries = new ArrayList<>();
 
 	private Region(final RegionType region) {
-		this.name = region;
+		this.region = region;
+		this.name = region.getName();
 	}
 
-	public static Region of(final RegionType regionType) {
-		return new Region(regionType);
+	public static Region from(final RegionType region) {
+		return new Region(region);
 	}
 }
