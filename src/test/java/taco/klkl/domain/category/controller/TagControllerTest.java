@@ -25,7 +25,7 @@ import taco.klkl.domain.category.domain.Subcategory;
 import taco.klkl.domain.category.domain.SubcategoryTag;
 import taco.klkl.domain.category.domain.SubcategoryType;
 import taco.klkl.domain.category.domain.Tag;
-import taco.klkl.domain.category.domain.TagName;
+import taco.klkl.domain.category.domain.TagType;
 import taco.klkl.domain.category.dto.response.TagResponse;
 import taco.klkl.domain.category.exception.SubcategoryNotFoundException;
 import taco.klkl.domain.category.service.SubcategoryService;
@@ -70,9 +70,9 @@ public class TagControllerTest {
 		when(mockSubcategory2.getName()).thenReturn(SubcategoryType.SNACK.getName());
 
 		when(mockTag1.getId()).thenReturn(1L);
-		when(mockTag1.getName()).thenReturn(TagName.CONVENIENCE_STORE);
+		when(mockTag1.getName()).thenReturn(TagType.CONVENIENCE_STORE.getName());
 		when(mockTag2.getId()).thenReturn(2L);
-		when(mockTag2.getName()).thenReturn(TagName.CILANTRO);
+		when(mockTag2.getName()).thenReturn(TagType.CILANTRO.getName());
 
 		when(subcategoryTagRepository.findAllBySubcategory(mockSubcategory1))
 			.thenReturn(Arrays.asList(subcategoryTag1, subcategoryTag2));
@@ -96,8 +96,8 @@ public class TagControllerTest {
 			.andExpect(jsonPath("$.data", hasSize(2)))
 			.andExpect(jsonPath("$.data[*].id", containsInAnyOrder(1, 2)))
 			.andExpect(jsonPath("$.data[*].name", containsInAnyOrder(
-				TagName.CONVENIENCE_STORE.getKoreanName(),
-				TagName.CILANTRO.getKoreanName()
+				TagType.CONVENIENCE_STORE.getName(),
+				TagType.CILANTRO.getName()
 			)))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
 
@@ -127,9 +127,9 @@ public class TagControllerTest {
 		when(mockSubcategory2.getName()).thenReturn(SubcategoryType.SNACK.getName());
 
 		when(mockTag1.getId()).thenReturn(1L);
-		when(mockTag1.getName()).thenReturn(TagName.CONVENIENCE_STORE);
+		when(mockTag1.getName()).thenReturn(TagType.CONVENIENCE_STORE.getName());
 		when(mockTag2.getId()).thenReturn(2L);
-		when(mockTag2.getName()).thenReturn(TagName.CILANTRO);
+		when(mockTag2.getName()).thenReturn(TagType.CILANTRO.getName());
 
 		when(subcategoryTagRepository.findAllBySubcategory(mockSubcategory1))
 			.thenReturn(Arrays.asList(subcategoryTag1, subcategoryTag2));
@@ -153,8 +153,8 @@ public class TagControllerTest {
 			.andExpect(jsonPath("$.data", hasSize(2)))
 			.andExpect(jsonPath("$.data[*].id", containsInAnyOrder(1, 2)))
 			.andExpect(jsonPath("$.data[*].name", containsInAnyOrder(
-				TagName.CONVENIENCE_STORE.getKoreanName(),
-				TagName.CILANTRO.getKoreanName()
+				TagType.CONVENIENCE_STORE.getName(),
+				TagType.CILANTRO.getName()
 			)))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
 

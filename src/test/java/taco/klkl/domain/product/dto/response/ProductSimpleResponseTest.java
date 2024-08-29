@@ -17,7 +17,7 @@ import taco.klkl.domain.category.domain.CategoryType;
 import taco.klkl.domain.category.domain.Subcategory;
 import taco.klkl.domain.category.domain.SubcategoryType;
 import taco.klkl.domain.category.domain.Tag;
-import taco.klkl.domain.category.domain.TagName;
+import taco.klkl.domain.category.domain.TagType;
 import taco.klkl.domain.category.dto.response.TagResponse;
 import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.product.domain.ProductTag;
@@ -70,8 +70,8 @@ class ProductSimpleResponseTest {
 			SubcategoryType.INSTANT_FOOD
 		);
 
-		Tag tag1 = Tag.of(TagName.CILANTRO);
-		Tag tag2 = Tag.of(TagName.CONVENIENCE_STORE);
+		Tag tag1 = Tag.of(TagType.CILANTRO);
+		Tag tag2 = Tag.of(TagType.CONVENIENCE_STORE);
 		Set<ProductTag> productTags = Set.of(tag1, tag2).stream()
 			.map(tag -> ProductTag.of(product, tag))
 			.collect(Collectors.toSet());
