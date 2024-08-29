@@ -69,7 +69,7 @@ public class User {
 		final Integer age,
 		final String description
 	) {
-		this.profileImageUrl = UserConstants.DEFAULT_PROFILE_IMAGE_URL;
+		this.profileImageUrl = DefaultProfileImageUrlGenerator.generate();
 		this.name = name;
 		this.gender = gender;
 		this.age = age;
