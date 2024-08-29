@@ -21,8 +21,6 @@ import taco.klkl.domain.category.dto.response.CategoryResponse;
 import taco.klkl.domain.category.dto.response.SubcategoryResponse;
 import taco.klkl.domain.category.service.CategoryService;
 import taco.klkl.domain.category.service.SubcategoryService;
-import taco.klkl.domain.product.domain.Product;
-import taco.klkl.domain.product.domain.Rating;
 import taco.klkl.domain.region.domain.City;
 import taco.klkl.domain.region.domain.CityType;
 import taco.klkl.domain.region.domain.Country;
@@ -80,10 +78,10 @@ class SearchServiceImplTest {
 		List<SubcategoryResponse> mockSubcategories = Collections.singletonList(
 			SubcategoryResponse.from(subcategory));
 
-		when(countryService.getAllCountriesByCountryTypes(any(List.class))).thenReturn(mockCountries);
-		when(cityService.getAllCitiesByCityTypes(any(List.class))).thenReturn(mockCities);
-		when(categoryService.findCategoriesByCategoryNames(any(List.class))).thenReturn(mockCategories);
-		when(subcategoryService.findSubcategoriesBySubcategoryNames(any(List.class))).thenReturn(mockSubcategories);
+		when(countryService.findAllCountriesByPartialString(any(String.class))).thenReturn(mockCountries);
+		when(cityService.findAllCitiesByCityTypes(any(List.class))).thenReturn(mockCities);
+		when(categoryService.findAllCategoriesByCategoryNames(any(List.class))).thenReturn(mockCategories);
+		when(subcategoryService.findAllSubcategoriesBySubcategoryNames(any(List.class))).thenReturn(mockSubcategories);
 
 		// when
 		SearchResponse result = searchService.findSearchResult(queryParam);

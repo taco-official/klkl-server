@@ -133,8 +133,8 @@ class RegionControllerTest {
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
-			.andExpect(jsonPath("$.data[0].name", is(countryList.get(0).getName().getKoreanName())))
-			.andExpect(jsonPath("$.data[1].name", is(countryList.get(1).getName().getKoreanName())))
+			.andExpect(jsonPath("$.data[0].name", is(countryList.get(0).getName())))
+			.andExpect(jsonPath("$.data[1].name", is(countryList.get(1).getName())))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
 
 		verify(regionService, times(1)).findCountriesByRegionId(1L);

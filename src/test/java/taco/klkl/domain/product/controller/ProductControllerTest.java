@@ -100,7 +100,7 @@ public class ProductControllerTest {
 			"productName",
 			10,
 			Rating.FIVE.getValue(),
-			CountryType.THAILAND.getKoreanName(),
+			CountryType.THAILAND.getName(),
 			CategoryName.FOOD.getKoreanName(),
 			Set.of(tagResponse1, tagResponse2)
 		);

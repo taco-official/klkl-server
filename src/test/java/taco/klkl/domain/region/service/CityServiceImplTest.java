@@ -46,7 +46,7 @@ public class CityServiceImplTest {
 		when(cityRepository.findAllByNameIn(cityTypes)).thenReturn(cities);
 
 		// when
-		List<CityResponse> cityResponseList = cityService.getAllCitiesByCityTypes(cityTypes);
+		List<CityResponse> cityResponseList = cityService.findAllCitiesByCityTypes(cityTypes);
 
 		// then
 		assertThat(cityResponseList).hasSize(cityTypes.size());

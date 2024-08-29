@@ -114,7 +114,7 @@ class CategoryServiceImplTest {
 		when(categoryRepository.findAllByNameIn(categoryNames)).thenReturn(categories);
 
 		// when
-		List<CategoryResponse> categoryResponses = categoryService.findCategoriesByCategoryNames(categoryNames);
+		List<CategoryResponse> categoryResponses = categoryService.findAllCategoriesByCategoryNames(categoryNames);
 
 		// then
 		Assertions.assertThat(categoryResponses.size()).isEqualTo(categoryNames.size());

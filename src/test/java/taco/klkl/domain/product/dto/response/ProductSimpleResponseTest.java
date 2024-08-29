@@ -102,7 +102,7 @@ class ProductSimpleResponseTest {
 		assertThat(dto.name()).isEqualTo(product.getName());
 		assertThat(dto.likeCount()).isEqualTo(product.getLikeCount());
 		assertThat(dto.rating()).isEqualTo(product.getRating().getValue());
-		assertThat(dto.countryName()).isEqualTo(product.getCity().getCountry().getName().getKoreanName());
+		assertThat(dto.countryName()).isEqualTo(product.getCity().getCountry().getName());
 		assertThat(dto.categoryName()).isEqualTo(product.getSubcategory().getCategory().getName().getKoreanName());
 	}
 
@@ -123,7 +123,7 @@ class ProductSimpleResponseTest {
 			product.getName(),
 			product.getLikeCount(),
 			product.getRating().getValue(),
-			product.getCity().getCountry().getName().getKoreanName(),
+			product.getCity().getCountry().getName(),
 			product.getSubcategory().getCategory().getName().getKoreanName(),
 			tags
 		);
@@ -134,7 +134,7 @@ class ProductSimpleResponseTest {
 		assertThat(dto.name()).isEqualTo(product.getName());
 		assertThat(dto.likeCount()).isEqualTo(product.getLikeCount());
 		assertThat(dto.rating()).isEqualTo(product.getRating().getValue());
-		assertThat(dto.countryName()).isEqualTo(product.getCity().getCountry().getName().getKoreanName());
+		assertThat(dto.countryName()).isEqualTo(product.getCity().getCountry().getName());
 		assertThat(dto.categoryName()).isEqualTo(product.getSubcategory().getCategory().getName().getKoreanName());
 		assertThat(dto.tags()).isEqualTo(tags);
 	}

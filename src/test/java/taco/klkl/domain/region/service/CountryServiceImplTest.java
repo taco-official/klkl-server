@@ -69,8 +69,8 @@ public class CountryServiceImplTest {
 
 		// then
 		assertThat(findCountries.size()).isEqualTo(countries.size());
-		assertThat(findCountries.get(0).name()).isEqualTo(countries.get(0).getName().getKoreanName());
-		assertThat(findCountries.get(1).name()).isEqualTo(countries.get(1).getName().getKoreanName());
+		assertThat(findCountries.get(0).name()).isEqualTo(countries.get(0).getName());
+		assertThat(findCountries.get(1).name()).isEqualTo(countries.get(1).getName());
 	}
 
 	@Test
@@ -117,20 +117,20 @@ public class CountryServiceImplTest {
 	}
 
 	@Test
-	@DisplayName("CountryType리스트로 국가 조회")
+	@DisplayName("부분 문자열로 국가 조회")
 	void testGetCountriesByCountryTypes() {
 		// given
-		List<CountryType> countryTypes = Arrays.asList(CountryType.JAPAN, CountryType.TAIWAN);
+		String partialName = "일";
 		CountrySimpleResponse country1ResponseDto = CountrySimpleResponse.from(country1);
 		CountrySimpleResponse country2ResponseDto = CountrySimpleResponse.from(country2);
-		when(countryRepository.findAllByNameIn(countryTypes)).thenReturn(Arrays.asList(country1, country2));
+		when(countryRepository.findAllByNameLike(partialName)).thenReturn(Arrays.asList(country1, country2));
 
 		// when
-		List<CountrySimpleResponse> countrySimpleResponses = countryService.getAllCountriesByCountryTypes(
-			countryTypes);
+		List<CountrySimpleResponse> countrySimpleResponses = countryService.findAllCountriesByPartialString(
+			partialName);
 
 		// then
-		assertThat(countrySimpleResponses).hasSize(countryTypes.size());
+		assertThat(countrySimpleResponses).hasSize(2);
 		assertThat(countrySimpleResponses).containsExactlyInAnyOrder(country1ResponseDto, country2ResponseDto);
 	}
 }

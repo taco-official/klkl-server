@@ -79,7 +79,7 @@ public class SubcategoryServiceImplTest {
 
 	@Test
 	@DisplayName("SubcategoryName리스트로 Subcategory 조회")
-	void testFindSubcategoriesBySubcategoryNames() {
+	void testFindAllSubcategoriesBySubcategoryNames() {
 		// given
 		List<SubcategoryName> subcategoryNames = Arrays.asList(subcategory1.getName(), subcategory2.getName(),
 			subcategory3.getName());
@@ -92,7 +92,7 @@ public class SubcategoryServiceImplTest {
 
 		// when
 		List<SubcategoryResponse> subcategoryResponseList = subcategoryService
-			.findSubcategoriesBySubcategoryNames(subcategoryNames);
+			.findAllSubcategoriesBySubcategoryNames(subcategoryNames);
 
 		// then
 		Assertions.assertThat(subcategoryResponseList.size()).isEqualTo(subcategoryNames.size());

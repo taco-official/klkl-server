@@ -75,8 +75,8 @@ public class CountryControllerTest {
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
 			.andExpect(jsonPath("$.data", hasSize(2)))
-			.andExpect(jsonPath("$.data[0].name", is(country1.getName().getKoreanName())))
-			.andExpect(jsonPath("$.data[1].name", is(country2.getName().getKoreanName())))
+			.andExpect(jsonPath("$.data[0].name", is(country1.getName())))
+			.andExpect(jsonPath("$.data[1].name", is(country2.getName())))
 			.andExpect(jsonPath("$.data[0].currency.code", is(country1.getCurrency().getCode().getCode())))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
 
@@ -96,7 +96,7 @@ public class CountryControllerTest {
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
-			.andExpect(jsonPath("$.data.name", is(country1.getName().getKoreanName())))
+			.andExpect(jsonPath("$.data.name", is(country1.getName())))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
 
 		verify(countryService, times(1)).findCountryById(400L);
@@ -107,7 +107,7 @@ public class CountryControllerTest {
 	void testGetCountryWithCities() throws Exception {
 		// given
 		Country mockCountry = mock(Country.class);
-		when(mockCountry.getName()).thenReturn(CountryType.JAPAN);
+		when(mockCountry.getName()).thenReturn(CountryType.JAPAN.getName());
 		when(countryRepository.findById(400L)).thenReturn(Optional.of(mockCountry));
 		when(mockCountry.getCities()).thenReturn(cities);
 		when(countryService.findCitiesByCountryId(400L)).thenReturn(cities.stream().map(CityResponse::from).toList());
