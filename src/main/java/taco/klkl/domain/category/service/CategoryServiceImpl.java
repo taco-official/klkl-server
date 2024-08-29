@@ -10,9 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import taco.klkl.domain.category.dao.CategoryRepository;
 import taco.klkl.domain.category.domain.Category;
-import taco.klkl.domain.category.domain.CategoryName;
 import taco.klkl.domain.category.dto.response.CategoryResponse;
-import taco.klkl.domain.category.dto.response.CategoryWithSubcategoryResponse;
 import taco.klkl.domain.category.exception.CategoryNotFoundException;
 
 @Slf4j
@@ -33,18 +31,18 @@ public class CategoryServiceImpl implements CategoryService {
 	}
 
 	@Override
-	public CategoryWithSubcategoryResponse findSubCategoriesByCategoryId(final Long categoryId) {
+	public CategoryResponse findSubCategoriesByCategoryId(final Long categoryId) {
 		final Category category = categoryRepository.findById(categoryId)
 			.orElseThrow(CategoryNotFoundException::new);
-		return CategoryWithSubcategoryResponse.from(category);
+		return CategoryResponse.from(category);
 	}
 
 	@Override
-	public List<CategoryResponse> findAllCategoriesByCategoryNames(final List<CategoryName> categoryNames) {
-		if (categoryNames == null || categoryNames.isEmpty()) {
+	public List<CategoryResponse> findAllCategoriesByPartialString(final String partialString) {
+		if (partialString == null || partialString.isEmpty()) {
 			return List.of();
 		}
-		final List<Category> categories = categoryRepository.findAllByNameIn(categoryNames);
+		final List<Category> categories = categoryRepository.findAllByNameLike(partialString);
 		return categories.stream()
 			.map(CategoryResponse::from)
 			.toList();

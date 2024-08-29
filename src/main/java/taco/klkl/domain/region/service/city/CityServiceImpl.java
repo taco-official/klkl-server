@@ -23,14 +23,11 @@ public class CityServiceImpl implements CityService {
 
 	@Override
 	public List<CityResponse> findAllCitiesByPartialString(final String partialString) {
-
 		if (partialString == null || partialString.isEmpty()) {
 			return List.of();
 		}
-
-		final List<City> findCities = cityRepository.findAllByNameLike(partialString);
-
-		return findCities.stream()
+		final List<City> cities = cityRepository.findAllByNameLike(partialString);
+		return cities.stream()
 			.map(CityResponse::from)
 			.toList();
 	}

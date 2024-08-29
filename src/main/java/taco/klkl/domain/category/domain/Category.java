@@ -17,22 +17,26 @@ import lombok.NoArgsConstructor;
 @Entity(name = "category")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Category {
+
+	private CategoryType categoryType;
+
 	@Id
 	@Column(name = "category_id")
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
 	@Column(name = "name")
-	private CategoryName name;
+	private String name;
 
 	@OneToMany(mappedBy = "category")
 	private List<Subcategory> subcategories = new ArrayList<>();
 
-	private Category(final CategoryName name) {
-		this.name = name;
+	private Category(final CategoryType categoryType) {
+		this.categoryType = categoryType;
+		this.name = categoryType.getName();
 	}
 
-	public static Category of(final CategoryName name) {
-		return new Category(name);
+	public static Category of(final CategoryType categoryType) {
+		return new Category(categoryType);
 	}
 }

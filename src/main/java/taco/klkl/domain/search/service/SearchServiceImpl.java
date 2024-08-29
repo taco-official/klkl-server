@@ -8,7 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import taco.klkl.domain.category.domain.CategoryName;
 import taco.klkl.domain.category.domain.SubcategoryName;
 import taco.klkl.domain.category.dto.response.CategoryResponse;
 import taco.klkl.domain.category.dto.response.SubcategoryResponse;
@@ -50,8 +49,7 @@ public class SearchServiceImpl implements SearchService {
 	}
 
 	private List<CategoryResponse> findCategoriesByQueryParam(final String queryParam) {
-		final List<CategoryName> categoryNames = CategoryName.findByPartialString(queryParam);
-		return categoryService.findAllCategoriesByCategoryNames(categoryNames);
+		return categoryService.findAllCategoriesByPartialString(queryParam);
 	}
 
 	private List<SubcategoryResponse> findSubcategoriesByQueryParam(final String queryParam) {

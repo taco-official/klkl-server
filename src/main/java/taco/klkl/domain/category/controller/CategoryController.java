@@ -12,7 +12,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import taco.klkl.domain.category.dto.response.CategoryResponse;
-import taco.klkl.domain.category.dto.response.CategoryWithSubcategoryResponse;
 import taco.klkl.domain.category.service.CategoryService;
 
 @Slf4j
@@ -32,7 +31,7 @@ public class CategoryController {
 
 	@GetMapping("/{categoryId}/subcategories")
 	@Operation(summary = "대분류의 소분류 목록 조회", description = "Category에 포함된 Subcategory 반환")
-	public CategoryWithSubcategoryResponse findSubCategoriesByCategoryId(@PathVariable Long categoryId) {
+	public CategoryResponse findSubCategoriesByCategoryId(@PathVariable Long categoryId) {
 		return categoryService.findSubCategoriesByCategoryId(categoryId);
 	}
 }

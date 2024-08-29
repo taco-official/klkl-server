@@ -27,13 +27,10 @@ public class CountryServiceImpl implements CountryService {
 
 	@Override
 	public List<CountryResponse> findAllCountries() {
-
 		final List<Country> countries = countryRepository.findAll();
-
 		if (countries.isEmpty()) {
 			return Collections.emptyList();
 		}
-
 		return countries.stream()
 			.map(CountryResponse::from)
 			.toList();
@@ -41,19 +38,15 @@ public class CountryServiceImpl implements CountryService {
 
 	@Override
 	public CountryResponse findCountryById(final Long countryId) throws CountryNotFoundException {
-
 		final Country country = countryRepository.findById(countryId)
 			.orElseThrow(CountryNotFoundException::new);
-
 		return CountryResponse.from(country);
 	}
 
 	@Override
 	public List<CityResponse> findCitiesByCountryId(final Long countryId) throws CountryNotFoundException {
-
 		final Country country = countryRepository.findById(countryId)
 			.orElseThrow(CountryNotFoundException::new);
-
 		return country.getCities().stream()
 			.map(CityResponse::from)
 			.toList();
@@ -61,14 +54,11 @@ public class CountryServiceImpl implements CountryService {
 
 	@Override
 	public List<CountrySimpleResponse> findAllCountriesByPartialString(final String partialString) {
-
 		if (partialString == null || partialString.isEmpty()) {
 			return List.of();
 		}
-
-		final List<Country> findCountries = countryRepository.findAllByNameLike(partialString);
-
-		return findCountries.stream()
+		final List<Country> countries = countryRepository.findAllByNameLike(partialString);
+		return countries.stream()
 			.map(CountrySimpleResponse::from)
 			.toList();
 	}

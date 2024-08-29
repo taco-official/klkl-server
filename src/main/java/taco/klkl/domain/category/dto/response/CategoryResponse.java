@@ -16,7 +16,7 @@ public record CategoryResponse(
 
 		return new CategoryResponse(
 			category.getId(),
-			category.getName().getKoreanName(),
+			category.getName(),
 			subcategories
 		);
 	}

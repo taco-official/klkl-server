@@ -29,7 +29,7 @@ public record ProductSimpleResponse(
 			product.getLikeCount(),
 			product.getRating().getValue(),
 			product.getCity().getCountry().getName(),
-			product.getSubcategory().getCategory().getName().getKoreanName(),
+			product.getSubcategory().getCategory().getName(),
 			ProductUtil.createTagsByProduct(product)
 		);
 	}
