@@ -52,14 +52,12 @@ public class CommentServiceTest {
 		"이상화",
 		"남",
 		19,
-		"image/ideal-flower.jpg",
 		"저는 이상화입니다."
 	);
 
 	private final User user = User.of(
-		userRequestDto.profile(),
 		userRequestDto.name(),
-		Gender.getGenderByDescription(userRequestDto.description()),
+		Gender.from(userRequestDto.gender()),
 		userRequestDto.age(),
 		userRequestDto.description()
 	);

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.IntStream;
 
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
@@ -20,6 +21,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OrderBy;
 import jakarta.persistence.PrePersist;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -46,6 +48,14 @@ public class Product {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "product_id")
 	private Long id;
+
+	@OneToMany(
+		mappedBy = "product",
+		cascade = CascadeType.ALL,
+		orphanRemoval = true
+	)
+	@OrderBy("orderIndex ASC")
+	private List<ProductImage> images = new ArrayList<>();
 
 	@Column(
 		name = "name",
@@ -163,30 +173,6 @@ public class Product {
 		}
 	}
 
-	private Product(
-		final String name,
-		final String description,
-		final String address,
-		final Integer price,
-		final Rating rating,
-		final User user,
-		final City city,
-		final Subcategory subcategory,
-		final Currency currency
-	) {
-		this.name = name;
-		this.description = description;
-		this.address = address;
-		this.price = price;
-		this.rating = rating;
-		this.user = user;
-		this.city = city;
-		this.subcategory = subcategory;
-		this.currency = currency;
-		this.likeCount = DefaultConstants.DEFAULT_INT_VALUE;
-		this.createdAt = LocalDateTime.now();
-	}
-
 	public static Product of(
 		final String name,
 		final String description,
@@ -251,5 +237,38 @@ public class Product {
 		this.likeCount -= 1;
 
 		return this.likeCount;
+	}
+
+	public void updateImages(final List<String> imageUrls) {
+		this.images.clear();
+		IntStream.range(0, imageUrls.size())
+			.forEach(i -> {
+				ProductImage newImage = ProductImage.of(this, imageUrls.get(i), i);
+				this.images.add(newImage);
+			});
+	}
+
+	private Product(
+		final String name,
+		final String description,
+		final String address,
+		final Integer price,
+		final Rating rating,
+		final User user,
+		final City city,
+		final Subcategory subcategory,
+		final Currency currency
+	) {
+		this.name = name;
+		this.description = description;
+		this.address = address;
+		this.price = price;
+		this.rating = rating;
+		this.user = user;
+		this.city = city;
+		this.subcategory = subcategory;
+		this.currency = currency;
+		this.likeCount = DefaultConstants.DEFAULT_INT_VALUE;
+		this.createdAt = LocalDateTime.now();
 	}
 }

@@ -58,9 +58,8 @@ public class OauthKakaoLoginServiceImpl implements OauthKakaoLoginService {
 		// TODO: 성별, 나이는 기본값으로 넣고 있습니다.
 		final UserCreateRequest userCreateRequest = UserCreateRequest.of(
 			name,
-			Gender.MALE.getDescription(),
+			Gender.MALE.getValue(),
 			0,
-			userInfoRequest.profileImage(),
 			""
 		);
 

@@ -20,7 +20,8 @@ public class UserUtil {
 	private final UserRepository userRepository;
 
 	public User findTestUser() {
-		return userRepository.findFirstByName(UserConstants.TEST_USER_NAME);
+		return userRepository.findById(1L)
+			.orElseThrow(UserNotFoundException::new);
 	}
 
 	/**
@@ -29,16 +30,7 @@ public class UserUtil {
 	 * @return
 	 */
 	public User findCurrentUser() {
-		return userRepository.findFirstByName(UserConstants.TEST_USER_NAME);
-	}
-
-	public User findUserById(final Long id) {
-		return userRepository.findById(id)
-			.orElseThrow(UserNotFoundException::new);
-	}
-
-	public User findUserByName(final String name) {
-		return userRepository.findFirstByName(name);
+		return findTestUser();
 	}
 
 	public String createUsername(final String name, final Long oauthMemberId) {

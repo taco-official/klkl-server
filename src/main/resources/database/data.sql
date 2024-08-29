@@ -1,5 +1,5 @@
 /* User */
-INSERT INTO klkl_user(user_id, profile, name, gender, age, description, created_at)
+INSERT INTO klkl_user(user_id, profile_image_url, name, gender, age, description, created_at)
 VALUES (1, 'image/test.jpg', 'testUser', '남', 20, '테스트입니다.', now());
 
 /* Like */

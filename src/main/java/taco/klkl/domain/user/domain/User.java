@@ -22,42 +22,88 @@ public class User {
 	@Column(name = "user_id")
 	private Long id;
 
-	@Column(length = 500, nullable = false)
-	private String profile = UserConstants.DEFAULT_PROFILE;
+	@Column(
+		name = "profile_image_url",
+		length = 500,
+		nullable = false
+	)
+	private String profileImageUrl;
 
-	@Column(unique = true, length = 30, nullable = false)
+	@Column(
+		name = "name",
+		unique = true,
+		length = 30,
+		nullable = false
+	)
 	private String name;
 
-	@Column(length = 1, nullable = false)
+	@Column(
+		name = "gender",
+		length = 1,
+		nullable = false
+	)
 	private Gender gender;
 
-	@Column(nullable = false)
+	@Column(
+		name = "age",
+		nullable = false
+	)
 	private Integer age;
 
-	@Column(length = 100)
+	@Column(
+		name = "description",
+		length = 100
+	)
 	private String description;
 
 	// TODO: created_at 이름으로 json나가야 함
-	@Column(name = "created_at", nullable = false, updatable = false)
+	@Column(
+		name = "created_at",
+		nullable = false,
+		updatable = false
+	)
 	private LocalDateTime createdAt;
 
 	@PrePersist
 	protected void prePersist() {
-		if (this.profile == null) {
-			this.profile = UserConstants.DEFAULT_PROFILE;
-		}
 		this.createdAt = LocalDateTime.now();
 	}
 
-	private User(String profile, String name, Gender gender, Integer age, String description) {
-		this.profile = profile;
+	private User(
+		final String name,
+		final Gender gender,
+		final Integer age,
+		final String description
+	) {
+		this.profileImageUrl = UserConstants.DEFAULT_PROFILE;
 		this.name = name;
 		this.gender = gender;
 		this.age = age;
 		this.description = description;
 	}
 
-	public static User of(String profile, String name, Gender gender, Integer age, String description) {
-		return new User(profile, name, gender, age, description);
+	public static User of(
+		final String name,
+		final Gender gender,
+		final Integer age,
+		final String description
+	) {
+		return new User(name, gender, age, description);
+	}
+
+	public void update(
+		final String name,
+		final Gender gender,
+		final Integer age,
+		final String description
+	) {
+		this.name = name;
+		this.gender = gender;
+		this.age = age;
+		this.description = description;
+	}
+
+	public void updateProfileImageUrl(final String profileImageUrl) {
+		this.profileImageUrl = profileImageUrl;
 	}
 }

@@ -18,7 +18,8 @@ public enum ErrorCode {
 	QUERY_PARAM_NOT_FOUND(HttpStatus.BAD_REQUEST, "쿼리 파라미터가 존재하지 않습니다."),
 
 	// User
-	USER_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 유저입니다."),
+	USER_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 사용자입니다."),
+	GENDER_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 성별입니다."),
 
 	// Product
 	PRODUCT_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 상품입니다."),
@@ -57,6 +58,14 @@ public enum ErrorCode {
 	NOTIFICATION_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 알림 입니다."),
 
 	// Search
+
+	// Image
+	FILE_EXTENSION_NOT_FOUND(HttpStatus.NOT_FOUND, "유효하지 않은 파일 확장자입니다."),
+	IMAGE_TYPE_NOT_FOUND(HttpStatus.NOT_FOUND, "유효하지 않은 이미지 타입입니다."),
+	UPLOAD_STATE_NOT_FOUND(HttpStatus.NOT_FOUND, "유효하지 않은 업로드 상태입니다."),
+	IMAGE_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 이미지입니다."),
+	IMAGE_UPLOAD_NOT_COMPLETE(HttpStatus.BAD_REQUEST, "이미지 업로드가 완료되지 않았습니다."),
+	IMAGE_URL_INVALID(HttpStatus.BAD_REQUEST, "유효하지 않은 이미지 url 형식입니다."),
 
 	// Sample
 	SAMPLE_ERROR(HttpStatus.BAD_REQUEST, "샘플 에러입니다."),

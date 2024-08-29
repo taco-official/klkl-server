@@ -40,7 +40,7 @@ class UserControllerTest {
 	@DisplayName("내 정보 조회 API 테스트")
 	public void testGetMe() throws Exception {
 		// given
-		Mockito.when(userService.getMyInfo()).thenReturn(responseDto);
+		Mockito.when(userService.getCurrentUser()).thenReturn(responseDto);
 
 		// when & then
 		mockMvc.perform(get("/v1/users/me")
@@ -48,7 +48,7 @@ class UserControllerTest {
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
 			.andExpect(jsonPath("$.data.id", is(nullValue())))
-			.andExpect(jsonPath("$.data.profile", is(notNullValue())))
+			.andExpect(jsonPath("$.data.profileImageUrl", is(notNullValue())))
 			.andExpect(jsonPath("$.data.name", is(responseDto.name())))
 			.andExpect(jsonPath("$.data.description", is(responseDto.description())))
 			.andExpect(jsonPath("$.data.totalLikeCount", is(UserConstants.DEFAULT_TOTAL_LIKE_COUNT)))

@@ -56,6 +56,10 @@ dependencies {
 
     // MySQL
     runtimeOnly 'com.mysql:mysql-connector-j'
+
+    // S3
+    implementation platform('software.amazon.awssdk:bom:2.21.1')
+    implementation 'software.amazon.awssdk:s3'
 }
 
 checkstyle {
@@ -70,5 +74,5 @@ test {
     useJUnitPlatform()
     dependsOn 'checkstyleMain'
     dependsOn 'checkstyleTest'
-    systemProperty 'spring.profiles.active', 'local,h2'
+    systemProperty 'spring.profiles.active', 'test'
 }

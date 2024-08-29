@@ -1,6 +1,7 @@
 package taco.klkl.domain.product.dto.response;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
 import taco.klkl.domain.category.dto.response.SubcategoryResponse;
@@ -11,24 +12,9 @@ import taco.klkl.domain.region.dto.response.CurrencyResponse;
 import taco.klkl.domain.user.dto.response.UserDetailResponse;
 import taco.klkl.global.util.ProductUtil;
 
-/**
- * TODO: 상품필터속성 추가 해야함 (상품필터속성 테이블 개발 후)
- * TODO: 상품 컨트롤러에서 필터 서비스를 이용해서 조합 하는게 괜찮아 보입니다.
- * @param id
- * @param name
- * @param description
- * @param address
- * @param price
- * @param likeCount
- * @param rating
- * @param user
- * @param city
- * @param subcategory
- * @param currency
- * @param createdAt
- */
 public record ProductDetailResponse(
 	Long id,
+	List<ProductImageResponse> images,
 	String name,
 	String description,
 	String address,
@@ -42,10 +28,14 @@ public record ProductDetailResponse(
 	Set<TagResponse> tags,
 	LocalDateTime createdAt
 ) {
-
 	public static ProductDetailResponse from(final Product product) {
+		List<ProductImageResponse> images = product.getImages().stream()
+			.map(ProductImageResponse::from)
+			.toList();
+
 		return new ProductDetailResponse(
 			product.getId(),
+			images,
 			product.getName(),
 			product.getDescription(),
 			product.getAddress(),

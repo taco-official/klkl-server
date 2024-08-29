@@ -68,14 +68,11 @@ public class CommentControllerTest {
 		"이상화",
 		"남",
 		19,
-		"image/ideal-flower.jpg",
 		"저는 이상화입니다."
 	);
-
 	private final User user = User.of(
-		requestDto.profile(),
 		requestDto.name(),
-		Gender.getGenderByDescription(requestDto.description()),
+		Gender.from(requestDto.gender()),
 		requestDto.age(),
 		requestDto.description()
 	);

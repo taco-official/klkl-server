@@ -127,10 +127,7 @@ public class ProductServiceImpl implements ProductService {
 		final Product product = productRepository.findById(id)
 			.orElseThrow(ProductNotFoundException::new);
 		updateProductEntity(product, updateRequest);
-		if (updateRequest.tagIds() != null) {
-			Set<Tag> updatedTags = createTagsByTagIds(updateRequest.tagIds());
-			product.updateTags(updatedTags);
-		}
+		updateProductEntityTags(product, updateRequest.tagIds());
 		return ProductDetailResponse.from(product);
 	}
 
@@ -285,6 +282,13 @@ public class ProductServiceImpl implements ProductService {
 			subcategory,
 			currency
 		);
+	}
+
+	private void updateProductEntityTags(final Product product, final Set<Long> tagIds) {
+		if (tagIds != null) {
+			final Set<Tag> updatedTags = createTagsByTagIds(tagIds);
+			product.updateTags(updatedTags);
+		}
 	}
 
 	private Sort.Direction createSortDirectionByQuery(final String query) throws SortDirectionNotFoundException {
