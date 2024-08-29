@@ -11,17 +11,17 @@ VALUES (400, '동북아시아'),
        (401, '동남아시아'),
        (402, '기타');
 
-INSERT INTO currency (currency_id, code, flag)
-VALUES (438, 'JPY', 'japan_flag.png'),
-       (439, 'CNH', 'china_flag.png'),
-       (440, 'TWD', 'taiwan_flag.png'),
-       (441, 'THB', 'thailand_flag.png'),
-       (442, 'VND', 'vietnam_flag.png'),
-       (443, 'PHP', 'philippines_flag.png'),
-       (444, 'SGD', 'singapore_flag.png'),
-       (445, 'IDR', 'indonesia_flag.png'),
-       (446, 'MYR', 'malaysia_flag.png'),
-       (447, 'USD', 'usa_flag.png');
+INSERT INTO currency (currency_id, code)
+VALUES (438, 'JPY'),
+       (439, 'CNH'),
+       (440, 'TWD'),
+       (441, 'THB'),
+       (442, 'VND'),
+       (443, 'PHP'),
+       (444, 'SGD'),
+       (445, 'IDR'),
+       (446, 'MYR'),
+       (447, 'USD');
 
 INSERT INTO country(country_id, region_id, name, country_code, photo, currency_id)
 VALUES (403, 400, '일본', 'JP', 'image/sample', 438),

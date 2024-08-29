@@ -22,15 +22,11 @@ public class Currency {
 	@Column(name = "code", length = 3, nullable = false)
 	private CurrencyType code;
 
-	@Column(name = "flag", length = 500, nullable = false)
-	private String flag;
-
-	private Currency(final CurrencyType code, final String flag) {
+	private Currency(final CurrencyType code) {
 		this.code = code;
-		this.flag = flag;
 	}
 
-	public static Currency of(final CurrencyType code, final String flag) {
-		return new Currency(code, flag);
+	public static Currency of(final CurrencyType code) {
+		return new Currency(code);
 	}
 }
