@@ -48,7 +48,7 @@ class ProductDetailResponseTest {
 
 		mockCurrency = mock(Currency.class);
 		when(mockCurrency.getId()).thenReturn(1L);
-		when(mockCurrency.getCode()).thenReturn(CurrencyType.THAI_BAHT);
+		when(mockCurrency.getCode()).thenReturn(CurrencyType.THAI_BAHT.getCode());
 
 		mockProduct = mock(Product.class);
 		when(mockProduct.getId()).thenReturn(1L);
