@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Region {
 
-	private RegionType region;
+	private RegionType regionType;
 
 	@Id
 	@Column(name = "region_id")
@@ -38,9 +38,9 @@ public class Region {
 	)
 	private List<Country> countries = new ArrayList<>();
 
-	private Region(final RegionType region) {
-		this.region = region;
-		this.name = region.getName();
+	private Region(final RegionType regionType) {
+		this.regionType = regionType;
+		this.name = regionType.getName();
 	}
 
 	public static Region from(final RegionType region) {
