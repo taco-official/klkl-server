@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.MockitoAnnotations;
 
 import taco.klkl.domain.category.domain.Subcategory;
-import taco.klkl.domain.category.domain.SubcategoryName;
+import taco.klkl.domain.category.domain.SubcategoryType;
 import taco.klkl.domain.category.dto.response.SubcategoryResponse;
 import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.product.domain.Rating;
@@ -44,7 +44,7 @@ class ProductDetailResponseTest {
 
 		mockSubcategory = mock(Subcategory.class);
 		when(mockSubcategory.getId()).thenReturn(1L);
-		when(mockSubcategory.getName()).thenReturn(SubcategoryName.INSTANT_FOOD);
+		when(mockSubcategory.getName()).thenReturn(SubcategoryType.INSTANT_FOOD.getName());
 
 		mockCurrency = mock(Currency.class);
 		when(mockCurrency.getId()).thenReturn(1L);

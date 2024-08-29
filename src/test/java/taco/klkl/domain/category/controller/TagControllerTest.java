@@ -22,8 +22,8 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 
 import taco.klkl.domain.category.dao.SubcategoryTagRepository;
 import taco.klkl.domain.category.domain.Subcategory;
-import taco.klkl.domain.category.domain.SubcategoryName;
 import taco.klkl.domain.category.domain.SubcategoryTag;
+import taco.klkl.domain.category.domain.SubcategoryType;
 import taco.klkl.domain.category.domain.Tag;
 import taco.klkl.domain.category.domain.TagName;
 import taco.klkl.domain.category.dto.response.TagResponse;
@@ -65,9 +65,9 @@ public class TagControllerTest {
 		List<Subcategory> mockSubcategoryList = Arrays.asList(mockSubcategory1, mockSubcategory2);
 
 		when(mockSubcategory1.getId()).thenReturn(1L);
-		when(mockSubcategory1.getName()).thenReturn(SubcategoryName.INSTANT_FOOD);
+		when(mockSubcategory1.getName()).thenReturn(SubcategoryType.INSTANT_FOOD.getName());
 		when(mockSubcategory2.getId()).thenReturn(2L);
-		when(mockSubcategory2.getName()).thenReturn(SubcategoryName.SNACK);
+		when(mockSubcategory2.getName()).thenReturn(SubcategoryType.SNACK.getName());
 
 		when(mockTag1.getId()).thenReturn(1L);
 		when(mockTag1.getName()).thenReturn(TagName.CONVENIENCE_STORE);
@@ -122,9 +122,9 @@ public class TagControllerTest {
 		List<Subcategory> mockSubcategoryList = Arrays.asList(mockSubcategory1, mockSubcategory2);
 
 		when(mockSubcategory1.getId()).thenReturn(1L);
-		when(mockSubcategory1.getName()).thenReturn(SubcategoryName.INSTANT_FOOD);
+		when(mockSubcategory1.getName()).thenReturn(SubcategoryType.INSTANT_FOOD.getName());
 		when(mockSubcategory2.getId()).thenReturn(2L);
-		when(mockSubcategory2.getName()).thenReturn(SubcategoryName.SNACK);
+		when(mockSubcategory2.getName()).thenReturn(SubcategoryType.SNACK.getName());
 
 		when(mockTag1.getId()).thenReturn(1L);
 		when(mockTag1.getName()).thenReturn(TagName.CONVENIENCE_STORE);

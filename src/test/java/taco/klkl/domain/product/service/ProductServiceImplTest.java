@@ -34,7 +34,7 @@ import taco.klkl.domain.category.domain.QCategory;
 import taco.klkl.domain.category.domain.QSubcategory;
 import taco.klkl.domain.category.domain.QTag;
 import taco.klkl.domain.category.domain.Subcategory;
-import taco.klkl.domain.category.domain.SubcategoryName;
+import taco.klkl.domain.category.domain.SubcategoryType;
 import taco.klkl.domain.category.domain.Tag;
 import taco.klkl.domain.category.dto.response.TagResponse;
 import taco.klkl.domain.like.exception.LikeCountBelowMinimumException;
@@ -129,7 +129,7 @@ class ProductServiceImplTest {
 		Category category = Category.of(CategoryType.FOOD);
 		subcategory = Subcategory.of(
 			category,
-			SubcategoryName.INSTANT_FOOD
+			SubcategoryType.INSTANT_FOOD
 		);
 
 		testProduct = Product.of(

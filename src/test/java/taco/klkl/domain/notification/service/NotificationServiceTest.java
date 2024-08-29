@@ -26,7 +26,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import taco.klkl.domain.category.domain.Category;
 import taco.klkl.domain.category.domain.CategoryType;
 import taco.klkl.domain.category.domain.Subcategory;
-import taco.klkl.domain.category.domain.SubcategoryName;
+import taco.klkl.domain.category.domain.SubcategoryType;
 import taco.klkl.domain.comment.domain.Comment;
 import taco.klkl.domain.notification.dao.NotificationRepository;
 import taco.klkl.domain.notification.domain.Notification;
@@ -100,7 +100,7 @@ public class NotificationServiceTest {
 		Category category = Category.of(CategoryType.FOOD);
 		Subcategory subcategory = Subcategory.of(
 			category,
-			SubcategoryName.INSTANT_FOOD
+			SubcategoryType.INSTANT_FOOD
 		);
 
 		product = Product.of(

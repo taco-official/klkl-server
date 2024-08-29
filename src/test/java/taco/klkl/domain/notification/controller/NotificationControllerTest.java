@@ -19,7 +19,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import taco.klkl.domain.category.domain.Category;
 import taco.klkl.domain.category.domain.CategoryType;
 import taco.klkl.domain.category.domain.Subcategory;
-import taco.klkl.domain.category.domain.SubcategoryName;
+import taco.klkl.domain.category.domain.SubcategoryType;
 import taco.klkl.domain.comment.domain.Comment;
 import taco.klkl.domain.notification.domain.Notification;
 import taco.klkl.domain.notification.dto.response.NotificationResponse;
@@ -54,7 +54,7 @@ class NotificationControllerTest {
 	private final Country country = Country.of(CountryType.MALAYSIA, region, "photo", currency);
 	private final City city = City.of(CityType.BORACAY, country);
 	private final Category category = Category.of(CategoryType.CLOTHES);
-	private final Subcategory subcategory = Subcategory.of(category, SubcategoryName.MAKEUP);
+	private final Subcategory subcategory = Subcategory.of(category, SubcategoryType.MAKEUP);
 
 	private final Product product = Product.of(
 		"name",

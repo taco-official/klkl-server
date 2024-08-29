@@ -20,7 +20,7 @@ import taco.klkl.domain.category.dao.CategoryRepository;
 import taco.klkl.domain.category.domain.Category;
 import taco.klkl.domain.category.domain.CategoryType;
 import taco.klkl.domain.category.domain.Subcategory;
-import taco.klkl.domain.category.domain.SubcategoryName;
+import taco.klkl.domain.category.domain.SubcategoryType;
 import taco.klkl.domain.category.dto.response.CategoryResponse;
 import taco.klkl.domain.category.exception.CategoryNotFoundException;
 
@@ -36,8 +36,8 @@ class CategoryServiceImplTest {
 
 	private final Category category = Category.of(CategoryType.FOOD);
 	private final Category category2 = Category.of(CategoryType.CLOTHES);
-	private final Subcategory subcategory1 = Subcategory.of(category, SubcategoryName.SNACK);
-	private final Subcategory subcategory2 = Subcategory.of(category, SubcategoryName.INSTANT_FOOD);
+	private final Subcategory subcategory1 = Subcategory.of(category, SubcategoryType.SNACK);
+	private final Subcategory subcategory2 = Subcategory.of(category, SubcategoryType.INSTANT_FOOD);
 	private final List<Subcategory> subcategories = Arrays.asList(subcategory1, subcategory2);
 
 	@Test
@@ -78,8 +78,8 @@ class CategoryServiceImplTest {
 
 		//then
 		assertNotNull(response);
-		assertEquals(SubcategoryName.SNACK.getKoreanName(), response.subcategories().get(0).name());
-		assertEquals(SubcategoryName.INSTANT_FOOD.getKoreanName(), response.subcategories().get(1).name());
+		assertEquals(SubcategoryType.SNACK.getName(), response.subcategories().get(0).name());
+		assertEquals(SubcategoryType.INSTANT_FOOD.getName(), response.subcategories().get(1).name());
 
 		verify(categoryRepository, times(1)).findById(1L);
 	}

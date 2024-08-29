@@ -22,7 +22,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import taco.klkl.domain.category.domain.Category;
 import taco.klkl.domain.category.domain.CategoryType;
 import taco.klkl.domain.category.domain.Subcategory;
-import taco.klkl.domain.category.domain.SubcategoryName;
+import taco.klkl.domain.category.domain.SubcategoryType;
 import taco.klkl.domain.comment.domain.Comment;
 import taco.klkl.domain.comment.dto.request.CommentCreateUpdateRequest;
 import taco.klkl.domain.comment.dto.response.CommentResponse;
@@ -94,7 +94,7 @@ public class CommentControllerTest {
 
 	private final Category category = Category.of(CategoryType.FOOD);
 
-	private final Subcategory subcategory = Subcategory.of(category, SubcategoryName.INSTANT_FOOD);
+	private final Subcategory subcategory = Subcategory.of(category, SubcategoryType.INSTANT_FOOD);
 
 	private final Product product = Product.of(
 		"name",

@@ -15,7 +15,7 @@ import org.mockito.MockitoAnnotations;
 import taco.klkl.domain.category.domain.Category;
 import taco.klkl.domain.category.domain.CategoryType;
 import taco.klkl.domain.category.domain.Subcategory;
-import taco.klkl.domain.category.domain.SubcategoryName;
+import taco.klkl.domain.category.domain.SubcategoryType;
 import taco.klkl.domain.category.domain.Tag;
 import taco.klkl.domain.category.domain.TagName;
 import taco.klkl.domain.category.dto.response.TagResponse;
@@ -67,7 +67,7 @@ class ProductSimpleResponseTest {
 		Category category = Category.of(CategoryType.FOOD);
 		subcategory = Subcategory.of(
 			category,
-			SubcategoryName.INSTANT_FOOD
+			SubcategoryType.INSTANT_FOOD
 		);
 
 		Tag tag1 = Tag.of(TagName.CILANTRO);
