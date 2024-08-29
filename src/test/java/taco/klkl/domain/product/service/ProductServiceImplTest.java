@@ -111,7 +111,7 @@ class ProductServiceImplTest {
 
 		user = UserConstants.TEST_USER;
 
-		Region region = Region.of(RegionType.SOUTHEAST_ASIA);
+		Region region = Region.from(RegionType.SOUTHEAST_ASIA);
 		currency = Currency.of(
 			CurrencyType.THAI_BAHT
 		);

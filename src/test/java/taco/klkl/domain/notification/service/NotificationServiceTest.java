@@ -82,7 +82,7 @@ public class NotificationServiceTest {
 			26,
 			"나는 해적왕이 될 사나이다.");
 
-		Region region = Region.of(RegionType.SOUTHEAST_ASIA);
+		Region region = Region.from(RegionType.SOUTHEAST_ASIA);
 		Currency currency = Currency.of(
 			CurrencyType.THAI_BAHT
 		);

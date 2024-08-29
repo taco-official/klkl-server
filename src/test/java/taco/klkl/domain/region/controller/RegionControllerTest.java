@@ -39,9 +39,9 @@ class RegionControllerTest {
 	@MockBean
 	RegionService regionService;
 
-	private final Region region1 = Region.of(RegionType.NORTHEAST_ASIA);
-	private final Region region2 = Region.of(RegionType.SOUTHEAST_ASIA);
-	private final Region region3 = Region.of(RegionType.ETC);
+	private final Region region1 = Region.from(RegionType.NORTHEAST_ASIA);
+	private final Region region2 = Region.from(RegionType.SOUTHEAST_ASIA);
+	private final Region region3 = Region.from(RegionType.ETC);
 	private final Currency currency1 = Currency.of(CurrencyType.JAPANESE_YEN);
 	private final Country country1 = Country.of(
 		CountryType.JAPAN,
@@ -74,9 +74,9 @@ class RegionControllerTest {
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
 			.andExpect(jsonPath("$.data", hasSize(3)))
-			.andExpect(jsonPath("$.data[0].name", is(region1.getName().getKoreanName())))
-			.andExpect(jsonPath("$.data[1].name", is(region2.getName().getKoreanName())))
-			.andExpect(jsonPath("$.data[2].name", is(region3.getName().getKoreanName())))
+			.andExpect(jsonPath("$.data[0].name", is(region1.getName())))
+			.andExpect(jsonPath("$.data[1].name", is(region2.getName())))
+			.andExpect(jsonPath("$.data[2].name", is(region3.getName())))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
 
 		verify(regionService, times(1)).findAllRegions();
@@ -122,7 +122,7 @@ class RegionControllerTest {
 		// given
 		Region mockRegion = mock(Region.class);
 		RegionRepository regionRepository = mock(RegionRepository.class);
-		when(mockRegion.getName()).thenReturn(RegionType.NORTHEAST_ASIA);
+		when(mockRegion.getName()).thenReturn(RegionType.NORTHEAST_ASIA.getName());
 		when(regionRepository.findById(1L)).thenReturn(Optional.of(mockRegion));
 		when(mockRegion.getCountries()).thenReturn(countryList);
 		List<CountryResponse> responseDto = countryList.stream().map(CountryResponse::from).toList();

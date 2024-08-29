@@ -49,7 +49,7 @@ class ProductSimpleResponseTest {
 		when(mockUser.getId()).thenReturn(1L);
 		when(mockUser.getName()).thenReturn("Test User");
 
-		Region region = Region.of(RegionType.SOUTHEAST_ASIA);
+		Region region = Region.from(RegionType.SOUTHEAST_ASIA);
 		currency = Currency.of(
 			CurrencyType.THAI_BAHT
 		);

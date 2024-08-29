@@ -42,7 +42,7 @@ public class CountryControllerTest {
 	@MockBean
 	private CountryRepository countryRepository;
 
-	private final Region region = Region.of(RegionType.NORTHEAST_ASIA);
+	private final Region region = Region.from(RegionType.NORTHEAST_ASIA);
 	private final Currency currency1 = Currency.of(CurrencyType.JAPANESE_YEN);
 	private final Country country1 = Country.of(
 		CountryType.JAPAN,

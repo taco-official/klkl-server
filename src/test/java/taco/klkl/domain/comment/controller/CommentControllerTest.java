@@ -77,7 +77,7 @@ public class CommentControllerTest {
 		requestDto.description()
 	);
 
-	private final Region region = Region.of(RegionType.SOUTHEAST_ASIA);
+	private final Region region = Region.from(RegionType.SOUTHEAST_ASIA);
 
 	private final Currency currency = Currency.of(
 		CurrencyType.MALAYSIAN_RINGGIT
