@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import taco.klkl.domain.region.dao.CityRepository;
 import taco.klkl.domain.region.domain.City;
-import taco.klkl.domain.region.domain.CityType;
 import taco.klkl.domain.region.dto.response.CityResponse;
 
 @Slf4j
@@ -23,13 +22,13 @@ public class CityServiceImpl implements CityService {
 	private final CityRepository cityRepository;
 
 	@Override
-	public List<CityResponse> findAllCitiesByCityTypes(final List<CityType> cityTypes) {
+	public List<CityResponse> findAllCitiesByPartialString(final String partialString) {
 
-		if (cityTypes == null || cityTypes.isEmpty()) {
+		if (partialString == null || partialString.isEmpty()) {
 			return List.of();
 		}
 
-		final List<City> findCities = cityRepository.findAllByNameIn(cityTypes);
+		final List<City> findCities = cityRepository.findAllByNameLike(partialString);
 
 		return findCities.stream()
 			.map(CityResponse::from)

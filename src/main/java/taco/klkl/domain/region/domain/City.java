@@ -17,6 +17,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class City {
 
+	private CityType cityType;
+
 	@Id
 	@Column(name = "city_id")
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -37,20 +39,21 @@ public class City {
 		length = 50,
 		nullable = false
 	)
-	private CityType name;
+	private String name;
 
 	private City(
-		final Country country,
-		final CityType name
+		final CityType cityType,
+		final Country country
 	) {
+		this.cityType = cityType;
 		this.country = country;
-		this.name = name;
+		this.name = cityType.getName();
 	}
 
 	public static City of(
-		final Country country,
-		final CityType name
+		final CityType cityType,
+		final Country country
 	) {
-		return new City(country, name);
+		return new City(cityType, country);
 	}
 }

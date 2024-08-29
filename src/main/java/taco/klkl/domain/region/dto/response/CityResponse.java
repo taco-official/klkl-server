@@ -14,7 +14,7 @@ public record CityResponse(
 	public static CityResponse from(final City city) {
 		return new CityResponse(
 			city.getId(),
-			city.getName().getKoreanName()
+			city.getName()
 		);
 	}
 

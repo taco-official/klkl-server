@@ -14,7 +14,6 @@ import taco.klkl.domain.category.dto.response.CategoryResponse;
 import taco.klkl.domain.category.dto.response.SubcategoryResponse;
 import taco.klkl.domain.category.service.CategoryService;
 import taco.klkl.domain.category.service.SubcategoryService;
-import taco.klkl.domain.region.domain.CityType;
 import taco.klkl.domain.region.dto.response.CityResponse;
 import taco.klkl.domain.region.dto.response.CountrySimpleResponse;
 import taco.klkl.domain.region.service.CityService;
@@ -35,28 +34,27 @@ public class SearchServiceImpl implements SearchService {
 
 	@Override
 	public SearchResponse findSearchResult(final String queryParam) {
-		final List<CountrySimpleResponse> findCountries = getCountriesByQueryParam(queryParam);
-		final List<CityResponse> findCities = getCitiesByQueryParam(queryParam);
-		final List<CategoryResponse> findCategories = getCategoriesByQueryParam(queryParam);
-		final List<SubcategoryResponse> findSubcategories = getSubcategoriesByQueryParam(queryParam);
-		return SearchResponse.of(findCountries, findCities, findCategories, findSubcategories);
+		final List<CountrySimpleResponse> countries = findCountriesByQueryParam(queryParam);
+		final List<CityResponse> cities = findCitiesByQueryParam(queryParam);
+		final List<CategoryResponse> categories = findCategoriesByQueryParam(queryParam);
+		final List<SubcategoryResponse> subcategories = findSubcategoriesByQueryParam(queryParam);
+		return SearchResponse.of(countries, cities, categories, subcategories);
 	}
 
-	private List<CountrySimpleResponse> getCountriesByQueryParam(final String queryParam) {
+	private List<CountrySimpleResponse> findCountriesByQueryParam(final String queryParam) {
 		return countryService.findAllCountriesByPartialString(queryParam);
 	}
 
-	private List<CityResponse> getCitiesByQueryParam(final String queryParam) {
-		final List<CityType> cityTypes = CityType.getCityTypesByPartialString(queryParam);
-		return cityService.findAllCitiesByCityTypes(cityTypes);
+	private List<CityResponse> findCitiesByQueryParam(final String queryParam) {
+		return cityService.findAllCitiesByPartialString(queryParam);
 	}
 
-	private List<CategoryResponse> getCategoriesByQueryParam(final String queryParam) {
+	private List<CategoryResponse> findCategoriesByQueryParam(final String queryParam) {
 		final List<CategoryName> categoryNames = CategoryName.findByPartialString(queryParam);
 		return categoryService.findAllCategoriesByCategoryNames(categoryNames);
 	}
 
-	private List<SubcategoryResponse> getSubcategoriesByQueryParam(final String queryParam) {
+	private List<SubcategoryResponse> findSubcategoriesByQueryParam(final String queryParam) {
 		final List<SubcategoryName> subcategoryNames = SubcategoryName.findByPartialString(queryParam);
 		return subcategoryService.findAllSubcategoriesBySubcategoryNames(subcategoryNames);
 	}
