@@ -19,11 +19,10 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import taco.klkl.domain.category.dao.CategoryRepository;
 import taco.klkl.domain.category.domain.Category;
-import taco.klkl.domain.category.domain.CategoryName;
+import taco.klkl.domain.category.domain.CategoryType;
 import taco.klkl.domain.category.domain.Subcategory;
 import taco.klkl.domain.category.domain.SubcategoryName;
 import taco.klkl.domain.category.dto.response.CategoryResponse;
-import taco.klkl.domain.category.dto.response.CategoryWithSubcategoryResponse;
 import taco.klkl.domain.category.dto.response.SubcategoryResponse;
 import taco.klkl.domain.category.exception.CategoryNotFoundException;
 import taco.klkl.domain.category.service.CategoryService;
@@ -38,7 +37,7 @@ public class CategoryControllerTest {
 	@MockBean
 	private CategoryService categoryService;
 
-	private final Category category = Category.of(CategoryName.FOOD);
+	private final Category category = Category.of(CategoryType.FOOD);
 	private final Subcategory subcategory1 = Subcategory.of(category, SubcategoryName.DRESS);
 	private final Subcategory subcategory2 = Subcategory.of(category, SubcategoryName.HAIR_CARE);
 	private final List<Subcategory> subcategories = Arrays.asList(subcategory1, subcategory2);
@@ -83,11 +82,11 @@ public class CategoryControllerTest {
 		Category mockCategory = mock(Category.class);
 		CategoryRepository mockCategoryRepository = mock(CategoryRepository.class);
 		when(mockCategory.getId()).thenReturn(id);
-		when(mockCategory.getName()).thenReturn(CategoryName.FOOD);
+		when(mockCategory.getName()).thenReturn(CategoryType.FOOD.getName());
 
 		when(mockCategoryRepository.findById(id)).thenReturn(Optional.of(mockCategory));
 		when(mockCategory.getSubcategories()).thenReturn(subcategories);
-		CategoryWithSubcategoryResponse response = CategoryWithSubcategoryResponse.from(mockCategory);
+		CategoryResponse response = CategoryResponse.from(mockCategory);
 
 		// when
 		when(categoryService.findSubCategoriesByCategoryId(id)).thenReturn(response);
@@ -98,7 +97,7 @@ public class CategoryControllerTest {
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
 			.andExpect(jsonPath("$.data.id", is(1)))
-			.andExpect(jsonPath("$.data.name", is(CategoryName.FOOD.getKoreanName())))
+			.andExpect(jsonPath("$.data.name", is(CategoryType.FOOD.getName())))
 			.andExpect(jsonPath("$.data.subcategories[0].id", is(subcategory1.getId())))
 			.andExpect(jsonPath("$.data.subcategories[0].name", is(SubcategoryName.DRESS.getKoreanName())))
 			.andExpect(jsonPath("$.data.subcategories[1].id", is(subcategory2.getId())))

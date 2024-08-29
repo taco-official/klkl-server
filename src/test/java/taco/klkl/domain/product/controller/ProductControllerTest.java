@@ -24,7 +24,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import taco.klkl.domain.category.domain.CategoryName;
+import taco.klkl.domain.category.domain.CategoryType;
 import taco.klkl.domain.category.dto.response.SubcategoryResponse;
 import taco.klkl.domain.category.dto.response.TagResponse;
 import taco.klkl.domain.product.domain.Rating;
@@ -101,7 +101,7 @@ public class ProductControllerTest {
 			10,
 			Rating.FIVE.getValue(),
 			CountryType.THAILAND.getName(),
-			CategoryName.FOOD.getKoreanName(),
+			CategoryType.FOOD.getName(),
 			Set.of(tagResponse1, tagResponse2)
 		);
 		productDetailResponse = new ProductDetailResponse(

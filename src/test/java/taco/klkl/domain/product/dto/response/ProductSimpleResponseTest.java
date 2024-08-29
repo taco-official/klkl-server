@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.MockitoAnnotations;
 
 import taco.klkl.domain.category.domain.Category;
-import taco.klkl.domain.category.domain.CategoryName;
+import taco.klkl.domain.category.domain.CategoryType;
 import taco.klkl.domain.category.domain.Subcategory;
 import taco.klkl.domain.category.domain.SubcategoryName;
 import taco.klkl.domain.category.domain.Tag;
@@ -64,7 +64,7 @@ class ProductSimpleResponseTest {
 			country
 		);
 
-		Category category = Category.of(CategoryName.FOOD);
+		Category category = Category.of(CategoryType.FOOD);
 		subcategory = Subcategory.of(
 			category,
 			SubcategoryName.INSTANT_FOOD
@@ -103,7 +103,7 @@ class ProductSimpleResponseTest {
 		assertThat(dto.likeCount()).isEqualTo(product.getLikeCount());
 		assertThat(dto.rating()).isEqualTo(product.getRating().getValue());
 		assertThat(dto.countryName()).isEqualTo(product.getCity().getCountry().getName());
-		assertThat(dto.categoryName()).isEqualTo(product.getSubcategory().getCategory().getName().getKoreanName());
+		assertThat(dto.categoryName()).isEqualTo(product.getSubcategory().getCategory().getName());
 	}
 
 	@Test
@@ -124,7 +124,7 @@ class ProductSimpleResponseTest {
 			product.getLikeCount(),
 			product.getRating().getValue(),
 			product.getCity().getCountry().getName(),
-			product.getSubcategory().getCategory().getName().getKoreanName(),
+			product.getSubcategory().getCategory().getName(),
 			tags
 		);
 
@@ -135,7 +135,7 @@ class ProductSimpleResponseTest {
 		assertThat(dto.likeCount()).isEqualTo(product.getLikeCount());
 		assertThat(dto.rating()).isEqualTo(product.getRating().getValue());
 		assertThat(dto.countryName()).isEqualTo(product.getCity().getCountry().getName());
-		assertThat(dto.categoryName()).isEqualTo(product.getSubcategory().getCategory().getName().getKoreanName());
+		assertThat(dto.categoryName()).isEqualTo(product.getSubcategory().getCategory().getName());
 		assertThat(dto.tags()).isEqualTo(tags);
 	}
 }

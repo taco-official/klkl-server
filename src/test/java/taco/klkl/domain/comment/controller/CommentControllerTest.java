@@ -20,7 +20,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import taco.klkl.domain.category.domain.Category;
-import taco.klkl.domain.category.domain.CategoryName;
+import taco.klkl.domain.category.domain.CategoryType;
 import taco.klkl.domain.category.domain.Subcategory;
 import taco.klkl.domain.category.domain.SubcategoryName;
 import taco.klkl.domain.comment.domain.Comment;
@@ -92,7 +92,7 @@ public class CommentControllerTest {
 
 	private final City city = City.of(CityType.KUALA_LUMPUR, country);
 
-	private final Category category = Category.of(CategoryName.FOOD);
+	private final Category category = Category.of(CategoryType.FOOD);
 
 	private final Subcategory subcategory = Subcategory.of(category, SubcategoryName.INSTANT_FOOD);
 

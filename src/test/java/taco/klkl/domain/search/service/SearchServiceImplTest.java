@@ -14,7 +14,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import taco.klkl.domain.category.domain.Category;
-import taco.klkl.domain.category.domain.CategoryName;
+import taco.klkl.domain.category.domain.CategoryType;
 import taco.klkl.domain.category.domain.Subcategory;
 import taco.klkl.domain.category.domain.SubcategoryName;
 import taco.klkl.domain.category.dto.response.CategoryResponse;
@@ -59,7 +59,7 @@ class SearchServiceImplTest {
 
 	private final Country country = Country.of(CountryType.MALAYSIA, region, "photo", currency);
 	private final City city = City.of(CityType.BORACAY, country);
-	private final Category category = Category.of(CategoryName.CLOTHES);
+	private final Category category = Category.of(CategoryType.CLOTHES);
 	private final Subcategory subcategory = Subcategory.of(category, SubcategoryName.MAKEUP);
 
 	@Test
@@ -77,7 +77,7 @@ class SearchServiceImplTest {
 
 		when(countryService.findAllCountriesByPartialString(any(String.class))).thenReturn(mockCountries);
 		when(cityService.findAllCitiesByPartialString(any(String.class))).thenReturn(mockCities);
-		when(categoryService.findAllCategoriesByCategoryNames(any(List.class))).thenReturn(mockCategories);
+		when(categoryService.findAllCategoriesByPartialString(any(String.class))).thenReturn(mockCategories);
 		when(subcategoryService.findAllSubcategoriesBySubcategoryNames(any(List.class))).thenReturn(mockSubcategories);
 
 		// when

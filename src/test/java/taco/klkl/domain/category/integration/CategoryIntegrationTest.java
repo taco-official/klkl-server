@@ -16,7 +16,6 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import jakarta.transaction.Transactional;
 import taco.klkl.domain.category.dto.response.CategoryResponse;
-import taco.klkl.domain.category.dto.response.CategoryWithSubcategoryResponse;
 import taco.klkl.domain.category.service.CategoryService;
 import taco.klkl.global.error.exception.ErrorCode;
 
@@ -57,7 +56,7 @@ class CategoryIntegrationTest {
 	@DisplayName("valid한 id값이 들어왔을 때 테스트")
 	public void testGetCategoriesWithValidId() throws Exception {
 		//given
-		CategoryWithSubcategoryResponse categoryWithSubcategoryResponse =
+		CategoryResponse categoryResponse =
 			categoryService.findSubCategoriesByCategoryId(300L);
 
 		//when, then
@@ -65,16 +64,16 @@ class CategoryIntegrationTest {
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
-			.andExpect(jsonPath("$.data.id", is(categoryWithSubcategoryResponse.id().intValue())))
-			.andExpect(jsonPath("$.data.name", is(categoryWithSubcategoryResponse.name())))
+			.andExpect(jsonPath("$.data.id", is(categoryResponse.id().intValue())))
+			.andExpect(jsonPath("$.data.name", is(categoryResponse.name())))
 			.andExpect(jsonPath("$.data.subcategories[0].id",
-				is(categoryWithSubcategoryResponse.subcategories().get(0).id().intValue())))
+				is(categoryResponse.subcategories().get(0).id().intValue())))
 			.andExpect(jsonPath("$.data.subcategories[0].name",
-				is(categoryWithSubcategoryResponse.subcategories().get(0).name())))
+				is(categoryResponse.subcategories().get(0).name())))
 			.andExpect(jsonPath("$.data.subcategories[1].id",
-				is(categoryWithSubcategoryResponse.subcategories().get(1).id().intValue())))
+				is(categoryResponse.subcategories().get(1).id().intValue())))
 			.andExpect(jsonPath("$.data.subcategories[1].name",
-				is(categoryWithSubcategoryResponse.subcategories().get(1).name())));
+				is(categoryResponse.subcategories().get(1).name())));
 	}
 
 	@Test

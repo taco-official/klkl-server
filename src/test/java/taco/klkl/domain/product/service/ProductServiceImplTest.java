@@ -29,7 +29,7 @@ import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import taco.klkl.domain.category.domain.Category;
-import taco.klkl.domain.category.domain.CategoryName;
+import taco.klkl.domain.category.domain.CategoryType;
 import taco.klkl.domain.category.domain.QCategory;
 import taco.klkl.domain.category.domain.QSubcategory;
 import taco.klkl.domain.category.domain.QTag;
@@ -126,7 +126,7 @@ class ProductServiceImplTest {
 			country
 		);
 
-		Category category = Category.of(CategoryName.FOOD);
+		Category category = Category.of(CategoryType.FOOD);
 		subcategory = Subcategory.of(
 			category,
 			SubcategoryName.INSTANT_FOOD
