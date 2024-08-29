@@ -39,7 +39,7 @@ public class CityServiceImplTest {
 	@DisplayName("부분 문자열로 도시 조회")
 	void testGetCitiesByCityTypes() {
 		// given
-		String partialName = "도";
+		String partialName = "foo";
 		List<City> cities = Arrays.asList(city1, city2);
 		CityResponse city1ResponseDto = CityResponse.from(city1);
 		CityResponse city2ResponseDto = CityResponse.from(city2);
