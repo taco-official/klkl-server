@@ -80,8 +80,7 @@ public class CommentControllerTest {
 	private final Region region = Region.of(RegionType.SOUTHEAST_ASIA);
 
 	private final Currency currency = Currency.of(
-		CurrencyType.MALAYSIAN_RINGGIT,
-		"image/malaysia-ringgit.jpg"
+		CurrencyType.MALAYSIAN_RINGGIT
 	);
 
 	private final Country country = Country.of(

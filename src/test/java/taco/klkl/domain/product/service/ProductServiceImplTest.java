@@ -113,8 +113,7 @@ class ProductServiceImplTest {
 
 		Region region = Region.of(RegionType.SOUTHEAST_ASIA);
 		currency = Currency.of(
-			CurrencyType.THAI_BAHT,
-			"image/baht.jpg"
+			CurrencyType.THAI_BAHT
 		);
 		Country country = Country.of(
 			CountryType.JAPAN,

@@ -39,7 +39,7 @@ class RegionServiceImplTest {
 	private final Region region1 = Region.of(RegionType.NORTHEAST_ASIA);
 	private final Region region2 = Region.of(RegionType.SOUTHEAST_ASIA);
 	private final Region region3 = Region.of(RegionType.ETC);
-	private final Currency currency1 = Currency.of(CurrencyType.JAPANESE_YEN, "flagUrl");
+	private final Currency currency1 = Currency.of(CurrencyType.JAPANESE_YEN);
 	private final Country country1 = Country.of(
 		CountryType.JAPAN,
 		region1,

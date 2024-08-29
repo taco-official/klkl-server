@@ -293,7 +293,6 @@ public class ProductControllerTest {
 			.andExpect(jsonPath("$.data.currency.id",
 				is(productDetailResponse.currency().id().intValue())))
 			.andExpect(jsonPath("$.data.currency.code", is(productDetailResponse.currency().code())))
-			.andExpect(jsonPath("$.data.currency.flag", is(productDetailResponse.currency().flag())))
 			.andExpect(jsonPath("$.data.tags", hasSize(productSimpleResponse.tags().size())))
 			.andExpect(jsonPath("$.data.createdAt", notNullValue()))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
@@ -338,7 +337,6 @@ public class ProductControllerTest {
 			.andExpect(jsonPath("$.data.currency.id",
 				is(productDetailResponse.currency().id().intValue())))
 			.andExpect(jsonPath("$.data.currency.code", is(productDetailResponse.currency().code())))
-			.andExpect(jsonPath("$.data.currency.flag", is(productDetailResponse.currency().flag())))
 			.andExpect(jsonPath("$.data.tags", hasSize(productSimpleResponse.tags().size())))
 			.andExpect(jsonPath("$.data.createdAt", notNullValue()))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
@@ -382,7 +380,6 @@ public class ProductControllerTest {
 			.andExpect(jsonPath("$.data.currency.id",
 				is(productDetailResponse.currency().id().intValue())))
 			.andExpect(jsonPath("$.data.currency.code", is(productDetailResponse.currency().code())))
-			.andExpect(jsonPath("$.data.currency.flag", is(productDetailResponse.currency().flag())))
 			.andExpect(jsonPath("$.data.tags", hasSize(productSimpleResponse.tags().size())))
 			.andExpect(jsonPath("$.data.createdAt", notNullValue()))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
