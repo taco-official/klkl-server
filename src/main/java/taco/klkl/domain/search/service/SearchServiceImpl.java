@@ -15,7 +15,6 @@ import taco.klkl.domain.category.dto.response.SubcategoryResponse;
 import taco.klkl.domain.category.service.CategoryService;
 import taco.klkl.domain.category.service.SubcategoryService;
 import taco.klkl.domain.region.domain.CityType;
-import taco.klkl.domain.region.domain.CountryType;
 import taco.klkl.domain.region.dto.response.CityResponse;
 import taco.klkl.domain.region.dto.response.CountrySimpleResponse;
 import taco.klkl.domain.region.service.CityService;
@@ -44,23 +43,22 @@ public class SearchServiceImpl implements SearchService {
 	}
 
 	private List<CountrySimpleResponse> getCountriesByQueryParam(final String queryParam) {
-		final List<CountryType> countryTypes = CountryType.findCountryTypesByPartialString(queryParam);
-		return countryService.getAllCountriesByCountryTypes(countryTypes);
+		return countryService.findAllCountriesByPartialString(queryParam);
 	}
 
 	private List<CityResponse> getCitiesByQueryParam(final String queryParam) {
 		final List<CityType> cityTypes = CityType.getCityTypesByPartialString(queryParam);
-		return cityService.getAllCitiesByCityTypes(cityTypes);
+		return cityService.findAllCitiesByCityTypes(cityTypes);
 	}
 
 	private List<CategoryResponse> getCategoriesByQueryParam(final String queryParam) {
 		final List<CategoryName> categoryNames = CategoryName.findByPartialString(queryParam);
-		return categoryService.findCategoriesByCategoryNames(categoryNames);
+		return categoryService.findAllCategoriesByCategoryNames(categoryNames);
 	}
 
 	private List<SubcategoryResponse> getSubcategoriesByQueryParam(final String queryParam) {
 		final List<SubcategoryName> subcategoryNames = SubcategoryName.findByPartialString(queryParam);
-		return subcategoryService.findSubcategoriesBySubcategoryNames(subcategoryNames);
+		return subcategoryService.findAllSubcategoriesBySubcategoryNames(subcategoryNames);
 	}
 
 }

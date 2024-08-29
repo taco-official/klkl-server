@@ -24,7 +24,9 @@ public class SubcategoryServiceImpl implements SubcategoryService {
 	private final SubcategoryRepository subcategoryRepository;
 
 	@Override
-	public List<SubcategoryResponse> findSubcategoriesBySubcategoryNames(final List<SubcategoryName> subcategoryNames) {
+	public List<SubcategoryResponse> findAllSubcategoriesBySubcategoryNames(
+		final List<SubcategoryName> subcategoryNames
+	) {
 		if (subcategoryNames == null || subcategoryNames.isEmpty()) {
 			return List.of();
 		}

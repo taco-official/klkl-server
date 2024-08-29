@@ -23,7 +23,7 @@ public class CityServiceImpl implements CityService {
 	private final CityRepository cityRepository;
 
 	@Override
-	public List<CityResponse> getAllCitiesByCityTypes(final List<CityType> cityTypes) {
+	public List<CityResponse> findAllCitiesByCityTypes(final List<CityType> cityTypes) {
 
 		if (cityTypes == null || cityTypes.isEmpty()) {
 			return List.of();

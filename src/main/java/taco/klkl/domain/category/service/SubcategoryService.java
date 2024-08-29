@@ -11,7 +11,7 @@ import taco.klkl.domain.category.dto.response.SubcategoryResponse;
 @Service
 public interface SubcategoryService {
 
-	List<SubcategoryResponse> findSubcategoriesBySubcategoryNames(final List<SubcategoryName> subcategoryNames);
+	List<SubcategoryResponse> findAllSubcategoriesBySubcategoryNames(final List<SubcategoryName> subcategoryNames);
 
 	List<Subcategory> findSubcategoriesBySubcategoryIds(final List<Long> subcategoryIds);
 }

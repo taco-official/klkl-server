@@ -15,5 +15,5 @@ public interface CategoryService {
 
 	CategoryWithSubcategoryResponse findSubCategoriesByCategoryId(final Long categoryId);
 
-	List<CategoryResponse> findCategoriesByCategoryNames(final List<CategoryName> categoryNames);
+	List<CategoryResponse> findAllCategoriesByCategoryNames(final List<CategoryName> categoryNames);
 }

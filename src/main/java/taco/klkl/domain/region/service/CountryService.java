@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import taco.klkl.domain.region.domain.CountryType;
 import taco.klkl.domain.region.dto.response.CityResponse;
 import taco.klkl.domain.region.dto.response.CountryResponse;
 import taco.klkl.domain.region.dto.response.CountrySimpleResponse;
@@ -17,5 +16,5 @@ public interface CountryService {
 
 	List<CityResponse> findCitiesByCountryId(final Long countryId);
 
-	List<CountrySimpleResponse> getAllCountriesByCountryTypes(final List<CountryType> countryTypes);
+	List<CountrySimpleResponse> findAllCountriesByPartialString(final String partialString);
 }

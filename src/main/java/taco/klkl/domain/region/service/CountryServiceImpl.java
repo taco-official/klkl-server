@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import taco.klkl.domain.region.dao.CountryRepository;
 import taco.klkl.domain.region.domain.Country;
-import taco.klkl.domain.region.domain.CountryType;
 import taco.klkl.domain.region.dto.response.CityResponse;
 import taco.klkl.domain.region.dto.response.CountryResponse;
 import taco.klkl.domain.region.dto.response.CountrySimpleResponse;
@@ -61,13 +60,13 @@ public class CountryServiceImpl implements CountryService {
 	}
 
 	@Override
-	public List<CountrySimpleResponse> getAllCountriesByCountryTypes(final List<CountryType> countryTypes) {
+	public List<CountrySimpleResponse> findAllCountriesByPartialString(final String partialString) {
 
-		if (countryTypes == null || countryTypes.isEmpty()) {
+		if (partialString == null || partialString.isEmpty()) {
 			return List.of();
 		}
 
-		final List<Country> findCountries = countryRepository.findAllByNameIn(countryTypes);
+		final List<Country> findCountries = countryRepository.findAllByNameLike(partialString);
 
 		return findCountries.stream()
 			.map(CountrySimpleResponse::from)

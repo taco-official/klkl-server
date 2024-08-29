@@ -48,20 +48,4 @@ public enum CountryType {
 			.findFirst()
 			.orElseThrow(CountryTypeNotFoundException::new);
 	}
-
-	/**
-	 * 부분문자열을 포함하는 CountryType을 찾는 함수
-	 * @param partialString 부분 문자열
-	 * @return 부분문자열을 포함하는 CountryType의 리스트
-	 */
-	public static List<CountryType> findCountryTypesByPartialString(final String partialString) {
-		if (partialString == null || partialString.isEmpty()) {
-			return List.of();
-		}
-		String regex = ".*" + Pattern.quote(partialString) + ".*";
-		Pattern pattern = Pattern.compile(regex);
-		return Arrays.stream(CountryType.values())
-			.filter(c -> pattern.matcher(c.getName()).matches())
-			.toList();
-	}
 }

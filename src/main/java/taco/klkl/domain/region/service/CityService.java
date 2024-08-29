@@ -10,6 +10,6 @@ import taco.klkl.domain.region.dto.response.CityResponse;
 @Service
 public interface CityService {
 
-	List<CityResponse> getAllCitiesByCityTypes(final List<CityType> cityTypes);
+	List<CityResponse> findAllCitiesByCityTypes(final List<CityType> cityTypes);
 
 }

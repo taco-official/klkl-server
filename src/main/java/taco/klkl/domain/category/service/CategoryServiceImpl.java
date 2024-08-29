@@ -40,7 +40,7 @@ public class CategoryServiceImpl implements CategoryService {
 	}
 
 	@Override
-	public List<CategoryResponse> findCategoriesByCategoryNames(final List<CategoryName> categoryNames) {
+	public List<CategoryResponse> findAllCategoriesByCategoryNames(final List<CategoryName> categoryNames) {
 		if (categoryNames == null || categoryNames.isEmpty()) {
 			return List.of();
 		}
