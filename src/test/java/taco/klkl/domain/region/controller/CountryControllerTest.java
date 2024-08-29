@@ -77,7 +77,7 @@ public class CountryControllerTest {
 			.andExpect(jsonPath("$.data", hasSize(2)))
 			.andExpect(jsonPath("$.data[0].name", is(country1.getName().getKoreanName())))
 			.andExpect(jsonPath("$.data[1].name", is(country2.getName().getKoreanName())))
-			.andExpect(jsonPath("$.data[0].currency.code", is(country1.getCurrency().getCode().getCodeName())))
+			.andExpect(jsonPath("$.data[0].currency.code", is(country1.getCurrency().getCode().getCode())))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
 
 		verify(countryService, times(1)).findAllCountries();

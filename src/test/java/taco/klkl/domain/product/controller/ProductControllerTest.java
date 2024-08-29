@@ -77,6 +77,7 @@ public class ProductControllerTest {
 		CurrencyResponse currencyResponse = new CurrencyResponse(
 			1L,
 			"currencyCode",
+			"통화단위",
 			"image/flagUrl.jpg"
 		);
 		TagResponse tagResponse1 = new TagResponse(

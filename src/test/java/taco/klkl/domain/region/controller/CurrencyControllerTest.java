@@ -54,8 +54,8 @@ public class CurrencyControllerTest {
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
 			.andExpect(jsonPath("$.data", hasSize(2)))
-			.andExpect(jsonPath("$.data[0].code", is(currency1.getCode().getCodeName())))
-			.andExpect(jsonPath("$.data[1].code", is(currency2.getCode().getCodeName())))
+			.andExpect(jsonPath("$.data[0].code", is(currency1.getCode().getCode())))
+			.andExpect(jsonPath("$.data[1].code", is(currency2.getCode().getCode())))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
 	}
 }
