@@ -22,8 +22,12 @@ public class Currency {
 	@Column(name = "code", length = 3, nullable = false)
 	private CurrencyType code;
 
+	@Column(name = "korean_unit", length = 3, nullable = false)
+	private String koreanUnit;
+
 	private Currency(final CurrencyType code) {
 		this.code = code;
+		this.koreanUnit = code.getKoreanUnit();
 	}
 
 	public static Currency of(final CurrencyType code) {

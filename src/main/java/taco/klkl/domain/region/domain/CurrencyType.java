@@ -9,28 +9,29 @@ import taco.klkl.domain.region.exception.CurrencyTypeNotFoundException;
 @Getter
 @AllArgsConstructor
 public enum CurrencyType {
-	JAPANESE_YEN("JPY"),
+	JAPANESE_YEN("JPY", "엔"),
 
-	CHINESE_YUAN("CNH"),
+	CHINESE_YUAN("CNH", "위안"),
 
-	NEW_TAIWAN_DOLLAR("TWD"),
+	NEW_TAIWAN_DOLLAR("TWD", "달러"),
 
-	THAI_BAHT("THB"),
+	THAI_BAHT("THB", "바트"),
 
-	VIETNAMESE_DONG("VND"),
+	VIETNAMESE_DONG("VND", "동"),
 
-	PHILIPPINE_PESO("PHP"),
+	PHILIPPINE_PESO("PHP", "페"),
 
-	SINGAPORE_DOLLAR("SGD"),
+	SINGAPORE_DOLLAR("SGD", "달러"),
 
-	INDONESIAN_RUPIAH("IDR"),
+	INDONESIAN_RUPIAH("IDR", "루피아"),
 
-	MALAYSIAN_RINGGIT("MYR"),
+	MALAYSIAN_RINGGIT("MYR", "링깃"),
 
-	UNITED_STATES_DOLLAR("USD"),
+	UNITED_STATES_DOLLAR("USD", "달러"),
 	;
 
-	private final String codeName;
+	private final String code;
+	private final String koreanUnit;
 
 	/**
 	 *
@@ -39,7 +40,7 @@ public enum CurrencyType {
 	 */
 	public static CurrencyType getCurrencyTypeByCodeName(String codeName) {
 		return Arrays.stream(CurrencyType.values())
-			.filter(c -> c.getCodeName().equals(codeName))
+			.filter(c -> c.getCode().equals(codeName))
 			.findFirst()
 			.orElseThrow(CurrencyTypeNotFoundException::new);
 	}

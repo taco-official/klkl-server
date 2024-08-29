@@ -11,7 +11,7 @@ public class CurrencyTypeConverter implements AttributeConverter<CurrencyType, S
 		if (currencyType == null) {
 			return null;
 		}
-		return currencyType.getCodeName();
+		return currencyType.getCode();
 	}
 
 	@Override
