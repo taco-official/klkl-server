@@ -52,7 +52,7 @@ class NotificationControllerTest {
 
 	private final User user = UserConstants.TEST_USER;
 	private final Country country = Country.of(CountryType.MALAYSIA, region, "photo", currency);
-	private final City city = City.of(country, CityType.BORACAY);
+	private final City city = City.of(CityType.BORACAY, country);
 	private final Category category = Category.of(CategoryName.CLOTHES);
 	private final Subcategory subcategory = Subcategory.of(category, SubcategoryName.MAKEUP);
 

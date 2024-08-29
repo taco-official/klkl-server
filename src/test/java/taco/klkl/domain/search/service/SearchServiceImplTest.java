@@ -60,10 +60,9 @@ class SearchServiceImplTest {
 	Currency currency;
 
 	private final Country country = Country.of(CountryType.MALAYSIA, region, "photo", currency);
-	private final City city = City.of(country, CityType.BORACAY);
+	private final City city = City.of(CityType.BORACAY, country);
 	private final Category category = Category.of(CategoryName.CLOTHES);
 	private final Subcategory subcategory = Subcategory.of(category, SubcategoryName.MAKEUP);
-	private final User user = UserConstants.TEST_USER;
 
 	@Test
 	@DisplayName("SearchService 테스트")
@@ -79,7 +78,7 @@ class SearchServiceImplTest {
 			SubcategoryResponse.from(subcategory));
 
 		when(countryService.findAllCountriesByPartialString(any(String.class))).thenReturn(mockCountries);
-		when(cityService.findAllCitiesByCityTypes(any(List.class))).thenReturn(mockCities);
+		when(cityService.findAllCitiesByPartialString(any(String.class))).thenReturn(mockCities);
 		when(categoryService.findAllCategoriesByCategoryNames(any(List.class))).thenReturn(mockCategories);
 		when(subcategoryService.findAllSubcategoriesBySubcategoryNames(any(List.class))).thenReturn(mockSubcategories);
 

@@ -53,8 +53,8 @@ public class CountryServiceImplTest {
 		region,
 		"photo",
 		currency1);
-	private final City city1 = City.of(country1, CityType.OSAKA);
-	private final City city2 = City.of(country1, CityType.KYOTO);
+	private final City city1 = City.of(CityType.OSAKA, country1);
+	private final City city2 = City.of(CityType.KYOTO, country1);
 	private final List<City> cities = Arrays.asList(city1, city2);
 
 	@Test
@@ -112,8 +112,8 @@ public class CountryServiceImplTest {
 
 		// then
 		assertThat(findCountries.size()).isEqualTo(cities.size());
-		assertThat(findCountries.get(0).name()).isEqualTo(cities.get(0).getName().getKoreanName());
-		assertThat(findCountries.get(1).name()).isEqualTo(cities.get(1).getName().getKoreanName());
+		assertThat(findCountries.get(0).name()).isEqualTo(cities.get(0).getName());
+		assertThat(findCountries.get(1).name()).isEqualTo(cities.get(1).getName());
 	}
 
 	@Test

@@ -90,7 +90,7 @@ public class CommentControllerTest {
 		currency
 	);
 
-	private final City city = City.of(country, CityType.KUALA_LUMPUR);
+	private final City city = City.of(CityType.KUALA_LUMPUR, country);
 
 	private final Category category = Category.of(CategoryName.FOOD);
 

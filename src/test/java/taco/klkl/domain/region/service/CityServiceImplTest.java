@@ -31,25 +31,24 @@ public class CityServiceImplTest {
 	@Mock
 	Country country;
 
-	private final City city1 = City.of(country, CityType.BEIJING);
-	private final City city2 = City.of(country, CityType.BORACAY);
+	private final City city1 = City.of(CityType.BEIJING, country);
+	private final City city2 = City.of(CityType.BORACAY, country);
 
 	@Test
-	@DisplayName("CityType리스트로 도시 조회")
+	@DisplayName("부분 문자열로 도시 조회")
 	void testGetCitiesByCityTypes() {
 		// given
-		List<CityType> cityTypes = Arrays.asList(CityType.BEIJING, CityType.BORACAY);
+		String partialName = "도";
 		List<City> cities = Arrays.asList(city1, city2);
 		CityResponse city1ResponseDto = CityResponse.from(city1);
 		CityResponse city2ResponseDto = CityResponse.from(city2);
-		List<CityResponse> cityResponses = Arrays.asList(city1ResponseDto, city2ResponseDto);
-		when(cityRepository.findAllByNameIn(cityTypes)).thenReturn(cities);
+		when(cityRepository.findAllByNameLike(partialName)).thenReturn(cities);
 
 		// when
-		List<CityResponse> cityResponseList = cityService.findAllCitiesByCityTypes(cityTypes);
+		List<CityResponse> cityResponseList = cityService.findAllCitiesByPartialString(partialName);
 
 		// then
-		assertThat(cityResponseList).hasSize(cityTypes.size());
+		assertThat(cityResponseList).hasSize(2);
 		assertThat(cityResponseList).containsExactly(city1ResponseDto, city2ResponseDto);
 	}
 }

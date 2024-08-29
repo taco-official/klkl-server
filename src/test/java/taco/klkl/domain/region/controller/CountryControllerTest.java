@@ -54,8 +54,8 @@ public class CountryControllerTest {
 		region,
 		"photo",
 		currency1);
-	private final City city1 = City.of(country1, CityType.OSAKA);
-	private final City city2 = City.of(country1, CityType.KYOTO);
+	private final City city1 = City.of(CityType.OSAKA, country1);
+	private final City city2 = City.of(CityType.KYOTO, country1);
 	private final List<City> cities = Arrays.asList(city1, city2);
 
 	@Test
@@ -117,8 +117,8 @@ public class CountryControllerTest {
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
-			.andExpect(jsonPath("$.data[0].name", is(cities.get(0).getName().getKoreanName())))
-			.andExpect(jsonPath("$.data[1].name", is(cities.get(1).getName().getKoreanName())))
+			.andExpect(jsonPath("$.data[0].name", is(cities.get(0).getName())))
+			.andExpect(jsonPath("$.data[1].name", is(cities.get(1).getName())))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
 
 		verify(countryService, times(1)).findCitiesByCountryId(400L);

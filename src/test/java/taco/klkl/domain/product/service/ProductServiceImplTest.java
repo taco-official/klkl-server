@@ -122,8 +122,8 @@ class ProductServiceImplTest {
 			currency
 		);
 		city = City.of(
-			country,
-			CityType.BANGKOK
+			CityType.BANGKOK,
+			country
 		);
 
 		Category category = Category.of(CategoryName.FOOD);

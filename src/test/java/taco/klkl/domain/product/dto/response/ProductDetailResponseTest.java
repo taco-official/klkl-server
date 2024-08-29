@@ -40,7 +40,7 @@ class ProductDetailResponseTest {
 
 		mockCity = mock(City.class);
 		when(mockCity.getId()).thenReturn(1L);
-		when(mockCity.getName()).thenReturn(CityType.BANGKOK);
+		when(mockCity.getName()).thenReturn(CityType.BANGKOK.getName());
 
 		mockSubcategory = mock(Subcategory.class);
 		when(mockSubcategory.getId()).thenReturn(1L);

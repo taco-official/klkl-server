@@ -93,8 +93,8 @@ public class NotificationServiceTest {
 			currency
 		);
 		City city = City.of(
-			country,
-			CityType.BANGKOK
+			CityType.BANGKOK,
+			country
 		);
 
 		Category category = Category.of(CategoryName.FOOD);
