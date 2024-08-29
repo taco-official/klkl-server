@@ -7,7 +7,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.PrePersist;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import taco.klkl.global.common.constants.UserConstants;
@@ -64,22 +63,18 @@ public class User {
 	)
 	private LocalDateTime createdAt;
 
-	@PrePersist
-	protected void prePersist() {
-		this.createdAt = LocalDateTime.now();
-	}
-
 	private User(
 		final String name,
 		final Gender gender,
 		final Integer age,
 		final String description
 	) {
-		this.profileImageUrl = UserConstants.DEFAULT_PROFILE;
+		this.profileImageUrl = UserConstants.DEFAULT_PROFILE_IMAGE_URL;
 		this.name = name;
 		this.gender = gender;
 		this.age = age;
 		this.description = description;
+		this.createdAt = LocalDateTime.now();
 	}
 
 	public static User of(
