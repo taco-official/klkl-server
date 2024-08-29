@@ -119,7 +119,6 @@ class ProductServiceImplTest {
 		Country country = Country.of(
 			CountryType.JAPAN,
 			region,
-			"image/thailand-flag.jpg",
 			"image/thailand-photo.jpg",
 			currency
 		);

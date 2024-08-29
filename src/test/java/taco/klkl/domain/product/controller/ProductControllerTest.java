@@ -77,7 +77,7 @@ public class ProductControllerTest {
 		CurrencyResponse currencyResponse = new CurrencyResponse(
 			1L,
 			"currencyCode",
-			"image/flag.jpg"
+			"image/flagUrl.jpg"
 		);
 		TagResponse tagResponse1 = new TagResponse(
 			1L,

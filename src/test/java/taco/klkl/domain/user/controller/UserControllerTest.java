@@ -32,8 +32,10 @@ class UserControllerTest {
 
 	@BeforeEach
 	public void setUp() {
-		User user = UserConstants.TEST_USER;
+		final User user = UserConstants.TEST_USER;
+		System.out.println("Test User created - profileImageUrl: " + user.getProfileImageUrl());
 		responseDto = UserDetailResponse.from(user);
+		System.out.println("Test Response DTO: " + responseDto);
 	}
 
 	@Test
@@ -41,6 +43,8 @@ class UserControllerTest {
 	public void testGetMe() throws Exception {
 		// given
 		Mockito.when(userService.getCurrentUser()).thenReturn(responseDto);
+		UserDetailResponse mockedResponse = userService.getCurrentUser();
+		System.out.println("Mocked Response: " + mockedResponse);
 
 		// when & then
 		mockMvc.perform(get("/v1/users/me")

@@ -42,18 +42,16 @@ public class CountryServiceImplTest {
 	CountryRepository countryRepository;
 
 	private final Region region = Region.of(RegionType.NORTHEAST_ASIA);
-	private final Currency currency1 = Currency.of(CurrencyType.JAPANESE_YEN, "flag");
+	private final Currency currency1 = Currency.of(CurrencyType.JAPANESE_YEN, "flagUrl");
 	private final Country country1 = Country.of(
 		CountryType.JAPAN,
 		region,
-		"test",
-		"test",
+		"photo",
 		currency1);
 	private final Country country2 = Country.of(
 		CountryType.TAIWAN,
 		region,
-		"test",
-		"test",
+		"photo",
 		currency1);
 	private final City city1 = City.of(country1, CityType.OSAKA);
 	private final City city2 = City.of(country1, CityType.KYOTO);
