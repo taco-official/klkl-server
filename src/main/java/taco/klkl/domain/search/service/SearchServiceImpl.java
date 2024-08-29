@@ -44,7 +44,7 @@ public class SearchServiceImpl implements SearchService {
 	}
 
 	private List<CountrySimpleResponse> getCountriesByQueryParam(final String queryParam) {
-		final List<CountryType> countryTypes = CountryType.getCountryTypesByPartialString(queryParam);
+		final List<CountryType> countryTypes = CountryType.findCountryTypesByPartialString(queryParam);
 		return countryService.getAllCountriesByCountryTypes(countryTypes);
 	}
 

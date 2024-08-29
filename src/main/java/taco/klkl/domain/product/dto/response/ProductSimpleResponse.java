@@ -28,7 +28,7 @@ public record ProductSimpleResponse(
 			product.getName(),
 			product.getLikeCount(),
 			product.getRating().getValue(),
-			product.getCity().getCountry().getName().getKoreanName(),
+			product.getCity().getCountry().getName(),
 			product.getSubcategory().getCategory().getName().getKoreanName(),
 			ProductUtil.createTagsByProduct(product)
 		);

@@ -20,6 +20,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Country {
 
+	private CountryType countryType;
+
 	@Id
 	@Column(name = "country_id")
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -40,7 +42,7 @@ public class Country {
 		length = 20,
 		nullable = false
 	)
-	private CountryType name;
+	private String name;
 
 	@Column(
 		name = "country_code",
@@ -78,9 +80,10 @@ public class Country {
 		final String photo,
 		final Currency currency
 	) {
+		this.countryType = countryType;
 		this.region = region;
-		this.name = countryType;
-		this.countryCode = name.getCode();
+		this.name = countryType.getName();
+		this.countryCode = countryType.getCode();
 		this.photo = photo;
 		this.currency = currency;
 	}

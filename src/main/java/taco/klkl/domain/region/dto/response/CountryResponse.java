@@ -26,7 +26,7 @@ public record CountryResponse(
 	public static CountryResponse from(final Country country) {
 		return new CountryResponse(
 			country.getId(),
-			country.getName().getKoreanName(),
+			country.getName(),
 			FlagUrlGenerator.generateSvgUrlByCountryCode(country.getCountryCode()),
 			country.getPhoto(),
 			CurrencyResponse.from(country.getCurrency()));

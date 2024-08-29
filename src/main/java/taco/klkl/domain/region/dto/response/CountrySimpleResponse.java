@@ -14,7 +14,7 @@ public record CountrySimpleResponse(
 	public static CountrySimpleResponse from(final Country country) {
 		return new CountrySimpleResponse(
 			country.getId(),
-			country.getName().getKoreanName()
+			country.getName()
 		);
 	}
 }

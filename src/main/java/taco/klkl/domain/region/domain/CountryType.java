@@ -11,40 +11,40 @@ import taco.klkl.domain.region.exception.CountryTypeNotFoundException;
 @Getter
 @AllArgsConstructor
 public enum CountryType {
-	JAPAN("일본", "JP"),
+	JAPAN("JP", "일본"),
 
-	CHINA("중국", "CN"),
+	CHINA("CN", "중국"),
 
-	TAIWAN("대만", "TW"),
+	TAIWAN("TW", "대만"),
 
-	THAILAND("태국", "TH"),
+	THAILAND("TH", "태국"),
 
-	VIETNAM("베트남", "VN"),
+	VIETNAM("VN", "베트남"),
 
-	PHILIPPINES("필리핀", "PH"),
+	PHILIPPINES("PH", "필리핀"),
 
-	SINGAPORE("싱가포르", "SG"),
+	SINGAPORE("SG", "싱가포르"),
 
-	INDONESIA("인도네시아", "ID"),
+	INDONESIA("ID", "인도네시아"),
 
-	MALAYSIA("말레이시아", "MY"),
+	MALAYSIA("MY", "말레이시아"),
 
-	GUAM("괌", "GU"),
+	GUAM("GU", "괌"),
 
-	USA("미국", "US"),
+	USA("US", "미국"),
 	;
 
-	private final String koreanName;
 	private final String code;
+	private final String name;
 
 	/**
 	 *
-	 * @param koreanName CountryType 이름
+	 * @param name CountryType 이름
 	 * @return CountryType
 	 */
-	public static CountryType getCountryTypeByName(String koreanName) {
+	public static CountryType from(final String name) {
 		return Arrays.stream(CountryType.values())
-			.filter(c -> c.getKoreanName().equals(koreanName))
+			.filter(c -> c.getName().equals(name))
 			.findFirst()
 			.orElseThrow(CountryTypeNotFoundException::new);
 	}
@@ -54,14 +54,14 @@ public enum CountryType {
 	 * @param partialString 부분 문자열
 	 * @return 부분문자열을 포함하는 CountryType의 리스트
 	 */
-	public static List<CountryType> getCountryTypesByPartialString(String partialString) {
+	public static List<CountryType> findCountryTypesByPartialString(final String partialString) {
 		if (partialString == null || partialString.isEmpty()) {
 			return List.of();
 		}
 		String regex = ".*" + Pattern.quote(partialString) + ".*";
 		Pattern pattern = Pattern.compile(regex);
 		return Arrays.stream(CountryType.values())
-			.filter(c -> pattern.matcher(c.getKoreanName()).matches())
+			.filter(c -> pattern.matcher(c.getName()).matches())
 			.toList();
 	}
 }
