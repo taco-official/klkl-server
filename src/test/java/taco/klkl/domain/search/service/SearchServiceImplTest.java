@@ -13,29 +13,25 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import taco.klkl.domain.category.domain.Category;
-import taco.klkl.domain.category.domain.CategoryName;
-import taco.klkl.domain.category.domain.Subcategory;
-import taco.klkl.domain.category.domain.SubcategoryName;
-import taco.klkl.domain.category.dto.response.CategoryResponse;
-import taco.klkl.domain.category.dto.response.SubcategoryResponse;
-import taco.klkl.domain.category.service.CategoryService;
-import taco.klkl.domain.category.service.SubcategoryService;
-import taco.klkl.domain.product.domain.Product;
-import taco.klkl.domain.product.domain.Rating;
-import taco.klkl.domain.region.domain.City;
-import taco.klkl.domain.region.domain.CityType;
-import taco.klkl.domain.region.domain.Country;
-import taco.klkl.domain.region.domain.CountryType;
-import taco.klkl.domain.region.domain.Currency;
-import taco.klkl.domain.region.domain.Region;
-import taco.klkl.domain.region.dto.response.CityResponse;
-import taco.klkl.domain.region.dto.response.CountrySimpleResponse;
-import taco.klkl.domain.region.service.CityService;
-import taco.klkl.domain.region.service.CountryService;
+import taco.klkl.domain.category.domain.category.Category;
+import taco.klkl.domain.category.domain.category.CategoryType;
+import taco.klkl.domain.category.domain.subcategory.Subcategory;
+import taco.klkl.domain.category.domain.subcategory.SubcategoryType;
+import taco.klkl.domain.category.dto.response.category.CategoryResponse;
+import taco.klkl.domain.category.dto.response.subcategory.SubcategoryResponse;
+import taco.klkl.domain.category.service.category.CategoryService;
+import taco.klkl.domain.category.service.subcategory.SubcategoryService;
+import taco.klkl.domain.region.domain.city.City;
+import taco.klkl.domain.region.domain.city.CityType;
+import taco.klkl.domain.region.domain.country.Country;
+import taco.klkl.domain.region.domain.country.CountryType;
+import taco.klkl.domain.region.domain.currency.Currency;
+import taco.klkl.domain.region.domain.region.Region;
+import taco.klkl.domain.region.dto.response.city.CityResponse;
+import taco.klkl.domain.region.dto.response.country.CountrySimpleResponse;
+import taco.klkl.domain.region.service.city.CityService;
+import taco.klkl.domain.region.service.country.CountryService;
 import taco.klkl.domain.search.dto.response.SearchResponse;
-import taco.klkl.domain.user.domain.User;
-import taco.klkl.global.common.constants.UserConstants;
 
 @ExtendWith(MockitoExtension.class)
 class SearchServiceImplTest {
@@ -61,22 +57,10 @@ class SearchServiceImplTest {
 	@Mock
 	Currency currency;
 
-	private final Country country = Country.of(CountryType.MALAYSIA, region, "flag", "photo", currency);
-	private final City city = City.of(country, CityType.BORACAY);
-	private final Category category = Category.of(CategoryName.CLOTHES);
-	private final Subcategory subcategory = Subcategory.of(category, SubcategoryName.MAKEUP);
-	private final User user = UserConstants.TEST_USER;
-	private final Product product = Product.of(
-		"ProductTestProduct",
-		"description",
-		"address",
-		1000,
-		Rating.FIVE,
-		user,
-		city,
-		subcategory,
-		currency
-	);
+	private final Country country = Country.of(CountryType.MALAYSIA, region, "photo", currency);
+	private final City city = City.of(CityType.BORACAY, country);
+	private final Category category = Category.of(CategoryType.CLOTHES);
+	private final Subcategory subcategory = Subcategory.of(category, SubcategoryType.MAKEUP);
 
 	@Test
 	@DisplayName("SearchService 테스트")
@@ -91,10 +75,10 @@ class SearchServiceImplTest {
 		List<SubcategoryResponse> mockSubcategories = Collections.singletonList(
 			SubcategoryResponse.from(subcategory));
 
-		when(countryService.getAllCountriesByCountryTypes(any(List.class))).thenReturn(mockCountries);
-		when(cityService.getAllCitiesByCityTypes(any(List.class))).thenReturn(mockCities);
-		when(categoryService.findCategoriesByCategoryNames(any(List.class))).thenReturn(mockCategories);
-		when(subcategoryService.findSubcategoriesBySubcategoryNames(any(List.class))).thenReturn(mockSubcategories);
+		when(countryService.findAllCountriesByPartialString(any(String.class))).thenReturn(mockCountries);
+		when(cityService.findAllCitiesByPartialString(any(String.class))).thenReturn(mockCities);
+		when(categoryService.findAllCategoriesByPartialString(any(String.class))).thenReturn(mockCategories);
+		when(subcategoryService.findAllSubcategoriesByPartialString(any(String.class))).thenReturn(mockSubcategories);
 
 		// when
 		SearchResponse result = searchService.findSearchResult(queryParam);

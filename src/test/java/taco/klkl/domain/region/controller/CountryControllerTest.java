@@ -17,18 +17,19 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import taco.klkl.domain.region.dao.CountryRepository;
-import taco.klkl.domain.region.domain.City;
-import taco.klkl.domain.region.domain.CityType;
-import taco.klkl.domain.region.domain.Country;
-import taco.klkl.domain.region.domain.CountryType;
-import taco.klkl.domain.region.domain.Currency;
-import taco.klkl.domain.region.domain.CurrencyType;
-import taco.klkl.domain.region.domain.Region;
-import taco.klkl.domain.region.domain.RegionType;
-import taco.klkl.domain.region.dto.response.CityResponse;
-import taco.klkl.domain.region.dto.response.CountryResponse;
-import taco.klkl.domain.region.service.CountryService;
+import taco.klkl.domain.region.controller.country.CountryController;
+import taco.klkl.domain.region.dao.country.CountryRepository;
+import taco.klkl.domain.region.domain.city.City;
+import taco.klkl.domain.region.domain.city.CityType;
+import taco.klkl.domain.region.domain.country.Country;
+import taco.klkl.domain.region.domain.country.CountryType;
+import taco.klkl.domain.region.domain.currency.Currency;
+import taco.klkl.domain.region.domain.currency.CurrencyType;
+import taco.klkl.domain.region.domain.region.Region;
+import taco.klkl.domain.region.domain.region.RegionType;
+import taco.klkl.domain.region.dto.response.city.CityResponse;
+import taco.klkl.domain.region.dto.response.country.CountryResponse;
+import taco.klkl.domain.region.service.country.CountryService;
 
 @WebMvcTest(CountryController.class)
 public class CountryControllerTest {
@@ -42,22 +43,20 @@ public class CountryControllerTest {
 	@MockBean
 	private CountryRepository countryRepository;
 
-	private final Region region = Region.of(RegionType.NORTHEAST_ASIA);
-	private final Currency currency1 = Currency.of(CurrencyType.JAPANESE_YEN, "flag");
+	private final Region region = Region.from(RegionType.NORTHEAST_ASIA);
+	private final Currency currency1 = Currency.of(CurrencyType.JAPANESE_YEN);
 	private final Country country1 = Country.of(
 		CountryType.JAPAN,
 		region,
-		"test",
-		"test",
+		"photo",
 		currency1);
 	private final Country country2 = Country.of(
 		CountryType.TAIWAN,
 		region,
-		"test",
-		"test",
+		"photo",
 		currency1);
-	private final City city1 = City.of(country1, CityType.OSAKA);
-	private final City city2 = City.of(country1, CityType.KYOTO);
+	private final City city1 = City.of(CityType.OSAKA, country1);
+	private final City city2 = City.of(CityType.KYOTO, country1);
 	private final List<City> cities = Arrays.asList(city1, city2);
 
 	@Test
@@ -77,9 +76,9 @@ public class CountryControllerTest {
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
 			.andExpect(jsonPath("$.data", hasSize(2)))
-			.andExpect(jsonPath("$.data[0].name", is(country1.getName().getKoreanName())))
-			.andExpect(jsonPath("$.data[1].name", is(country2.getName().getKoreanName())))
-			.andExpect(jsonPath("$.data[0].currency.code", is(country1.getCurrency().getCode().getCodeName())))
+			.andExpect(jsonPath("$.data[0].name", is(country1.getName())))
+			.andExpect(jsonPath("$.data[1].name", is(country2.getName())))
+			.andExpect(jsonPath("$.data[0].currency.code", is(country1.getCurrency().getCode())))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
 
 		verify(countryService, times(1)).findAllCountries();
@@ -98,7 +97,7 @@ public class CountryControllerTest {
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
-			.andExpect(jsonPath("$.data.name", is(country1.getName().getKoreanName())))
+			.andExpect(jsonPath("$.data.name", is(country1.getName())))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
 
 		verify(countryService, times(1)).findCountryById(400L);
@@ -109,7 +108,7 @@ public class CountryControllerTest {
 	void testGetCountryWithCities() throws Exception {
 		// given
 		Country mockCountry = mock(Country.class);
-		when(mockCountry.getName()).thenReturn(CountryType.JAPAN);
+		when(mockCountry.getName()).thenReturn(CountryType.JAPAN.getName());
 		when(countryRepository.findById(400L)).thenReturn(Optional.of(mockCountry));
 		when(mockCountry.getCities()).thenReturn(cities);
 		when(countryService.findCitiesByCountryId(400L)).thenReturn(cities.stream().map(CityResponse::from).toList());
@@ -119,8 +118,8 @@ public class CountryControllerTest {
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
-			.andExpect(jsonPath("$.data[0].name", is(cities.get(0).getName().getKoreanName())))
-			.andExpect(jsonPath("$.data[1].name", is(cities.get(1).getName().getKoreanName())))
+			.andExpect(jsonPath("$.data[0].name", is(cities.get(0).getName())))
+			.andExpect(jsonPath("$.data[1].name", is(cities.get(1).getName())))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
 
 		verify(countryService, times(1)).findCitiesByCountryId(400L);

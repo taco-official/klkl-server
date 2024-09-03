@@ -13,10 +13,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import taco.klkl.domain.region.dao.CurrencyRepository;
-import taco.klkl.domain.region.domain.Currency;
-import taco.klkl.domain.region.domain.CurrencyType;
-import taco.klkl.domain.region.dto.response.CurrencyResponse;
+import taco.klkl.domain.region.dao.currency.CurrencyRepository;
+import taco.klkl.domain.region.domain.currency.Currency;
+import taco.klkl.domain.region.domain.currency.CurrencyType;
+import taco.klkl.domain.region.dto.response.currency.CurrencyResponse;
+import taco.klkl.domain.region.service.currency.CurrencyServiceImpl;
 
 @ExtendWith(MockitoExtension.class)
 public class CurrencyServiceImplTest {
@@ -27,8 +28,8 @@ public class CurrencyServiceImplTest {
 	@Mock
 	CurrencyRepository currencyRepository;
 
-	private final Currency currency1 = Currency.of(CurrencyType.JAPANESE_YEN, "test1");
-	private final Currency currency2 = Currency.of(CurrencyType.THAI_BAHT, "test2");
+	private final Currency currency1 = Currency.of(CurrencyType.JAPANESE_YEN);
+	private final Currency currency2 = Currency.of(CurrencyType.THAI_BAHT);
 	private final CurrencyResponse currencyResponse1 = CurrencyResponse.from(currency1);
 	private final CurrencyResponse currencyResponse2 = CurrencyResponse.from(currency2);
 

@@ -3,7 +3,7 @@ package taco.klkl.domain.product.dto.response;
 import java.util.List;
 import java.util.Set;
 
-import taco.klkl.domain.category.dto.response.TagResponse;
+import taco.klkl.domain.category.dto.response.tag.TagResponse;
 import taco.klkl.domain.product.domain.Product;
 import taco.klkl.global.util.ProductUtil;
 
@@ -28,8 +28,8 @@ public record ProductSimpleResponse(
 			product.getName(),
 			product.getLikeCount(),
 			product.getRating().getValue(),
-			product.getCity().getCountry().getName().getKoreanName(),
-			product.getSubcategory().getCategory().getName().getKoreanName(),
+			product.getCity().getCountry().getName(),
+			product.getSubcategory().getCategory().getName(),
 			ProductUtil.createTagsByProduct(product)
 		);
 	}

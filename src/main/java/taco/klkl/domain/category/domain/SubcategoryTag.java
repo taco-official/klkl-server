@@ -11,6 +11,8 @@ import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import taco.klkl.domain.category.domain.subcategory.Subcategory;
+import taco.klkl.domain.category.domain.tag.Tag;
 
 @Getter
 @Entity(name = "subcategory_tag")

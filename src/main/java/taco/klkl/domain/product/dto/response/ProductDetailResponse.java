@@ -4,11 +4,11 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
-import taco.klkl.domain.category.dto.response.SubcategoryResponse;
-import taco.klkl.domain.category.dto.response.TagResponse;
+import taco.klkl.domain.category.dto.response.subcategory.SubcategoryResponse;
+import taco.klkl.domain.category.dto.response.tag.TagResponse;
 import taco.klkl.domain.product.domain.Product;
-import taco.klkl.domain.region.dto.response.CityResponse;
-import taco.klkl.domain.region.dto.response.CurrencyResponse;
+import taco.klkl.domain.region.dto.response.city.CityResponse;
+import taco.klkl.domain.region.dto.response.currency.CurrencyResponse;
 import taco.klkl.domain.user.dto.response.UserDetailResponse;
 import taco.klkl.global.util.ProductUtil;
 

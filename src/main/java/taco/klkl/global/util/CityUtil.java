@@ -6,10 +6,10 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
-import taco.klkl.domain.region.dao.CityRepository;
-import taco.klkl.domain.region.domain.City;
-import taco.klkl.domain.region.domain.Country;
-import taco.klkl.domain.region.exception.CityNotFoundException;
+import taco.klkl.domain.region.dao.city.CityRepository;
+import taco.klkl.domain.region.domain.city.City;
+import taco.klkl.domain.region.domain.country.Country;
+import taco.klkl.domain.region.exception.city.CityNotFoundException;
 
 @Component
 @RequiredArgsConstructor

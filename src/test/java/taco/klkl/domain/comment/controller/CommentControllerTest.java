@@ -19,10 +19,10 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import taco.klkl.domain.category.domain.Category;
-import taco.klkl.domain.category.domain.CategoryName;
-import taco.klkl.domain.category.domain.Subcategory;
-import taco.klkl.domain.category.domain.SubcategoryName;
+import taco.klkl.domain.category.domain.category.Category;
+import taco.klkl.domain.category.domain.category.CategoryType;
+import taco.klkl.domain.category.domain.subcategory.Subcategory;
+import taco.klkl.domain.category.domain.subcategory.SubcategoryType;
 import taco.klkl.domain.comment.domain.Comment;
 import taco.klkl.domain.comment.dto.request.CommentCreateUpdateRequest;
 import taco.klkl.domain.comment.dto.response.CommentResponse;
@@ -33,14 +33,14 @@ import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.product.domain.Rating;
 import taco.klkl.domain.product.exception.ProductNotFoundException;
 import taco.klkl.domain.product.service.ProductService;
-import taco.klkl.domain.region.domain.City;
-import taco.klkl.domain.region.domain.CityType;
-import taco.klkl.domain.region.domain.Country;
-import taco.klkl.domain.region.domain.CountryType;
-import taco.klkl.domain.region.domain.Currency;
-import taco.klkl.domain.region.domain.CurrencyType;
-import taco.klkl.domain.region.domain.Region;
-import taco.klkl.domain.region.domain.RegionType;
+import taco.klkl.domain.region.domain.city.City;
+import taco.klkl.domain.region.domain.city.CityType;
+import taco.klkl.domain.region.domain.country.Country;
+import taco.klkl.domain.region.domain.country.CountryType;
+import taco.klkl.domain.region.domain.currency.Currency;
+import taco.klkl.domain.region.domain.currency.CurrencyType;
+import taco.klkl.domain.region.domain.region.Region;
+import taco.klkl.domain.region.domain.region.RegionType;
 import taco.klkl.domain.user.domain.Gender;
 import taco.klkl.domain.user.domain.User;
 import taco.klkl.domain.user.dto.request.UserCreateRequest;
@@ -77,26 +77,24 @@ public class CommentControllerTest {
 		requestDto.description()
 	);
 
-	private final Region region = Region.of(RegionType.SOUTHEAST_ASIA);
+	private final Region region = Region.from(RegionType.SOUTHEAST_ASIA);
 
 	private final Currency currency = Currency.of(
-		CurrencyType.MALAYSIAN_RINGGIT,
-		"image/malaysia-ringgit.jpg"
+		CurrencyType.MALAYSIAN_RINGGIT
 	);
 
 	private final Country country = Country.of(
 		CountryType.MALAYSIA,
 		region,
-		"image/malaysia-flag.jpg",
 		"image/malaysia-photo.jpg",
 		currency
 	);
 
-	private final City city = City.of(country, CityType.KUALA_LUMPUR);
+	private final City city = City.of(CityType.KUALA_LUMPUR, country);
 
-	private final Category category = Category.of(CategoryName.FOOD);
+	private final Category category = Category.of(CategoryType.FOOD);
 
-	private final Subcategory subcategory = Subcategory.of(category, SubcategoryName.INSTANT_FOOD);
+	private final Subcategory subcategory = Subcategory.of(category, SubcategoryType.INSTANT_FOOD);
 
 	private final Product product = Product.of(
 		"name",

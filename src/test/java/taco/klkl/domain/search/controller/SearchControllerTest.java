@@ -14,24 +14,22 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
-import taco.klkl.domain.category.domain.Category;
-import taco.klkl.domain.category.domain.CategoryName;
-import taco.klkl.domain.category.domain.Subcategory;
-import taco.klkl.domain.category.domain.SubcategoryName;
-import taco.klkl.domain.category.dto.response.CategoryResponse;
-import taco.klkl.domain.category.dto.response.SubcategoryResponse;
-import taco.klkl.domain.region.domain.City;
-import taco.klkl.domain.region.domain.CityType;
-import taco.klkl.domain.region.domain.Country;
-import taco.klkl.domain.region.domain.CountryType;
-import taco.klkl.domain.region.domain.Currency;
-import taco.klkl.domain.region.domain.Region;
-import taco.klkl.domain.region.dto.response.CityResponse;
-import taco.klkl.domain.region.dto.response.CountrySimpleResponse;
+import taco.klkl.domain.category.domain.category.Category;
+import taco.klkl.domain.category.domain.category.CategoryType;
+import taco.klkl.domain.category.domain.subcategory.Subcategory;
+import taco.klkl.domain.category.domain.subcategory.SubcategoryType;
+import taco.klkl.domain.category.dto.response.category.CategoryResponse;
+import taco.klkl.domain.category.dto.response.subcategory.SubcategoryResponse;
+import taco.klkl.domain.region.domain.city.City;
+import taco.klkl.domain.region.domain.city.CityType;
+import taco.klkl.domain.region.domain.country.Country;
+import taco.klkl.domain.region.domain.country.CountryType;
+import taco.klkl.domain.region.domain.currency.Currency;
+import taco.klkl.domain.region.domain.region.Region;
+import taco.klkl.domain.region.dto.response.city.CityResponse;
+import taco.klkl.domain.region.dto.response.country.CountrySimpleResponse;
 import taco.klkl.domain.search.dto.response.SearchResponse;
 import taco.klkl.domain.search.service.SearchService;
-import taco.klkl.domain.user.domain.User;
-import taco.klkl.global.common.constants.UserConstants;
 
 @WebMvcTest(SearchController.class)
 public class SearchControllerTest {
@@ -50,11 +48,10 @@ public class SearchControllerTest {
 	@Mock
 	Currency currency;
 
-	private final User user = UserConstants.TEST_USER;
-	private final Country country = Country.of(CountryType.MALAYSIA, region, "flag", "photo", currency);
-	private final City city = City.of(country, CityType.BORACAY);
-	private final Category category = Category.of(CategoryName.CLOTHES);
-	private final Subcategory subcategory = Subcategory.of(category, SubcategoryName.MAKEUP);
+	private final Country country = Country.of(CountryType.MALAYSIA, region, "photo", currency);
+	private final City city = City.of(CityType.BORACAY, country);
+	private final Category category = Category.of(CategoryType.CLOTHES);
+	private final Subcategory subcategory = Subcategory.of(category, SubcategoryType.MAKEUP);
 
 	@BeforeEach
 	void setUp() {

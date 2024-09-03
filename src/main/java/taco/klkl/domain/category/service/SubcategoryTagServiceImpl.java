@@ -12,9 +12,9 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import taco.klkl.domain.category.dao.SubcategoryTagRepository;
-import taco.klkl.domain.category.domain.Subcategory;
 import taco.klkl.domain.category.domain.SubcategoryTag;
-import taco.klkl.domain.category.dto.response.TagResponse;
+import taco.klkl.domain.category.domain.subcategory.Subcategory;
+import taco.klkl.domain.category.dto.response.tag.TagResponse;
 
 @Slf4j
 @Primary

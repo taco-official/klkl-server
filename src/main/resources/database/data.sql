@@ -11,30 +11,30 @@ VALUES (400, '동북아시아'),
        (401, '동남아시아'),
        (402, '기타');
 
-INSERT INTO currency (currency_id, code, flag)
-VALUES (438, 'JPY', 'japan_flag.png'),
-       (439, 'CNH', 'china_flag.png'),
-       (440, 'TWD', 'taiwan_flag.png'),
-       (441, 'THB', 'thailand_flag.png'),
-       (442, 'VND', 'vietnam_flag.png'),
-       (443, 'PHP', 'philippines_flag.png'),
-       (444, 'SGD', 'singapore_flag.png'),
-       (445, 'IDR', 'indonesia_flag.png'),
-       (446, 'MYR', 'malaysia_flag.png'),
-       (447, 'USD', 'usa_flag.png');
+INSERT INTO currency (currency_id, code, unit)
+VALUES (438, 'JPY', '엔'),
+       (439, 'CNH', '위안'),
+       (440, 'TWD', '달러'),
+       (441, 'THB', '바트'),
+       (442, 'VND', '동'),
+       (443, 'PHP', '페소'),
+       (444, 'SGD', '달러'),
+       (445, 'IDR', '루피아'),
+       (446, 'MYR', '링깃'),
+       (447, 'USD', '달러');
 
-INSERT INTO country(country_id, region_id, name, flag, photo, currency_id)
-VALUES (403, 400, '일본', 'image/sample', 'image/sample', 438),
-       (404, 400, '중국', 'image/sample', 'image/sample', 439),
-       (405, 400, '대만', 'image/sample', 'image/sample', 440),
-       (406, 401, '태국', 'image/sample', 'image/sample', 441),
-       (407, 401, '베트남', 'image/sample', 'image/sample', 442),
-       (408, 401, '필리핀', 'image/sample', 'image/sample', 443),
-       (409, 401, '싱가포르', 'image/sample', 'image/sample', 444),
-       (410, 401, '인도네시아', 'image/sample', 'image/sample', 445),
-       (411, 401, '말레이시아', 'image/sample', 'image/sample', 446),
-       (412, 402, '괌', 'image/sample', 'image/sample', 447),
-       (413, 402, '미국', 'image/sample', 'image/sample', 447);
+INSERT INTO country(country_id, region_id, name, code, photo, currency_id)
+VALUES (403, 400, '일본', 'JP', 'image/sample', 438),
+       (404, 400, '중국', 'CN', 'image/sample', 439),
+       (405, 400, '대만', 'TW', 'image/sample', 440),
+       (406, 401, '태국', 'TH', 'image/sample', 441),
+       (407, 401, '베트남', 'VN', 'image/sample', 442),
+       (408, 401, '필리핀', 'PH', 'image/sample', 443),
+       (409, 401, '싱가포르', 'SG', 'image/sample', 444),
+       (410, 401, '인도네시아', 'ID', 'image/sample', 445),
+       (411, 401, '말레이시아', 'MY', 'image/sample', 446),
+       (412, 402, '괌', 'GU', 'image/sample', 447),
+       (413, 402, '미국', 'US', 'image/sample', 447);
 
 INSERT INTO city (city_id, country_id, name)
 VALUES (414, 403, '오사카'),

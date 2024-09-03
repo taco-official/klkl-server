@@ -28,15 +28,15 @@ import com.querydsl.core.types.dsl.PathBuilder;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
-import taco.klkl.domain.category.domain.Category;
-import taco.klkl.domain.category.domain.CategoryName;
-import taco.klkl.domain.category.domain.QCategory;
-import taco.klkl.domain.category.domain.QSubcategory;
-import taco.klkl.domain.category.domain.QTag;
-import taco.klkl.domain.category.domain.Subcategory;
-import taco.klkl.domain.category.domain.SubcategoryName;
-import taco.klkl.domain.category.domain.Tag;
-import taco.klkl.domain.category.dto.response.TagResponse;
+import taco.klkl.domain.category.domain.category.Category;
+import taco.klkl.domain.category.domain.category.CategoryType;
+import taco.klkl.domain.category.domain.category.QCategory;
+import taco.klkl.domain.category.domain.subcategory.QSubcategory;
+import taco.klkl.domain.category.domain.subcategory.Subcategory;
+import taco.klkl.domain.category.domain.subcategory.SubcategoryType;
+import taco.klkl.domain.category.domain.tag.QTag;
+import taco.klkl.domain.category.domain.tag.Tag;
+import taco.klkl.domain.category.dto.response.tag.TagResponse;
 import taco.klkl.domain.like.exception.LikeCountBelowMinimumException;
 import taco.klkl.domain.like.exception.LikeCountOverMaximumException;
 import taco.klkl.domain.product.dao.ProductRepository;
@@ -51,16 +51,16 @@ import taco.klkl.domain.product.dto.request.ProductSortOptions;
 import taco.klkl.domain.product.dto.response.ProductDetailResponse;
 import taco.klkl.domain.product.dto.response.ProductSimpleResponse;
 import taco.klkl.domain.product.exception.ProductNotFoundException;
-import taco.klkl.domain.region.domain.City;
-import taco.klkl.domain.region.domain.CityType;
-import taco.klkl.domain.region.domain.Country;
-import taco.klkl.domain.region.domain.CountryType;
-import taco.klkl.domain.region.domain.Currency;
-import taco.klkl.domain.region.domain.CurrencyType;
-import taco.klkl.domain.region.domain.QCity;
-import taco.klkl.domain.region.domain.QCountry;
-import taco.klkl.domain.region.domain.Region;
-import taco.klkl.domain.region.domain.RegionType;
+import taco.klkl.domain.region.domain.city.City;
+import taco.klkl.domain.region.domain.city.CityType;
+import taco.klkl.domain.region.domain.city.QCity;
+import taco.klkl.domain.region.domain.country.Country;
+import taco.klkl.domain.region.domain.country.CountryType;
+import taco.klkl.domain.region.domain.country.QCountry;
+import taco.klkl.domain.region.domain.currency.Currency;
+import taco.klkl.domain.region.domain.currency.CurrencyType;
+import taco.klkl.domain.region.domain.region.Region;
+import taco.klkl.domain.region.domain.region.RegionType;
 import taco.klkl.domain.user.domain.User;
 import taco.klkl.global.common.constants.UserConstants;
 import taco.klkl.global.common.response.PagedResponseDto;
@@ -111,27 +111,25 @@ class ProductServiceImplTest {
 
 		user = UserConstants.TEST_USER;
 
-		Region region = Region.of(RegionType.SOUTHEAST_ASIA);
+		Region region = Region.from(RegionType.SOUTHEAST_ASIA);
 		currency = Currency.of(
-			CurrencyType.THAI_BAHT,
-			"image/baht.jpg"
+			CurrencyType.THAI_BAHT
 		);
 		Country country = Country.of(
 			CountryType.JAPAN,
 			region,
-			"image/thailand-flag.jpg",
 			"image/thailand-photo.jpg",
 			currency
 		);
 		city = City.of(
-			country,
-			CityType.BANGKOK
+			CityType.BANGKOK,
+			country
 		);
 
-		Category category = Category.of(CategoryName.FOOD);
+		Category category = Category.of(CategoryType.FOOD);
 		subcategory = Subcategory.of(
 			category,
-			SubcategoryName.INSTANT_FOOD
+			SubcategoryType.INSTANT_FOOD
 		);
 
 		testProduct = Product.of(

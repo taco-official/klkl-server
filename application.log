@@ -175,18 +175,18 @@
 2024-08-02 14:49:35 [Test worker] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
 2024-08-02 14:49:35 [Test worker] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 1 ms
 2024-08-02 14:49:35 [Test worker] INFO  t.k.d.c.c.CategoryControllerTest - Started CategoryControllerTest in 0.48 seconds (process running for 3.655)
-2024-08-02 14:49:35 [Test worker] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to taco.klkl.domain.category.controller.CategoryController#getSubCategory(Long)
+2024-08-02 14:49:35 [Test worker] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to taco.klkl.domain.category.controller.category.CategoryController#getSubCategory(Long)
 2024-08-02 14:49:35 [Test worker] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
 2024-08-02 14:49:35 [Test worker] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [GlobalResponse[isSuccess=true, code=C000, data=CategoryWithSubcategoryDto[categoryId=1, category=식품, (truncated)...]
-2024-08-02 14:49:35 [Test worker] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to taco.klkl.domain.category.controller.CategoryController#getCategory()
+2024-08-02 14:49:35 [Test worker] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to taco.klkl.domain.category.controller.category.CategoryController#getCategory()
 2024-08-02 14:49:35 [Test worker] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
 2024-08-02 14:49:35 [Test worker] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [GlobalResponse[isSuccess=true, code=C000, data=[CategoryResponseDto[categoryId=1, category=Category1 (truncated)...]
-2024-08-02 14:49:35 [Test worker] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to taco.klkl.domain.category.controller.CategoryController#getSubCategory(Long)
+2024-08-02 14:49:35 [Test worker] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to taco.klkl.domain.category.controller.category.CategoryController#getSubCategory(Long)
 2024-08-02 14:49:35 [Test worker] DEBUG o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Using @ExceptionHandler taco.klkl.global.error.GlobalExceptionHandler#handleCustomException(CustomException)
 2024-08-02 14:49:35 [Test worker] ERROR t.k.g.error.GlobalExceptionHandler - CustomException : 존재하지 않는 카테고리 ID 입니다.
-taco.klkl.domain.category.exception.CategoryNotFoundException: 존재하지 않는 카테고리 ID 입니다.
-	at taco.klkl.domain.category.service.CategoryService.getSubcategories(CategoryService.java:29)
-	at taco.klkl.domain.category.controller.CategoryController.getSubCategory(CategoryController.java:38)
+taco.klkl.domain.category.exception.category.CategoryNotFoundException: 존재하지 않는 카테고리 ID 입니다.
+	at taco.klkl.domain.category.service.category.CategoryService.getSubcategories(CategoryService.java:29)
+	at taco.klkl.domain.category.controller.category.CategoryController.getSubCategory(CategoryController.java:38)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -308,7 +308,7 @@ taco.klkl.domain.category.exception.CategoryNotFoundException: 존재하지 않�
 	at worker.org.gradle.process.internal.worker.GradleWorkerMain.main(GradleWorkerMain.java:74)
 2024-08-02 14:49:35 [Test worker] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
 2024-08-02 14:49:35 [Test worker] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [GlobalResponse[isSuccess=false, code=C060, data=ErrorResponse[code=C060, message=존재하지 않는 카테고리 ID 입니다 (truncated)...]
-2024-08-02 14:49:35 [Test worker] DEBUG o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [taco.klkl.domain.category.exception.CategoryNotFoundException: 존재하지 않는 카테고리 ID 입니다.]
+2024-08-02 14:49:35 [Test worker] DEBUG o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [taco.klkl.domain.category.exception.category.CategoryNotFoundException: 존재하지 않는 카테고리 ID 입니다.]
 2024-08-02 14:49:35 [Test worker] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [taco.klkl.domain.category.integration.CategoryIntegrationTest]: CategoryIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
 2024-08-02 14:49:35 [Test worker] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration taco.klkl.KlklApplication for test class taco.klkl.domain.category.integration.CategoryIntegrationTest
 2024-08-02 14:49:36 [Test worker] INFO  t.k.d.c.i.CategoryIntegrationTest - Starting CategoryIntegrationTest using Java 17.0.11 with PID 33686 (started by IdealFlower in /Users/IdealFlower/klkl-server)
@@ -483,7 +483,7 @@ taco.klkl.domain.category.exception.CategoryNotFoundException: 존재하지 않�
         c1_0.name 
     from
         category c1_0
-2024-08-02 14:49:36 [Test worker] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to taco.klkl.domain.category.controller.CategoryController#getCategory()
+2024-08-02 14:49:36 [Test worker] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to taco.klkl.domain.category.controller.category.CategoryController#getCategory()
 2024-08-02 14:49:36 [Test worker] DEBUG org.hibernate.SQL - 
     select
         c1_0.category_id,
@@ -492,7 +492,7 @@ taco.klkl.domain.category.exception.CategoryNotFoundException: 존재하지 않�
         category c1_0
 2024-08-02 14:49:36 [Test worker] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
 2024-08-02 14:49:36 [Test worker] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [GlobalResponse[isSuccess=true, code=C000, data=[CategoryResponseDto[categoryId=300, category=식품], Ca (truncated)...]
-2024-08-02 14:49:36 [Test worker] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to taco.klkl.domain.category.controller.CategoryController#getSubCategory(Long)
+2024-08-02 14:49:36 [Test worker] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to taco.klkl.domain.category.controller.category.CategoryController#getSubCategory(Long)
 2024-08-02 14:49:36 [Test worker] DEBUG org.hibernate.SQL - 
     select
         c1_0.category_id,
@@ -503,10 +503,10 @@ taco.klkl.domain.category.exception.CategoryNotFoundException: 존재하지 않�
         c1_0.category_id=?
 2024-08-02 14:49:36 [Test worker] DEBUG o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Using @ExceptionHandler taco.klkl.global.error.GlobalExceptionHandler#handleCustomException(CustomException)
 2024-08-02 14:49:36 [Test worker] ERROR t.k.g.error.GlobalExceptionHandler - CustomException : 존재하지 않는 카테고리 ID 입니다.
-taco.klkl.domain.category.exception.CategoryNotFoundException: 존재하지 않는 카테고리 ID 입니다.
+taco.klkl.domain.category.exception.category.CategoryNotFoundException: 존재하지 않는 카테고리 ID 입니다.
 	at java.base/java.util.Optional.orElseThrow(Optional.java:403)
-	at taco.klkl.domain.category.service.CategoryService.getSubcategories(CategoryService.java:29)
-	at taco.klkl.domain.category.controller.CategoryController.getSubCategory(CategoryController.java:38)
+	at taco.klkl.domain.category.service.category.CategoryService.getSubcategories(CategoryService.java:29)
+	at taco.klkl.domain.category.controller.category.CategoryController.getSubCategory(CategoryController.java:38)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -628,7 +628,7 @@ taco.klkl.domain.category.exception.CategoryNotFoundException: 존재하지 않�
 	at worker.org.gradle.process.internal.worker.GradleWorkerMain.main(GradleWorkerMain.java:74)
 2024-08-02 14:49:36 [Test worker] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
 2024-08-02 14:49:36 [Test worker] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [GlobalResponse[isSuccess=false, code=C060, data=ErrorResponse[code=C060, message=존재하지 않는 카테고리 ID 입니다 (truncated)...]
-2024-08-02 14:49:36 [Test worker] DEBUG o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [taco.klkl.domain.category.exception.CategoryNotFoundException: 존재하지 않는 카테고리 ID 입니다.]
+2024-08-02 14:49:36 [Test worker] DEBUG o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [taco.klkl.domain.category.exception.category.CategoryNotFoundException: 존재하지 않는 카테고리 ID 입니다.]
 2024-08-02 14:49:36 [Test worker] DEBUG org.hibernate.SQL - 
     select
         c1_0.category_id,
@@ -646,7 +646,7 @@ taco.klkl.domain.category.exception.CategoryNotFoundException: 존재하지 않�
         subcategory s1_0 
     where
         s1_0.category_id=?
-2024-08-02 14:49:36 [Test worker] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to taco.klkl.domain.category.controller.CategoryController#getSubCategory(Long)
+2024-08-02 14:49:36 [Test worker] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to taco.klkl.domain.category.controller.category.CategoryController#getSubCategory(Long)
 2024-08-02 14:49:36 [Test worker] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
 2024-08-02 14:49:36 [Test worker] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [GlobalResponse[isSuccess=true, code=C000, data=CategoryWithSubcategoryDto[categoryId=300, category=식 (truncated)...]
 2024-08-02 14:49:36 [Test worker] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [taco.klkl.domain.product.controller.ProductControllerTest]: ProductControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
@@ -1661,18 +1661,18 @@ org.springframework.http.converter.HttpMessageNotReadableException: Error readin
 2024-08-02 14:53:20 [Test worker] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
 2024-08-02 14:53:20 [Test worker] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 1 ms
 2024-08-02 14:53:20 [Test worker] INFO  t.k.d.c.c.CategoryControllerTest - Started CategoryControllerTest in 0.479 seconds (process running for 3.649)
-2024-08-02 14:53:20 [Test worker] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to taco.klkl.domain.category.controller.CategoryController#getSubCategory(Long)
+2024-08-02 14:53:20 [Test worker] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to taco.klkl.domain.category.controller.category.CategoryController#getSubCategory(Long)
 2024-08-02 14:53:20 [Test worker] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
 2024-08-02 14:53:20 [Test worker] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [GlobalResponse[isSuccess=true, code=C000, data=CategoryWithSubcategoryDto[categoryId=1, category=식품, (truncated)...]
-2024-08-02 14:53:20 [Test worker] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to taco.klkl.domain.category.controller.CategoryController#getCategory()
+2024-08-02 14:53:20 [Test worker] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to taco.klkl.domain.category.controller.category.CategoryController#getCategory()
 2024-08-02 14:53:20 [Test worker] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
 2024-08-02 14:53:20 [Test worker] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [GlobalResponse[isSuccess=true, code=C000, data=[CategoryResponseDto[categoryId=1, category=Category1 (truncated)...]
-2024-08-02 14:53:20 [Test worker] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to taco.klkl.domain.category.controller.CategoryController#getSubCategory(Long)
+2024-08-02 14:53:20 [Test worker] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to taco.klkl.domain.category.controller.category.CategoryController#getSubCategory(Long)
 2024-08-02 14:53:20 [Test worker] DEBUG o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Using @ExceptionHandler taco.klkl.global.error.GlobalExceptionHandler#handleCustomException(CustomException)
 2024-08-02 14:53:20 [Test worker] ERROR t.k.g.error.GlobalExceptionHandler - CustomException : 존재하지 않는 카테고리 ID 입니다.
-taco.klkl.domain.category.exception.CategoryNotFoundException: 존재하지 않는 카테고리 ID 입니다.
-	at taco.klkl.domain.category.service.CategoryService.getSubcategories(CategoryService.java:29)
-	at taco.klkl.domain.category.controller.CategoryController.getSubCategory(CategoryController.java:38)
+taco.klkl.domain.category.exception.category.CategoryNotFoundException: 존재하지 않는 카테고리 ID 입니다.
+	at taco.klkl.domain.category.service.category.CategoryService.getSubcategories(CategoryService.java:29)
+	at taco.klkl.domain.category.controller.category.CategoryController.getSubCategory(CategoryController.java:38)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -1794,7 +1794,7 @@ taco.klkl.domain.category.exception.CategoryNotFoundException: 존재하지 않�
 	at worker.org.gradle.process.internal.worker.GradleWorkerMain.main(GradleWorkerMain.java:74)
 2024-08-02 14:53:20 [Test worker] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
 2024-08-02 14:53:20 [Test worker] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [GlobalResponse[isSuccess=false, code=C060, data=ErrorResponse[code=C060, message=존재하지 않는 카테고리 ID 입니다 (truncated)...]
-2024-08-02 14:53:20 [Test worker] DEBUG o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [taco.klkl.domain.category.exception.CategoryNotFoundException: 존재하지 않는 카테고리 ID 입니다.]
+2024-08-02 14:53:20 [Test worker] DEBUG o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [taco.klkl.domain.category.exception.category.CategoryNotFoundException: 존재하지 않는 카테고리 ID 입니다.]
 2024-08-02 14:53:20 [Test worker] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [taco.klkl.domain.category.integration.CategoryIntegrationTest]: CategoryIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
 2024-08-02 14:53:20 [Test worker] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration taco.klkl.KlklApplication for test class taco.klkl.domain.category.integration.CategoryIntegrationTest
 2024-08-02 14:53:20 [Test worker] INFO  t.k.d.c.i.CategoryIntegrationTest - Starting CategoryIntegrationTest using Java 17.0.11 with PID 33915 (started by IdealFlower in /Users/IdealFlower/klkl-server)
@@ -1821,16 +1821,16 @@ taco.klkl.domain.category.exception.CategoryNotFoundException: 존재하지 않�
 2024-08-02 14:53:21 [Test worker] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
 2024-08-02 14:53:21 [Test worker] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 1 ms
 2024-08-02 14:53:21 [Test worker] INFO  t.k.d.c.i.CategoryIntegrationTest - Started CategoryIntegrationTest in 0.698 seconds (process running for 4.573)
-2024-08-02 14:53:21 [Test worker] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to taco.klkl.domain.category.controller.CategoryController#getCategory()
+2024-08-02 14:53:21 [Test worker] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to taco.klkl.domain.category.controller.category.CategoryController#getCategory()
 2024-08-02 14:53:21 [Test worker] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
 2024-08-02 14:53:21 [Test worker] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [GlobalResponse[isSuccess=true, code=C000, data=[CategoryResponseDto[categoryId=300, category=식품], Ca (truncated)...]
-2024-08-02 14:53:21 [Test worker] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to taco.klkl.domain.category.controller.CategoryController#getSubCategory(Long)
+2024-08-02 14:53:21 [Test worker] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to taco.klkl.domain.category.controller.category.CategoryController#getSubCategory(Long)
 2024-08-02 14:53:21 [Test worker] DEBUG o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Using @ExceptionHandler taco.klkl.global.error.GlobalExceptionHandler#handleCustomException(CustomException)
 2024-08-02 14:53:21 [Test worker] ERROR t.k.g.error.GlobalExceptionHandler - CustomException : 존재하지 않는 카테고리 ID 입니다.
-taco.klkl.domain.category.exception.CategoryNotFoundException: 존재하지 않는 카테고리 ID 입니다.
+taco.klkl.domain.category.exception.category.CategoryNotFoundException: 존재하지 않는 카테고리 ID 입니다.
 	at java.base/java.util.Optional.orElseThrow(Optional.java:403)
-	at taco.klkl.domain.category.service.CategoryService.getSubcategories(CategoryService.java:29)
-	at taco.klkl.domain.category.controller.CategoryController.getSubCategory(CategoryController.java:38)
+	at taco.klkl.domain.category.service.category.CategoryService.getSubcategories(CategoryService.java:29)
+	at taco.klkl.domain.category.controller.category.CategoryController.getSubCategory(CategoryController.java:38)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -1952,8 +1952,8 @@ taco.klkl.domain.category.exception.CategoryNotFoundException: 존재하지 않�
 	at worker.org.gradle.process.internal.worker.GradleWorkerMain.main(GradleWorkerMain.java:74)
 2024-08-02 14:53:21 [Test worker] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
 2024-08-02 14:53:21 [Test worker] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [GlobalResponse[isSuccess=false, code=C060, data=ErrorResponse[code=C060, message=존재하지 않는 카테고리 ID 입니다 (truncated)...]
-2024-08-02 14:53:21 [Test worker] DEBUG o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [taco.klkl.domain.category.exception.CategoryNotFoundException: 존재하지 않는 카테고리 ID 입니다.]
-2024-08-02 14:53:21 [Test worker] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to taco.klkl.domain.category.controller.CategoryController#getSubCategory(Long)
+2024-08-02 14:53:21 [Test worker] DEBUG o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [taco.klkl.domain.category.exception.category.CategoryNotFoundException: 존재하지 않는 카테고리 ID 입니다.]
+2024-08-02 14:53:21 [Test worker] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to taco.klkl.domain.category.controller.category.CategoryController#getSubCategory(Long)
 2024-08-02 14:53:21 [Test worker] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
 2024-08-02 14:53:21 [Test worker] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [GlobalResponse[isSuccess=true, code=C000, data=CategoryWithSubcategoryDto[categoryId=300, category=식 (truncated)...]
 2024-08-02 14:53:21 [Test worker] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [taco.klkl.domain.product.controller.ProductControllerTest]: ProductControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
@@ -2671,18 +2671,18 @@ org.springframework.http.converter.HttpMessageNotReadableException: Error readin
 2024-08-02 14:55:23 [Test worker] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
 2024-08-02 14:55:23 [Test worker] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 1 ms
 2024-08-02 14:55:23 [Test worker] INFO  t.k.d.c.c.CategoryControllerTest - Started CategoryControllerTest in 0.523 seconds (process running for 8.479)
-2024-08-02 14:55:23 [Test worker] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to taco.klkl.domain.category.controller.CategoryController#getSubCategory(Long)
+2024-08-02 14:55:23 [Test worker] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to taco.klkl.domain.category.controller.category.CategoryController#getSubCategory(Long)
 2024-08-02 14:55:23 [Test worker] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
 2024-08-02 14:55:23 [Test worker] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [GlobalResponse[isSuccess=true, code=C000, data=CategoryWithSubcategoryDto[categoryId=1, category=식품, (truncated)...]
-2024-08-02 14:55:23 [Test worker] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to taco.klkl.domain.category.controller.CategoryController#getCategory()
+2024-08-02 14:55:23 [Test worker] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to taco.klkl.domain.category.controller.category.CategoryController#getCategory()
 2024-08-02 14:55:23 [Test worker] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
 2024-08-02 14:55:23 [Test worker] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [GlobalResponse[isSuccess=true, code=C000, data=[CategoryResponseDto[categoryId=1, category=Category1 (truncated)...]
-2024-08-02 14:55:24 [Test worker] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to taco.klkl.domain.category.controller.CategoryController#getSubCategory(Long)
+2024-08-02 14:55:24 [Test worker] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to taco.klkl.domain.category.controller.category.CategoryController#getSubCategory(Long)
 2024-08-02 14:55:24 [Test worker] DEBUG o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Using @ExceptionHandler taco.klkl.global.error.GlobalExceptionHandler#handleCustomException(CustomException)
 2024-08-02 14:55:24 [Test worker] ERROR t.k.g.error.GlobalExceptionHandler - CustomException : 존재하지 않는 카테고리 ID 입니다.
-taco.klkl.domain.category.exception.CategoryNotFoundException: 존재하지 않는 카테고리 ID 입니다.
-	at taco.klkl.domain.category.service.CategoryService.getSubcategories(CategoryService.java:29)
-	at taco.klkl.domain.category.controller.CategoryController.getSubCategory(CategoryController.java:38)
+taco.klkl.domain.category.exception.category.CategoryNotFoundException: 존재하지 않는 카테고리 ID 입니다.
+	at taco.klkl.domain.category.service.category.CategoryService.getSubcategories(CategoryService.java:29)
+	at taco.klkl.domain.category.controller.category.CategoryController.getSubCategory(CategoryController.java:38)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -2804,7 +2804,7 @@ taco.klkl.domain.category.exception.CategoryNotFoundException: 존재하지 않�
 	at worker.org.gradle.process.internal.worker.GradleWorkerMain.main(GradleWorkerMain.java:74)
 2024-08-02 14:55:24 [Test worker] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
 2024-08-02 14:55:24 [Test worker] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [GlobalResponse[isSuccess=false, code=C060, data=ErrorResponse[code=C060, message=존재하지 않는 카테고리 ID 입니다 (truncated)...]
-2024-08-02 14:55:24 [Test worker] DEBUG o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [taco.klkl.domain.category.exception.CategoryNotFoundException: 존재하지 않는 카테고리 ID 입니다.]
+2024-08-02 14:55:24 [Test worker] DEBUG o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [taco.klkl.domain.category.exception.category.CategoryNotFoundException: 존재하지 않는 카테고리 ID 입니다.]
 2024-08-02 14:55:24 [Test worker] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [taco.klkl.domain.category.integration.CategoryIntegrationTest]: CategoryIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
 2024-08-02 14:55:24 [Test worker] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration taco.klkl.KlklApplication for test class taco.klkl.domain.category.integration.CategoryIntegrationTest
 2024-08-02 14:55:24 [Test worker] INFO  t.k.d.c.i.CategoryIntegrationTest - Starting CategoryIntegrationTest using Java 17.0.11 with PID 34212 (started by IdealFlower in /Users/IdealFlower/klkl-server)
@@ -2831,16 +2831,16 @@ taco.klkl.domain.category.exception.CategoryNotFoundException: 존재하지 않�
 2024-08-02 14:55:24 [Test worker] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
 2024-08-02 14:55:24 [Test worker] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
 2024-08-02 14:55:24 [Test worker] INFO  t.k.d.c.i.CategoryIntegrationTest - Started CategoryIntegrationTest in 0.78 seconds (process running for 9.524)
-2024-08-02 14:55:24 [Test worker] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to taco.klkl.domain.category.controller.CategoryController#getCategory()
+2024-08-02 14:55:24 [Test worker] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to taco.klkl.domain.category.controller.category.CategoryController#getCategory()
 2024-08-02 14:55:24 [Test worker] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
 2024-08-02 14:55:24 [Test worker] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [GlobalResponse[isSuccess=true, code=C000, data=[CategoryResponseDto[categoryId=300, category=식품], Ca (truncated)...]
-2024-08-02 14:55:24 [Test worker] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to taco.klkl.domain.category.controller.CategoryController#getSubCategory(Long)
+2024-08-02 14:55:24 [Test worker] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to taco.klkl.domain.category.controller.category.CategoryController#getSubCategory(Long)
 2024-08-02 14:55:24 [Test worker] DEBUG o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Using @ExceptionHandler taco.klkl.global.error.GlobalExceptionHandler#handleCustomException(CustomException)
 2024-08-02 14:55:24 [Test worker] ERROR t.k.g.error.GlobalExceptionHandler - CustomException : 존재하지 않는 카테고리 ID 입니다.
-taco.klkl.domain.category.exception.CategoryNotFoundException: 존재하지 않는 카테고리 ID 입니다.
+taco.klkl.domain.category.exception.category.CategoryNotFoundException: 존재하지 않는 카테고리 ID 입니다.
 	at java.base/java.util.Optional.orElseThrow(Optional.java:403)
-	at taco.klkl.domain.category.service.CategoryService.getSubcategories(CategoryService.java:29)
-	at taco.klkl.domain.category.controller.CategoryController.getSubCategory(CategoryController.java:38)
+	at taco.klkl.domain.category.service.category.CategoryService.getSubcategories(CategoryService.java:29)
+	at taco.klkl.domain.category.controller.category.CategoryController.getSubCategory(CategoryController.java:38)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -2962,8 +2962,8 @@ taco.klkl.domain.category.exception.CategoryNotFoundException: 존재하지 않�
 	at worker.org.gradle.process.internal.worker.GradleWorkerMain.main(GradleWorkerMain.java:74)
 2024-08-02 14:55:24 [Test worker] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
 2024-08-02 14:55:24 [Test worker] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [GlobalResponse[isSuccess=false, code=C060, data=ErrorResponse[code=C060, message=존재하지 않는 카테고리 ID 입니다 (truncated)...]
-2024-08-02 14:55:24 [Test worker] DEBUG o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [taco.klkl.domain.category.exception.CategoryNotFoundException: 존재하지 않는 카테고리 ID 입니다.]
-2024-08-02 14:55:24 [Test worker] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to taco.klkl.domain.category.controller.CategoryController#getSubCategory(Long)
+2024-08-02 14:55:24 [Test worker] DEBUG o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [taco.klkl.domain.category.exception.category.CategoryNotFoundException: 존재하지 않는 카테고리 ID 입니다.]
+2024-08-02 14:55:24 [Test worker] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to taco.klkl.domain.category.controller.category.CategoryController#getSubCategory(Long)
 2024-08-02 14:55:24 [Test worker] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
 2024-08-02 14:55:24 [Test worker] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [GlobalResponse[isSuccess=true, code=C000, data=CategoryWithSubcategoryDto[categoryId=300, category=식 (truncated)...]
 2024-08-02 14:55:24 [Test worker] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [taco.klkl.domain.product.controller.ProductControllerTest]: ProductControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
@@ -3823,18 +3823,18 @@ org.springframework.http.converter.HttpMessageNotReadableException: Error readin
 2024-08-02 15:02:24 [Test worker] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
 2024-08-02 15:02:24 [Test worker] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 1 ms
 2024-08-02 15:02:24 [Test worker] INFO  t.k.d.c.c.CategoryControllerTest - Started CategoryControllerTest in 0.48 seconds (process running for 3.7)
-2024-08-02 15:02:24 [Test worker] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to taco.klkl.domain.category.controller.CategoryController#getSubCategory(Long)
+2024-08-02 15:02:24 [Test worker] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to taco.klkl.domain.category.controller.category.CategoryController#getSubCategory(Long)
 2024-08-02 15:02:24 [Test worker] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
 2024-08-02 15:02:24 [Test worker] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [GlobalResponse[isSuccess=true, code=C000, data=CategoryWithSubcategoryDto[categoryId=1, category=식품, (truncated)...]
-2024-08-02 15:02:25 [Test worker] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to taco.klkl.domain.category.controller.CategoryController#getCategory()
+2024-08-02 15:02:25 [Test worker] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to taco.klkl.domain.category.controller.category.CategoryController#getCategory()
 2024-08-02 15:02:25 [Test worker] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
 2024-08-02 15:02:25 [Test worker] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [GlobalResponse[isSuccess=true, code=C000, data=[CategoryResponseDto[categoryId=1, category=Category1 (truncated)...]
-2024-08-02 15:02:25 [Test worker] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to taco.klkl.domain.category.controller.CategoryController#getSubCategory(Long)
+2024-08-02 15:02:25 [Test worker] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to taco.klkl.domain.category.controller.category.CategoryController#getSubCategory(Long)
 2024-08-02 15:02:25 [Test worker] DEBUG o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Using @ExceptionHandler taco.klkl.global.error.GlobalExceptionHandler#handleCustomException(CustomException)
 2024-08-02 15:02:25 [Test worker] ERROR t.k.g.error.GlobalExceptionHandler - CustomException : 존재하지 않는 카테고리 ID 입니다.
-taco.klkl.domain.category.exception.CategoryNotFoundException: 존재하지 않는 카테고리 ID 입니다.
-	at taco.klkl.domain.category.service.CategoryService.getSubcategories(CategoryService.java:29)
-	at taco.klkl.domain.category.controller.CategoryController.getSubCategory(CategoryController.java:38)
+taco.klkl.domain.category.exception.category.CategoryNotFoundException: 존재하지 않는 카테고리 ID 입니다.
+	at taco.klkl.domain.category.service.category.CategoryService.getSubcategories(CategoryService.java:29)
+	at taco.klkl.domain.category.controller.category.CategoryController.getSubCategory(CategoryController.java:38)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -3956,7 +3956,7 @@ taco.klkl.domain.category.exception.CategoryNotFoundException: 존재하지 않�
 	at worker.org.gradle.process.internal.worker.GradleWorkerMain.main(GradleWorkerMain.java:74)
 2024-08-02 15:02:25 [Test worker] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
 2024-08-02 15:02:25 [Test worker] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [GlobalResponse[isSuccess=false, code=C060, data=ErrorResponse[code=C060, message=존재하지 않는 카테고리 ID 입니다 (truncated)...]
-2024-08-02 15:02:25 [Test worker] DEBUG o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [taco.klkl.domain.category.exception.CategoryNotFoundException: 존재하지 않는 카테고리 ID 입니다.]
+2024-08-02 15:02:25 [Test worker] DEBUG o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [taco.klkl.domain.category.exception.category.CategoryNotFoundException: 존재하지 않는 카테고리 ID 입니다.]
 2024-08-02 15:02:25 [Test worker] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [taco.klkl.domain.category.integration.CategoryIntegrationTest]: CategoryIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
 2024-08-02 15:02:25 [Test worker] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration taco.klkl.KlklApplication for test class taco.klkl.domain.category.integration.CategoryIntegrationTest
 2024-08-02 15:02:25 [Test worker] INFO  t.k.d.c.i.CategoryIntegrationTest - Starting CategoryIntegrationTest using Java 17.0.11 with PID 34653 (started by IdealFlower in /Users/IdealFlower/klkl-server)
@@ -4131,7 +4131,7 @@ taco.klkl.domain.category.exception.CategoryNotFoundException: 존재하지 않�
         c1_0.name 
     from
         category c1_0
-2024-08-02 15:02:25 [Test worker] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to taco.klkl.domain.category.controller.CategoryController#getCategory()
+2024-08-02 15:02:25 [Test worker] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to taco.klkl.domain.category.controller.category.CategoryController#getCategory()
 2024-08-02 15:02:25 [Test worker] DEBUG org.hibernate.SQL - 
     select
         c1_0.category_id,
@@ -4140,7 +4140,7 @@ taco.klkl.domain.category.exception.CategoryNotFoundException: 존재하지 않�
         category c1_0
 2024-08-02 15:02:25 [Test worker] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
 2024-08-02 15:02:25 [Test worker] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [GlobalResponse[isSuccess=true, code=C000, data=[CategoryResponseDto[categoryId=300, category=식품], Ca (truncated)...]
-2024-08-02 15:02:25 [Test worker] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to taco.klkl.domain.category.controller.CategoryController#getSubCategory(Long)
+2024-08-02 15:02:25 [Test worker] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to taco.klkl.domain.category.controller.category.CategoryController#getSubCategory(Long)
 2024-08-02 15:02:25 [Test worker] DEBUG org.hibernate.SQL - 
     select
         c1_0.category_id,
@@ -4151,10 +4151,10 @@ taco.klkl.domain.category.exception.CategoryNotFoundException: 존재하지 않�
         c1_0.category_id=?
 2024-08-02 15:02:25 [Test worker] DEBUG o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Using @ExceptionHandler taco.klkl.global.error.GlobalExceptionHandler#handleCustomException(CustomException)
 2024-08-02 15:02:25 [Test worker] ERROR t.k.g.error.GlobalExceptionHandler - CustomException : 존재하지 않는 카테고리 ID 입니다.
-taco.klkl.domain.category.exception.CategoryNotFoundException: 존재하지 않는 카테고리 ID 입니다.
+taco.klkl.domain.category.exception.category.CategoryNotFoundException: 존재하지 않는 카테고리 ID 입니다.
 	at java.base/java.util.Optional.orElseThrow(Optional.java:403)
-	at taco.klkl.domain.category.service.CategoryService.getSubcategories(CategoryService.java:29)
-	at taco.klkl.domain.category.controller.CategoryController.getSubCategory(CategoryController.java:38)
+	at taco.klkl.domain.category.service.category.CategoryService.getSubcategories(CategoryService.java:29)
+	at taco.klkl.domain.category.controller.category.CategoryController.getSubCategory(CategoryController.java:38)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -4276,7 +4276,7 @@ taco.klkl.domain.category.exception.CategoryNotFoundException: 존재하지 않�
 	at worker.org.gradle.process.internal.worker.GradleWorkerMain.main(GradleWorkerMain.java:74)
 2024-08-02 15:02:25 [Test worker] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
 2024-08-02 15:02:25 [Test worker] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [GlobalResponse[isSuccess=false, code=C060, data=ErrorResponse[code=C060, message=존재하지 않는 카테고리 ID 입니다 (truncated)...]
-2024-08-02 15:02:25 [Test worker] DEBUG o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [taco.klkl.domain.category.exception.CategoryNotFoundException: 존재하지 않는 카테고리 ID 입니다.]
+2024-08-02 15:02:25 [Test worker] DEBUG o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [taco.klkl.domain.category.exception.category.CategoryNotFoundException: 존재하지 않는 카테고리 ID 입니다.]
 2024-08-02 15:02:25 [Test worker] DEBUG org.hibernate.SQL - 
     select
         c1_0.category_id,
@@ -4294,7 +4294,7 @@ taco.klkl.domain.category.exception.CategoryNotFoundException: 존재하지 않�
         subcategory s1_0 
     where
         s1_0.category_id=?
-2024-08-02 15:02:25 [Test worker] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to taco.klkl.domain.category.controller.CategoryController#getSubCategory(Long)
+2024-08-02 15:02:25 [Test worker] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to taco.klkl.domain.category.controller.category.CategoryController#getSubCategory(Long)
 2024-08-02 15:02:25 [Test worker] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
 2024-08-02 15:02:25 [Test worker] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [GlobalResponse[isSuccess=true, code=C000, data=CategoryWithSubcategoryDto[categoryId=300, category=식 (truncated)...]
 2024-08-02 15:02:25 [Test worker] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [taco.klkl.domain.product.controller.ProductControllerTest]: ProductControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
@@ -5451,18 +5451,18 @@ org.springframework.http.converter.HttpMessageNotReadableException: Error readin
 2024-08-02 15:11:32 [Test worker] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
 2024-08-02 15:11:32 [Test worker] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
 2024-08-02 15:11:32 [Test worker] INFO  t.k.d.c.c.CategoryControllerTest - Started CategoryControllerTest in 0.451 seconds (process running for 3.84)
-2024-08-02 15:11:32 [Test worker] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to taco.klkl.domain.category.controller.CategoryController#getSubCategory(Long)
+2024-08-02 15:11:32 [Test worker] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to taco.klkl.domain.category.controller.category.CategoryController#getSubCategory(Long)
 2024-08-02 15:11:32 [Test worker] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
 2024-08-02 15:11:32 [Test worker] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [GlobalResponse[isSuccess=true, code=C000, data=CategoryWithSubcategoryDto[categoryId=1, category=식품, (truncated)...]
-2024-08-02 15:11:33 [Test worker] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to taco.klkl.domain.category.controller.CategoryController#getCategory()
+2024-08-02 15:11:33 [Test worker] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to taco.klkl.domain.category.controller.category.CategoryController#getCategory()
 2024-08-02 15:11:33 [Test worker] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
 2024-08-02 15:11:33 [Test worker] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [GlobalResponse[isSuccess=true, code=C000, data=[CategoryResponseDto[categoryId=1, category=Category1 (truncated)...]
-2024-08-02 15:11:33 [Test worker] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to taco.klkl.domain.category.controller.CategoryController#getSubCategory(Long)
+2024-08-02 15:11:33 [Test worker] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to taco.klkl.domain.category.controller.category.CategoryController#getSubCategory(Long)
 2024-08-02 15:11:33 [Test worker] DEBUG o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Using @ExceptionHandler taco.klkl.global.error.GlobalExceptionHandler#handleCustomException(CustomException)
 2024-08-02 15:11:33 [Test worker] ERROR t.k.g.error.GlobalExceptionHandler - CustomException : 존재하지 않는 카테고리 ID 입니다.
-taco.klkl.domain.category.exception.CategoryNotFoundException: 존재하지 않는 카테고리 ID 입니다.
-	at taco.klkl.domain.category.service.CategoryService.getSubcategories(CategoryService.java:29)
-	at taco.klkl.domain.category.controller.CategoryController.getSubCategory(CategoryController.java:38)
+taco.klkl.domain.category.exception.category.CategoryNotFoundException: 존재하지 않는 카테고리 ID 입니다.
+	at taco.klkl.domain.category.service.category.CategoryService.getSubcategories(CategoryService.java:29)
+	at taco.klkl.domain.category.controller.category.CategoryController.getSubCategory(CategoryController.java:38)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -5584,7 +5584,7 @@ taco.klkl.domain.category.exception.CategoryNotFoundException: 존재하지 않�
 	at worker.org.gradle.process.internal.worker.GradleWorkerMain.main(GradleWorkerMain.java:74)
 2024-08-02 15:11:33 [Test worker] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
 2024-08-02 15:11:33 [Test worker] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [GlobalResponse[isSuccess=false, code=C060, data=ErrorResponse[code=C060, message=존재하지 않는 카테고리 ID 입니다 (truncated)...]
-2024-08-02 15:11:33 [Test worker] DEBUG o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [taco.klkl.domain.category.exception.CategoryNotFoundException: 존재하지 않는 카테고리 ID 입니다.]
+2024-08-02 15:11:33 [Test worker] DEBUG o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [taco.klkl.domain.category.exception.category.CategoryNotFoundException: 존재하지 않는 카테고리 ID 입니다.]
 2024-08-02 15:11:33 [Test worker] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [taco.klkl.domain.category.integration.CategoryIntegrationTest]: CategoryIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
 2024-08-02 15:11:33 [Test worker] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration taco.klkl.KlklApplication for test class taco.klkl.domain.category.integration.CategoryIntegrationTest
 2024-08-02 15:11:33 [Test worker] INFO  t.k.d.c.i.CategoryIntegrationTest - Starting CategoryIntegrationTest using Java 17.0.11 with PID 35358 (started by IdealFlower in /Users/IdealFlower/klkl-server)
@@ -5759,7 +5759,7 @@ taco.klkl.domain.category.exception.CategoryNotFoundException: 존재하지 않�
         c1_0.name 
     from
         category c1_0
-2024-08-02 15:11:33 [Test worker] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to taco.klkl.domain.category.controller.CategoryController#getCategory()
+2024-08-02 15:11:33 [Test worker] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to taco.klkl.domain.category.controller.category.CategoryController#getCategory()
 2024-08-02 15:11:33 [Test worker] DEBUG org.hibernate.SQL - 
     select
         c1_0.category_id,
@@ -5768,7 +5768,7 @@ taco.klkl.domain.category.exception.CategoryNotFoundException: 존재하지 않�
         category c1_0
 2024-08-02 15:11:33 [Test worker] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
 2024-08-02 15:11:33 [Test worker] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [GlobalResponse[isSuccess=true, code=C000, data=[CategoryResponseDto[categoryId=300, category=식품], Ca (truncated)...]
-2024-08-02 15:11:33 [Test worker] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to taco.klkl.domain.category.controller.CategoryController#getSubCategory(Long)
+2024-08-02 15:11:33 [Test worker] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to taco.klkl.domain.category.controller.category.CategoryController#getSubCategory(Long)
 2024-08-02 15:11:33 [Test worker] DEBUG org.hibernate.SQL - 
     select
         c1_0.category_id,
@@ -5779,10 +5779,10 @@ taco.klkl.domain.category.exception.CategoryNotFoundException: 존재하지 않�
         c1_0.category_id=?
 2024-08-02 15:11:33 [Test worker] DEBUG o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Using @ExceptionHandler taco.klkl.global.error.GlobalExceptionHandler#handleCustomException(CustomException)
 2024-08-02 15:11:33 [Test worker] ERROR t.k.g.error.GlobalExceptionHandler - CustomException : 존재하지 않는 카테고리 ID 입니다.
-taco.klkl.domain.category.exception.CategoryNotFoundException: 존재하지 않는 카테고리 ID 입니다.
+taco.klkl.domain.category.exception.category.CategoryNotFoundException: 존재하지 않는 카테고리 ID 입니다.
 	at java.base/java.util.Optional.orElseThrow(Optional.java:403)
-	at taco.klkl.domain.category.service.CategoryService.getSubcategories(CategoryService.java:29)
-	at taco.klkl.domain.category.controller.CategoryController.getSubCategory(CategoryController.java:38)
+	at taco.klkl.domain.category.service.category.CategoryService.getSubcategories(CategoryService.java:29)
+	at taco.klkl.domain.category.controller.category.CategoryController.getSubCategory(CategoryController.java:38)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -5904,7 +5904,7 @@ taco.klkl.domain.category.exception.CategoryNotFoundException: 존재하지 않�
 	at worker.org.gradle.process.internal.worker.GradleWorkerMain.main(GradleWorkerMain.java:74)
 2024-08-02 15:11:33 [Test worker] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
 2024-08-02 15:11:33 [Test worker] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [GlobalResponse[isSuccess=false, code=C060, data=ErrorResponse[code=C060, message=존재하지 않는 카테고리 ID 입니다 (truncated)...]
-2024-08-02 15:11:33 [Test worker] DEBUG o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [taco.klkl.domain.category.exception.CategoryNotFoundException: 존재하지 않는 카테고리 ID 입니다.]
+2024-08-02 15:11:33 [Test worker] DEBUG o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [taco.klkl.domain.category.exception.category.CategoryNotFoundException: 존재하지 않는 카테고리 ID 입니다.]
 2024-08-02 15:11:33 [Test worker] DEBUG org.hibernate.SQL - 
     select
         c1_0.category_id,
@@ -5922,7 +5922,7 @@ taco.klkl.domain.category.exception.CategoryNotFoundException: 존재하지 않�
         subcategory s1_0 
     where
         s1_0.category_id=?
-2024-08-02 15:11:33 [Test worker] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to taco.klkl.domain.category.controller.CategoryController#getSubCategory(Long)
+2024-08-02 15:11:33 [Test worker] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to taco.klkl.domain.category.controller.category.CategoryController#getSubCategory(Long)
 2024-08-02 15:11:33 [Test worker] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
 2024-08-02 15:11:33 [Test worker] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [GlobalResponse[isSuccess=true, code=C000, data=CategoryWithSubcategoryDto[categoryId=300, category=식 (truncated)...]
 2024-08-02 15:11:33 [Test worker] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [taco.klkl.domain.product.controller.ProductControllerTest]: ProductControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.

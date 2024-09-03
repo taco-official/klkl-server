@@ -16,11 +16,12 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import taco.klkl.domain.region.dao.CurrencyRepository;
-import taco.klkl.domain.region.domain.Currency;
-import taco.klkl.domain.region.domain.CurrencyType;
-import taco.klkl.domain.region.dto.response.CurrencyResponse;
-import taco.klkl.domain.region.service.CurrencyService;
+import taco.klkl.domain.region.controller.currency.CurrencyController;
+import taco.klkl.domain.region.dao.currency.CurrencyRepository;
+import taco.klkl.domain.region.domain.currency.Currency;
+import taco.klkl.domain.region.domain.currency.CurrencyType;
+import taco.klkl.domain.region.dto.response.currency.CurrencyResponse;
+import taco.klkl.domain.region.service.currency.CurrencyService;
 
 @WebMvcTest(CurrencyController.class)
 public class CurrencyControllerTest {
@@ -34,8 +35,8 @@ public class CurrencyControllerTest {
 	@MockBean
 	CurrencyRepository currencyRepository;
 
-	private final Currency currency1 = Currency.of(CurrencyType.JAPANESE_YEN, "test1");
-	private final Currency currency2 = Currency.of(CurrencyType.THAI_BAHT, "test2");
+	private final Currency currency1 = Currency.of(CurrencyType.JAPANESE_YEN);
+	private final Currency currency2 = Currency.of(CurrencyType.THAI_BAHT);
 	private final CurrencyResponse currencyResponse1 = CurrencyResponse.from(currency1);
 	private final CurrencyResponse currencyResponse2 = CurrencyResponse.from(currency2);
 	@Autowired
@@ -54,8 +55,8 @@ public class CurrencyControllerTest {
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
 			.andExpect(jsonPath("$.data", hasSize(2)))
-			.andExpect(jsonPath("$.data[0].code", is(currency1.getCode().getCodeName())))
-			.andExpect(jsonPath("$.data[1].code", is(currency2.getCode().getCodeName())))
+			.andExpect(jsonPath("$.data[0].code", is(currency1.getCode())))
+			.andExpect(jsonPath("$.data[1].code", is(currency2.getCode())))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
 	}
 }

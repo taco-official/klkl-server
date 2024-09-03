@@ -6,14 +6,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,18 +20,17 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
+import taco.klkl.domain.category.controller.tag.TagController;
 import taco.klkl.domain.category.dao.SubcategoryTagRepository;
-import taco.klkl.domain.category.domain.Category;
-import taco.klkl.domain.category.domain.CategoryName;
-import taco.klkl.domain.category.domain.Subcategory;
-import taco.klkl.domain.category.domain.SubcategoryName;
 import taco.klkl.domain.category.domain.SubcategoryTag;
-import taco.klkl.domain.category.domain.Tag;
-import taco.klkl.domain.category.domain.TagName;
-import taco.klkl.domain.category.dto.response.TagResponse;
-import taco.klkl.domain.category.exception.SubcategoryNotFoundException;
-import taco.klkl.domain.category.service.SubcategoryService;
+import taco.klkl.domain.category.domain.subcategory.Subcategory;
+import taco.klkl.domain.category.domain.subcategory.SubcategoryType;
+import taco.klkl.domain.category.domain.tag.Tag;
+import taco.klkl.domain.category.domain.tag.TagType;
+import taco.klkl.domain.category.dto.response.tag.TagResponse;
+import taco.klkl.domain.category.exception.subcategory.SubcategoryNotFoundException;
 import taco.klkl.domain.category.service.SubcategoryTagService;
+import taco.klkl.domain.category.service.subcategory.SubcategoryService;
 import taco.klkl.global.error.exception.ErrorCode;
 
 @WebMvcTest(TagController.class)
@@ -70,14 +66,14 @@ public class TagControllerTest {
 		List<Subcategory> mockSubcategoryList = Arrays.asList(mockSubcategory1, mockSubcategory2);
 
 		when(mockSubcategory1.getId()).thenReturn(1L);
-		when(mockSubcategory1.getName()).thenReturn(SubcategoryName.INSTANT_FOOD);
+		when(mockSubcategory1.getName()).thenReturn(SubcategoryType.INSTANT_FOOD.getName());
 		when(mockSubcategory2.getId()).thenReturn(2L);
-		when(mockSubcategory2.getName()).thenReturn(SubcategoryName.SNACK);
+		when(mockSubcategory2.getName()).thenReturn(SubcategoryType.SNACK.getName());
 
 		when(mockTag1.getId()).thenReturn(1L);
-		when(mockTag1.getName()).thenReturn(TagName.CONVENIENCE_STORE);
+		when(mockTag1.getName()).thenReturn(TagType.CONVENIENCE_STORE.getName());
 		when(mockTag2.getId()).thenReturn(2L);
-		when(mockTag2.getName()).thenReturn(TagName.CILANTRO);
+		when(mockTag2.getName()).thenReturn(TagType.CILANTRO.getName());
 
 		when(subcategoryTagRepository.findAllBySubcategory(mockSubcategory1))
 			.thenReturn(Arrays.asList(subcategoryTag1, subcategoryTag2));
@@ -101,8 +97,8 @@ public class TagControllerTest {
 			.andExpect(jsonPath("$.data", hasSize(2)))
 			.andExpect(jsonPath("$.data[*].id", containsInAnyOrder(1, 2)))
 			.andExpect(jsonPath("$.data[*].name", containsInAnyOrder(
-				TagName.CONVENIENCE_STORE.getKoreanName(),
-				TagName.CILANTRO.getKoreanName()
+				TagType.CONVENIENCE_STORE.getName(),
+				TagType.CILANTRO.getName()
 			)))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
 
@@ -127,14 +123,14 @@ public class TagControllerTest {
 		List<Subcategory> mockSubcategoryList = Arrays.asList(mockSubcategory1, mockSubcategory2);
 
 		when(mockSubcategory1.getId()).thenReturn(1L);
-		when(mockSubcategory1.getName()).thenReturn(SubcategoryName.INSTANT_FOOD);
+		when(mockSubcategory1.getName()).thenReturn(SubcategoryType.INSTANT_FOOD.getName());
 		when(mockSubcategory2.getId()).thenReturn(2L);
-		when(mockSubcategory2.getName()).thenReturn(SubcategoryName.SNACK);
+		when(mockSubcategory2.getName()).thenReturn(SubcategoryType.SNACK.getName());
 
 		when(mockTag1.getId()).thenReturn(1L);
-		when(mockTag1.getName()).thenReturn(TagName.CONVENIENCE_STORE);
+		when(mockTag1.getName()).thenReturn(TagType.CONVENIENCE_STORE.getName());
 		when(mockTag2.getId()).thenReturn(2L);
-		when(mockTag2.getName()).thenReturn(TagName.CILANTRO);
+		when(mockTag2.getName()).thenReturn(TagType.CILANTRO.getName());
 
 		when(subcategoryTagRepository.findAllBySubcategory(mockSubcategory1))
 			.thenReturn(Arrays.asList(subcategoryTag1, subcategoryTag2));
@@ -158,8 +154,8 @@ public class TagControllerTest {
 			.andExpect(jsonPath("$.data", hasSize(2)))
 			.andExpect(jsonPath("$.data[*].id", containsInAnyOrder(1, 2)))
 			.andExpect(jsonPath("$.data[*].name", containsInAnyOrder(
-				TagName.CONVENIENCE_STORE.getKoreanName(),
-				TagName.CILANTRO.getKoreanName()
+				TagType.CONVENIENCE_STORE.getName(),
+				TagType.CILANTRO.getName()
 			)))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
 

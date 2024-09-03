@@ -13,7 +13,6 @@ public final class UserConstants {
 		"테스트입니다."
 	);
 
-	public static final String DEFAULT_PROFILE = "image/test.jpg";
 	public static final int DEFAULT_TOTAL_LIKE_COUNT = 0;
 	public static final int USERNAME_SUFFIX_MOD = 9973;
 

@@ -24,9 +24,9 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import taco.klkl.domain.category.domain.CategoryName;
-import taco.klkl.domain.category.dto.response.SubcategoryResponse;
-import taco.klkl.domain.category.dto.response.TagResponse;
+import taco.klkl.domain.category.domain.category.CategoryType;
+import taco.klkl.domain.category.dto.response.subcategory.SubcategoryResponse;
+import taco.klkl.domain.category.dto.response.tag.TagResponse;
 import taco.klkl.domain.product.domain.Rating;
 import taco.klkl.domain.product.dto.request.ProductCreateUpdateRequest;
 import taco.klkl.domain.product.dto.request.ProductFilterOptions;
@@ -35,9 +35,9 @@ import taco.klkl.domain.product.dto.response.ProductDetailResponse;
 import taco.klkl.domain.product.dto.response.ProductImageResponse;
 import taco.klkl.domain.product.dto.response.ProductSimpleResponse;
 import taco.klkl.domain.product.service.ProductService;
-import taco.klkl.domain.region.domain.CountryType;
-import taco.klkl.domain.region.dto.response.CityResponse;
-import taco.klkl.domain.region.dto.response.CurrencyResponse;
+import taco.klkl.domain.region.domain.country.CountryType;
+import taco.klkl.domain.region.dto.response.city.CityResponse;
+import taco.klkl.domain.region.dto.response.currency.CurrencyResponse;
 import taco.klkl.domain.user.dto.response.UserDetailResponse;
 import taco.klkl.global.common.response.PagedResponseDto;
 
@@ -77,7 +77,8 @@ public class ProductControllerTest {
 		CurrencyResponse currencyResponse = new CurrencyResponse(
 			1L,
 			"currencyCode",
-			"image/flag.jpg"
+			"통화단위",
+			"image/flagUrl.jpg"
 		);
 		TagResponse tagResponse1 = new TagResponse(
 			1L,
@@ -99,8 +100,8 @@ public class ProductControllerTest {
 			"productName",
 			10,
 			Rating.FIVE.getValue(),
-			CountryType.THAILAND.getKoreanName(),
-			CategoryName.FOOD.getKoreanName(),
+			CountryType.THAILAND.getName(),
+			CategoryType.FOOD.getName(),
 			Set.of(tagResponse1, tagResponse2)
 		);
 		productDetailResponse = new ProductDetailResponse(
@@ -293,7 +294,6 @@ public class ProductControllerTest {
 			.andExpect(jsonPath("$.data.currency.id",
 				is(productDetailResponse.currency().id().intValue())))
 			.andExpect(jsonPath("$.data.currency.code", is(productDetailResponse.currency().code())))
-			.andExpect(jsonPath("$.data.currency.flag", is(productDetailResponse.currency().flag())))
 			.andExpect(jsonPath("$.data.tags", hasSize(productSimpleResponse.tags().size())))
 			.andExpect(jsonPath("$.data.createdAt", notNullValue()))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
@@ -338,7 +338,6 @@ public class ProductControllerTest {
 			.andExpect(jsonPath("$.data.currency.id",
 				is(productDetailResponse.currency().id().intValue())))
 			.andExpect(jsonPath("$.data.currency.code", is(productDetailResponse.currency().code())))
-			.andExpect(jsonPath("$.data.currency.flag", is(productDetailResponse.currency().flag())))
 			.andExpect(jsonPath("$.data.tags", hasSize(productSimpleResponse.tags().size())))
 			.andExpect(jsonPath("$.data.createdAt", notNullValue()))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
@@ -382,7 +381,6 @@ public class ProductControllerTest {
 			.andExpect(jsonPath("$.data.currency.id",
 				is(productDetailResponse.currency().id().intValue())))
 			.andExpect(jsonPath("$.data.currency.code", is(productDetailResponse.currency().code())))
-			.andExpect(jsonPath("$.data.currency.flag", is(productDetailResponse.currency().flag())))
 			.andExpect(jsonPath("$.data.tags", hasSize(productSimpleResponse.tags().size())))
 			.andExpect(jsonPath("$.data.createdAt", notNullValue()))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));

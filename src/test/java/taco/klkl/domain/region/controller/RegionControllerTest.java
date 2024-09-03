@@ -18,16 +18,17 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import taco.klkl.domain.region.dao.RegionRepository;
-import taco.klkl.domain.region.domain.Country;
-import taco.klkl.domain.region.domain.CountryType;
-import taco.klkl.domain.region.domain.Currency;
-import taco.klkl.domain.region.domain.CurrencyType;
-import taco.klkl.domain.region.domain.Region;
-import taco.klkl.domain.region.domain.RegionType;
-import taco.klkl.domain.region.dto.response.CountryResponse;
-import taco.klkl.domain.region.dto.response.RegionResponse;
-import taco.klkl.domain.region.service.RegionService;
+import taco.klkl.domain.region.controller.region.RegionController;
+import taco.klkl.domain.region.dao.region.RegionRepository;
+import taco.klkl.domain.region.domain.country.Country;
+import taco.klkl.domain.region.domain.country.CountryType;
+import taco.klkl.domain.region.domain.currency.Currency;
+import taco.klkl.domain.region.domain.currency.CurrencyType;
+import taco.klkl.domain.region.domain.region.Region;
+import taco.klkl.domain.region.domain.region.RegionType;
+import taco.klkl.domain.region.dto.response.country.CountryResponse;
+import taco.klkl.domain.region.dto.response.region.RegionResponse;
+import taco.klkl.domain.region.service.region.RegionService;
 import taco.klkl.global.error.exception.ErrorCode;
 
 @WebMvcTest(RegionController.class)
@@ -39,20 +40,18 @@ class RegionControllerTest {
 	@MockBean
 	RegionService regionService;
 
-	private final Region region1 = Region.of(RegionType.NORTHEAST_ASIA);
-	private final Region region2 = Region.of(RegionType.SOUTHEAST_ASIA);
-	private final Region region3 = Region.of(RegionType.ETC);
-	private final Currency currency1 = Currency.of(CurrencyType.JAPANESE_YEN, "flag");
+	private final Region region1 = Region.from(RegionType.NORTHEAST_ASIA);
+	private final Region region2 = Region.from(RegionType.SOUTHEAST_ASIA);
+	private final Region region3 = Region.from(RegionType.ETC);
+	private final Currency currency1 = Currency.of(CurrencyType.JAPANESE_YEN);
 	private final Country country1 = Country.of(
 		CountryType.JAPAN,
 		region1,
-		"image/japan",
 		"image/japan",
 		currency1);
 	private final Country country2 = Country.of(
 		CountryType.TAIWAN,
 		region1,
-		"image/taiwan",
 		"image/taiwan",
 		currency1);
 	private final List<Country> countryList = Arrays.asList(country1,
@@ -76,9 +75,9 @@ class RegionControllerTest {
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
 			.andExpect(jsonPath("$.data", hasSize(3)))
-			.andExpect(jsonPath("$.data[0].name", is(region1.getName().getKoreanName())))
-			.andExpect(jsonPath("$.data[1].name", is(region2.getName().getKoreanName())))
-			.andExpect(jsonPath("$.data[2].name", is(region3.getName().getKoreanName())))
+			.andExpect(jsonPath("$.data[0].name", is(region1.getName())))
+			.andExpect(jsonPath("$.data[1].name", is(region2.getName())))
+			.andExpect(jsonPath("$.data[2].name", is(region3.getName())))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
 
 		verify(regionService, times(1)).findAllRegions();
@@ -124,7 +123,7 @@ class RegionControllerTest {
 		// given
 		Region mockRegion = mock(Region.class);
 		RegionRepository regionRepository = mock(RegionRepository.class);
-		when(mockRegion.getName()).thenReturn(RegionType.NORTHEAST_ASIA);
+		when(mockRegion.getName()).thenReturn(RegionType.NORTHEAST_ASIA.getName());
 		when(regionRepository.findById(1L)).thenReturn(Optional.of(mockRegion));
 		when(mockRegion.getCountries()).thenReturn(countryList);
 		List<CountryResponse> responseDto = countryList.stream().map(CountryResponse::from).toList();
@@ -135,8 +134,8 @@ class RegionControllerTest {
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
-			.andExpect(jsonPath("$.data[0].name", is(countryList.get(0).getName().getKoreanName())))
-			.andExpect(jsonPath("$.data[1].name", is(countryList.get(1).getName().getKoreanName())))
+			.andExpect(jsonPath("$.data[0].name", is(countryList.get(0).getName())))
+			.andExpect(jsonPath("$.data[1].name", is(countryList.get(1).getName())))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
 
 		verify(regionService, times(1)).findCountriesByRegionId(1L);

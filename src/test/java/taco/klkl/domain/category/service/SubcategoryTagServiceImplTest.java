@@ -7,7 +7,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,12 +15,11 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import taco.klkl.domain.category.dao.SubcategoryTagRepository;
-import taco.klkl.domain.category.domain.Subcategory;
-import taco.klkl.domain.category.domain.SubcategoryName;
 import taco.klkl.domain.category.domain.SubcategoryTag;
-import taco.klkl.domain.category.domain.Tag;
-import taco.klkl.domain.category.domain.TagName;
-import taco.klkl.domain.category.dto.response.TagResponse;
+import taco.klkl.domain.category.domain.subcategory.Subcategory;
+import taco.klkl.domain.category.domain.tag.Tag;
+import taco.klkl.domain.category.domain.tag.TagType;
+import taco.klkl.domain.category.dto.response.tag.TagResponse;
 
 @ExtendWith(MockitoExtension.class)
 public class SubcategoryTagServiceImplTest {
@@ -65,9 +63,9 @@ public class SubcategoryTagServiceImplTest {
 		when(subcategoryTag2.getTag()).thenReturn(tag2);
 
 		when(tag1.getId()).thenReturn(1L);
-		when(tag1.getName()).thenReturn(TagName.CONVENIENCE_STORE);
+		when(tag1.getName()).thenReturn(TagType.CONVENIENCE_STORE.getName());
 		when(tag2.getId()).thenReturn(2L);
-		when(tag2.getName()).thenReturn(TagName.CILANTRO);
+		when(tag2.getName()).thenReturn(TagType.CILANTRO.getName());
 
 		// when
 		Set<TagResponse> result = subcategoryTagService.findTagsBySubcategoryList(subcategoryList);
@@ -77,10 +75,10 @@ public class SubcategoryTagServiceImplTest {
 		assertEquals(2, result.size());
 
 		assertTrue(result.stream().anyMatch(
-			tag -> tag.id().equals(1L) && tag.name().equals(TagName.CONVENIENCE_STORE.getKoreanName()))
+			tag -> tag.id().equals(1L) && tag.name().equals(TagType.CONVENIENCE_STORE.getName()))
 		);
 		assertTrue(result.stream().anyMatch(
-			tag -> tag.id().equals(2L) && tag.name().equals(TagName.CILANTRO.getKoreanName()))
+			tag -> tag.id().equals(2L) && tag.name().equals(TagType.CILANTRO.getName()))
 		);
 
 		verify(subcategoryTagRepository, times(1)).findAllBySubcategory(subcategory1);

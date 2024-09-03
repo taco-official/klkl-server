@@ -16,14 +16,14 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import jakarta.transaction.Transactional;
-import taco.klkl.domain.category.dao.CategoryRepository;
-import taco.klkl.domain.category.domain.Category;
-import taco.klkl.domain.category.domain.CategoryName;
-import taco.klkl.domain.category.domain.Subcategory;
-import taco.klkl.domain.category.domain.SubcategoryName;
-import taco.klkl.domain.category.dto.response.CategoryResponse;
-import taco.klkl.domain.category.dto.response.CategoryWithSubcategoryResponse;
-import taco.klkl.domain.category.exception.CategoryNotFoundException;
+import taco.klkl.domain.category.dao.category.CategoryRepository;
+import taco.klkl.domain.category.domain.category.Category;
+import taco.klkl.domain.category.domain.category.CategoryType;
+import taco.klkl.domain.category.domain.subcategory.Subcategory;
+import taco.klkl.domain.category.domain.subcategory.SubcategoryType;
+import taco.klkl.domain.category.dto.response.category.CategoryResponse;
+import taco.klkl.domain.category.exception.category.CategoryNotFoundException;
+import taco.klkl.domain.category.service.category.CategoryServiceImpl;
 
 @Transactional
 @ExtendWith(MockitoExtension.class)
@@ -35,18 +35,18 @@ class CategoryServiceImplTest {
 	@Mock
 	private CategoryRepository categoryRepository;
 
-	private final Category category = Category.of(CategoryName.FOOD);
-	private final Category category2 = Category.of(CategoryName.CLOTHES);
-	private final Subcategory subcategory1 = Subcategory.of(category, SubcategoryName.SNACK);
-	private final Subcategory subcategory2 = Subcategory.of(category, SubcategoryName.INSTANT_FOOD);
+	private final Category category = Category.of(CategoryType.FOOD);
+	private final Category category2 = Category.of(CategoryType.CLOTHES);
+	private final Subcategory subcategory1 = Subcategory.of(category, SubcategoryType.SNACK);
+	private final Subcategory subcategory2 = Subcategory.of(category, SubcategoryType.INSTANT_FOOD);
 	private final List<Subcategory> subcategories = Arrays.asList(subcategory1, subcategory2);
 
 	@Test
 	@DisplayName("카테고리 Service CategoryResponse(DTO)에 담겨 나오는지 Test")
 	void testFindAllCategories() {
 		// given
-		Category category1 = Category.of(CategoryName.CLOTHES);
-		Category category2 = Category.of(CategoryName.FOOD);
+		Category category1 = Category.of(CategoryType.CLOTHES);
+		Category category2 = Category.of(CategoryType.FOOD);
 		List<Category> categories = Arrays.asList(category1, category2);
 
 		when(categoryRepository.findAll()).thenReturn(categories);
@@ -58,8 +58,8 @@ class CategoryServiceImplTest {
 		assertNotNull(result);
 		assertEquals(2, result.size());
 
-		assertEquals(CategoryName.CLOTHES.getKoreanName(), result.get(0).name());
-		assertEquals(CategoryName.FOOD.getKoreanName(), result.get(1).name());
+		assertEquals(CategoryType.CLOTHES.getName(), result.get(0).name());
+		assertEquals(CategoryType.FOOD.getName(), result.get(1).name());
 
 		verify(categoryRepository, times(1)).findAll();
 	}
@@ -73,14 +73,14 @@ class CategoryServiceImplTest {
 
 		//when
 		when(mockCategory.getSubcategories()).thenReturn(subcategories);
-		when(mockCategory.getName()).thenReturn(CategoryName.FOOD);
+		when(mockCategory.getName()).thenReturn(CategoryType.FOOD.getName());
 		when(categoryRepository.findById(categoryId)).thenReturn(Optional.of(mockCategory));
-		CategoryWithSubcategoryResponse response = categoryService.findSubCategoriesByCategoryId(categoryId);
+		CategoryResponse response = categoryService.findSubCategoriesByCategoryId(categoryId);
 
 		//then
 		assertNotNull(response);
-		assertEquals(SubcategoryName.SNACK.getKoreanName(), response.subcategories().get(0).name());
-		assertEquals(SubcategoryName.INSTANT_FOOD.getKoreanName(), response.subcategories().get(1).name());
+		assertEquals(SubcategoryType.SNACK.getName(), response.subcategories().get(0).name());
+		assertEquals(SubcategoryType.INSTANT_FOOD.getName(), response.subcategories().get(1).name());
 
 		verify(categoryRepository, times(1)).findById(1L);
 	}
@@ -104,20 +104,20 @@ class CategoryServiceImplTest {
 
 	@Test
 	@DisplayName("CategoryName리스트로 Category 조회")
-	void testFindAllCategoriesByCategoryNames() {
+	void testFindAllCategoriesByPartialString() {
 		// given
-		List<CategoryName> categoryNames = Arrays.asList(CategoryName.CLOTHES, CategoryName.FOOD);
+		String partialName = "foo";
 		List<Category> categories = Arrays.asList(category, category2);
 		CategoryResponse category1ResponseDto = CategoryResponse.from(category);
 		CategoryResponse category2ResponseDto = CategoryResponse.from(category2);
 
-		when(categoryRepository.findAllByNameIn(categoryNames)).thenReturn(categories);
+		when(categoryRepository.findAllByNameLike(partialName)).thenReturn(categories);
 
 		// when
-		List<CategoryResponse> categoryResponses = categoryService.findCategoriesByCategoryNames(categoryNames);
+		List<CategoryResponse> categoryResponses = categoryService.findAllCategoriesByPartialString(partialName);
 
 		// then
-		Assertions.assertThat(categoryResponses.size()).isEqualTo(categoryNames.size());
+		Assertions.assertThat(categoryResponses.size()).isEqualTo(2);
 		Assertions.assertThat(categoryResponses).containsExactly(category1ResponseDto, category2ResponseDto);
 	}
 }

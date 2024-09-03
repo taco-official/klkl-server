@@ -15,13 +15,14 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.transaction.annotation.Transactional;
 
-import taco.klkl.domain.category.dao.SubcategoryRepository;
-import taco.klkl.domain.category.domain.Category;
-import taco.klkl.domain.category.domain.CategoryName;
-import taco.klkl.domain.category.domain.Subcategory;
-import taco.klkl.domain.category.domain.SubcategoryName;
-import taco.klkl.domain.category.dto.response.SubcategoryResponse;
-import taco.klkl.domain.category.exception.SubcategoryNotFoundException;
+import taco.klkl.domain.category.dao.subcategory.SubcategoryRepository;
+import taco.klkl.domain.category.domain.category.Category;
+import taco.klkl.domain.category.domain.category.CategoryType;
+import taco.klkl.domain.category.domain.subcategory.Subcategory;
+import taco.klkl.domain.category.domain.subcategory.SubcategoryType;
+import taco.klkl.domain.category.dto.response.subcategory.SubcategoryResponse;
+import taco.klkl.domain.category.exception.subcategory.SubcategoryNotFoundException;
+import taco.klkl.domain.category.service.subcategory.SubcategoryServiceImpl;
 
 @ExtendWith(MockitoExtension.class)
 @Transactional
@@ -33,10 +34,10 @@ public class SubcategoryServiceImplTest {
 	@Mock
 	private SubcategoryRepository subcategoryRepository;
 
-	private final Category category = Category.of(CategoryName.FOOD);
-	private final Subcategory subcategory1 = Subcategory.of(category, SubcategoryName.SNACK);
-	private final Subcategory subcategory2 = Subcategory.of(category, SubcategoryName.BEVERAGE);
-	private final Subcategory subcategory3 = Subcategory.of(category, SubcategoryName.DRINKS);
+	private final Category category = Category.of(CategoryType.FOOD);
+	private final Subcategory subcategory1 = Subcategory.of(category, SubcategoryType.SNACK);
+	private final Subcategory subcategory2 = Subcategory.of(category, SubcategoryType.BEVERAGE);
+	private final Subcategory subcategory3 = Subcategory.of(category, SubcategoryType.DRINKS);
 
 	@Test
 	@DisplayName("Query id가 Long type으로 입력되고 subcategory가 존재하는 경우")
@@ -54,9 +55,9 @@ public class SubcategoryServiceImplTest {
 		assertNotNull(result);
 		assertEquals(3, result.size());
 
-		assertEquals(SubcategoryName.SNACK.getKoreanName(), result.get(0).getName().getKoreanName());
-		assertEquals(SubcategoryName.BEVERAGE.getKoreanName(), result.get(1).getName().getKoreanName());
-		assertEquals(SubcategoryName.DRINKS.getKoreanName(), result.get(2).getName().getKoreanName());
+		assertEquals(SubcategoryType.SNACK.getName(), result.get(0).getName());
+		assertEquals(SubcategoryType.BEVERAGE.getName(), result.get(1).getName());
+		assertEquals(SubcategoryType.DRINKS.getName(), result.get(2).getName());
 
 		verify(subcategoryRepository, times(1)).findAllById(subcategoriesIds);
 	}
@@ -79,23 +80,22 @@ public class SubcategoryServiceImplTest {
 
 	@Test
 	@DisplayName("SubcategoryName리스트로 Subcategory 조회")
-	void testFindSubcategoriesBySubcategoryNames() {
+	void testFindAllSubcategoriesByPartialString() {
 		// given
-		List<SubcategoryName> subcategoryNames = Arrays.asList(subcategory1.getName(), subcategory2.getName(),
-			subcategory3.getName());
+		String partialName = "foo";
 		List<Subcategory> subcategories = Arrays.asList(subcategory1, subcategory2, subcategory3);
 		SubcategoryResponse subcategory1ResponseDto = SubcategoryResponse.from(subcategory1);
 		SubcategoryResponse subcategory2ResponseDto = SubcategoryResponse.from(subcategory2);
 		SubcategoryResponse subcategory3ResponseDto = SubcategoryResponse.from(subcategory3);
 
-		when(subcategoryRepository.findAllByNameIn(subcategoryNames)).thenReturn(subcategories);
+		when(subcategoryRepository.findAllByNameLike(partialName)).thenReturn(subcategories);
 
 		// when
 		List<SubcategoryResponse> subcategoryResponseList = subcategoryService
-			.findSubcategoriesBySubcategoryNames(subcategoryNames);
+			.findAllSubcategoriesByPartialString(partialName);
 
 		// then
-		Assertions.assertThat(subcategoryResponseList.size()).isEqualTo(subcategoryNames.size());
+		Assertions.assertThat(subcategoryResponseList.size()).isEqualTo(3);
 		Assertions.assertThat(subcategoryResponseList)
 			.containsExactly(subcategory1ResponseDto, subcategory2ResponseDto, subcategory3ResponseDto);
 	}

@@ -12,24 +12,24 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockitoAnnotations;
 
-import taco.klkl.domain.category.domain.Category;
-import taco.klkl.domain.category.domain.CategoryName;
-import taco.klkl.domain.category.domain.Subcategory;
-import taco.klkl.domain.category.domain.SubcategoryName;
-import taco.klkl.domain.category.domain.Tag;
-import taco.klkl.domain.category.domain.TagName;
-import taco.klkl.domain.category.dto.response.TagResponse;
+import taco.klkl.domain.category.domain.category.Category;
+import taco.klkl.domain.category.domain.category.CategoryType;
+import taco.klkl.domain.category.domain.subcategory.Subcategory;
+import taco.klkl.domain.category.domain.subcategory.SubcategoryType;
+import taco.klkl.domain.category.domain.tag.Tag;
+import taco.klkl.domain.category.domain.tag.TagType;
+import taco.klkl.domain.category.dto.response.tag.TagResponse;
 import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.product.domain.ProductTag;
 import taco.klkl.domain.product.domain.Rating;
-import taco.klkl.domain.region.domain.City;
-import taco.klkl.domain.region.domain.CityType;
-import taco.klkl.domain.region.domain.Country;
-import taco.klkl.domain.region.domain.CountryType;
-import taco.klkl.domain.region.domain.Currency;
-import taco.klkl.domain.region.domain.CurrencyType;
-import taco.klkl.domain.region.domain.Region;
-import taco.klkl.domain.region.domain.RegionType;
+import taco.klkl.domain.region.domain.city.City;
+import taco.klkl.domain.region.domain.city.CityType;
+import taco.klkl.domain.region.domain.country.Country;
+import taco.klkl.domain.region.domain.country.CountryType;
+import taco.klkl.domain.region.domain.currency.Currency;
+import taco.klkl.domain.region.domain.currency.CurrencyType;
+import taco.klkl.domain.region.domain.region.Region;
+import taco.klkl.domain.region.domain.region.RegionType;
 import taco.klkl.domain.user.domain.User;
 import taco.klkl.global.util.ProductUtil;
 
@@ -49,31 +49,29 @@ class ProductSimpleResponseTest {
 		when(mockUser.getId()).thenReturn(1L);
 		when(mockUser.getName()).thenReturn("Test User");
 
-		Region region = Region.of(RegionType.SOUTHEAST_ASIA);
+		Region region = Region.from(RegionType.SOUTHEAST_ASIA);
 		currency = Currency.of(
-			CurrencyType.THAI_BAHT,
-			"image/baht.jpg"
+			CurrencyType.THAI_BAHT
 		);
 		Country country = Country.of(
 			CountryType.JAPAN,
 			region,
-			"image/thailand-flag.jpg",
 			"image/thailand-photo.jpg",
 			currency
 		);
 		city = City.of(
-			country,
-			CityType.BANGKOK
+			CityType.BANGKOK,
+			country
 		);
 
-		Category category = Category.of(CategoryName.FOOD);
+		Category category = Category.of(CategoryType.FOOD);
 		subcategory = Subcategory.of(
 			category,
-			SubcategoryName.INSTANT_FOOD
+			SubcategoryType.INSTANT_FOOD
 		);
 
-		Tag tag1 = Tag.of(TagName.CILANTRO);
-		Tag tag2 = Tag.of(TagName.CONVENIENCE_STORE);
+		Tag tag1 = Tag.of(TagType.CILANTRO);
+		Tag tag2 = Tag.of(TagType.CONVENIENCE_STORE);
 		Set<ProductTag> productTags = Set.of(tag1, tag2).stream()
 			.map(tag -> ProductTag.of(product, tag))
 			.collect(Collectors.toSet());
@@ -104,8 +102,8 @@ class ProductSimpleResponseTest {
 		assertThat(dto.name()).isEqualTo(product.getName());
 		assertThat(dto.likeCount()).isEqualTo(product.getLikeCount());
 		assertThat(dto.rating()).isEqualTo(product.getRating().getValue());
-		assertThat(dto.countryName()).isEqualTo(product.getCity().getCountry().getName().getKoreanName());
-		assertThat(dto.categoryName()).isEqualTo(product.getSubcategory().getCategory().getName().getKoreanName());
+		assertThat(dto.countryName()).isEqualTo(product.getCity().getCountry().getName());
+		assertThat(dto.categoryName()).isEqualTo(product.getSubcategory().getCategory().getName());
 	}
 
 	@Test
@@ -125,8 +123,8 @@ class ProductSimpleResponseTest {
 			product.getName(),
 			product.getLikeCount(),
 			product.getRating().getValue(),
-			product.getCity().getCountry().getName().getKoreanName(),
-			product.getSubcategory().getCategory().getName().getKoreanName(),
+			product.getCity().getCountry().getName(),
+			product.getSubcategory().getCategory().getName(),
 			tags
 		);
 
@@ -136,8 +134,8 @@ class ProductSimpleResponseTest {
 		assertThat(dto.name()).isEqualTo(product.getName());
 		assertThat(dto.likeCount()).isEqualTo(product.getLikeCount());
 		assertThat(dto.rating()).isEqualTo(product.getRating().getValue());
-		assertThat(dto.countryName()).isEqualTo(product.getCity().getCountry().getName().getKoreanName());
-		assertThat(dto.categoryName()).isEqualTo(product.getSubcategory().getCategory().getName().getKoreanName());
+		assertThat(dto.countryName()).isEqualTo(product.getCity().getCountry().getName());
+		assertThat(dto.categoryName()).isEqualTo(product.getSubcategory().getCategory().getName());
 		assertThat(dto.tags()).isEqualTo(tags);
 	}
 }

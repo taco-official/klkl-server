@@ -2,10 +2,10 @@ package taco.klkl.domain.search.dto.response;
 
 import java.util.List;
 
-import taco.klkl.domain.category.dto.response.CategoryResponse;
-import taco.klkl.domain.category.dto.response.SubcategoryResponse;
-import taco.klkl.domain.region.dto.response.CityResponse;
-import taco.klkl.domain.region.dto.response.CountrySimpleResponse;
+import taco.klkl.domain.category.dto.response.category.CategoryResponse;
+import taco.klkl.domain.category.dto.response.subcategory.SubcategoryResponse;
+import taco.klkl.domain.region.dto.response.city.CityResponse;
+import taco.klkl.domain.region.dto.response.country.CountrySimpleResponse;
 
 public record SearchResponse(
 	List<CountrySimpleResponse> countries,

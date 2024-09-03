@@ -17,19 +17,20 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import taco.klkl.domain.region.dao.CountryRepository;
-import taco.klkl.domain.region.domain.City;
-import taco.klkl.domain.region.domain.CityType;
-import taco.klkl.domain.region.domain.Country;
-import taco.klkl.domain.region.domain.CountryType;
-import taco.klkl.domain.region.domain.Currency;
-import taco.klkl.domain.region.domain.CurrencyType;
-import taco.klkl.domain.region.domain.Region;
-import taco.klkl.domain.region.domain.RegionType;
-import taco.klkl.domain.region.dto.response.CityResponse;
-import taco.klkl.domain.region.dto.response.CountryResponse;
-import taco.klkl.domain.region.dto.response.CountrySimpleResponse;
-import taco.klkl.domain.region.exception.CountryNotFoundException;
+import taco.klkl.domain.region.dao.country.CountryRepository;
+import taco.klkl.domain.region.domain.city.City;
+import taco.klkl.domain.region.domain.city.CityType;
+import taco.klkl.domain.region.domain.country.Country;
+import taco.klkl.domain.region.domain.country.CountryType;
+import taco.klkl.domain.region.domain.currency.Currency;
+import taco.klkl.domain.region.domain.currency.CurrencyType;
+import taco.klkl.domain.region.domain.region.Region;
+import taco.klkl.domain.region.domain.region.RegionType;
+import taco.klkl.domain.region.dto.response.city.CityResponse;
+import taco.klkl.domain.region.dto.response.country.CountryResponse;
+import taco.klkl.domain.region.dto.response.country.CountrySimpleResponse;
+import taco.klkl.domain.region.exception.country.CountryNotFoundException;
+import taco.klkl.domain.region.service.country.CountryServiceImpl;
 
 @ExtendWith(MockitoExtension.class)
 public class CountryServiceImplTest {
@@ -41,22 +42,20 @@ public class CountryServiceImplTest {
 	@Mock
 	CountryRepository countryRepository;
 
-	private final Region region = Region.of(RegionType.NORTHEAST_ASIA);
-	private final Currency currency1 = Currency.of(CurrencyType.JAPANESE_YEN, "flag");
+	private final Region region = Region.from(RegionType.NORTHEAST_ASIA);
+	private final Currency currency1 = Currency.of(CurrencyType.JAPANESE_YEN);
 	private final Country country1 = Country.of(
 		CountryType.JAPAN,
 		region,
-		"test",
-		"test",
+		"photo",
 		currency1);
 	private final Country country2 = Country.of(
 		CountryType.TAIWAN,
 		region,
-		"test",
-		"test",
+		"photo",
 		currency1);
-	private final City city1 = City.of(country1, CityType.OSAKA);
-	private final City city2 = City.of(country1, CityType.KYOTO);
+	private final City city1 = City.of(CityType.OSAKA, country1);
+	private final City city2 = City.of(CityType.KYOTO, country1);
 	private final List<City> cities = Arrays.asList(city1, city2);
 
 	@Test
@@ -71,8 +70,8 @@ public class CountryServiceImplTest {
 
 		// then
 		assertThat(findCountries.size()).isEqualTo(countries.size());
-		assertThat(findCountries.get(0).name()).isEqualTo(countries.get(0).getName().getKoreanName());
-		assertThat(findCountries.get(1).name()).isEqualTo(countries.get(1).getName().getKoreanName());
+		assertThat(findCountries.get(0).name()).isEqualTo(countries.get(0).getName());
+		assertThat(findCountries.get(1).name()).isEqualTo(countries.get(1).getName());
 	}
 
 	@Test
@@ -114,25 +113,25 @@ public class CountryServiceImplTest {
 
 		// then
 		assertThat(findCountries.size()).isEqualTo(cities.size());
-		assertThat(findCountries.get(0).name()).isEqualTo(cities.get(0).getName().getKoreanName());
-		assertThat(findCountries.get(1).name()).isEqualTo(cities.get(1).getName().getKoreanName());
+		assertThat(findCountries.get(0).name()).isEqualTo(cities.get(0).getName());
+		assertThat(findCountries.get(1).name()).isEqualTo(cities.get(1).getName());
 	}
 
 	@Test
-	@DisplayName("CountryType리스트로 국가 조회")
+	@DisplayName("부분 문자열로 국가 조회")
 	void testGetCountriesByCountryTypes() {
 		// given
-		List<CountryType> countryTypes = Arrays.asList(CountryType.JAPAN, CountryType.TAIWAN);
+		String partialName = "foo";
 		CountrySimpleResponse country1ResponseDto = CountrySimpleResponse.from(country1);
 		CountrySimpleResponse country2ResponseDto = CountrySimpleResponse.from(country2);
-		when(countryRepository.findAllByNameIn(countryTypes)).thenReturn(Arrays.asList(country1, country2));
+		when(countryRepository.findAllByNameLike(partialName)).thenReturn(Arrays.asList(country1, country2));
 
 		// when
-		List<CountrySimpleResponse> countrySimpleResponses = countryService.getAllCountriesByCountryTypes(
-			countryTypes);
+		List<CountrySimpleResponse> countrySimpleResponses = countryService.findAllCountriesByPartialString(
+			partialName);
 
 		// then
-		assertThat(countrySimpleResponses).hasSize(countryTypes.size());
+		assertThat(countrySimpleResponses).hasSize(2);
 		assertThat(countrySimpleResponses).containsExactlyInAnyOrder(country1ResponseDto, country2ResponseDto);
 	}
 }

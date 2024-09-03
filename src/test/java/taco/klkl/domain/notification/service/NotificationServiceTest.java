@@ -23,10 +23,10 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
-import taco.klkl.domain.category.domain.Category;
-import taco.klkl.domain.category.domain.CategoryName;
-import taco.klkl.domain.category.domain.Subcategory;
-import taco.klkl.domain.category.domain.SubcategoryName;
+import taco.klkl.domain.category.domain.category.Category;
+import taco.klkl.domain.category.domain.category.CategoryType;
+import taco.klkl.domain.category.domain.subcategory.Subcategory;
+import taco.klkl.domain.category.domain.subcategory.SubcategoryType;
 import taco.klkl.domain.comment.domain.Comment;
 import taco.klkl.domain.notification.dao.NotificationRepository;
 import taco.klkl.domain.notification.domain.Notification;
@@ -35,14 +35,14 @@ import taco.klkl.domain.notification.dto.response.NotificationResponse;
 import taco.klkl.domain.notification.exception.NotificationNotFoundException;
 import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.product.domain.Rating;
-import taco.klkl.domain.region.domain.City;
-import taco.klkl.domain.region.domain.CityType;
-import taco.klkl.domain.region.domain.Country;
-import taco.klkl.domain.region.domain.CountryType;
-import taco.klkl.domain.region.domain.Currency;
-import taco.klkl.domain.region.domain.CurrencyType;
-import taco.klkl.domain.region.domain.Region;
-import taco.klkl.domain.region.domain.RegionType;
+import taco.klkl.domain.region.domain.city.City;
+import taco.klkl.domain.region.domain.city.CityType;
+import taco.klkl.domain.region.domain.country.Country;
+import taco.klkl.domain.region.domain.country.CountryType;
+import taco.klkl.domain.region.domain.currency.Currency;
+import taco.klkl.domain.region.domain.currency.CurrencyType;
+import taco.klkl.domain.region.domain.region.Region;
+import taco.klkl.domain.region.domain.region.RegionType;
 import taco.klkl.domain.user.domain.Gender;
 import taco.klkl.domain.user.domain.QUser;
 import taco.klkl.domain.user.domain.User;
@@ -82,27 +82,25 @@ public class NotificationServiceTest {
 			26,
 			"나는 해적왕이 될 사나이다.");
 
-		Region region = Region.of(RegionType.SOUTHEAST_ASIA);
+		Region region = Region.from(RegionType.SOUTHEAST_ASIA);
 		Currency currency = Currency.of(
-			CurrencyType.THAI_BAHT,
-			"image/baht.jpg"
+			CurrencyType.THAI_BAHT
 		);
 		Country country = Country.of(
 			CountryType.JAPAN,
 			region,
-			"image/thailand-flag.jpg",
 			"image/thailand-photo.jpg",
 			currency
 		);
 		City city = City.of(
-			country,
-			CityType.BANGKOK
+			CityType.BANGKOK,
+			country
 		);
 
-		Category category = Category.of(CategoryName.FOOD);
+		Category category = Category.of(CategoryType.FOOD);
 		Subcategory subcategory = Subcategory.of(
 			category,
-			SubcategoryName.INSTANT_FOOD
+			SubcategoryType.INSTANT_FOOD
 		);
 
 		product = Product.of(
