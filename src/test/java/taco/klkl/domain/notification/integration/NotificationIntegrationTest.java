@@ -45,14 +45,14 @@ public class NotificationIntegrationTest {
 
 	@Test
 	@DisplayName("모든 알림 읽음 테스트")
-	public void testReadAllNotification() throws Exception {
+	public void testReadAllNotifications() throws Exception {
 		//given
 		//when & then
-		mockMvc.perform(put("/v1/notifications/all")
+		mockMvc.perform(put("/v1/notifications/read")
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
-			.andExpect(jsonPath("$.data[*].notification.isRead", everyItem(is(true))));
+			.andExpect(jsonPath("$.data.updatedCount", not(0)));
 	}
 
 	@Test
@@ -62,11 +62,11 @@ public class NotificationIntegrationTest {
 		Long notificationId = 700L;
 
 		//when & then
-		mockMvc.perform(put("/v1/notifications/{notificationId}", notificationId)
+		mockMvc.perform(put("/v1/notifications/{notificationId}/read", notificationId)
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
-			.andExpect(jsonPath("$.data.notification.isRead", is(true)));
+			.andExpect(jsonPath("$.data.updatedCount", is(1)));
 	}
 
 	@Test
@@ -76,7 +76,7 @@ public class NotificationIntegrationTest {
 		Long wrongNotificationId = 1L;
 
 		//when & then
-		mockMvc.perform(put("/v1/notifications/{wrongNotificationId}", wrongNotificationId)
+		mockMvc.perform(put("/v1/notifications/{wrongNotificationId}/read", wrongNotificationId)
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isNotFound())
 			.andExpect(jsonPath("$.isSuccess", is(false)))

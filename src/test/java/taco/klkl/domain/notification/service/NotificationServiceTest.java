@@ -32,6 +32,7 @@ import taco.klkl.domain.notification.dao.NotificationRepository;
 import taco.klkl.domain.notification.domain.Notification;
 import taco.klkl.domain.notification.domain.QNotification;
 import taco.klkl.domain.notification.dto.response.NotificationResponse;
+import taco.klkl.domain.notification.dto.response.NotificationUpdateResponse;
 import taco.klkl.domain.notification.exception.NotificationNotFoundException;
 import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.product.domain.Rating;
@@ -143,8 +144,8 @@ public class NotificationServiceTest {
 
 		//then
 		assertThat(response).hasSize(1);
-		assertThat(response.get(0).notification().id()).isEqualTo(mockNotification.getId());
-		assertThat(response.get(0).notification().isRead()).isFalse();
+		assertThat(response.get(0).id()).isEqualTo(mockNotification.getId());
+		assertThat(response.get(0).isRead()).isFalse();
 	}
 
 	@Test
@@ -182,13 +183,13 @@ public class NotificationServiceTest {
 
 		when(userUtil.findTestUser()).thenReturn(mockUser);
 		when(notificationRepository.findAllByComment_Product_User(mockUser)).thenReturn(notificationList);
+		when(notificationRepository.count()).thenReturn(2L);
 
 		//when
-		List<NotificationResponse> response = notificationService.readAllNotifications();
+		NotificationUpdateResponse response = notificationService.readAllNotifications();
 
 		//then
-		assertThat(response.get(0).notification().isRead()).isEqualTo(true);
-		assertThat(response.get(1).notification().isRead()).isEqualTo(true);
+		assertThat(response.updatedCount()).isEqualTo(2L);
 		verify(notificationRepository).findAllByComment_Product_User(mockUser);
 	}
 
@@ -201,10 +202,10 @@ public class NotificationServiceTest {
 		when(notificationRepository.findById(any(Long.class))).thenReturn(Optional.of(notification));
 
 		//when
-		NotificationResponse response = notificationService.readNotificationById(any(Long.class));
+		NotificationUpdateResponse response = notificationService.readNotificationById(any(Long.class));
 
 		//then
-		assertThat(response.notification().isRead()).isEqualTo(true);
+		assertThat(response.updatedCount()).isEqualTo(1L);
 		verify(notificationRepository).findById(any(Long.class));
 	}
 
