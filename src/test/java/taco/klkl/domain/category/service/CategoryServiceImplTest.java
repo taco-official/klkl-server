@@ -111,7 +111,7 @@ class CategoryServiceImplTest {
 		CategoryResponse category1ResponseDto = CategoryResponse.from(category);
 		CategoryResponse category2ResponseDto = CategoryResponse.from(category2);
 
-		when(categoryRepository.findAllByNameLike(partialName)).thenReturn(categories);
+		when(categoryRepository.findAllByNameContaining(partialName)).thenReturn(categories);
 
 		// when
 		List<CategoryResponse> categoryResponses = categoryService.findAllCategoriesByPartialString(partialName);

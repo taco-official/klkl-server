@@ -9,5 +9,5 @@ import taco.klkl.domain.region.domain.country.Country;
 
 @Repository
 public interface CountryRepository extends JpaRepository<Country, Long> {
-	List<Country> findAllByNameLike(final String partialName);
+	List<Country> findAllByNameContaining(final String partialName);
 }

@@ -57,7 +57,7 @@ public class CountryServiceImpl implements CountryService {
 		if (partialString == null || partialString.isEmpty()) {
 			return List.of();
 		}
-		final List<Country> countries = countryRepository.findAllByNameLike(partialString);
+		final List<Country> countries = countryRepository.findAllByNameContaining(partialString);
 		return countries.stream()
 			.map(CountrySimpleResponse::from)
 			.toList();

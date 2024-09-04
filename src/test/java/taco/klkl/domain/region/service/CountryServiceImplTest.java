@@ -124,7 +124,7 @@ public class CountryServiceImplTest {
 		String partialName = "foo";
 		CountrySimpleResponse country1ResponseDto = CountrySimpleResponse.from(country1);
 		CountrySimpleResponse country2ResponseDto = CountrySimpleResponse.from(country2);
-		when(countryRepository.findAllByNameLike(partialName)).thenReturn(Arrays.asList(country1, country2));
+		when(countryRepository.findAllByNameContaining(partialName)).thenReturn(Arrays.asList(country1, country2));
 
 		// when
 		List<CountrySimpleResponse> countrySimpleResponses = countryService.findAllCountriesByPartialString(
