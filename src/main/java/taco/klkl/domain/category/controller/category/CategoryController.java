@@ -24,7 +24,7 @@ public class CategoryController {
 	private final CategoryService categoryService;
 
 	@GetMapping
-	@Operation(summary = "대분류 목록 조회", description = "전체 Category 반환")
+	@Operation(summary = "전체 카테고리 목록 조회", description = "전체 카테고리 목록을 조회합니다.")
 	public List<CategoryResponse> findAllCategories() {
 		return categoryService.findAllCategories();
 	}
