@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -24,7 +25,12 @@ public class CurrencyController {
 
 	@Operation(summary = "모든 통화 조회", description = "모든 통화 목록을 조회합니다.")
 	@GetMapping
-	public List<CurrencyResponse> findAllCurrencies() {
-		return currencyService.findAllCurrencies();
+	public List<CurrencyResponse> findCurrencies(
+		@RequestParam(name = "country_id", required = false) Long countryId
+	) {
+		if (countryId == null) {
+			return currencyService.findAllCurrencies();
+		}
+		return List.of(currencyService.findCurrencyByCountryId(countryId));
 	}
 }
