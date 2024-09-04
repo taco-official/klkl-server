@@ -4,6 +4,7 @@ import java.util.List;
 
 import taco.klkl.domain.region.domain.country.Country;
 import taco.klkl.domain.region.dto.response.city.CityResponse;
+import taco.klkl.global.util.CountryUtil;
 
 /**
  *
@@ -17,14 +18,10 @@ public record CountrySimpleResponse(
 	List<CityResponse> cities
 ) {
 	public static CountrySimpleResponse from(final Country country) {
-		final List<CityResponse> cities = country.getCities().stream()
-			.map(CityResponse::from)
-			.toList();
-
 		return new CountrySimpleResponse(
 			country.getId(),
 			country.getName(),
-			cities
+			CountryUtil.createCitiesByCountry(country)
 		);
 	}
 }

@@ -6,6 +6,7 @@ import taco.klkl.domain.region.domain.FlagUrlGenerator;
 import taco.klkl.domain.region.domain.country.Country;
 import taco.klkl.domain.region.dto.response.city.CityResponse;
 import taco.klkl.domain.region.dto.response.currency.CurrencyResponse;
+import taco.klkl.global.util.CountryUtil;
 
 /**
  *
@@ -30,18 +31,13 @@ public record CountryResponse(
 	 * @return CountryResponse
 	 */
 	public static CountryResponse from(final Country country) {
-		final List<CityResponse> cities = country.getCities().stream()
-			.map(CityResponse::from)
-			.toList();
-
 		return new CountryResponse(
 			country.getId(),
 			country.getName(),
 			FlagUrlGenerator.generateSvgUrlByCountryCode(country.getCode()),
 			country.getPhoto(),
 			CurrencyResponse.from(country.getCurrency()),
-			cities
+			CountryUtil.createCitiesByCountry(country)
 		);
 	}
-
 }
