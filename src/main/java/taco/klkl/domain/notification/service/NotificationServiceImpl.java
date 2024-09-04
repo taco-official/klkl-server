@@ -14,7 +14,9 @@ import taco.klkl.domain.comment.domain.Comment;
 import taco.klkl.domain.notification.dao.NotificationRepository;
 import taco.klkl.domain.notification.domain.Notification;
 import taco.klkl.domain.notification.domain.QNotification;
+import taco.klkl.domain.notification.dto.response.NotificationDeleteResponse;
 import taco.klkl.domain.notification.dto.response.NotificationResponse;
+import taco.klkl.domain.notification.dto.response.NotificationUpdateResponse;
 import taco.klkl.domain.notification.exception.NotificationNotFoundException;
 import taco.klkl.domain.user.domain.QUser;
 import taco.klkl.domain.user.domain.User;
@@ -57,22 +59,29 @@ public class NotificationServiceImpl implements NotificationService {
 
 	@Override
 	@Transactional
-	public List<NotificationResponse> readAllNotifications() {
+	public NotificationUpdateResponse readAllNotifications() {
 		final User receiver = findReceiver();
 		final List<Notification> notifications = notificationRepository.findAllByComment_Product_User(receiver);
 		notifications.forEach(Notification::read);
-		return notifications.stream()
-			.map(NotificationResponse::from)
-			.toList();
+		final Long notificationCount = notificationRepository.count();
+		return NotificationUpdateResponse.of(notificationCount);
 	}
 
 	@Override
 	@Transactional
-	public NotificationResponse readNotificationById(final Long id) {
+	public NotificationUpdateResponse readNotificationById(final Long id) {
 		final Notification notification = notificationRepository.findById(id)
 			.orElseThrow(NotificationNotFoundException::new);
 		notification.read();
-		return NotificationResponse.from(notification);
+		return NotificationUpdateResponse.of(1L);
+	}
+
+	@Override
+	@Transactional
+	public NotificationDeleteResponse deleteAllNotifications() {
+		final Long notificationCount = notificationRepository.count();
+		notificationRepository.deleteAll();
+		return NotificationDeleteResponse.of(notificationCount);
 	}
 
 	@Override

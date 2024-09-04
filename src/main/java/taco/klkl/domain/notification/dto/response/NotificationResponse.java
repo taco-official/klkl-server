@@ -1,19 +1,25 @@
 package taco.klkl.domain.notification.dto.response;
 
-import taco.klkl.domain.comment.dto.response.CommentResponse;
+import java.time.LocalDateTime;
+
+import taco.klkl.domain.comment.dto.response.CommentNotificationResponse;
 import taco.klkl.domain.notification.domain.Notification;
-import taco.klkl.domain.product.dto.response.ProductSimpleResponse;
+import taco.klkl.domain.product.dto.response.ProductNotificationResponse;
 
 public record NotificationResponse(
-	NotificationInfo notification,
-	ProductSimpleResponse product,
-	CommentResponse comment
+	Long id,
+	boolean isRead,
+	ProductNotificationResponse product,
+	CommentNotificationResponse comment,
+	LocalDateTime createdAt
 ) {
 	public static NotificationResponse from(final Notification notification) {
 		return new NotificationResponse(
-			NotificationInfo.from(notification),
-			ProductSimpleResponse.from(notification.getComment().getProduct()),
-			CommentResponse.from(notification.getComment())
+			notification.getId(),
+			notification.getIsRead(),
+			ProductNotificationResponse.from(notification.getComment().getProduct()),
+			CommentNotificationResponse.from(notification.getComment()),
+			notification.getCreatedAt()
 		);
 	}
 }
