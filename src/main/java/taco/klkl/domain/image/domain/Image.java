@@ -2,6 +2,8 @@ package taco.klkl.domain.image.domain;
 
 import java.time.LocalDateTime;
 
+import org.springframework.beans.factory.annotation.Value;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -17,6 +19,9 @@ import lombok.NoArgsConstructor;
 @Entity(name = "image")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Image {
+
+	@Value("${cloud.aws.cloudfront.domain}")
+	private String cloudFrontDomain;
 
 	@Id
 	@Column(name = "image_id",
@@ -88,7 +93,7 @@ public class Image {
 		return new Image(imageType, targetId, imageUuid, fileExtension);
 	}
 
-	public void uploadComplete() {
+	public void markAsComplete() {
 		this.uploadState = UploadState.COMPLETE;
 	}
 
@@ -101,5 +106,9 @@ public class Image {
 			+ targetId + "/"
 			+ imageKey + "."
 			+ fileExtension.getValue();
+	}
+
+	public String createCloudFrontUrl() {
+		return "https://" + cloudFrontDomain + "/" + this.createFileName();
 	}
 }
