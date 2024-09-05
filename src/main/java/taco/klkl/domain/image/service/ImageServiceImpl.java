@@ -21,11 +21,14 @@ import taco.klkl.domain.image.domain.FileExtension;
 import taco.klkl.domain.image.domain.Image;
 import taco.klkl.domain.image.domain.ImageType;
 import taco.klkl.domain.image.domain.UploadState;
-import taco.klkl.domain.image.dto.request.ImageUploadRequest;
+import taco.klkl.domain.image.dto.request.MultipleImagesUpdateRequest;
+import taco.klkl.domain.image.dto.request.MultipleImagesUploadRequest;
+import taco.klkl.domain.image.dto.request.SingleImageUpdateRequest;
+import taco.klkl.domain.image.dto.request.SingleImageUploadRequest;
 import taco.klkl.domain.image.dto.response.PresignedUrlResponse;
-import taco.klkl.domain.image.exception.ImageNotFoundException;
 import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.user.domain.User;
+import taco.klkl.global.util.ImageUtil;
 import taco.klkl.global.util.ProductUtil;
 import taco.klkl.global.util.UserUtil;
 
@@ -44,55 +47,59 @@ public class ImageServiceImpl implements ImageService {
 	private final ImageRepository imageRepository;
 	private final UserUtil userUtil;
 	private final ProductUtil productUtil;
+	private final ImageUtil imageUtil;
 
 	@Value("${cloud.aws.s3.bucket}")
 	private String bucketName;
 
-	@Value("${cloud.aws.cloudfront.domain}")
-	private String cloudFrontDomain;
-
 	@Override
 	@Transactional
-	public PresignedUrlResponse createUserImageUploadUrl(final ImageUploadRequest uploadRequest) {
+	public PresignedUrlResponse createUserImageUploadUrl(final SingleImageUploadRequest uploadRequest) {
 		final User currentUser = userUtil.findCurrentUser();
 		return createImageUploadUrl(ImageType.USER_IMAGE, currentUser.getId(), uploadRequest.fileExtension());
 	}
 
 	@Override
 	@Transactional
-	public PresignedUrlResponse createProductImageUploadUrl(
+	public List<PresignedUrlResponse> createProductImageUploadUrls(
 		final Long productId,
-		final ImageUploadRequest uploadRequest
+		final MultipleImagesUploadRequest uploadRequest
 	) {
-		return createImageUploadUrl(ImageType.PRODUCT_IMAGE, productId, uploadRequest.fileExtension());
+		return uploadRequest.fileExtensions().stream()
+			.map(fileExtension -> createImageUploadUrl(ImageType.PRODUCT_IMAGE, productId, fileExtension))
+			.toList();
 	}
 
 	@Override
 	@Transactional
-	public void uploadCompleteUserImage() {
+	public void uploadCompleteUserImage(
+		final SingleImageUpdateRequest updateRequest
+	) {
 		final User currentUser = userUtil.findCurrentUser();
-		final List<Image> images = uploadCompleteImage(ImageType.USER_IMAGE, currentUser.getId());
+		expireOldImages(ImageType.USER_IMAGE, currentUser.getId());
 
-		final Image newImage = images.stream()
-			.filter(image -> image.getUploadState() == UploadState.COMPLETE)
-			.findFirst()
-			.orElseThrow(ImageNotFoundException::new);
+		Image updatedImage = imageUtil.findImageEntityById(updateRequest.imageId());
+		updatedImage.markAsComplete();
 
-		final String imageUrl = createImageUrl(newImage);
-		currentUser.updateProfileImageUrl(imageUrl);
+		currentUser.updateImage(updatedImage);
 	}
 
 	@Override
 	@Transactional
-	public void uploadCompleteProductImage(final Long productId) {
-		final List<Image> newImages = uploadCompleteImage(ImageType.PRODUCT_IMAGE, productId);
+	public void uploadCompleteProductImages(
+		final Long productId,
+		final MultipleImagesUpdateRequest updateRequest
+	) {
+		expireOldImages(ImageType.PRODUCT_IMAGE, productId);
 
-		final List<String> imageUrls = newImages.stream()
-			.map(this::createImageUrl)
+		List<Image> updatedImages = updateRequest.imageIds().stream()
+			.map(imageUtil::findImageEntityById)
 			.toList();
 
+		updatedImages.forEach(Image::markAsComplete);
+
 		Product product = productUtil.findProductEntityById(productId);
-		product.updateImages(imageUrls);
+		product.updateImages(updatedImages);
 	}
 
 	private PresignedUrlResponse createImageUploadUrl(
@@ -112,7 +119,7 @@ public class ImageServiceImpl implements ImageService {
 		final PresignedPutObjectRequest presignedRequest = s3Presigner.presignPutObject(putObjectPresignRequest);
 		final String presignedUrl = presignedRequest.url().toString();
 
-		return PresignedUrlResponse.from(presignedUrl);
+		return PresignedUrlResponse.of(image, presignedUrl);
 	}
 
 	private Image createAndSaveImageEntity(
@@ -125,19 +132,10 @@ public class ImageServiceImpl implements ImageService {
 		return imageRepository.save(image);
 	}
 
-	private List<Image> uploadCompleteImage(final ImageType imageType, Long targetId) {
-		final List<Image> images = imageRepository.findAllByImageTypeAndTargetId(imageType, targetId);
-
-		images.stream()
+	private void expireOldImages(final ImageType imageType, Long targetId) {
+		imageRepository.findAllByImageTypeAndTargetId(imageType, targetId).stream()
 			.filter(image -> image.getUploadState() == UploadState.COMPLETE)
 			.forEach(Image::markAsOutdated);
-
-		final List<Image> newImages = images.stream()
-			.filter(image -> image.getUploadState() == UploadState.PENDING)
-			.toList();
-		newImages.forEach(Image::uploadComplete);
-
-		return newImages;
 	}
 
 	private PutObjectRequest createPutObjectRequest(final String fileName, final FileExtension fileExtension) {
@@ -154,9 +152,5 @@ public class ImageServiceImpl implements ImageService {
 			.signatureDuration(SIGNATURE_DURATION)
 			.putObjectRequest(putObjectRequest)
 			.build();
-	}
-
-	private String createImageUrl(final Image image) {
-		return "https://" + cloudFrontDomain + "/" + image.createFileName();
 	}
 }
