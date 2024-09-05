@@ -12,7 +12,8 @@ public record CommentResponse(
 	LocalDateTime createdAt
 ) {
 	public static CommentResponse from(final Comment comment) {
-		return new CommentResponse(comment.getId(),
+		return new CommentResponse(
+			comment.getId(),
 			UserSimpleResponse.from(comment.getUser()),
 			comment.getContent(),
 			comment.getCreatedAt()

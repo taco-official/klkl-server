@@ -21,8 +21,10 @@ import taco.klkl.domain.category.domain.category.CategoryType;
 import taco.klkl.domain.category.domain.subcategory.Subcategory;
 import taco.klkl.domain.category.domain.subcategory.SubcategoryType;
 import taco.klkl.domain.comment.domain.Comment;
+import taco.klkl.domain.notification.dao.NotificationRepository;
 import taco.klkl.domain.notification.domain.Notification;
 import taco.klkl.domain.notification.dto.response.NotificationResponse;
+import taco.klkl.domain.notification.dto.response.NotificationUpdateResponse;
 import taco.klkl.domain.notification.service.NotificationService;
 import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.product.domain.Rating;
@@ -46,6 +48,9 @@ class NotificationControllerTest {
 
 	@Mock
 	Currency currency;
+
+	@Mock
+	private NotificationRepository notificationRepository;
 
 	@MockBean
 	NotificationService notificationService;
@@ -93,10 +98,10 @@ class NotificationControllerTest {
 		mockMvc.perform(get("/v1/notifications"))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
-			.andExpect(jsonPath("$.data[0].notification.isRead", is(false)))
+			.andExpect(jsonPath("$.data[0].isRead", is(false)))
 			.andExpect(jsonPath("$.data[0].product.name", is(product.getName())))
 			.andExpect(jsonPath("$.data[0].comment.content", is(comment1.getContent())))
-			.andExpect(jsonPath("$.data[1].notification.isRead", is(false)))
+			.andExpect(jsonPath("$.data[1].isRead", is(false)))
 			.andExpect(jsonPath("$.data[1].product.name", is(product.getName())))
 			.andExpect(jsonPath("$.data[1].comment.content", is(comment2.getContent())))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
@@ -108,21 +113,15 @@ class NotificationControllerTest {
 		// given
 		notification1.read();
 		notification2.read();
-		NotificationResponse notificationResponse1 = NotificationResponse.from(notification1);
-		NotificationResponse notificationResponse2 = NotificationResponse.from(notification2);
-		List<NotificationResponse> notificationResponseList = List.of(notificationResponse1, notificationResponse2);
-		when(notificationService.readAllNotifications()).thenReturn(notificationResponseList);
+		NotificationUpdateResponse notificationUpdateResponse = NotificationUpdateResponse.of(2L);
+		when(notificationService.readAllNotifications()).thenReturn(notificationUpdateResponse);
+		when(notificationRepository.count()).thenReturn(2L);
 
 		// when
-		mockMvc.perform(put("/v1/notifications/all"))
+		mockMvc.perform(put("/v1/notifications/read"))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
-			.andExpect(jsonPath("$.data[0].notification.isRead", is(true)))
-			.andExpect(jsonPath("$.data[0].product.name", is(product.getName())))
-			.andExpect(jsonPath("$.data[0].comment.content", is(comment1.getContent())))
-			.andExpect(jsonPath("$.data[1].notification.isRead", is(true)))
-			.andExpect(jsonPath("$.data[1].product.name", is(product.getName())))
-			.andExpect(jsonPath("$.data[1].comment.content", is(comment2.getContent())))
+			.andExpect(jsonPath("$.data.updatedCount", is(2)))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
 
 		// then
@@ -133,16 +132,14 @@ class NotificationControllerTest {
 	void testReadOneNotifications() throws Exception {
 		// given
 		notification1.read();
-		NotificationResponse notificationResponse = NotificationResponse.from(notification1);
-		when(notificationService.readNotificationById(1L)).thenReturn(notificationResponse);
+		NotificationUpdateResponse notificationUpdateResponse = NotificationUpdateResponse.of(1L);
+		when(notificationService.readNotificationById(1L)).thenReturn(notificationUpdateResponse);
 
 		// when & then
-		mockMvc.perform(put("/v1/notifications/1"))
+		mockMvc.perform(put("/v1/notifications/1/read"))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
-			.andExpect(jsonPath("$.data.notification.isRead", is(true)))
-			.andExpect(jsonPath("$.data.product.name", is(product.getName())))
-			.andExpect(jsonPath("$.data.comment.content", is(comment1.getContent())))
+			.andExpect(jsonPath("$.data.updatedCount", is(1)))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
 	}
 }

@@ -26,7 +26,7 @@ public class CityServiceImpl implements CityService {
 		if (partialString == null || partialString.isEmpty()) {
 			return List.of();
 		}
-		final List<City> cities = cityRepository.findAllByNameLike(partialString);
+		final List<City> cities = cityRepository.findAllByNameContaining(partialString);
 		return cities.stream()
 			.map(CityResponse::from)
 			.toList();

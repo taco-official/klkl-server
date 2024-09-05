@@ -88,7 +88,7 @@ public class SubcategoryServiceImplTest {
 		SubcategoryResponse subcategory2ResponseDto = SubcategoryResponse.from(subcategory2);
 		SubcategoryResponse subcategory3ResponseDto = SubcategoryResponse.from(subcategory3);
 
-		when(subcategoryRepository.findAllByNameLike(partialName)).thenReturn(subcategories);
+		when(subcategoryRepository.findAllByNameContaining(partialName)).thenReturn(subcategories);
 
 		// when
 		List<SubcategoryResponse> subcategoryResponseList = subcategoryService

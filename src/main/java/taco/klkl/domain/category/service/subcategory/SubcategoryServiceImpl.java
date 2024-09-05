@@ -27,7 +27,7 @@ public class SubcategoryServiceImpl implements SubcategoryService {
 		if (partialString == null || partialString.isEmpty()) {
 			return List.of();
 		}
-		final List<Subcategory> subcategories = subcategoryRepository.findAllByNameLike(partialString);
+		final List<Subcategory> subcategories = subcategoryRepository.findAllByNameContaining(partialString);
 		return subcategories.stream()
 			.map(SubcategoryResponse::from)
 			.toList();

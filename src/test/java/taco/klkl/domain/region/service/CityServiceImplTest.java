@@ -43,7 +43,7 @@ public class CityServiceImplTest {
 		List<City> cities = Arrays.asList(city1, city2);
 		CityResponse city1ResponseDto = CityResponse.from(city1);
 		CityResponse city2ResponseDto = CityResponse.from(city2);
-		when(cityRepository.findAllByNameLike(partialName)).thenReturn(cities);
+		when(cityRepository.findAllByNameContaining(partialName)).thenReturn(cities);
 
 		// when
 		List<CityResponse> cityResponseList = cityService.findAllCitiesByPartialString(partialName);

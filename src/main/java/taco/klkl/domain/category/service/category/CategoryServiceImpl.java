@@ -42,7 +42,7 @@ public class CategoryServiceImpl implements CategoryService {
 		if (partialString == null || partialString.isEmpty()) {
 			return List.of();
 		}
-		final List<Category> categories = categoryRepository.findAllByNameLike(partialString);
+		final List<Category> categories = categoryRepository.findAllByNameContaining(partialString);
 		return categories.stream()
 			.map(CategoryResponse::from)
 			.toList();

@@ -11,4 +11,5 @@ public interface CurrencyService {
 
 	List<CurrencyResponse> findAllCurrencies();
 
+	CurrencyResponse findCurrencyByCountryId(final Long countryId);
 }
