@@ -11,6 +11,7 @@ import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import taco.klkl.domain.image.domain.Image;
 
 @Getter
 @Entity(name = "product_image")
@@ -31,33 +32,37 @@ public class ProductImage {
 	)
 	private Product product;
 
-	@Column(
-		name = "image_url",
+	@ManyToOne(
+		fetch = FetchType.LAZY,
+		optional = false
+	)
+	@JoinColumn(
+		name = "image_id",
 		nullable = false
 	)
-	private String imageUrl;
+	private Image image;
 
 	@Column(
 		name = "order_index",
 		nullable = false
 	)
-	private Integer orderIndex;
+	private Integer order;
 
 	public static ProductImage of(
 		final Product product,
-		final String imageUrl,
-		final Integer orderIndex
+		final Image image,
+		final Integer order
 	) {
-		return new ProductImage(product, imageUrl, orderIndex);
+		return new ProductImage(product, image, order);
 	}
 
 	private ProductImage(
 		final Product product,
-		final String imageUrl,
-		final Integer orderIndex
+		final Image image,
+		final Integer order
 	) {
 		this.product = product;
-		this.imageUrl = imageUrl;
-		this.orderIndex = orderIndex;
+		this.image = image;
+		this.order = order;
 	}
 }
