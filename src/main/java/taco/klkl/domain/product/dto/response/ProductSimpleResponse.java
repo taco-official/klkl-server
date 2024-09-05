@@ -1,6 +1,5 @@
 package taco.klkl.domain.product.dto.response;
 
-import java.util.List;
 import java.util.Set;
 
 import taco.klkl.domain.category.dto.response.tag.TagResponse;
@@ -9,7 +8,7 @@ import taco.klkl.global.util.ProductUtil;
 
 public record ProductSimpleResponse(
 	Long id,
-	List<ProductImageResponse> images,
+	String mainImageUrl,
 	String name,
 	Integer likeCount,
 	Double rating,
@@ -18,19 +17,15 @@ public record ProductSimpleResponse(
 	Set<TagResponse> tags
 ) {
 	public static ProductSimpleResponse from(final Product product) {
-		List<ProductImageResponse> images = product.getImages().stream()
-			.map(ProductImageResponse::from)
-			.toList();
-
 		return new ProductSimpleResponse(
 			product.getId(),
-			images,
+			product.getMainImageUrl(),
 			product.getName(),
 			product.getLikeCount(),
 			product.getRating().getValue(),
 			product.getCity().getCountry().getName(),
 			product.getSubcategory().getCategory().getName(),
-			ProductUtil.createTagsByProduct(product)
+			ProductUtil.generateTagsByProduct(product)
 		);
 	}
 }
