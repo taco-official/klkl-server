@@ -37,17 +37,17 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	@Transactional
-	public User createUser(final UserCreateRequest createRequest) {
-		final User user = createUserEntity(createRequest);
-		return userRepository.save(user);
-	}
-
-	@Override
-	@Transactional
 	public UserDetailResponse updateUser(final UserUpdateRequest updateRequest) {
 		User user = userUtil.getCurrentUser();
 		updateUserEntity(user, updateRequest);
 		return UserDetailResponse.from(user);
+	}
+
+	@Override
+	@Transactional
+	public User createUser(final UserCreateRequest createRequest) {
+		final User user = createUserEntity(createRequest);
+		return userRepository.save(user);
 	}
 
 	private User createUserEntity(final UserCreateRequest createRequest) {

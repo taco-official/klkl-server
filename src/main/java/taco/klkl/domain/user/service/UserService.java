@@ -9,9 +9,11 @@ import taco.klkl.domain.user.dto.response.UserDetailResponse;
 
 @Service
 public interface UserService {
+
 	UserDetailResponse getCurrentUser();
+
+	UserDetailResponse updateUser(final UserUpdateRequest updateRequest);
 
 	User createUser(final UserCreateRequest createRequest);
 
-	UserDetailResponse updateUser(final UserUpdateRequest updateRequest);
 }
