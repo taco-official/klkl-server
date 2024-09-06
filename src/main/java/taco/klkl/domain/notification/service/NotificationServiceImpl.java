@@ -92,6 +92,6 @@ public class NotificationServiceImpl implements NotificationService {
 
 	// TODO: 토큰으로 유저 가져오는 방식으로 수정하기
 	private User findReceiver() {
-		return userUtil.findTestUser();
+		return userUtil.getCurrentUser();
 	}
 }

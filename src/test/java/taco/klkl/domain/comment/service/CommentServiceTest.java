@@ -105,7 +105,7 @@ public class CommentServiceTest {
 		final Long productId = 1L;
 		final Comment comment = Comment.of(product, user, "이거 진짜에요?");
 
-		when(userUtil.findTestUser()).thenReturn(user);
+		when(userUtil.getCurrentUser()).thenReturn(user);
 		when(commentRepository.save(any(Comment.class))).thenReturn(comment);
 
 		//when

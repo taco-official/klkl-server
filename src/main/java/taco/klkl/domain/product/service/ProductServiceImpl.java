@@ -248,7 +248,7 @@ public class ProductServiceImpl implements ProductService {
 
 	private Product createProductEntity(final ProductCreateUpdateRequest createRequest) {
 		final Rating rating = Rating.from(createRequest.rating());
-		final User user = userUtil.findTestUser();
+		final User user = userUtil.getCurrentUser();
 		final City city = findCityById(createRequest.cityId());
 		final Subcategory subcategory = findSubcategoryById(createRequest.subcategoryId());
 		final Currency currency = findCurrencyById(createRequest.currencyId());

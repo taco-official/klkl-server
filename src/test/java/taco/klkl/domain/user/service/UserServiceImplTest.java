@@ -39,7 +39,7 @@ class UserServiceImplTest {
 		// given
 
 		User user = mock(User.class);
-		when(userUtil.findCurrentUser()).thenReturn(user);
+		when(userUtil.getCurrentUser()).thenReturn(user);
 		when(user.getId()).thenReturn(1L);
 		when(user.getName()).thenReturn("testUser");
 		when(user.getDescription()).thenReturn("테스트입니다.");

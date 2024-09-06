@@ -376,7 +376,7 @@ class ProductServiceImplTest {
 	@DisplayName("상품 생성 - 성공")
 	void testCreateProduct() {
 		// Given
-		when(userUtil.findTestUser()).thenReturn(user);
+		when(userUtil.getCurrentUser()).thenReturn(user);
 		when(cityUtil.findCityEntityById(1L)).thenReturn(city);
 		when(subcategoryUtil.findSubcategoryEntityById(1L)).thenReturn(subcategory);
 		when(currencyUtil.findCurrencyEntityById(1L)).thenReturn(currency);

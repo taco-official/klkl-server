@@ -31,7 +31,7 @@ public class UserServiceImpl implements UserService {
 	 */
 	@Override
 	public UserDetailResponse getCurrentUser() {
-		final User currentUser = userUtil.findCurrentUser();
+		final User currentUser = userUtil.getCurrentUser();
 		return UserDetailResponse.from(currentUser);
 	}
 
@@ -45,7 +45,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	@Transactional
 	public UserDetailResponse updateUser(final UserUpdateRequest updateRequest) {
-		User user = userUtil.findCurrentUser();
+		User user = userUtil.getCurrentUser();
 		updateUserEntity(user, updateRequest);
 		return UserDetailResponse.from(user);
 	}

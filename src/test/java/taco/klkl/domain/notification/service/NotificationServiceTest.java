@@ -127,7 +127,7 @@ public class NotificationServiceTest {
 		QNotification notification = QNotification.notification;
 		QUser user = QUser.user;
 
-		when(userUtil.findTestUser()).thenReturn(mockUser);
+		when(userUtil.getCurrentUser()).thenReturn(mockUser);
 		when(mockNotification.getId()).thenReturn(1L);
 		when(mockNotification.getIsRead()).thenReturn(false);
 		when(mockNotification.getCreatedAt()).thenReturn(LocalDateTime.now());
@@ -157,7 +157,7 @@ public class NotificationServiceTest {
 		QNotification notification = QNotification.notification;
 		QUser user = QUser.user;
 
-		when(userUtil.findTestUser()).thenReturn(mockUser);
+		when(userUtil.getCurrentUser()).thenReturn(mockUser);
 
 		when(queryFactory.selectFrom(any(QNotification.class))).thenReturn(mockQuery);
 		when(mockQuery.join(notification.comment.product.user, user)).thenReturn(mockQuery);
@@ -181,7 +181,7 @@ public class NotificationServiceTest {
 
 		List<Notification> notificationList = List.of(notification1, notification2);
 
-		when(userUtil.findTestUser()).thenReturn(mockUser);
+		when(userUtil.getCurrentUser()).thenReturn(mockUser);
 		when(notificationRepository.findAllByComment_Product_User(mockUser)).thenReturn(notificationList);
 		when(notificationRepository.count()).thenReturn(2L);
 
