@@ -83,12 +83,12 @@ public class ImageServiceImpl implements ImageService {
 		final User currentUser = userUtil.findCurrentUser();
 		expireOldImages(ImageType.USER_IMAGE, currentUser.getId());
 
-		Image updatedImage = imageUtil.findImageEntityById(updateRequest.imageId());
+		Image updatedImage = imageUtil.findImageEntityByImageTypeAndId(ImageType.USER_IMAGE, updateRequest.imageId());
 		updatedImage.markAsComplete();
 
 		currentUser.updateImage(updatedImage);
 
-		return SingleUploadCompleteResponse.from(currentUser.getId());
+		return SingleUploadCompleteResponse.from(currentUser.getImage().getId());
 	}
 
 	@Override
@@ -100,7 +100,7 @@ public class ImageServiceImpl implements ImageService {
 		expireOldImages(ImageType.PRODUCT_IMAGE, productId);
 
 		List<Image> updatedImages = updateRequest.imageIds().stream()
-			.map(imageUtil::findImageEntityById)
+			.map(imageId -> imageUtil.findImageEntityByImageTypeAndId(ImageType.PRODUCT_IMAGE, imageId))
 			.toList();
 
 		updatedImages.forEach(Image::markAsComplete);
