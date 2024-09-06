@@ -1,7 +1,5 @@
 package taco.klkl.global.common.constants;
 
-import java.util.Set;
-
 public final class ProductConstants {
 
 	public static final int DEFAULT_PAGE_SIZE = 9;
