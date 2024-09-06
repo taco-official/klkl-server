@@ -25,8 +25,11 @@ import taco.klkl.domain.image.dto.request.MultipleImagesUpdateRequest;
 import taco.klkl.domain.image.dto.request.MultipleImagesUploadRequest;
 import taco.klkl.domain.image.dto.request.SingleImageUpdateRequest;
 import taco.klkl.domain.image.dto.request.SingleImageUploadRequest;
+import taco.klkl.domain.image.dto.response.MultipleUploadCompleteResponse;
 import taco.klkl.domain.image.dto.response.PresignedUrlResponse;
+import taco.klkl.domain.image.dto.response.SingleUploadCompleteResponse;
 import taco.klkl.domain.product.domain.Product;
+import taco.klkl.domain.product.domain.ProductImage;
 import taco.klkl.domain.user.domain.User;
 import taco.klkl.global.util.ImageUtil;
 import taco.klkl.global.util.ProductUtil;
@@ -74,7 +77,7 @@ public class ImageServiceImpl implements ImageService {
 
 	@Override
 	@Transactional
-	public void uploadCompleteUserImage(
+	public SingleUploadCompleteResponse uploadCompleteUserImage(
 		final SingleImageUpdateRequest updateRequest
 	) {
 		final User currentUser = userUtil.findCurrentUser();
@@ -84,11 +87,13 @@ public class ImageServiceImpl implements ImageService {
 		updatedImage.markAsComplete();
 
 		currentUser.updateImage(updatedImage);
+
+		return SingleUploadCompleteResponse.from(currentUser.getId());
 	}
 
 	@Override
 	@Transactional
-	public void uploadCompleteProductImages(
+	public MultipleUploadCompleteResponse uploadCompleteProductImages(
 		final Long productId,
 		final MultipleImagesUpdateRequest updateRequest
 	) {
@@ -102,6 +107,13 @@ public class ImageServiceImpl implements ImageService {
 
 		Product product = productUtil.findProductEntityById(productId);
 		product.updateImages(updatedImages);
+
+		final List<Long> productImageIds = product.getImages().stream()
+			.map(ProductImage::getImage)
+			.map(Image::getId)
+			.toList();
+
+		return MultipleUploadCompleteResponse.from(productImageIds);
 	}
 
 	private PresignedUrlResponse createImageUploadUrl(

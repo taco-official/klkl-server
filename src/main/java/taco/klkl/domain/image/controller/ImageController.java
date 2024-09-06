@@ -2,7 +2,6 @@ package taco.klkl.domain.image.controller;
 
 import java.util.List;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,7 +16,9 @@ import taco.klkl.domain.image.dto.request.MultipleImagesUpdateRequest;
 import taco.klkl.domain.image.dto.request.MultipleImagesUploadRequest;
 import taco.klkl.domain.image.dto.request.SingleImageUpdateRequest;
 import taco.klkl.domain.image.dto.request.SingleImageUploadRequest;
+import taco.klkl.domain.image.dto.response.MultipleUploadCompleteResponse;
 import taco.klkl.domain.image.dto.response.PresignedUrlResponse;
+import taco.klkl.domain.image.dto.response.SingleUploadCompleteResponse;
 import taco.klkl.domain.image.service.ImageService;
 
 @Slf4j
@@ -40,18 +41,6 @@ public class ImageController {
 	}
 
 	@Operation(
-		summary = "유저 이미지 업로드 완료 처리",
-		description = "유저 이미지 업로드를 완료 처리합니다."
-	)
-	@PostMapping("/v1/users/me/upload-complete")
-	public ResponseEntity<Void> uploadCompleteUserImage(
-		@Valid @RequestBody final SingleImageUpdateRequest request
-	) {
-		imageService.uploadCompleteUserImage(request);
-		return ResponseEntity.ok().build();
-	}
-
-	@Operation(
 		summary = "상품 이미지 업로드 Presigned URL 생성",
 		description = "상품 이미지 업로드를 위한 Presigned URL를 생성합니다."
 	)
@@ -64,15 +53,25 @@ public class ImageController {
 	}
 
 	@Operation(
+		summary = "유저 이미지 업로드 완료 처리",
+		description = "유저 이미지 업로드를 완료 처리합니다."
+	)
+	@PostMapping("/v1/users/me/upload-complete")
+	public SingleUploadCompleteResponse uploadCompleteUserImage(
+		@Valid @RequestBody final SingleImageUpdateRequest request
+	) {
+		return imageService.uploadCompleteUserImage(request);
+	}
+
+	@Operation(
 		summary = "상품 이미지 업로드 완료 처리",
 		description = "상품 이미지 업로드를 완료 처리합니다."
 	)
 	@PostMapping("/v1/products/{productId}/upload-complete")
-	public ResponseEntity<Void> uploadCompleteProductImages(
+	public MultipleUploadCompleteResponse uploadCompleteProductImages(
 		@PathVariable final Long productId,
 		@Valid @RequestBody final MultipleImagesUpdateRequest request
 	) {
-		imageService.uploadCompleteProductImages(productId, request);
-		return ResponseEntity.ok().build();
+		return imageService.uploadCompleteProductImages(productId, request);
 	}
 }
