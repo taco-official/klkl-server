@@ -56,7 +56,8 @@ public class ImageServiceImpl implements ImageService {
 	@Transactional
 	public PresignedUrlResponse createUserImageUploadUrl(final SingleImageUploadRequest uploadRequest) {
 		final User currentUser = userUtil.findCurrentUser();
-		return createImageUploadUrl(ImageType.USER_IMAGE, currentUser.getId(), uploadRequest.fileExtension());
+		final FileExtension fileExtension = FileExtension.from(uploadRequest.fileExtension());
+		return createImageUploadUrl(ImageType.USER_IMAGE, currentUser.getId(), fileExtension);
 	}
 
 	@Override
@@ -66,6 +67,7 @@ public class ImageServiceImpl implements ImageService {
 		final MultipleImagesUploadRequest uploadRequest
 	) {
 		return uploadRequest.fileExtensions().stream()
+			.map(FileExtension::from)
 			.map(fileExtension -> createImageUploadUrl(ImageType.PRODUCT_IMAGE, productId, fileExtension))
 			.toList();
 	}
@@ -105,15 +107,14 @@ public class ImageServiceImpl implements ImageService {
 	private PresignedUrlResponse createImageUploadUrl(
 		final ImageType imageType,
 		final Long targetId,
-		final String fileExtensionStr
+		final FileExtension fileExtension
 	) {
 		final String imageKey = ImageKeyGenerator.generate();
-		final FileExtension fileExtension = FileExtension.from(fileExtensionStr);
 
 		final Image image = createAndSaveImageEntity(imageType, targetId, imageKey, fileExtension);
 
 		final PutObjectRequest putObjectRequest
-			= createPutObjectRequest(image.createFileName(), image.getFileExtension());
+			= createPutObjectRequest(image.generateFileName(), image.getFileExtension());
 		final PutObjectPresignRequest putObjectPresignRequest = createPutObjectPresignRequest(putObjectRequest);
 
 		final PresignedPutObjectRequest presignedRequest = s3Presigner.presignPutObject(putObjectPresignRequest);
