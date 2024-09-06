@@ -9,7 +9,6 @@ import taco.klkl.domain.image.exception.FileExtensionNotFoundException;
 @Getter
 @RequiredArgsConstructor
 public enum FileExtension {
-	JPG("jpeg"),
 	JPEG("jpeg"),
 	PNG("png"),
 	WEBP("webp"),
