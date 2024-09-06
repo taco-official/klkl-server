@@ -29,6 +29,7 @@ import lombok.NoArgsConstructor;
 import taco.klkl.domain.category.domain.subcategory.Subcategory;
 import taco.klkl.domain.category.domain.tag.Tag;
 import taco.klkl.domain.comment.domain.Comment;
+import taco.klkl.domain.image.domain.Image;
 import taco.klkl.domain.like.exception.LikeCountBelowMinimumException;
 import taco.klkl.domain.like.exception.LikeCountOverMaximumException;
 import taco.klkl.domain.product.converter.RatingConverter;
@@ -54,7 +55,7 @@ public class Product {
 		cascade = CascadeType.ALL,
 		orphanRemoval = true
 	)
-	@OrderBy("orderIndex ASC")
+	@OrderBy("order ASC")
 	private List<ProductImage> images = new ArrayList<>();
 
 	@Column(
@@ -239,13 +240,21 @@ public class Product {
 		return this.likeCount;
 	}
 
-	public void updateImages(final List<String> imageUrls) {
+	public void updateImages(final List<Image> updateImages) {
 		this.images.clear();
-		IntStream.range(0, imageUrls.size())
+		IntStream.range(0, updateImages.size())
 			.forEach(i -> {
-				ProductImage newImage = ProductImage.of(this, imageUrls.get(i), i);
-				this.images.add(newImage);
+				final ProductImage productImage = ProductImage.of(this, updateImages.get(i), i);
+				this.images.add(productImage);
 			});
+	}
+
+	public String getMainImageUrl() {
+		if (images.isEmpty()) {
+			return null;
+		}
+		final Image mainImage = images.get(0).getImage();
+		return mainImage.getUrl();
 	}
 
 	private Product(

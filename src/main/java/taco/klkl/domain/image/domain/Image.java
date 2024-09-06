@@ -12,6 +12,7 @@ import jakarta.persistence.Id;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import taco.klkl.infra.cloudfront.CloudFrontUrlGenerator;
 
 @Getter
 @Entity(name = "image")
@@ -88,7 +89,7 @@ public class Image {
 		return new Image(imageType, targetId, imageUuid, fileExtension);
 	}
 
-	public void uploadComplete() {
+	public void markAsComplete() {
 		this.uploadState = UploadState.COMPLETE;
 	}
 
@@ -96,10 +97,14 @@ public class Image {
 		this.uploadState = UploadState.OUTDATED;
 	}
 
-	public String createFileName() {
+	public String generateFileName() {
 		return imageType.getValue() + "/"
 			+ targetId + "/"
 			+ imageKey + "."
 			+ fileExtension.getValue();
+	}
+
+	public String getUrl() {
+		return CloudFrontUrlGenerator.generateUrlByFileName(this.generateFileName());
 	}
 }

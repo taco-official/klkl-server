@@ -14,8 +14,6 @@ import jakarta.validation.constraints.Size;
 import taco.klkl.global.common.constants.ProductConstants;
 
 /**
- * TODO: 상품필터속성 추가 해야함 (상품필터속성 테이블 개발 후)
- * TODO: 상품 컨트롤러에서 필터 서비스를 이용해서 조합 하는게 괜찮아 보입니다.
  * @param name
  * @param description
  * @param address

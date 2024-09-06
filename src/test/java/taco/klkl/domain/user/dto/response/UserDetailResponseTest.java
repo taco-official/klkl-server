@@ -15,7 +15,7 @@ public class UserDetailResponseTest {
 	public void testUserDetailResponseDto() {
 		// given
 		Long id = 1L;
-		String profile = "image/profileImageUrl.png";
+		String profile = "image/profileUrl.png";
 		String name = "이름";
 		String description = "자기소개";
 		int totalLikeCount = 100;
@@ -25,7 +25,7 @@ public class UserDetailResponseTest {
 
 		// then
 		assertThat(userDetail.id()).isEqualTo(id);
-		assertThat(userDetail.profileImageUrl()).isEqualTo(profile);
+		assertThat(userDetail.profileUrl()).isEqualTo(profile);
 		assertThat(userDetail.name()).isEqualTo(name);
 		assertThat(userDetail.description()).isEqualTo(description);
 		assertThat(userDetail.totalLikeCount()).isEqualTo(totalLikeCount);

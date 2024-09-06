@@ -14,7 +14,7 @@ import taco.klkl.global.util.ProductUtil;
 
 public record ProductDetailResponse(
 	Long id,
-	List<ProductImageResponse> images,
+	List<String> imageUrls,
 	String name,
 	String description,
 	String address,
@@ -29,13 +29,9 @@ public record ProductDetailResponse(
 	LocalDateTime createdAt
 ) {
 	public static ProductDetailResponse from(final Product product) {
-		List<ProductImageResponse> images = product.getImages().stream()
-			.map(ProductImageResponse::from)
-			.toList();
-
 		return new ProductDetailResponse(
 			product.getId(),
-			images,
+			ProductUtil.generateImageUrlsByProduct(product),
 			product.getName(),
 			product.getDescription(),
 			product.getAddress(),
@@ -46,7 +42,7 @@ public record ProductDetailResponse(
 			CityResponse.from(product.getCity()),
 			SubcategoryResponse.from(product.getSubcategory()),
 			CurrencyResponse.from(product.getCurrency()),
-			ProductUtil.createTagsByProduct(product),
+			ProductUtil.generateTagsByProduct(product),
 			product.getCreatedAt()
 		);
 	}

@@ -42,7 +42,6 @@ class UserServiceImplTest {
 		when(userUtil.findCurrentUser()).thenReturn(user);
 		when(user.getId()).thenReturn(1L);
 		when(user.getName()).thenReturn("testUser");
-		when(user.getProfileImageUrl()).thenReturn("image/test.jpg");
 		when(user.getDescription()).thenReturn("테스트입니다.");
 
 		// when
@@ -51,7 +50,6 @@ class UserServiceImplTest {
 		// then
 		assertThat(userDto.id()).isEqualTo(user.getId());
 		assertThat(userDto.name()).isEqualTo(user.getName());
-		assertThat(userDto.profileImageUrl()).isEqualTo(user.getProfileImageUrl());
 		assertThat(userDto.description()).isEqualTo(user.getDescription());
 		assertThat(userDto.totalLikeCount()).isEqualTo(UserConstants.DEFAULT_TOTAL_LIKE_COUNT);
 	}

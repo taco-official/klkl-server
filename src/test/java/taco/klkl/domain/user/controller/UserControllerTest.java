@@ -14,6 +14,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import taco.klkl.domain.user.domain.Gender;
 import taco.klkl.domain.user.domain.User;
 import taco.klkl.domain.user.dto.response.UserDetailResponse;
 import taco.klkl.domain.user.service.UserService;
@@ -28,23 +29,19 @@ class UserControllerTest {
 	@MockBean
 	UserService userService;
 
-	private UserDetailResponse responseDto;
+	private UserDetailResponse userDetailResponse;
 
 	@BeforeEach
 	public void setUp() {
-		final User user = UserConstants.TEST_USER;
-		System.out.println("Test User created - profileImageUrl: " + user.getProfileImageUrl());
-		responseDto = UserDetailResponse.from(user);
-		System.out.println("Test Response DTO: " + responseDto);
+		final User user = User.of("name", Gender.MALE, 20, "description");
+		userDetailResponse = UserDetailResponse.from(user);
 	}
 
 	@Test
 	@DisplayName("내 정보 조회 API 테스트")
 	public void testGetMe() throws Exception {
 		// given
-		Mockito.when(userService.getCurrentUser()).thenReturn(responseDto);
-		UserDetailResponse mockedResponse = userService.getCurrentUser();
-		System.out.println("Mocked Response: " + mockedResponse);
+		Mockito.when(userService.getCurrentUser()).thenReturn(userDetailResponse);
 
 		// when & then
 		mockMvc.perform(get("/v1/users/me")
@@ -52,9 +49,9 @@ class UserControllerTest {
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
 			.andExpect(jsonPath("$.data.id", is(nullValue())))
-			.andExpect(jsonPath("$.data.profileImageUrl", is(notNullValue())))
-			.andExpect(jsonPath("$.data.name", is(responseDto.name())))
-			.andExpect(jsonPath("$.data.description", is(responseDto.description())))
+			.andExpect(jsonPath("$.data.profileUrl", is(userDetailResponse.profileUrl())))
+			.andExpect(jsonPath("$.data.name", is(userDetailResponse.name())))
+			.andExpect(jsonPath("$.data.description", is(userDetailResponse.description())))
 			.andExpect(jsonPath("$.data.totalLikeCount", is(UserConstants.DEFAULT_TOTAL_LIKE_COUNT)))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
 	}

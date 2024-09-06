@@ -24,7 +24,6 @@ import taco.klkl.global.util.UserUtil;
 
 /**
  * TODO: 알림은 30일 이내 데이터만 보여준다.
- * TODO: 페이징 하지않고 모든 데이터를 준다.
  * TODO: 30일이 지난 데이터는 삭제한다. (스프링 배치 스케줄링)
  */
 @Slf4j

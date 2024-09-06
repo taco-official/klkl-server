@@ -1,6 +1,7 @@
 package taco.klkl.global.util;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
@@ -10,8 +11,10 @@ import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
 import taco.klkl.domain.category.dto.response.tag.TagResponse;
+import taco.klkl.domain.image.domain.Image;
 import taco.klkl.domain.product.dao.ProductRepository;
 import taco.klkl.domain.product.domain.Product;
+import taco.klkl.domain.product.domain.ProductImage;
 import taco.klkl.domain.product.domain.ProductTag;
 import taco.klkl.domain.product.exception.ProductNotFoundException;
 
@@ -33,7 +36,14 @@ public class ProductUtil {
 		}
 	}
 
-	public static Set<TagResponse> createTagsByProduct(final Product product) {
+	public static List<String> generateImageUrlsByProduct(final Product product) {
+		return product.getImages().stream()
+			.map(ProductImage::getImage)
+			.map(Image::getUrl)
+			.toList();
+	}
+
+	public static Set<TagResponse> generateTagsByProduct(final Product product) {
 		return Optional.ofNullable(product.getProductTags())
 			.map(productTag -> productTag.stream()
 				.map(ProductTag::getTag)
