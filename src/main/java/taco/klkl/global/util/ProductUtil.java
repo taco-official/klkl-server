@@ -39,7 +39,7 @@ public class ProductUtil {
 	public static List<String> generateImageUrlsByProduct(final Product product) {
 		return product.getImages().stream()
 			.map(ProductImage::getImage)
-			.map(Image::createCloudFrontUrl)
+			.map(Image::getUrl)
 			.toList();
 	}
 

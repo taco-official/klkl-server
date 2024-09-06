@@ -52,8 +52,8 @@ public class Product {
 
 	@OneToMany(
 		mappedBy = "product",
-		orphanRemoval = true,
-		fetch = FetchType.LAZY
+		cascade = CascadeType.ALL,
+		orphanRemoval = true
 	)
 	@OrderBy("order ASC")
 	private List<ProductImage> images = new ArrayList<>();
@@ -254,7 +254,7 @@ public class Product {
 			return null;
 		}
 		final Image mainImage = images.get(0).getImage();
-		return mainImage.createCloudFrontUrl();
+		return mainImage.getUrl();
 	}
 
 	private Product(

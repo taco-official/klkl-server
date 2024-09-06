@@ -48,7 +48,7 @@ public class UserUtil {
 
 	public static String generateProfileUrlByUser(final User user) {
 		return Optional.ofNullable(user.getImage())
-			.map(Image::createCloudFrontUrl)
+			.map(Image::getUrl)
 			.orElse(null);
 	}
 
