@@ -36,19 +36,6 @@ public class User {
 	private String name;
 
 	@Column(
-		name = "gender",
-		length = 1,
-		nullable = false
-	)
-	private Gender gender;
-
-	@Column(
-		name = "age",
-		nullable = false
-	)
-	private Integer age;
-
-	@Column(
 		name = "description",
 		length = 100
 	)
@@ -63,35 +50,25 @@ public class User {
 
 	private User(
 		final String name,
-		final Gender gender,
-		final Integer age,
 		final String description
 	) {
 		this.name = name;
-		this.gender = gender;
-		this.age = age;
 		this.description = description;
 		this.createdAt = LocalDateTime.now();
 	}
 
 	public static User of(
 		final String name,
-		final Gender gender,
-		final Integer age,
 		final String description
 	) {
-		return new User(name, gender, age, description);
+		return new User(name, description);
 	}
 
 	public void update(
 		final String name,
-		final Gender gender,
-		final Integer age,
 		final String description
 	) {
 		this.name = name;
-		this.gender = gender;
-		this.age = age;
 		this.description = description;
 	}
 

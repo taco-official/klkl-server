@@ -24,7 +24,6 @@ import taco.klkl.domain.comment.exception.CommentProductNotMatch;
 import taco.klkl.domain.notification.service.NotificationService;
 import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.product.exception.ProductNotFoundException;
-import taco.klkl.domain.user.domain.Gender;
 import taco.klkl.domain.user.domain.User;
 import taco.klkl.domain.user.dto.request.UserCreateRequest;
 import taco.klkl.global.util.ProductUtil;
@@ -50,15 +49,11 @@ public class CommentServiceTest {
 
 	private final UserCreateRequest userRequestDto = new UserCreateRequest(
 		"이상화",
-		"남",
-		19,
 		"저는 이상화입니다."
 	);
 
 	private final User user = User.of(
 		userRequestDto.name(),
-		Gender.from(userRequestDto.gender()),
-		userRequestDto.age(),
 		userRequestDto.description()
 	);
 

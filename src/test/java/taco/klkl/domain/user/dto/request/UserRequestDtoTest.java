@@ -24,7 +24,7 @@ class UserRequestDtoTest {
 	@DisplayName("유효한 UserCreateRequestDto에 대한 유효성 검사")
 	public void testValidUserCreateRequestDto() {
 		// given
-		UserCreateRequest requestDto = new UserCreateRequest("이름", "남", 20, "자기소개");
+		UserCreateRequest requestDto = new UserCreateRequest("이름", "자기소개");
 
 		// when
 		Set<ConstraintViolation<UserCreateRequest>> violations = validator.validate(requestDto);
@@ -37,20 +37,7 @@ class UserRequestDtoTest {
 	@DisplayName("이름이 null인 UserCreateRequest 유효성 검사")
 	public void testInvalidUserCreateRequestDto_NameRequired() {
 		// given
-		UserCreateRequest requestDto = new UserCreateRequest(null, "남", 20, "자기소개");
-
-		// when
-		Set<ConstraintViolation<UserCreateRequest>> violations = validator.validate(requestDto);
-
-		// then
-		assertThat(violations).isNotEmpty();
-	}
-
-	@Test
-	@DisplayName("나이가 음수인 UserCreateRequest 유효성 검사")
-	public void testInvalidUserCreateRequestDto_AgeNegative() {
-		// given
-		UserCreateRequest requestDto = new UserCreateRequest("이름", "남", -1, "자기소개");
+		UserCreateRequest requestDto = new UserCreateRequest(null, "자기소개");
 
 		// when
 		Set<ConstraintViolation<UserCreateRequest>> violations = validator.validate(requestDto);

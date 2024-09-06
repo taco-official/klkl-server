@@ -7,7 +7,6 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import taco.klkl.domain.user.dao.UserRepository;
-import taco.klkl.domain.user.domain.Gender;
 import taco.klkl.domain.user.domain.User;
 import taco.klkl.domain.user.dto.request.UserCreateRequest;
 import taco.klkl.domain.user.dto.request.UserUpdateRequest;
@@ -52,28 +51,20 @@ public class UserServiceImpl implements UserService {
 
 	private User createUserEntity(final UserCreateRequest createRequest) {
 		final String name = createRequest.name();
-		final Gender gender = Gender.from(createRequest.gender());
-		final Integer age = createRequest.age();
 		final String description = createRequest.description();
 
 		return User.of(
 			name,
-			gender,
-			age,
 			description
 		);
 	}
 
 	private void updateUserEntity(final User user, final UserUpdateRequest updateRequest) {
 		final String name = updateRequest.name();
-		final Gender gender = Gender.from(updateRequest.gender());
-		final Integer age = updateRequest.age();
 		final String description = updateRequest.description();
 
 		user.update(
 			name,
-			gender,
-			age,
 			description
 		);
 	}

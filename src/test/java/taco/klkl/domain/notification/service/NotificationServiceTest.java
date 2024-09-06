@@ -44,7 +44,6 @@ import taco.klkl.domain.region.domain.currency.Currency;
 import taco.klkl.domain.region.domain.currency.CurrencyType;
 import taco.klkl.domain.region.domain.region.Region;
 import taco.klkl.domain.region.domain.region.RegionType;
-import taco.klkl.domain.user.domain.Gender;
 import taco.klkl.domain.user.domain.QUser;
 import taco.klkl.domain.user.domain.User;
 import taco.klkl.global.util.UserUtil;
@@ -79,8 +78,6 @@ public class NotificationServiceTest {
 	public void setUp() {
 		commentUser = User.of(
 			"윤상정",
-			Gender.FEMALE,
-			26,
 			"나는 해적왕이 될 사나이다.");
 
 		Region region = Region.from(RegionType.SOUTHEAST_ASIA);

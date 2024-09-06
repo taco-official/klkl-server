@@ -62,7 +62,6 @@ import taco.klkl.domain.region.domain.currency.CurrencyType;
 import taco.klkl.domain.region.domain.region.Region;
 import taco.klkl.domain.region.domain.region.RegionType;
 import taco.klkl.domain.user.domain.User;
-import taco.klkl.global.common.constants.UserConstants;
 import taco.klkl.global.common.response.PagedResponseDto;
 import taco.klkl.global.util.CityUtil;
 import taco.klkl.global.util.CurrencyUtil;
@@ -109,7 +108,7 @@ class ProductServiceImplTest {
 	void setUp() {
 		MockitoAnnotations.openMocks(this);
 
-		user = UserConstants.TEST_USER;
+		user = User.of("testUser", "테스트입니다.");
 
 		Region region = Region.from(RegionType.SOUTHEAST_ASIA);
 		currency = Currency.of(

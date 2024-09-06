@@ -13,7 +13,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import taco.klkl.domain.user.dao.UserRepository;
-import taco.klkl.domain.user.domain.Gender;
 import taco.klkl.domain.user.domain.User;
 import taco.klkl.domain.user.dto.request.UserCreateRequest;
 import taco.klkl.domain.user.dto.response.UserDetailResponse;
@@ -60,14 +59,10 @@ class UserServiceImplTest {
 		// given
 		UserCreateRequest requestDto = new UserCreateRequest(
 			"이상화",
-			"남",
-			19,
 			"저는 이상화입니다."
 		);
 		User user = User.of(
 			requestDto.name(),
-			Gender.from(requestDto.gender()),
-			requestDto.age(),
 			requestDto.description()
 		);
 		when(userRepository.save(any(User.class))).thenReturn(user);

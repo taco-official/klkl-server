@@ -41,7 +41,6 @@ import taco.klkl.domain.region.domain.currency.Currency;
 import taco.klkl.domain.region.domain.currency.CurrencyType;
 import taco.klkl.domain.region.domain.region.Region;
 import taco.klkl.domain.region.domain.region.RegionType;
-import taco.klkl.domain.user.domain.Gender;
 import taco.klkl.domain.user.domain.User;
 import taco.klkl.domain.user.dto.request.UserCreateRequest;
 import taco.klkl.global.error.exception.ErrorCode;
@@ -66,14 +65,10 @@ public class CommentControllerTest {
 
 	private final UserCreateRequest requestDto = new UserCreateRequest(
 		"이상화",
-		"남",
-		19,
 		"저는 이상화입니다."
 	);
 	private final User user = User.of(
 		requestDto.name(),
-		Gender.from(requestDto.gender()),
-		requestDto.age(),
 		requestDto.description()
 	);
 

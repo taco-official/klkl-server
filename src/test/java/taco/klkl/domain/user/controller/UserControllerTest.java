@@ -14,7 +14,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import taco.klkl.domain.user.domain.Gender;
 import taco.klkl.domain.user.domain.User;
 import taco.klkl.domain.user.dto.response.UserDetailResponse;
 import taco.klkl.domain.user.service.UserService;
@@ -33,7 +32,7 @@ class UserControllerTest {
 
 	@BeforeEach
 	public void setUp() {
-		final User user = User.of("name", Gender.MALE, 20, "description");
+		final User user = User.of("name", "description");
 		userDetailResponse = UserDetailResponse.from(user);
 	}
 
