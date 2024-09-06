@@ -2,8 +2,11 @@ package taco.klkl.domain.image.dto.request;
 
 import java.util.List;
 
+import jakarta.validation.constraints.NotEmpty;
+import taco.klkl.global.common.constants.ImageValidationMessages;
+
 public record MultipleImagesUploadRequest(
-	// TODO: 유효성 검사 필요
+	@NotEmpty(message = ImageValidationMessages.FILE_EXTENSIONS_NOT_EMPTY)
 	List<String> fileExtensions
 ) {
 }
