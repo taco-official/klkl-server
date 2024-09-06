@@ -110,16 +110,12 @@ class ProductSimpleResponseTest {
 	@DisplayName("생성자를 통해 ProductSimpleResponse 생성 테스트")
 	void testConstructor() {
 		// given
-		List<ProductImageResponse> images = product.getImages().stream()
-			.map(ProductImageResponse::from)
-			.toList();
-
-		Set<TagResponse> tags = ProductUtil.createTagsByProduct(product);
+		Set<TagResponse> tags = ProductUtil.generateTagsByProduct(product);
 
 		// when
 		ProductSimpleResponse dto = new ProductSimpleResponse(
 			product.getId(),
-			images,
+			product.getMainImageUrl(),
 			product.getName(),
 			product.getLikeCount(),
 			product.getRating().getValue(),
@@ -130,7 +126,7 @@ class ProductSimpleResponseTest {
 
 		// then
 		assertThat(dto.id()).isEqualTo(product.getId());
-		assertThat(dto.images()).isEqualTo(images);
+		assertThat(dto.mainImageUrl()).isEqualTo(product.getMainImageUrl());
 		assertThat(dto.name()).isEqualTo(product.getName());
 		assertThat(dto.likeCount()).isEqualTo(product.getLikeCount());
 		assertThat(dto.rating()).isEqualTo(product.getRating().getValue());

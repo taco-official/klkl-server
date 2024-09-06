@@ -14,7 +14,7 @@ class UserSimpleResponseTest {
 	public void testUserSimpleResponseDto() {
 		// given
 		Long id = 1L;
-		String profile = "image/profileImageUrl.png";
+		String profile = "image/profileUrl.png";
 		String name = "이름";
 
 		// when
@@ -22,7 +22,7 @@ class UserSimpleResponseTest {
 
 		// then
 		assertThat(userSimple.id()).isEqualTo(id);
-		assertThat(userSimple.profileImageUrl()).isEqualTo(profile);
+		assertThat(userSimple.profileUrl()).isEqualTo(profile);
 		assertThat(userSimple.name()).isEqualTo(name);
 	}
 
