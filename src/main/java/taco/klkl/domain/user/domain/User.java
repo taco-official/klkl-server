@@ -54,7 +54,6 @@ public class User {
 	)
 	private String description;
 
-	// TODO: created_at 이름으로 json나가야 함
 	@Column(
 		name = "created_at",
 		nullable = false,
