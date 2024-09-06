@@ -2,8 +2,6 @@ package taco.klkl.domain.image.domain;
 
 import java.time.LocalDateTime;
 
-import org.springframework.beans.factory.annotation.Value;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -14,14 +12,12 @@ import jakarta.persistence.Id;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import taco.klkl.infra.cloudfront.CloudFrontUrlGenerator;
 
 @Getter
 @Entity(name = "image")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Image {
-
-	@Value("${cloud.aws.cloudfront.domain}")
-	private String cloudFrontDomain;
 
 	@Id
 	@Column(name = "image_id",
@@ -101,14 +97,14 @@ public class Image {
 		this.uploadState = UploadState.OUTDATED;
 	}
 
-	public String createFileName() {
+	public String generateFileName() {
 		return imageType.getValue() + "/"
 			+ targetId + "/"
 			+ imageKey + "."
 			+ fileExtension.getValue();
 	}
 
-	public String createCloudFrontUrl() {
-		return "https://" + cloudFrontDomain + "/" + this.createFileName();
+	public String getUrl() {
+		return CloudFrontUrlGenerator.generateUrlByFileName(this.generateFileName());
 	}
 }
