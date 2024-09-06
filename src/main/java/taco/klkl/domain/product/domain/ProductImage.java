@@ -33,7 +33,6 @@ public class ProductImage {
 	private Product product;
 
 	@ManyToOne(
-		fetch = FetchType.LAZY,
 		optional = false
 	)
 	@JoinColumn(
@@ -43,7 +42,7 @@ public class ProductImage {
 	private Image image;
 
 	@Column(
-		name = "order_index",
+		name = "image_order",
 		nullable = false
 	)
 	private Integer order;
