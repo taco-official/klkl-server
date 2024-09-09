@@ -2,6 +2,8 @@ package taco.klkl.domain.user.controller;
 
 import java.util.List;
 
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -20,6 +22,8 @@ import taco.klkl.domain.user.dto.request.UserUpdateRequest;
 import taco.klkl.domain.user.dto.response.UserDetailResponse;
 import taco.klkl.domain.user.dto.response.UserSimpleResponse;
 import taco.klkl.domain.user.service.UserService;
+import taco.klkl.global.common.constants.ProductConstants;
+import taco.klkl.global.common.response.PagedResponse;
 import taco.klkl.global.util.UserUtil;
 
 @Slf4j
@@ -47,29 +51,36 @@ public class UserController {
 
 	@Operation(summary = "내 상품 목록 조회", description = "내 상품 목록을 조회합니다.")
 	@GetMapping("/me/products")
-	public List<ProductSimpleResponse> getMyProducts() {
+	public PagedResponse<ProductSimpleResponse> getMyProducts(
+		@PageableDefault(size = ProductConstants.DEFAULT_PAGE_SIZE) Pageable pageable
+	) {
 		final User me = userUtil.getCurrentUser();
-		return userService.getUserProductsById(me.getId());
+		return userService.getUserProductsById(me.getId(), pageable);
 	}
 
 	@Operation(summary = "유저의 상품 목록 조회", description = "유저의 상품 목록을 조회합니다.")
 	@GetMapping("/{userId}/products")
-	public List<ProductSimpleResponse> getUserProducts(@PathVariable final Long userId) {
-		return userService.getUserProductsById(userId);
+	public PagedResponse<ProductSimpleResponse> getUserProducts(
+		@PathVariable final Long userId,
+		@PageableDefault(size = ProductConstants.DEFAULT_PAGE_SIZE) Pageable pageable
+	) {
+		return userService.getUserProductsById(userId, pageable);
 	}
 
 	@Operation(summary = "내 종아요 목록 조회", description = "내 좋아요 목록을 조회합니다.")
 	@GetMapping("/me/likes")
-	public List<ProductSimpleResponse> getMyLikes() {
+	public PagedResponse<ProductSimpleResponse> getMyLikes(
+		@PageableDefault(size = ProductConstants.DEFAULT_PAGE_SIZE) Pageable pageable
+	) {
 		final User me = userUtil.getCurrentUser();
-		return userService.getUserLikesById(me.getId());
+		return userService.getUserLikesById(me.getId(), pageable);
 	}
 
 	@Operation(summary = "내 팔로잉 목록 조회", description = "내 팔로잉 목록을 조회합니다.")
 	@GetMapping("/me/following")
-	public List<UserSimpleResponse> getMyFollowings() {
+	public List<UserSimpleResponse> getMyFollowing() {
 		final User me = userUtil.getCurrentUser();
-		return userService.getUserFollowingsById(me.getId());
+		return userService.getUserFollowingById(me.getId());
 	}
 
 	@Operation(summary = "내 정보 수정", description = "내 정보를 수정합니다.")

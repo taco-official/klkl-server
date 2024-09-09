@@ -7,6 +7,8 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
@@ -29,8 +31,8 @@ public class ProductUtil {
 			.orElseThrow(ProductNotFoundException::new);
 	}
 
-	public List<Product> findProductsByUserId(final Long userId) {
-		return productRepository.findAllByUserId(userId);
+	public Page<Product> findProductsByUserId(final Long userId, final Pageable pageable) {
+		return productRepository.findByUserId(userId, pageable);
 	}
 
 	public void validateProductId(final Long id) {

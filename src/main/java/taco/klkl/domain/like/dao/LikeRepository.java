@@ -1,7 +1,7 @@
 package taco.klkl.domain.like.dao;
 
-import java.util.List;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -11,7 +11,7 @@ import taco.klkl.domain.user.domain.User;
 
 @Repository
 public interface LikeRepository extends JpaRepository<Like, Long> {
-	List<Like> findAllByUserId(final Long userId);
+	Page<Like> findByUserId(final Long userId, final Pageable pageable);
 
 	void deleteByProductAndUser(final Product product, final User user);
 

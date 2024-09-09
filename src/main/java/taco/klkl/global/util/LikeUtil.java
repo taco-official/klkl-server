@@ -1,7 +1,7 @@
 package taco.klkl.global.util;
 
-import java.util.List;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
@@ -14,7 +14,7 @@ public class LikeUtil {
 
 	private final LikeRepository likeRepository;
 
-	public List<Like> findLikesByUserId(final Long userId) {
-		return likeRepository.findAllByUserId(userId);
+	public Page<Like> findLikesByUserId(final Long userId, final Pageable pageable) {
+		return likeRepository.findByUserId(userId, pageable);
 	}
 }

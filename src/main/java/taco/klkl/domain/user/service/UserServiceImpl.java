@@ -3,12 +3,15 @@ package taco.klkl.domain.user.service;
 import java.util.List;
 
 import org.springframework.context.annotation.Primary;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import taco.klkl.domain.like.domain.Like;
+import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.product.dto.response.ProductSimpleResponse;
 import taco.klkl.domain.user.dao.FollowRepository;
 import taco.klkl.domain.user.dao.UserRepository;
@@ -19,6 +22,7 @@ import taco.klkl.domain.user.dto.request.UserUpdateRequest;
 import taco.klkl.domain.user.dto.response.UserDetailResponse;
 import taco.klkl.domain.user.dto.response.UserSimpleResponse;
 import taco.klkl.domain.user.exception.UserNotFoundException;
+import taco.klkl.global.common.response.PagedResponse;
 import taco.klkl.global.util.LikeUtil;
 import taco.klkl.global.util.ProductUtil;
 import taco.klkl.global.util.UserUtil;
@@ -49,26 +53,24 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public List<ProductSimpleResponse> getUserProductsById(final Long id) {
+	public PagedResponse<ProductSimpleResponse> getUserProductsById(final Long id, final Pageable pageable) {
 		userRepository.findById(id)
 			.orElseThrow(UserNotFoundException::new);
-		return productUtil.findProductsByUserId(id).stream()
-			.map(ProductSimpleResponse::from)
-			.toList();
+		final Page<Product> userProducts = productUtil.findProductsByUserId(id, pageable);
+		return PagedResponse.of(userProducts, ProductSimpleResponse::from);
 	}
 
 	@Override
-	public List<ProductSimpleResponse> getUserLikesById(final Long id) {
+	public PagedResponse<ProductSimpleResponse> getUserLikesById(final Long id, final Pageable pageable) {
 		userRepository.findById(id)
 			.orElseThrow(UserNotFoundException::new);
-		return likeUtil.findLikesByUserId(id).stream()
-			.map(Like::getProduct)
-			.map(ProductSimpleResponse::from)
-			.toList();
+		final Page<Like> likes = likeUtil.findLikesByUserId(id, pageable);
+		final Page<Product> likedProducts = likes.map(Like::getProduct);
+		return PagedResponse.of(likedProducts, ProductSimpleResponse::from);
 	}
 
 	@Override
-	public List<UserSimpleResponse> getUserFollowingsById(final Long id) {
+	public List<UserSimpleResponse> getUserFollowingById(final Long id) {
 		userRepository.findById(id)
 			.orElseThrow(UserNotFoundException::new);
 		return followRepository.findAllByFollowerId(id).stream()
