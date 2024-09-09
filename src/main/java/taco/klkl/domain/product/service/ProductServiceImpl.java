@@ -167,8 +167,10 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	@Transactional
-	public ProductDetailResponse updateProduct(final Long id, final ProductCreateUpdateRequest updateRequest)
-		throws ProductNotFoundException {
+	public ProductDetailResponse updateProduct(
+		final Long id,
+		final ProductCreateUpdateRequest updateRequest
+	) throws ProductNotFoundException {
 		final Product product = productRepository.findById(id)
 			.orElseThrow(ProductNotFoundException::new);
 		validateMyProduct(product);
