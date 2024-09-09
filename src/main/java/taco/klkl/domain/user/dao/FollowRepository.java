@@ -12,7 +12,7 @@ import taco.klkl.domain.user.domain.User;
 public interface FollowRepository extends JpaRepository<Follow, Long> {
 	List<Follow> findByFollowerId(final Long followerId);
 
-	boolean existsByFollowerAndFollowing(final User Follower, final User Following);
+	boolean existsByFollowerAndFollowing(final User follower, final User following);
 
 	void deleteByFollowerAndFollowing(final User follower, final User following);
 }
