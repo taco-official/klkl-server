@@ -79,9 +79,10 @@ public class ProductController {
 	@GetMapping("/following")
 	@Operation(summary = "내 팔로잉의 상품 목록 조회", description = "내 팔로잉 유저들의 상품 목록을 조회합니다.")
 	public PagedResponse<ProductSimpleResponse> findFollowingProducts(
-		@PageableDefault(size = ProductConstants.DEFAULT_PAGE_SIZE) final Pageable pageable
+		@PageableDefault(size = ProductConstants.DEFAULT_PAGE_SIZE) final Pageable pageable,
+		@RequestParam(value = "following_id", required = false) final Set<Long> followingIds
 	) {
-		return productService.findMyFollowingProducts(pageable);
+		return productService.findMyFollowingProducts(pageable, followingIds);
 	}
 
 	@GetMapping("/{productId}")

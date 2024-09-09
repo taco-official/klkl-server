@@ -120,10 +120,17 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public PagedResponse<ProductSimpleResponse> findMyFollowingProducts(final Pageable pageable) {
+	public PagedResponse<ProductSimpleResponse> findMyFollowingProducts(
+		final Pageable pageable,
+		final Set<Long> followingIds
+	) {
 		final User me = userUtil.getCurrentUser();
 		final Pageable sortedPageable = createPageableSortedByCreatedAtDesc(pageable);
-		final Page<Product> followingProducts = productRepository.findProductsOfFollowedUsers(me, sortedPageable);
+		final Page<Product> followingProducts = productRepository.findProductsOfFollowedUsers(
+			me,
+			followingIds,
+			sortedPageable
+		);
 		return PagedResponse.of(followingProducts, ProductSimpleResponse::from);
 	}
 
