@@ -62,7 +62,7 @@ import taco.klkl.domain.region.domain.currency.CurrencyType;
 import taco.klkl.domain.region.domain.region.Region;
 import taco.klkl.domain.region.domain.region.RegionType;
 import taco.klkl.domain.user.domain.User;
-import taco.klkl.global.common.response.PagedResponseDto;
+import taco.klkl.global.common.response.PagedResponse;
 import taco.klkl.global.util.CityUtil;
 import taco.klkl.global.util.CurrencyUtil;
 import taco.klkl.global.util.SubcategoryUtil;
@@ -212,7 +212,7 @@ class ProductServiceImplTest {
 		when(tagUtil.findTagEntityById(anyLong())).thenReturn(mockTag);
 
 		// When
-		PagedResponseDto<ProductSimpleResponse> result = productService
+		PagedResponse<ProductSimpleResponse> result = productService
 			.findProductsByFilterOptionsAndSortOptions(pageable, filterOptions, sortOptions);
 
 		// Then
@@ -293,7 +293,7 @@ class ProductServiceImplTest {
 		when(productQuery.orderBy(any(OrderSpecifier.class))).thenReturn(productQuery);
 
 		// When
-		PagedResponseDto<ProductSimpleResponse> result = productService
+		PagedResponse<ProductSimpleResponse> result = productService
 			.findProductsByPartialName("name", pageable, sortOptions);
 
 		// Then

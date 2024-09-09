@@ -50,7 +50,7 @@ import taco.klkl.domain.region.domain.currency.Currency;
 import taco.klkl.domain.region.exception.city.CityNotFoundException;
 import taco.klkl.domain.region.exception.currency.CurrencyNotFoundException;
 import taco.klkl.domain.user.domain.User;
-import taco.klkl.global.common.response.PagedResponseDto;
+import taco.klkl.global.common.response.PagedResponse;
 import taco.klkl.global.util.CityUtil;
 import taco.klkl.global.util.CurrencyUtil;
 import taco.klkl.global.util.SubcategoryUtil;
@@ -74,7 +74,7 @@ public class ProductServiceImpl implements ProductService {
 	private final CurrencyUtil currencyUtil;
 
 	@Override
-	public PagedResponseDto<ProductSimpleResponse> findProductsByFilterOptionsAndSortOptions(
+	public PagedResponse<ProductSimpleResponse> findProductsByFilterOptionsAndSortOptions(
 		final Pageable pageable,
 		final ProductFilterOptions filterOptions,
 		final ProductSortOptions sortOptions
@@ -86,7 +86,7 @@ public class ProductServiceImpl implements ProductService {
 		final List<Product> products = fetchProducts(baseQuery, pageable, sortOptions);
 		final Page<Product> productPage = new PageImpl<>(products, pageable, total);
 
-		return PagedResponseDto.of(productPage, ProductSimpleResponse::from);
+		return PagedResponse.of(productPage, ProductSimpleResponse::from);
 	}
 
 	@Override
@@ -140,7 +140,7 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public PagedResponseDto<ProductSimpleResponse> findProductsByPartialName(
+	public PagedResponse<ProductSimpleResponse> findProductsByPartialName(
 		final String partialName,
 		final Pageable pageable,
 		final ProductSortOptions sortOptions
@@ -165,7 +165,7 @@ public class ProductServiceImpl implements ProductService {
 		final List<Product> products = fetchProducts(baseQuery, pageable, sortOptions);
 		final Page<Product> productPage = new PageImpl<>(products, pageable, total);
 
-		return PagedResponseDto.of(productPage, ProductSimpleResponse::from);
+		return PagedResponse.of(productPage, ProductSimpleResponse::from);
 	}
 
 	private JPAQuery<?> createBaseQuery(final ProductFilterOptions filterOptions) {

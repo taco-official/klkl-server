@@ -10,12 +10,12 @@ import taco.klkl.domain.product.dto.request.ProductSortOptions;
 import taco.klkl.domain.product.dto.response.ProductDetailResponse;
 import taco.klkl.domain.product.dto.response.ProductSimpleResponse;
 import taco.klkl.domain.product.exception.ProductNotFoundException;
-import taco.klkl.global.common.response.PagedResponseDto;
+import taco.klkl.global.common.response.PagedResponse;
 
 @Service
 public interface ProductService {
 
-	PagedResponseDto<ProductSimpleResponse> findProductsByFilterOptionsAndSortOptions(
+	PagedResponse<ProductSimpleResponse> findProductsByFilterOptionsAndSortOptions(
 		final Pageable pageable,
 		final ProductFilterOptions filterOptions,
 		final ProductSortOptions sortOptions
@@ -33,7 +33,7 @@ public interface ProductService {
 
 	void deleteProduct(final Long id) throws ProductNotFoundException;
 
-	PagedResponseDto<ProductSimpleResponse> findProductsByPartialName(String partialName, Pageable pageable,
+	PagedResponse<ProductSimpleResponse> findProductsByPartialName(String partialName, Pageable pageable,
 		ProductSortOptions sortOptions);
 
 }

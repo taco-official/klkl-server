@@ -29,7 +29,7 @@ import taco.klkl.domain.product.dto.response.ProductDetailResponse;
 import taco.klkl.domain.product.dto.response.ProductSimpleResponse;
 import taco.klkl.domain.product.service.ProductService;
 import taco.klkl.global.common.constants.ProductConstants;
-import taco.klkl.global.common.response.PagedResponseDto;
+import taco.klkl.global.common.response.PagedResponse;
 
 @RestController
 @RequestMapping("/v1/products")
@@ -41,7 +41,7 @@ public class ProductController {
 
 	@GetMapping
 	@Operation(summary = "상품 목록 조회", description = "상품 목록을 조회합니다.")
-	public PagedResponseDto<ProductSimpleResponse> findProductsByFilteringAndSorting(
+	public PagedResponse<ProductSimpleResponse> findProductsByFilteringAndSorting(
 		@PageableDefault(size = ProductConstants.DEFAULT_PAGE_SIZE) Pageable pageable,
 		@RequestParam(name = "city_id", required = false) Set<Long> cityIds,
 		@RequestParam(name = "subcategory_id", required = false) Set<Long> subcategoryIds,
@@ -63,7 +63,7 @@ public class ProductController {
 
 	@GetMapping("/search")
 	@Operation(summary = "제목으로 상품 목록 조회", description = "제목으로 상품 목록을 조회합니다.")
-	public PagedResponseDto<ProductSimpleResponse> findProductsByPartialNameAndSorting(
+	public PagedResponse<ProductSimpleResponse> findProductsByPartialNameAndSorting(
 		@RequestParam(value = "name") @NotBlank String partialName,
 		@PageableDefault(size = ProductConstants.DEFAULT_PAGE_SIZE) Pageable pageable,
 		@RequestParam(name = "sort_by", required = false, defaultValue = "created_at") String sortBy,
