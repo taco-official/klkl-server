@@ -57,6 +57,13 @@ public class UserController {
 		return userService.getUserProductsById(userId);
 	}
 
+	@Operation(summary = "내 종아요 목록 조회", description = "내 좋아요 목록을 조회합니다.")
+	@GetMapping("/me/likes")
+	public List<ProductSimpleResponse> getMyLikes() {
+		final User me = userUtil.getCurrentUser();
+		return userService.getUserLikesById(me.getId());
+	}
+
 	@Operation(summary = "내 정보 수정", description = "내 정보를 수정합니다.")
 	@PutMapping("/me")
 	public UserDetailResponse updateMe(@Valid @RequestBody final UserUpdateRequest request) {

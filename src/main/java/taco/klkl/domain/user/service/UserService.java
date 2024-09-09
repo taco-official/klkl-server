@@ -17,6 +17,8 @@ public interface UserService {
 
 	List<ProductSimpleResponse> getUserProductsById(final Long id);
 
+	List<ProductSimpleResponse> getUserLikesById(final Long id);
+
 	UserDetailResponse updateUser(final UserUpdateRequest updateRequest);
 
 	User createUser(final UserCreateRequest createRequest);
