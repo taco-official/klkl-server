@@ -34,7 +34,7 @@ class UserServiceImplTest {
 
 	@Test
 	@DisplayName("내 정보 조회 서비스 테스트")
-	public void testGetCurrentUser() {
+	public void testGetUserById() {
 		// given
 
 		User user = mock(User.class);
@@ -44,7 +44,7 @@ class UserServiceImplTest {
 		when(user.getDescription()).thenReturn("테스트입니다.");
 
 		// when
-		UserDetailResponse userDto = userServiceImpl.getCurrentUser();
+		UserDetailResponse userDto = userServiceImpl.getUserById(1L);
 
 		// then
 		assertThat(userDto.id()).isEqualTo(user.getId());
