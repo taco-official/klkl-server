@@ -71,7 +71,7 @@ public class NotificationServiceImpl implements NotificationService {
 	public NotificationUpdateResponse readNotificationById(final Long id) {
 		final Notification notification = notificationRepository.findById(id)
 			.orElseThrow(NotificationNotFoundException::new);
-		validateNotification(notification);
+		validateMyNotification(notification);
 		notification.read();
 		return NotificationUpdateResponse.of(1L);
 	}
@@ -98,7 +98,7 @@ public class NotificationServiceImpl implements NotificationService {
 		return userUtil.getCurrentUser();
 	}
 
-	private void validateNotification(final Notification notification) {
+	private void validateMyNotification(final Notification notification) {
 		final User receiver = findReceiver();
 		if (!notification.getComment().getProduct().getUser().equals(receiver)) {
 			throw new NotificationNotFoundException();
