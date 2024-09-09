@@ -18,6 +18,7 @@ import taco.klkl.domain.product.dto.response.ProductSimpleResponse;
 import taco.klkl.domain.user.domain.User;
 import taco.klkl.domain.user.dto.request.UserUpdateRequest;
 import taco.klkl.domain.user.dto.response.UserDetailResponse;
+import taco.klkl.domain.user.dto.response.UserSimpleResponse;
 import taco.klkl.domain.user.service.UserService;
 import taco.klkl.global.util.UserUtil;
 
@@ -62,6 +63,13 @@ public class UserController {
 	public List<ProductSimpleResponse> getMyLikes() {
 		final User me = userUtil.getCurrentUser();
 		return userService.getUserLikesById(me.getId());
+	}
+
+	@Operation(summary = "내 팔로잉 목록 조회", description = "내 팔로잉 목록을 조회합니다.")
+	@GetMapping("/me/following")
+	public List<UserSimpleResponse> getMyFollowings() {
+		final User me = userUtil.getCurrentUser();
+		return userService.getUserFollowingsById(me.getId());
 	}
 
 	@Operation(summary = "내 정보 수정", description = "내 정보를 수정합니다.")

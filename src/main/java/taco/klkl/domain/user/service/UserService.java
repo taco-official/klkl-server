@@ -9,6 +9,7 @@ import taco.klkl.domain.user.domain.User;
 import taco.klkl.domain.user.dto.request.UserCreateRequest;
 import taco.klkl.domain.user.dto.request.UserUpdateRequest;
 import taco.klkl.domain.user.dto.response.UserDetailResponse;
+import taco.klkl.domain.user.dto.response.UserSimpleResponse;
 
 @Service
 public interface UserService {
@@ -18,6 +19,8 @@ public interface UserService {
 	List<ProductSimpleResponse> getUserProductsById(final Long id);
 
 	List<ProductSimpleResponse> getUserLikesById(final Long id);
+
+	List<UserSimpleResponse> getUserFollowingsById(final Long id);
 
 	UserDetailResponse updateUser(final UserUpdateRequest updateRequest);
 

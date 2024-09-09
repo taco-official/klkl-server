@@ -10,11 +10,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import taco.klkl.domain.like.domain.Like;
 import taco.klkl.domain.product.dto.response.ProductSimpleResponse;
+import taco.klkl.domain.user.dao.FollowRepository;
 import taco.klkl.domain.user.dao.UserRepository;
+import taco.klkl.domain.user.domain.Follow;
 import taco.klkl.domain.user.domain.User;
 import taco.klkl.domain.user.dto.request.UserCreateRequest;
 import taco.klkl.domain.user.dto.request.UserUpdateRequest;
 import taco.klkl.domain.user.dto.response.UserDetailResponse;
+import taco.klkl.domain.user.dto.response.UserSimpleResponse;
 import taco.klkl.domain.user.exception.UserNotFoundException;
 import taco.klkl.global.util.LikeUtil;
 import taco.klkl.global.util.ProductUtil;
@@ -28,6 +31,7 @@ import taco.klkl.global.util.UserUtil;
 public class UserServiceImpl implements UserService {
 
 	private final UserRepository userRepository;
+	private final FollowRepository followRepository;
 
 	private final ProductUtil productUtil;
 	private final UserUtil userUtil;
@@ -60,6 +64,16 @@ public class UserServiceImpl implements UserService {
 		return likeUtil.findLikesByUserId(id).stream()
 			.map(Like::getProduct)
 			.map(ProductSimpleResponse::from)
+			.toList();
+	}
+
+	@Override
+	public List<UserSimpleResponse> getUserFollowingsById(final Long id) {
+		userRepository.findById(id)
+			.orElseThrow(UserNotFoundException::new);
+		return followRepository.findAllByFollowerId(id).stream()
+			.map(Follow::getFollowing)
+			.map(UserSimpleResponse::from)
 			.toList();
 	}
 
