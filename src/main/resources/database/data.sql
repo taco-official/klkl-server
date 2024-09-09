@@ -1,6 +1,7 @@
 /* User */
 INSERT INTO klkl_user(user_id, name, description, created_at)
-VALUES (1, 'testUser', '테스트입니다.', now());
+VALUES (1, 'testUser', '테스트입니다.', now()),
+       (2, 'dummy', '덤덤댄스', now());
 
 /* Like */
 
@@ -135,13 +136,13 @@ INSERT INTO product(product_id, user_id, name, description, address, price, like
                     city_id, subcategory_id, currency_id, created_at)
 VALUES (101, 1, '곤약젤리', '탱글탱글 맛있는 곤약젤리', '신사이바시 메가돈키호테', 1000, 100, 5.0, 414, 311, 438, now()),
        (102, 1, '여름 원피스', '시원하고 여름 휴양지 느낌의 원피스', '방콕 짜뚜짝 시장', 300, 333, 4.5, 425, 323, 441, now()),
-       (390, 1, '왕족발 보쌈 과자', '맛있는 왕족발 보쌈 과자', '상하이 장충동', 3000, 10, 3.0, 422, 311, 439, now());
+       (390, 2, '왕족발 보쌈 과자', '맛있는 왕족발 보쌈 과자', '상하이 장충동', 3000, 10, 3.0, 422, 311, 439, now());
 
 /* Comment */
 INSERT INTO comment(comment_id, product_id, user_id, content, created_at)
 VALUES (500, 390, 1, '이거 정말 맛있는데 표현할 방법이 읎네.', now()),
-       (501, 390, 1, '이거 정말 맛없는데 표현할 방법이 읎네.', now()),
-       (502, 390, 1, '이거 정말 좋은데 표현할 방법이 읎네.', now());
+       (501, 390, 2, '이거 정말 맛없는데 표현할 방법이 읎네.', now()),
+       (502, 390, 2, '이거 정말 좋은데 표현할 방법이 읎네.', now());
 
 /* Notification */
 INSERT INTO notification(notification_id, is_read, created_at, comment_id)
