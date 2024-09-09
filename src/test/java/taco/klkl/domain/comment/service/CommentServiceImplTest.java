@@ -31,7 +31,7 @@ import taco.klkl.global.util.UserUtil;
 
 @ExtendWith(MockitoExtension.class)
 @Transactional
-public class CommentServiceTest {
+public class CommentServiceImplTest {
 	@Mock
 	private CommentRepository commentRepository;
 

@@ -50,7 +50,7 @@ import taco.klkl.global.util.UserUtil;
 
 @ExtendWith(MockitoExtension.class)
 @Transactional
-public class NotificationServiceTest {
+public class NotificationServiceImplTest {
 
 	@Mock
 	private NotificationRepository notificationRepository;

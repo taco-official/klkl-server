@@ -3,6 +3,8 @@ package taco.klkl.domain.user.service;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import java.util.Optional;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -38,10 +40,10 @@ class UserServiceImplTest {
 		// given
 
 		User user = mock(User.class);
-		when(userUtil.getCurrentUser()).thenReturn(user);
 		when(user.getId()).thenReturn(1L);
 		when(user.getName()).thenReturn("testUser");
 		when(user.getDescription()).thenReturn("테스트입니다.");
+		when(userRepository.findById(1L)).thenReturn(Optional.of(user));
 
 		// when
 		UserDetailResponse userDto = userServiceImpl.getUserById(1L);

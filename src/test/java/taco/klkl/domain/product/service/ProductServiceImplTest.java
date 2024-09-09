@@ -413,6 +413,7 @@ class ProductServiceImplTest {
 	void testUpdateProduct() {
 		// Given
 		when(productRepository.findById(1L)).thenReturn(Optional.of(testProduct));
+		when(userUtil.getCurrentUser()).thenReturn(user);
 		when(cityUtil.findCityEntityById(1L)).thenReturn(city);
 		when(subcategoryUtil.findSubcategoryEntityById(1L)).thenReturn(subcategory);
 		when(currencyUtil.findCurrencyEntityById(1L)).thenReturn(currency);
@@ -441,6 +442,7 @@ class ProductServiceImplTest {
 	void testDeleteProduct() {
 		// Given
 		when(productRepository.findById(1L)).thenReturn(Optional.of(testProduct));
+		when(userUtil.getCurrentUser()).thenReturn(user);
 
 		// When
 		productService.deleteProduct(1L);
