@@ -37,8 +37,8 @@ public class CommentController {
 	}
 
 	@PostMapping
-	@Operation(summary = "댓글 등록", description = "작성한 댓글을 저장합니다.")
 	@ResponseStatus(HttpStatus.CREATED)
+	@Operation(summary = "댓글 등록", description = "작성한 댓글을 저장합니다.")
 	public CommentResponse addComment(
 		@PathVariable final Long productId,
 		@RequestBody @Valid final CommentCreateUpdateRequest commentCreateRequestDto
@@ -50,8 +50,8 @@ public class CommentController {
 	}
 
 	@PutMapping("/{commentId}")
-	@Operation(summary = "댓글 수정", description = "작성한 댓글을 수정합니다.")
 	@ResponseStatus(HttpStatus.OK)
+	@Operation(summary = "댓글 수정", description = "작성한 댓글을 수정합니다.")
 	public CommentResponse updateComment(
 		@PathVariable final Long productId,
 		@PathVariable final Long commentId,
@@ -65,8 +65,8 @@ public class CommentController {
 	}
 
 	@DeleteMapping("/{commentId}")
-	@Operation(summary = "댓글 삭제", description = "작성한 댓글을 삭제합니다.")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
+	@Operation(summary = "댓글 삭제", description = "작성한 댓글을 삭제합니다.")
 	public ResponseEntity<Void> deleteComment(
 		@PathVariable final Long productId,
 		@PathVariable final Long commentId
