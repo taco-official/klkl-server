@@ -179,7 +179,7 @@ public class NotificationServiceTest {
 		List<Notification> notificationList = List.of(notification1, notification2);
 
 		when(userUtil.getCurrentUser()).thenReturn(mockUser);
-		when(notificationRepository.findAllByComment_Product_User(mockUser)).thenReturn(notificationList);
+		when(notificationRepository.findByComment_Product_User(mockUser)).thenReturn(notificationList);
 		when(notificationRepository.count()).thenReturn(2L);
 
 		//when
@@ -187,7 +187,7 @@ public class NotificationServiceTest {
 
 		//then
 		assertThat(response.updatedCount()).isEqualTo(2L);
-		verify(notificationRepository).findAllByComment_Product_User(mockUser);
+		verify(notificationRepository).findByComment_Product_User(mockUser);
 	}
 
 	@Test

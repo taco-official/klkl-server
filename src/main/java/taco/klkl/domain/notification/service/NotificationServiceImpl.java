@@ -60,10 +60,10 @@ public class NotificationServiceImpl implements NotificationService {
 	@Transactional
 	public NotificationUpdateResponse readAllNotifications() {
 		final User receiver = findReceiver();
-		final List<Notification> notifications = notificationRepository.findAllByComment_Product_User(receiver);
+		final List<Notification> notifications = notificationRepository.findByComment_Product_User(receiver);
 		notifications.forEach(Notification::read);
-		final Long notificationCount = notificationRepository.count();
-		return NotificationUpdateResponse.of(notificationCount);
+		final Long updatedCount = (long)notifications.size();
+		return NotificationUpdateResponse.of(updatedCount);
 	}
 
 	@Override
@@ -78,9 +78,11 @@ public class NotificationServiceImpl implements NotificationService {
 	@Override
 	@Transactional
 	public NotificationDeleteResponse deleteAllNotifications() {
-		final Long notificationCount = notificationRepository.count();
-		notificationRepository.deleteAll();
-		return NotificationDeleteResponse.of(notificationCount);
+		final User receiver = findReceiver();
+		final List<Notification> notifications = notificationRepository.findByComment_Product_User(receiver);
+		notificationRepository.deleteAll(notifications);
+		final Long deletedCount = (long)notifications.size();
+		return NotificationDeleteResponse.of(deletedCount);
 	}
 
 	@Override
