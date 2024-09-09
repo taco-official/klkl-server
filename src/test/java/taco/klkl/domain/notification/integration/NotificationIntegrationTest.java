@@ -59,7 +59,7 @@ public class NotificationIntegrationTest {
 	@DisplayName("단일 알림 읽음 테스트 - 성공")
 	public void testReadOneNotification() throws Exception {
 		//given
-		Long notificationId = 700L;
+		Long notificationId = 701L;
 
 		//when & then
 		mockMvc.perform(put("/v1/notifications/{notificationId}/read", notificationId)

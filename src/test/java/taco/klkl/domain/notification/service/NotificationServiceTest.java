@@ -180,7 +180,6 @@ public class NotificationServiceTest {
 
 		when(userUtil.getCurrentUser()).thenReturn(mockUser);
 		when(notificationRepository.findByComment_Product_User(mockUser)).thenReturn(notificationList);
-		when(notificationRepository.count()).thenReturn(2L);
 
 		//when
 		NotificationUpdateResponse response = notificationService.readAllNotifications();
@@ -188,6 +187,9 @@ public class NotificationServiceTest {
 		//then
 		assertThat(response.updatedCount()).isEqualTo(2L);
 		verify(notificationRepository).findByComment_Product_User(mockUser);
+
+		assertTrue(notification1.getIsRead());
+		assertTrue(notification2.getIsRead());
 	}
 
 	@Test
@@ -196,14 +198,16 @@ public class NotificationServiceTest {
 		//given
 		Notification notification = Notification.of(comment);
 
-		when(notificationRepository.findById(any(Long.class))).thenReturn(Optional.of(notification));
+		when(userUtil.getCurrentUser()).thenReturn(mockUser);
+		when(notificationRepository.findById(1L)).thenReturn(Optional.of(notification));
 
 		//when
-		NotificationUpdateResponse response = notificationService.readNotificationById(any(Long.class));
+		NotificationUpdateResponse response = notificationService.readNotificationById(1L);
 
 		//then
 		assertThat(response.updatedCount()).isEqualTo(1L);
-		verify(notificationRepository).findById(any(Long.class));
+		verify(notificationRepository).findById(1L);
+		assertTrue(notification.getIsRead());
 	}
 
 	@Test

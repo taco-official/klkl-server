@@ -35,7 +35,7 @@ public class CommentIntegrationTest {
 	@Autowired
 	private ObjectMapper objectMapper;
 
-	private final Long productId = 390L;
+	private final Long productId = 101L;
 	private final Long commentId = 500L;
 
 	private final CommentCreateUpdateRequest commentCreateRequestDto = new CommentCreateUpdateRequest(
@@ -142,7 +142,7 @@ public class CommentIntegrationTest {
 	@DisplayName("댓글 수정시 존재하는 상품이지만 댓글에 저장된 상품 Id와 달라 실패하는 경우 테스트")
 	public void testUpdateCommentWhenExistProductButNotMatchWithComment() throws Exception {
 		//given
-		Long differentProductId = 101L;
+		Long differentProductId = 102L;
 
 		//when & given
 		mockMvc.perform(put("/v1/products/{wrongProductId}/comments/{commentId}", differentProductId, commentId)
@@ -201,7 +201,7 @@ public class CommentIntegrationTest {
 	@DisplayName("댓글 삭제시 존재하는 상품이지만 댓글에 저장된 상품 Id와 달라 실패하는 경우 테스트")
 	public void testDeleteCommentWhenExistProductButNotMatchWithComment() throws Exception {
 		//given
-		Long differentProductId = 101L;
+		Long differentProductId = 102L;
 
 		//when & given
 		mockMvc.perform(delete("/v1/products/{wrongProductId}/comments/{commentId}", differentProductId, commentId)

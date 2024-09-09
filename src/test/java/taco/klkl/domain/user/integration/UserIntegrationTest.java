@@ -30,7 +30,8 @@ public class UserIntegrationTest {
 	@Autowired
 	UserRepository userRepository;
 
-	UserUtil userUtil;
+	@Autowired
+	private UserUtil userUtil;
 
 	@Test
 	public void testUserMe() throws Exception {
