@@ -164,6 +164,7 @@ public class ProductServiceImpl implements ProductService {
 		throws ProductNotFoundException {
 		final Product product = productRepository.findById(id)
 			.orElseThrow(ProductNotFoundException::new);
+		validateMyProduct(product);
 		updateProductEntity(product, updateRequest);
 		updateProductEntityTags(product, updateRequest.tagIds());
 		return ProductDetailResponse.from(product);
@@ -174,6 +175,7 @@ public class ProductServiceImpl implements ProductService {
 	public void deleteProduct(final Long id) throws ProductNotFoundException {
 		final Product product = productRepository.findById(id)
 			.orElseThrow(ProductNotFoundException::new);
+		validateMyProduct(product);
 		productRepository.delete(product);
 	}
 
@@ -353,5 +355,12 @@ public class ProductServiceImpl implements ProductService {
 
 	private void validateTagIds(final Set<Long> tagIds) {
 		tagIds.forEach(tagUtil::findTagEntityById);
+	}
+
+	private void validateMyProduct(final Product product) {
+		final User me = userUtil.getCurrentUser();
+		if (!product.getUser().equals(me)) {
+			throw new ProductNotFoundException();
+		}
 	}
 }
