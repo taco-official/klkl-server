@@ -71,6 +71,7 @@ public class NotificationServiceImpl implements NotificationService {
 	public NotificationUpdateResponse readNotificationById(final Long id) {
 		final Notification notification = notificationRepository.findById(id)
 			.orElseThrow(NotificationNotFoundException::new);
+		validateNotification(notification);
 		notification.read();
 		return NotificationUpdateResponse.of(1L);
 	}
@@ -95,5 +96,12 @@ public class NotificationServiceImpl implements NotificationService {
 	// TODO: 토큰으로 유저 가져오는 방식으로 수정하기
 	private User findReceiver() {
 		return userUtil.getCurrentUser();
+	}
+
+	private void validateNotification(final Notification notification) {
+		final User receiver = findReceiver();
+		if (!notification.getComment().getProduct().getUser().equals(receiver)) {
+			throw new NotificationNotFoundException();
+		}
 	}
 }
