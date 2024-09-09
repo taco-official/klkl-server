@@ -4,7 +4,9 @@ import java.util.List;
 
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -56,7 +58,8 @@ public class UserServiceImpl implements UserService {
 	public PagedResponse<ProductSimpleResponse> getUserProductsById(final Long id, final Pageable pageable) {
 		userRepository.findById(id)
 			.orElseThrow(UserNotFoundException::new);
-		final Page<Product> userProducts = productUtil.findProductsByUserId(id, pageable);
+		final Pageable sortedPageable = createPageableSortedByCreatedAtDesc(pageable);
+		final Page<Product> userProducts = productUtil.findProductsByUserId(id, sortedPageable);
 		return PagedResponse.of(userProducts, ProductSimpleResponse::from);
 	}
 
@@ -64,7 +67,8 @@ public class UserServiceImpl implements UserService {
 	public PagedResponse<ProductSimpleResponse> getUserLikesById(final Long id, final Pageable pageable) {
 		userRepository.findById(id)
 			.orElseThrow(UserNotFoundException::new);
-		final Page<Like> likes = likeUtil.findLikesByUserId(id, pageable);
+		final Pageable sortedPageable = createPageableSortedByCreatedAtDesc(pageable);
+		final Page<Like> likes = likeUtil.findLikesByUserId(id, sortedPageable);
 		final Page<Product> likedProducts = likes.map(Like::getProduct);
 		return PagedResponse.of(likedProducts, ProductSimpleResponse::from);
 	}
@@ -111,6 +115,14 @@ public class UserServiceImpl implements UserService {
 		user.update(
 			name,
 			description
+		);
+	}
+
+	private Pageable createPageableSortedByCreatedAtDesc(final Pageable pageable) {
+		return PageRequest.of(
+			pageable.getPageNumber(),
+			pageable.getPageSize(),
+			Sort.by(Sort.Direction.DESC, "createdAt")
 		);
 	}
 }
