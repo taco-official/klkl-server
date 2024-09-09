@@ -30,6 +30,8 @@ public interface UserService {
 
 	UserFollowResponse createUserFollow(final UserFollowRequest followRequest);
 
+	UserFollowResponse removeUserFollow(final Long followerId);
+
 	UserDetailResponse updateUser(final UserUpdateRequest updateRequest);
 
 }

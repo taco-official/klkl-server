@@ -108,6 +108,18 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	@Transactional
+	public UserFollowResponse removeUserFollow(final Long followerId) {
+		final User follower = userUtil.getCurrentUser();
+		final User following = userRepository.findById(followerId)
+			.orElseThrow(UserNotFoundException::new);
+		if (isFollowPresent(follower, following)) {
+			followRepository.deleteByFollowerAndFollowing(follower, following);
+		}
+		return UserFollowResponse.of(false, follower, following);
+	}
+
+	@Override
+	@Transactional
 	public UserDetailResponse updateUser(final UserUpdateRequest updateRequest) {
 		User user = userUtil.getCurrentUser();
 		updateUserEntity(user, updateRequest);

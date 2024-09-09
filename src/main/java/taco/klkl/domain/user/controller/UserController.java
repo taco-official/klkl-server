@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -90,6 +91,12 @@ public class UserController {
 	@PostMapping("/following")
 	public UserFollowResponse followUser(@Valid @RequestBody final UserFollowRequest request) {
 		return userService.createUserFollow(request);
+	}
+
+	@Operation(summary = "유저 팔로우 취소", description = "유저 팔로우를 취소합니다.")
+	@DeleteMapping("/following/{targetUserId}")
+	public UserFollowResponse cancelUserFollow(@PathVariable final Long targetUserId) {
+		return userService.removeUserFollow(targetUserId);
 	}
 
 	@Operation(summary = "내 정보 수정", description = "내 정보를 수정합니다.")
