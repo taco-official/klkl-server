@@ -3,6 +3,7 @@ package taco.klkl.domain.user.controller;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,11 +31,17 @@ public class UserController {
 	private final UserService userService;
 	private final UserUtil userUtil;
 
-	@Operation(summary = "내 정보 조회", description = "내 정보를 조회합니다. (테스트용)")
+	@Operation(summary = "내 정보 조회", description = "내 정보를 조회합니다.")
 	@GetMapping("/me")
 	public UserDetailResponse getMe() {
 		final User me = userUtil.getCurrentUser();
 		return userService.getUserById(me.getId());
+	}
+
+	@Operation(summary = "유저 정보 조회", description = "유저 정보를 조회합니다.")
+	@GetMapping("/{userId}")
+	public UserDetailResponse getUser(@PathVariable Long userId) {
+		return userService.getUserById(userId);
 	}
 
 	@Operation(summary = "내 정보 수정", description = "내 정보를 수정합니다.")
