@@ -42,19 +42,19 @@ public class ProductController {
 	@GetMapping
 	@Operation(summary = "상품 목록 조회", description = "상품 목록을 조회합니다.")
 	public PagedResponse<ProductSimpleResponse> findProductsByFilteringAndSorting(
-		@PageableDefault(size = ProductConstants.DEFAULT_PAGE_SIZE) Pageable pageable,
-		@RequestParam(name = "city_id", required = false) Set<Long> cityIds,
-		@RequestParam(name = "subcategory_id", required = false) Set<Long> subcategoryIds,
-		@RequestParam(name = "tag_id", required = false) Set<Long> tagIds,
-		@RequestParam(name = "sort_by", required = false, defaultValue = "created_at") String sortBy,
-		@RequestParam(name = "sort_direction", required = false, defaultValue = "DESC") String sortDirection
+		@PageableDefault(size = ProductConstants.DEFAULT_PAGE_SIZE) final Pageable pageable,
+		@RequestParam(name = "city_id", required = false) final Set<Long> cityIds,
+		@RequestParam(name = "subcategory_id", required = false) final Set<Long> subcategoryIds,
+		@RequestParam(name = "tag_id", required = false) final Set<Long> tagIds,
+		@RequestParam(name = "sort_by", required = false, defaultValue = "created_at") final String sortBy,
+		@RequestParam(name = "sort_direction", required = false, defaultValue = "DESC") final String sortDirection
 	) {
-		ProductFilterOptions filterOptions = new ProductFilterOptions(
+		final ProductFilterOptions filterOptions = new ProductFilterOptions(
 			cityIds,
 			subcategoryIds,
 			tagIds
 		);
-		ProductSortOptions sortOptions = new ProductSortOptions(
+		final ProductSortOptions sortOptions = new ProductSortOptions(
 			sortBy,
 			sortDirection
 		);
@@ -64,12 +64,12 @@ public class ProductController {
 	@GetMapping("/search")
 	@Operation(summary = "제목으로 상품 목록 조회", description = "제목으로 상품 목록을 조회합니다.")
 	public PagedResponse<ProductSimpleResponse> findProductsByPartialNameAndSorting(
-		@RequestParam(value = "name") @NotBlank String partialName,
-		@PageableDefault(size = ProductConstants.DEFAULT_PAGE_SIZE) Pageable pageable,
-		@RequestParam(name = "sort_by", required = false, defaultValue = "created_at") String sortBy,
-		@RequestParam(name = "sort_direction", required = false, defaultValue = "DESC") String sortDirection
+		@RequestParam(value = "name") @NotBlank final String partialName,
+		@PageableDefault(size = ProductConstants.DEFAULT_PAGE_SIZE) final Pageable pageable,
+		@RequestParam(name = "sort_by", required = false, defaultValue = "created_at") final String sortBy,
+		@RequestParam(name = "sort_direction", required = false, defaultValue = "DESC") final String sortDirection
 	) {
-		ProductSortOptions sortOptions = new ProductSortOptions(
+		final ProductSortOptions sortOptions = new ProductSortOptions(
 			sortBy,
 			sortDirection
 		);
@@ -79,7 +79,7 @@ public class ProductController {
 	@GetMapping("/following")
 	@Operation(summary = "내 팔로잉의 상품 목록 조회", description = "내 팔로잉 유저들의 상품 목록을 조회합니다.")
 	public PagedResponse<ProductSimpleResponse> findFollowingProducts(
-		@PageableDefault(size = ProductConstants.DEFAULT_PAGE_SIZE) Pageable pageable
+		@PageableDefault(size = ProductConstants.DEFAULT_PAGE_SIZE) final Pageable pageable
 	) {
 		return productService.findMyFollowingProducts(pageable);
 	}
@@ -87,7 +87,7 @@ public class ProductController {
 	@GetMapping("/{productId}")
 	@Operation(summary = "상품 상세 조회", description = "상품 상세 정보를 조회합니다.")
 	public ProductDetailResponse findProductById(
-		@PathVariable Long productId
+		@PathVariable final Long productId
 	) {
 		return productService.findProductById(productId);
 	}
@@ -95,18 +95,18 @@ public class ProductController {
 	@PostMapping
 	@Operation(summary = "상품 등록", description = "상품을 등록합니다.")
 	public ResponseEntity<ProductDetailResponse> createProduct(
-		@Valid @RequestBody ProductCreateUpdateRequest createRequest
+		@Valid @RequestBody final ProductCreateUpdateRequest createRequest
 	) {
-		ProductDetailResponse createdProduct = productService.createProduct(createRequest);
-		URI location = createResourceLocation(createdProduct.id());
+		final ProductDetailResponse createdProduct = productService.createProduct(createRequest);
+		final URI location = createResourceLocation(createdProduct.id());
 		return ResponseEntity.created(location).body(createdProduct);
 	}
 
 	@PutMapping("/{productId}")
 	@Operation(summary = "상품 정보 수정", description = "상품 정보를 수정합니다.")
 	public ProductDetailResponse updateProduct(
-		@PathVariable Long productId,
-		@Valid @RequestBody ProductCreateUpdateRequest updateRequest
+		@PathVariable final Long productId,
+		@Valid @RequestBody final ProductCreateUpdateRequest updateRequest
 	) {
 		return productService.updateProduct(productId, updateRequest);
 	}
@@ -114,7 +114,7 @@ public class ProductController {
 	@DeleteMapping("/{productId}")
 	@Operation(summary = "상품 삭제", description = "상품을 삭제합니다.")
 	public ResponseEntity<Void> deleteProduct(
-		@PathVariable Long productId
+		@PathVariable final Long productId
 	) {
 		productService.deleteProduct(productId);
 		return ResponseEntity.noContent().build();
