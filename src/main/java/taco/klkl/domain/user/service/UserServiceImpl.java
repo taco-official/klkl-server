@@ -96,7 +96,7 @@ public class UserServiceImpl implements UserService {
 	@Transactional
 	public UserFollowResponse createUserFollow(final UserFollowRequest followRequest) {
 		final User follower = userUtil.getCurrentUser();
-		final User following = userRepository.findById(followRequest.targetUserId())
+		final User following = userRepository.findById(followRequest.userId())
 			.orElseThrow(UserNotFoundException::new);
 		if (isFollowPresent(follower, following)) {
 			return UserFollowResponse.of(true, follower, following);

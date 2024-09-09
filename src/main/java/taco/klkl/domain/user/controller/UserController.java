@@ -94,9 +94,9 @@ public class UserController {
 	}
 
 	@Operation(summary = "유저 팔로우 취소", description = "유저 팔로우를 취소합니다.")
-	@DeleteMapping("/following/{targetUserId}")
-	public UserFollowResponse cancelUserFollow(@PathVariable final Long targetUserId) {
-		return userService.removeUserFollow(targetUserId);
+	@DeleteMapping("/following/{userId}")
+	public UserFollowResponse cancelUserFollow(@PathVariable final Long userId) {
+		return userService.removeUserFollow(userId);
 	}
 
 	@Operation(summary = "내 정보 수정", description = "내 정보를 수정합니다.")

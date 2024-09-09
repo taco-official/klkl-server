@@ -4,7 +4,7 @@ import jakarta.validation.constraints.NotNull;
 import taco.klkl.global.common.constants.UserValidationMessages;
 
 public record UserFollowRequest(
-	@NotNull(message = UserValidationMessages.TARGET_USER_ID_NOT_NULL)
-	Long targetUserId
+	@NotNull(message = UserValidationMessages.USER_ID_NOT_NULL)
+	Long userId
 ) {
 }
