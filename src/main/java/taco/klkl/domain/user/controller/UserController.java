@@ -40,14 +40,8 @@ public class UserController {
 
 	@Operation(summary = "유저 정보 조회", description = "유저 정보를 조회합니다.")
 	@GetMapping("/{userId}")
-	public UserDetailResponse getUser(@PathVariable Long userId) {
+	public UserDetailResponse getUser(@PathVariable final Long userId) {
 		return userService.getUserById(userId);
-	}
-
-	@Operation(summary = "내 정보 수정", description = "내 정보를 수정합니다.")
-	@PutMapping("/me")
-	public UserDetailResponse updateMe(@Valid @RequestBody UserUpdateRequest request) {
-		return userService.updateUser(request);
 	}
 
 	@Operation(summary = "내 상품 목록 조회", description = "내 상품 목록을 조회합니다.")
@@ -55,5 +49,17 @@ public class UserController {
 	public List<ProductSimpleResponse> getMyProducts() {
 		final User me = userUtil.getCurrentUser();
 		return userService.getUserProductsById(me.getId());
+	}
+
+	@Operation(summary = "유저의 상품 목록 조회", description = "유저의 상품 목록을 조회합니다.")
+	@GetMapping("/{userId}/products")
+	public List<ProductSimpleResponse> getUserProducts(@PathVariable final Long userId) {
+		return userService.getUserProductsById(userId);
+	}
+
+	@Operation(summary = "내 정보 수정", description = "내 정보를 수정합니다.")
+	@PutMapping("/me")
+	public UserDetailResponse updateMe(@Valid @RequestBody final UserUpdateRequest request) {
+		return userService.updateUser(request);
 	}
 }
