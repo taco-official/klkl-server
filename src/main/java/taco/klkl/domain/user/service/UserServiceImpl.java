@@ -20,8 +20,10 @@ import taco.klkl.domain.user.dao.UserRepository;
 import taco.klkl.domain.user.domain.Follow;
 import taco.klkl.domain.user.domain.User;
 import taco.klkl.domain.user.dto.request.UserCreateRequest;
+import taco.klkl.domain.user.dto.request.UserFollowRequest;
 import taco.klkl.domain.user.dto.request.UserUpdateRequest;
 import taco.klkl.domain.user.dto.response.UserDetailResponse;
+import taco.klkl.domain.user.dto.response.UserFollowResponse;
 import taco.klkl.domain.user.dto.response.UserSimpleResponse;
 import taco.klkl.domain.user.exception.UserNotFoundException;
 import taco.klkl.global.common.response.PagedResponse;
@@ -85,17 +87,31 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	@Transactional
-	public UserDetailResponse updateUser(final UserUpdateRequest updateRequest) {
-		User user = userUtil.getCurrentUser();
-		updateUserEntity(user, updateRequest);
-		return UserDetailResponse.from(user);
+	public User createUser(final UserCreateRequest createRequest) {
+		final User user = createUserEntity(createRequest);
+		return userRepository.save(user);
 	}
 
 	@Override
 	@Transactional
-	public User createUser(final UserCreateRequest createRequest) {
-		final User user = createUserEntity(createRequest);
-		return userRepository.save(user);
+	public UserFollowResponse createUserFollow(final UserFollowRequest followRequest) {
+		final User follower = userUtil.getCurrentUser();
+		final User following = userRepository.findById(followRequest.targetUserId())
+			.orElseThrow(UserNotFoundException::new);
+		if (isFollowPresent(follower, following)) {
+			return UserFollowResponse.of(true, follower, following);
+		}
+		final Follow follow = Follow.of(follower, following);
+		followRepository.save(follow);
+		return UserFollowResponse.of(true, follower, following);
+	}
+
+	@Override
+	@Transactional
+	public UserDetailResponse updateUser(final UserUpdateRequest updateRequest) {
+		User user = userUtil.getCurrentUser();
+		updateUserEntity(user, updateRequest);
+		return UserDetailResponse.from(user);
 	}
 
 	private User createUserEntity(final UserCreateRequest createRequest) {
@@ -124,5 +140,9 @@ public class UserServiceImpl implements UserService {
 			pageable.getPageSize(),
 			Sort.by(Sort.Direction.DESC, "createdAt")
 		);
+	}
+
+	private boolean isFollowPresent(final User follower, final User following) {
+		return followRepository.existsByFollowerAndFollowing(follower, following);
 	}
 }

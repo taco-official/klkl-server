@@ -8,8 +8,10 @@ import org.springframework.stereotype.Service;
 import taco.klkl.domain.product.dto.response.ProductSimpleResponse;
 import taco.klkl.domain.user.domain.User;
 import taco.klkl.domain.user.dto.request.UserCreateRequest;
+import taco.klkl.domain.user.dto.request.UserFollowRequest;
 import taco.klkl.domain.user.dto.request.UserUpdateRequest;
 import taco.klkl.domain.user.dto.response.UserDetailResponse;
+import taco.klkl.domain.user.dto.response.UserFollowResponse;
 import taco.klkl.domain.user.dto.response.UserSimpleResponse;
 import taco.klkl.global.common.response.PagedResponse;
 
@@ -24,8 +26,10 @@ public interface UserService {
 
 	List<UserSimpleResponse> getUserFollowingById(final Long id);
 
-	UserDetailResponse updateUser(final UserUpdateRequest updateRequest);
-
 	User createUser(final UserCreateRequest createRequest);
+
+	UserFollowResponse createUserFollow(final UserFollowRequest followRequest);
+
+	UserDetailResponse updateUser(final UserUpdateRequest updateRequest);
 
 }

@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,8 +19,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import taco.klkl.domain.product.dto.response.ProductSimpleResponse;
 import taco.klkl.domain.user.domain.User;
+import taco.klkl.domain.user.dto.request.UserFollowRequest;
 import taco.klkl.domain.user.dto.request.UserUpdateRequest;
 import taco.klkl.domain.user.dto.response.UserDetailResponse;
+import taco.klkl.domain.user.dto.response.UserFollowResponse;
 import taco.klkl.domain.user.dto.response.UserSimpleResponse;
 import taco.klkl.domain.user.service.UserService;
 import taco.klkl.global.common.constants.ProductConstants;
@@ -77,10 +80,16 @@ public class UserController {
 	}
 
 	@Operation(summary = "내 팔로잉 목록 조회", description = "내 팔로잉 목록을 조회합니다.")
-	@GetMapping("/me/following")
+	@GetMapping("/following")
 	public List<UserSimpleResponse> getMyFollowing() {
 		final User me = userUtil.getCurrentUser();
 		return userService.getUserFollowingById(me.getId());
+	}
+
+	@Operation(summary = "유저 팔로우", description = "유저를 팔로우합니다.")
+	@PostMapping("/following")
+	public UserFollowResponse followUser(@Valid @RequestBody final UserFollowRequest request) {
+		return userService.createUserFollow(request);
 	}
 
 	@Operation(summary = "내 정보 수정", description = "내 정보를 수정합니다.")
