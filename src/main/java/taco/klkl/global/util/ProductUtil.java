@@ -29,6 +29,10 @@ public class ProductUtil {
 			.orElseThrow(ProductNotFoundException::new);
 	}
 
+	public List<Product> findProductsByUserId(final Long userId) {
+		return productRepository.findAllByUserId(userId);
+	}
+
 	public void validateProductId(final Long id) {
 		final boolean existsById = productRepository.existsById(id);
 		if (!existsById) {

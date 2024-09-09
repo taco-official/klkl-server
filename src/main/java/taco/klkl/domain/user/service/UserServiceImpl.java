@@ -1,16 +1,21 @@
 package taco.klkl.domain.user.service;
 
+import java.util.List;
+
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import taco.klkl.domain.product.dto.response.ProductSimpleResponse;
 import taco.klkl.domain.user.dao.UserRepository;
 import taco.klkl.domain.user.domain.User;
 import taco.klkl.domain.user.dto.request.UserCreateRequest;
 import taco.klkl.domain.user.dto.request.UserUpdateRequest;
 import taco.klkl.domain.user.dto.response.UserDetailResponse;
+import taco.klkl.domain.user.exception.UserNotFoundException;
+import taco.klkl.global.util.ProductUtil;
 import taco.klkl.global.util.UserUtil;
 
 @Slf4j
@@ -22,6 +27,7 @@ public class UserServiceImpl implements UserService {
 
 	private final UserRepository userRepository;
 
+	private final ProductUtil productUtil;
 	private final UserUtil userUtil;
 
 	/**
@@ -29,9 +35,19 @@ public class UserServiceImpl implements UserService {
 	 * name 속성이 "testUser"인 유저를 반환합니다.
 	 */
 	@Override
-	public UserDetailResponse getCurrentUser() {
-		final User currentUser = userUtil.getCurrentUser();
-		return UserDetailResponse.from(currentUser);
+	public UserDetailResponse getUserById(final Long id) {
+		final User user = userRepository.findById(id)
+			.orElseThrow(UserNotFoundException::new);
+		return UserDetailResponse.from(user);
+	}
+
+	@Override
+	public List<ProductSimpleResponse> getUserProductsById(final Long id) {
+		userRepository.findById(id)
+			.orElseThrow(UserNotFoundException::new);
+		return productUtil.findProductsByUserId(id).stream()
+			.map(ProductSimpleResponse::from)
+			.toList();
 	}
 
 	@Override
