@@ -9,5 +9,5 @@ import taco.klkl.domain.user.domain.Follow;
 
 @Repository
 public interface FollowRepository extends JpaRepository<Follow, Long> {
-	List<Follow> findAllByFollowerId(final Long followerId);
+	List<Follow> findByFollowerId(final Long followerId);
 }

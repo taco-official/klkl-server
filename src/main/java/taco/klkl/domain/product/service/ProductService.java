@@ -21,6 +21,14 @@ public interface ProductService {
 		final ProductSortOptions sortOptions
 	);
 
+	PagedResponse<ProductSimpleResponse> findProductsByPartialName(
+		String partialName,
+		Pageable pageable,
+		ProductSortOptions sortOptions
+	);
+
+	PagedResponse<ProductSimpleResponse> findMyFollowingProducts(final Pageable pageable);
+
 	ProductDetailResponse findProductById(final Long id) throws ProductNotFoundException;
 
 	ProductDetailResponse createProduct(final ProductCreateUpdateRequest createRequest);
@@ -32,8 +40,5 @@ public interface ProductService {
 	ProductDetailResponse updateProduct(final Long id, final ProductCreateUpdateRequest updateRequest);
 
 	void deleteProduct(final Long id) throws ProductNotFoundException;
-
-	PagedResponse<ProductSimpleResponse> findProductsByPartialName(String partialName, Pageable pageable,
-		ProductSortOptions sortOptions);
 
 }

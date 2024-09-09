@@ -77,7 +77,7 @@ public class UserServiceImpl implements UserService {
 	public List<UserSimpleResponse> getUserFollowingById(final Long id) {
 		userRepository.findById(id)
 			.orElseThrow(UserNotFoundException::new);
-		return followRepository.findAllByFollowerId(id).stream()
+		return followRepository.findByFollowerId(id).stream()
 			.map(Follow::getFollowing)
 			.map(UserSimpleResponse::from)
 			.toList();

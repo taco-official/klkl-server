@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -90,6 +91,43 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
+	public PagedResponse<ProductSimpleResponse> findProductsByPartialName(
+		final String partialName,
+		final Pageable pageable,
+		final ProductSortOptions sortOptions
+	) {
+		final QProduct product = QProduct.product;
+		final QCity city = QCity.city;
+		final QCountry country = QCountry.country;
+		final QSubcategory subcategory = QSubcategory.subcategory;
+		final QCategory category = QCategory.category;
+
+		final JPAQuery<?> baseQuery = queryFactory
+			.from(product)
+			.where(product.name.contains(partialName));
+
+		final long total = getCount(baseQuery);
+
+		baseQuery.join(product.city, city).fetchJoin()
+			.join(product.subcategory, subcategory).fetchJoin()
+			.join(city.country, country).fetchJoin()
+			.join(subcategory.category, category).fetchJoin();
+
+		final List<Product> products = fetchProducts(baseQuery, pageable, sortOptions);
+		final Page<Product> productPage = new PageImpl<>(products, pageable, total);
+
+		return PagedResponse.of(productPage, ProductSimpleResponse::from);
+	}
+
+	@Override
+	public PagedResponse<ProductSimpleResponse> findMyFollowingProducts(final Pageable pageable) {
+		final User me = userUtil.getCurrentUser();
+		final Pageable sortedPageable = createPageableSortedByCreatedAtDesc(pageable);
+		final Page<Product> followingProducts = productRepository.findProductsOfFollowedUsers(me, sortedPageable);
+		return PagedResponse.of(followingProducts, ProductSimpleResponse::from);
+	}
+
+	@Override
 	public ProductDetailResponse findProductById(final Long id) throws ProductNotFoundException {
 		final Product product = productRepository.findById(id)
 			.orElseThrow(ProductNotFoundException::new);
@@ -137,35 +175,6 @@ public class ProductServiceImpl implements ProductService {
 		final Product product = productRepository.findById(id)
 			.orElseThrow(ProductNotFoundException::new);
 		productRepository.delete(product);
-	}
-
-	@Override
-	public PagedResponse<ProductSimpleResponse> findProductsByPartialName(
-		final String partialName,
-		final Pageable pageable,
-		final ProductSortOptions sortOptions
-	) {
-		final QProduct product = QProduct.product;
-		final QCity city = QCity.city;
-		final QCountry country = QCountry.country;
-		final QSubcategory subcategory = QSubcategory.subcategory;
-		final QCategory category = QCategory.category;
-
-		final JPAQuery<?> baseQuery = queryFactory
-			.from(product)
-			.where(product.name.contains(partialName));
-
-		final long total = getCount(baseQuery);
-
-		baseQuery.join(product.city, city).fetchJoin()
-			.join(product.subcategory, subcategory).fetchJoin()
-			.join(city.country, country).fetchJoin()
-			.join(subcategory.category, category).fetchJoin();
-
-		final List<Product> products = fetchProducts(baseQuery, pageable, sortOptions);
-		final Page<Product> productPage = new PageImpl<>(products, pageable, total);
-
-		return PagedResponse.of(productPage, ProductSimpleResponse::from);
 	}
 
 	private JPAQuery<?> createBaseQuery(final ProductFilterOptions filterOptions) {
@@ -297,6 +306,14 @@ public class ProductServiceImpl implements ProductService {
 		} catch (IllegalArgumentException e) {
 			throw new SortDirectionNotFoundException();
 		}
+	}
+
+	private Pageable createPageableSortedByCreatedAtDesc(final Pageable pageable) {
+		return PageRequest.of(
+			pageable.getPageNumber(),
+			pageable.getPageSize(),
+			Sort.by(Sort.Direction.DESC, "createdAt")
+		);
 	}
 
 	private City findCityById(final Long cityId) throws CityNotFoundException {
