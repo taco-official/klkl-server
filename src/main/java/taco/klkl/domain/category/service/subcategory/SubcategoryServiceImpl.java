@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import taco.klkl.domain.category.dao.subcategory.SubcategoryRepository;
 import taco.klkl.domain.category.domain.subcategory.Subcategory;
+import taco.klkl.domain.category.dto.response.subcategory.SubcategoryHierarchyResponse;
 import taco.klkl.domain.category.dto.response.subcategory.SubcategoryResponse;
 import taco.klkl.domain.category.exception.subcategory.SubcategoryNotFoundException;
 
@@ -38,6 +39,13 @@ public class SubcategoryServiceImpl implements SubcategoryService {
 		final List<Subcategory> subcategories = subcategoryRepository.findAllById(subcategoryIds);
 		validateSubcategories(subcategoryIds.size(), subcategories.size());
 		return subcategories;
+	}
+
+	@Override
+	public SubcategoryHierarchyResponse findSubcategoryHierarchyById(final Long id) {
+		final Subcategory subcategory = subcategoryRepository.findById(id)
+			.orElseThrow(SubcategoryNotFoundException::new);
+		return SubcategoryHierarchyResponse.from(subcategory);
 	}
 
 	private void validateSubcategories(final int request, final int result) {
