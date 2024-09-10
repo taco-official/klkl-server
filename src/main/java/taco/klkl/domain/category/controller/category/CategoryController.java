@@ -23,9 +23,9 @@ public class CategoryController {
 
 	private final CategoryService categoryService;
 
-	@GetMapping
-	@Operation(summary = "전체 카테고리 목록 조회", description = "전체 카테고리 목록을 조회합니다.")
-	public List<CategoryResponse> findAllCategories() {
+	@GetMapping("/hierarchy")
+	@Operation(summary = "전체 분류의 계층 정보 조회", description = "전체 분류의 계층 정보를 조회합니다.")
+	public List<CategoryResponse> getAllCategories() {
 		return categoryService.findAllCategories();
 	}
 

@@ -59,7 +59,7 @@ class RegionControllerTest {
 
 	@Test
 	@DisplayName("모든 지역 조회 성공 테스트")
-	void testFindAllRegions() throws Exception {
+	void testGetAllRegions() throws Exception {
 		// given
 		List<RegionResponse> regionResponses = Arrays.asList(
 			RegionResponse.from(region1),
@@ -85,7 +85,7 @@ class RegionControllerTest {
 
 	@Test
 	@DisplayName("모든 지역 조회 empty 테스트")
-	void testFindAllRegionsEmpty() throws Exception {
+	void testGetAllRegionsEmpty() throws Exception {
 		// given
 		when(regionService.findAllRegions()).thenReturn(Collections.emptyList());
 

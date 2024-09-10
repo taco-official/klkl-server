@@ -24,9 +24,9 @@ public class RegionController {
 
 	private final RegionService regionService;
 
-	@GetMapping()
-	@Operation(summary = "전체 지역 목록 조회", description = "전체 지역 목록을 조회합니다.")
-	public List<RegionResponse> findAllRegions() {
+	@GetMapping("/hierarchy")
+	@Operation(summary = "전체 지역의 계층 정보 조회", description = "전체 지역의 계층 정보를 조회합니다.")
+	public List<RegionResponse> getAllRegions() {
 		return regionService.findAllRegions();
 	}
 

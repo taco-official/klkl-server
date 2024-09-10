@@ -46,7 +46,7 @@ public class CategoryControllerTest {
 
 	@Test
 	@DisplayName("카테고리 컨트롤러 GlobalResponse로 Wrapping되어 나오는지 Test")
-	public void testFindAllCategories() throws Exception {
+	public void testGetAllCategories() throws Exception {
 		// given
 		List<CategoryResponse> categoryResponse = Arrays.asList(
 			new CategoryResponse(1L, "Category1", subcategories.stream()
