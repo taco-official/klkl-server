@@ -61,7 +61,7 @@ public class CategoryControllerTest {
 		when(categoryService.findAllCategories()).thenReturn(categoryResponse);
 
 		// then
-		mockMvc.perform(get("/v1/categories")
+		mockMvc.perform(get("/v1/categories/hierarchy")
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))

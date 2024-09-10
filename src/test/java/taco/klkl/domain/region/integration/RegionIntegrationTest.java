@@ -15,7 +15,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import jakarta.transaction.Transactional;
-import taco.klkl.domain.region.dto.response.country.CountryResponse;
 import taco.klkl.domain.region.dto.response.region.RegionResponse;
 import taco.klkl.domain.region.service.region.RegionService;
 
@@ -37,26 +36,10 @@ public class RegionIntegrationTest {
 		List<RegionResponse> regionResponses = regionService.findAllRegions();
 
 		// when & then
-		mockMvc.perform(get("/v1/regions")
+		mockMvc.perform(get("/v1/regions/hierarchy")
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
 			.andExpect(jsonPath("$.data", hasSize(regionResponses.size())));
-	}
-
-	@Test
-	@DisplayName("지역에 속한 국가목록 조회 테스트")
-	void testGetCountriesByRegionId() throws Exception {
-		// given
-		List<CountryResponse> countryResponses = regionService.findCountriesByRegionId(400L);
-
-		// when
-		mockMvc.perform(get("/v1/regions/400/countries")
-				.contentType(MediaType.APPLICATION_JSON))
-			.andExpect(status().isOk())
-			.andExpect(jsonPath("isSuccess", is(true)))
-			.andExpect(jsonPath("$.data", hasSize(countryResponses.size())));
-
-		// then
 	}
 }

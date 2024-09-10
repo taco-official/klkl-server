@@ -37,7 +37,7 @@ class CategoryIntegrationTest {
 		List<CategoryResponse> categoryResponse = categoryService.findAllCategories();
 
 		//then
-		mockMvc.perform(get("/v1/categories")
+		mockMvc.perform(get("/v1/categories/hierarchy")
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.data", hasSize(categoryResponse.size())))

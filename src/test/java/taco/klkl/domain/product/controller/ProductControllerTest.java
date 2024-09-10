@@ -69,16 +69,6 @@ public class ProductControllerTest {
 			1L,
 			"cityName"
 		);
-		SubcategoryResponse subcategoryResponse = new SubcategoryResponse(
-			1L,
-			"subcategoryName"
-		);
-		CurrencyResponse currencyResponse = new CurrencyResponse(
-			1L,
-			"currencyCode",
-			"통화단위",
-			"image/flagUrl.jpg"
-		);
 		TagResponse tagResponse1 = new TagResponse(
 			1L,
 			"tagName1"
@@ -86,6 +76,17 @@ public class ProductControllerTest {
 		TagResponse tagResponse2 = new TagResponse(
 			2L,
 			"tagName2"
+		);
+		SubcategoryResponse subcategoryResponse = new SubcategoryResponse(
+			1L,
+			"subcategoryName",
+			List.of(tagResponse1, tagResponse2)
+		);
+		CurrencyResponse currencyResponse = new CurrencyResponse(
+			1L,
+			"currencyCode",
+			"통화단위",
+			"image/flagUrl.jpg"
 		);
 
 		productSimpleResponse = new ProductSimpleResponse(
