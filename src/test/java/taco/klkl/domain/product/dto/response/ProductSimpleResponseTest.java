@@ -56,7 +56,7 @@ class ProductSimpleResponseTest {
 		Country country = Country.of(
 			CountryType.JAPAN,
 			region,
-			"image/thailand-photo.jpg",
+			"image/thailand-wallpaper.jpg",
 			currency
 		);
 		city = City.of(

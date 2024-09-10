@@ -87,7 +87,7 @@ public class NotificationServiceImplTest {
 		Country country = Country.of(
 			CountryType.JAPAN,
 			region,
-			"image/thailand-photo.jpg",
+			"image/thailand-wallpaper.jpg",
 			currency
 		);
 		City city = City.of(

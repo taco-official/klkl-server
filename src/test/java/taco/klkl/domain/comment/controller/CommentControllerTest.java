@@ -81,7 +81,7 @@ public class CommentControllerTest {
 	private final Country country = Country.of(
 		CountryType.MALAYSIA,
 		region,
-		"image/malaysia-photo.jpg",
+		"image/malaysia-wallpaper.jpg",
 		currency
 	);
 

@@ -57,7 +57,7 @@ class SearchServiceImplTest {
 	@Mock
 	Currency currency;
 
-	private final Country country = Country.of(CountryType.MALAYSIA, region, "photo", currency);
+	private final Country country = Country.of(CountryType.MALAYSIA, region, "wallpaper", currency);
 	private final City city = City.of(CityType.BORACAY, country);
 	private final Category category = Category.of(CategoryType.CLOTHES);
 	private final Subcategory subcategory = Subcategory.of(category, SubcategoryType.MAKEUP);

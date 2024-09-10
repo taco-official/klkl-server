@@ -6,9 +6,7 @@ import static org.mockito.Mockito.*;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,15 +15,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import taco.klkl.domain.region.dao.region.RegionRepository;
-import taco.klkl.domain.region.domain.country.Country;
-import taco.klkl.domain.region.domain.country.CountryType;
-import taco.klkl.domain.region.domain.currency.Currency;
-import taco.klkl.domain.region.domain.currency.CurrencyType;
 import taco.klkl.domain.region.domain.region.Region;
 import taco.klkl.domain.region.domain.region.RegionType;
-import taco.klkl.domain.region.dto.response.country.CountryResponse;
 import taco.klkl.domain.region.dto.response.region.RegionResponse;
-import taco.klkl.domain.region.exception.region.RegionNotFoundException;
 import taco.klkl.domain.region.service.region.RegionServiceImpl;
 
 @ExtendWith(MockitoExtension.class)
