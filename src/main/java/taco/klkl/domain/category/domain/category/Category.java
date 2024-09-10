@@ -9,6 +9,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Transient;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,6 +20,7 @@ import taco.klkl.domain.category.domain.subcategory.Subcategory;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Category {
 
+	@Transient
 	private CategoryType categoryType;
 
 	@Id

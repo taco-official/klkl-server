@@ -11,6 +11,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Transient;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,6 +24,7 @@ import taco.klkl.domain.region.domain.region.Region;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Country {
 
+	@Transient
 	private CountryType countryType;
 
 	@Id
