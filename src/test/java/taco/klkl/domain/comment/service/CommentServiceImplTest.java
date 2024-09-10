@@ -24,7 +24,6 @@ import taco.klkl.domain.comment.exception.CommentProductNotMatch;
 import taco.klkl.domain.notification.service.NotificationService;
 import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.product.exception.ProductNotFoundException;
-import taco.klkl.domain.user.domain.Gender;
 import taco.klkl.domain.user.domain.User;
 import taco.klkl.domain.user.dto.request.UserCreateRequest;
 import taco.klkl.global.util.ProductUtil;
@@ -32,7 +31,7 @@ import taco.klkl.global.util.UserUtil;
 
 @ExtendWith(MockitoExtension.class)
 @Transactional
-public class CommentServiceTest {
+public class CommentServiceImplTest {
 	@Mock
 	private CommentRepository commentRepository;
 
@@ -50,15 +49,11 @@ public class CommentServiceTest {
 
 	private final UserCreateRequest userRequestDto = new UserCreateRequest(
 		"이상화",
-		"남",
-		19,
 		"저는 이상화입니다."
 	);
 
 	private final User user = User.of(
 		userRequestDto.name(),
-		Gender.from(userRequestDto.gender()),
-		userRequestDto.age(),
 		userRequestDto.description()
 	);
 
@@ -105,7 +100,7 @@ public class CommentServiceTest {
 		final Long productId = 1L;
 		final Comment comment = Comment.of(product, user, "이거 진짜에요?");
 
-		when(userUtil.findTestUser()).thenReturn(user);
+		when(userUtil.getCurrentUser()).thenReturn(user);
 		when(commentRepository.save(any(Comment.class))).thenReturn(comment);
 
 		//when

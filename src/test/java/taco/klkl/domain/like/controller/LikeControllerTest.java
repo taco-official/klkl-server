@@ -48,7 +48,7 @@ class LikeControllerTest {
 
 		// when & then
 		mockMvc.perform(post("/v1/products/{productId}/likes", productId))
-			.andExpect(status().isOk())
+			.andExpect(status().isCreated())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
 			.andExpect(jsonPath("$.data.isLiked", is(true)))
 			.andExpect(jsonPath("$.data.likeCount", is(1)));

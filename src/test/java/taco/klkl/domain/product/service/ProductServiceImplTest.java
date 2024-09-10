@@ -62,8 +62,7 @@ import taco.klkl.domain.region.domain.currency.CurrencyType;
 import taco.klkl.domain.region.domain.region.Region;
 import taco.klkl.domain.region.domain.region.RegionType;
 import taco.klkl.domain.user.domain.User;
-import taco.klkl.global.common.constants.UserConstants;
-import taco.klkl.global.common.response.PagedResponseDto;
+import taco.klkl.global.common.response.PagedResponse;
 import taco.klkl.global.util.CityUtil;
 import taco.klkl.global.util.CurrencyUtil;
 import taco.klkl.global.util.SubcategoryUtil;
@@ -109,7 +108,7 @@ class ProductServiceImplTest {
 	void setUp() {
 		MockitoAnnotations.openMocks(this);
 
-		user = UserConstants.TEST_USER;
+		user = User.of("testUser", "테스트입니다.");
 
 		Region region = Region.from(RegionType.SOUTHEAST_ASIA);
 		currency = Currency.of(
@@ -213,7 +212,7 @@ class ProductServiceImplTest {
 		when(tagUtil.findTagEntityById(anyLong())).thenReturn(mockTag);
 
 		// When
-		PagedResponseDto<ProductSimpleResponse> result = productService
+		PagedResponse<ProductSimpleResponse> result = productService
 			.findProductsByFilterOptionsAndSortOptions(pageable, filterOptions, sortOptions);
 
 		// Then
@@ -294,7 +293,7 @@ class ProductServiceImplTest {
 		when(productQuery.orderBy(any(OrderSpecifier.class))).thenReturn(productQuery);
 
 		// When
-		PagedResponseDto<ProductSimpleResponse> result = productService
+		PagedResponse<ProductSimpleResponse> result = productService
 			.findProductsByPartialName("name", pageable, sortOptions);
 
 		// Then
@@ -376,7 +375,7 @@ class ProductServiceImplTest {
 	@DisplayName("상품 생성 - 성공")
 	void testCreateProduct() {
 		// Given
-		when(userUtil.findTestUser()).thenReturn(user);
+		when(userUtil.getCurrentUser()).thenReturn(user);
 		when(cityUtil.findCityEntityById(1L)).thenReturn(city);
 		when(subcategoryUtil.findSubcategoryEntityById(1L)).thenReturn(subcategory);
 		when(currencyUtil.findCurrencyEntityById(1L)).thenReturn(currency);
@@ -414,6 +413,7 @@ class ProductServiceImplTest {
 	void testUpdateProduct() {
 		// Given
 		when(productRepository.findById(1L)).thenReturn(Optional.of(testProduct));
+		when(userUtil.getCurrentUser()).thenReturn(user);
 		when(cityUtil.findCityEntityById(1L)).thenReturn(city);
 		when(subcategoryUtil.findSubcategoryEntityById(1L)).thenReturn(subcategory);
 		when(currencyUtil.findCurrencyEntityById(1L)).thenReturn(currency);
@@ -442,6 +442,7 @@ class ProductServiceImplTest {
 	void testDeleteProduct() {
 		// Given
 		when(productRepository.findById(1L)).thenReturn(Optional.of(testProduct));
+		when(userUtil.getCurrentUser()).thenReturn(user);
 
 		// When
 		productService.deleteProduct(1L);

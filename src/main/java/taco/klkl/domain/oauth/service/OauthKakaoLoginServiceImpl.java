@@ -9,7 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 import taco.klkl.domain.oauth.dao.OauthRepository;
 import taco.klkl.domain.oauth.domain.Oauth;
 import taco.klkl.domain.oauth.dto.request.KakaoUserInfoRequest;
-import taco.klkl.domain.user.domain.Gender;
 import taco.klkl.domain.user.domain.User;
 import taco.klkl.domain.user.dto.request.UserCreateRequest;
 import taco.klkl.domain.user.dto.response.UserDetailResponse;
@@ -58,8 +57,6 @@ public class OauthKakaoLoginServiceImpl implements OauthKakaoLoginService {
 		// TODO: 성별, 나이는 기본값으로 넣고 있습니다.
 		final UserCreateRequest userCreateRequest = UserCreateRequest.of(
 			name,
-			Gender.MALE.getValue(),
-			0,
 			""
 		);
 

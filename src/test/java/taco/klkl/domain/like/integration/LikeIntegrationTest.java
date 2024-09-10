@@ -75,7 +75,7 @@ public class LikeIntegrationTest {
 	void testPostLike() throws Exception {
 		// when & then
 		mockMvc.perform(post("/v1/products/{productId}/likes", product.getId()))
-			.andExpect(status().isOk())
+			.andExpect(status().isCreated())
 			.andExpect(jsonPath("$.data.isLiked", is(true)))
 			.andExpect(jsonPath("$.data.likeCount", is(1)));
 
@@ -97,12 +97,12 @@ public class LikeIntegrationTest {
 	void testPostLikeMultiple() throws Exception {
 		// when & then
 		mockMvc.perform(post("/v1/products/{productId}/likes", product.getId()))
-			.andExpect(status().isOk())
+			.andExpect(status().isCreated())
 			.andExpect(jsonPath("$.data.isLiked", is(true)))
 			.andExpect(jsonPath("$.data.likeCount", is(1)));
 
 		mockMvc.perform(post("/v1/products/{productId}/likes", product.getId()))
-			.andExpect(status().isOk())
+			.andExpect(status().isCreated())
 			.andExpect(jsonPath("$.data.isLiked", is(true)))
 			.andExpect(jsonPath("$.data.likeCount", is(1)));
 

@@ -60,7 +60,7 @@ public class LikeServiceImpl implements LikeService {
 	}
 
 	private User findCurrentUser() {
-		return userUtil.findCurrentUser();
+		return userUtil.getCurrentUser();
 	}
 
 	@Override

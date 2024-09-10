@@ -12,8 +12,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
 import taco.klkl.domain.user.dao.UserRepository;
+import taco.klkl.domain.user.domain.User;
 import taco.klkl.domain.user.dto.response.UserDetailResponse;
 import taco.klkl.domain.user.service.UserService;
+import taco.klkl.global.util.UserUtil;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -28,10 +30,14 @@ public class UserIntegrationTest {
 	@Autowired
 	UserRepository userRepository;
 
+	@Autowired
+	private UserUtil userUtil;
+
 	@Test
 	public void testUserMe() throws Exception {
 		// given, when
-		UserDetailResponse currentUser = userService.getCurrentUser();
+		User me = userUtil.getCurrentUser();
+		UserDetailResponse currentUser = userService.getUserById(me.getId());
 
 		// then
 		mockMvc.perform(get("/v1/users/me"))

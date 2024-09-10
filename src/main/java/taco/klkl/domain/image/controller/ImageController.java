@@ -2,9 +2,11 @@ package taco.klkl.domain.image.controller;
 
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -29,22 +31,24 @@ public class ImageController {
 
 	private final ImageService imageService;
 
+	@PostMapping("/v1/users/me/upload-url")
+	@ResponseStatus(HttpStatus.CREATED)
 	@Operation(
 		summary = "유저 이미지 업로드 Presigned URL 생성",
 		description = "유저 이미지 업로드를 위한 Presigned URL를 생성합니다."
 	)
-	@PostMapping("/v1/users/me/upload-url")
 	public PresignedUrlResponse createUserImageUploadUrl(
 		@Valid @RequestBody final SingleImageUploadRequest request
 	) {
 		return imageService.createUserImageUploadUrl(request);
 	}
 
+	@PostMapping("/v1/products/{productId}/upload-url")
+	@ResponseStatus(HttpStatus.CREATED)
 	@Operation(
 		summary = "상품 이미지 업로드 Presigned URL 생성",
 		description = "상품 이미지 업로드를 위한 Presigned URL를 생성합니다."
 	)
-	@PostMapping("/v1/products/{productId}/upload-url")
 	public List<PresignedUrlResponse> createProductImageUploadUrls(
 		@PathVariable final Long productId,
 		@Valid @RequestBody final MultipleImagesUploadRequest request
@@ -52,22 +56,22 @@ public class ImageController {
 		return imageService.createProductImageUploadUrls(productId, request);
 	}
 
+	@PostMapping("/v1/users/me/upload-complete")
 	@Operation(
 		summary = "유저 이미지 업로드 완료 처리",
 		description = "유저 이미지 업로드를 완료 처리합니다."
 	)
-	@PostMapping("/v1/users/me/upload-complete")
 	public SingleUploadCompleteResponse uploadCompleteUserImage(
 		@Valid @RequestBody final SingleImageUpdateRequest request
 	) {
 		return imageService.uploadCompleteUserImage(request);
 	}
 
+	@PostMapping("/v1/products/{productId}/upload-complete")
 	@Operation(
 		summary = "상품 이미지 업로드 완료 처리",
 		description = "상품 이미지 업로드를 완료 처리합니다."
 	)
-	@PostMapping("/v1/products/{productId}/upload-complete")
 	public MultipleUploadCompleteResponse uploadCompleteProductImages(
 		@PathVariable final Long productId,
 		@Valid @RequestBody final MultipleImagesUpdateRequest request

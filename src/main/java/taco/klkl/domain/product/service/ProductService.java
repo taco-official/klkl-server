@@ -1,5 +1,7 @@
 package taco.klkl.domain.product.service;
 
+import java.util.Set;
+
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -10,16 +12,24 @@ import taco.klkl.domain.product.dto.request.ProductSortOptions;
 import taco.klkl.domain.product.dto.response.ProductDetailResponse;
 import taco.klkl.domain.product.dto.response.ProductSimpleResponse;
 import taco.klkl.domain.product.exception.ProductNotFoundException;
-import taco.klkl.global.common.response.PagedResponseDto;
+import taco.klkl.global.common.response.PagedResponse;
 
 @Service
 public interface ProductService {
 
-	PagedResponseDto<ProductSimpleResponse> findProductsByFilterOptionsAndSortOptions(
+	PagedResponse<ProductSimpleResponse> findProductsByFilterOptionsAndSortOptions(
 		final Pageable pageable,
 		final ProductFilterOptions filterOptions,
 		final ProductSortOptions sortOptions
 	);
+
+	PagedResponse<ProductSimpleResponse> findProductsByPartialName(
+		final String partialName,
+		final Pageable pageable,
+		final ProductSortOptions sortOptions
+	);
+
+	PagedResponse<ProductSimpleResponse> findMyFollowingProducts(final Pageable pageable, final Set<Long> followingIds);
 
 	ProductDetailResponse findProductById(final Long id) throws ProductNotFoundException;
 
@@ -32,8 +42,5 @@ public interface ProductService {
 	ProductDetailResponse updateProduct(final Long id, final ProductCreateUpdateRequest updateRequest);
 
 	void deleteProduct(final Long id) throws ProductNotFoundException;
-
-	PagedResponseDto<ProductSimpleResponse> findProductsByPartialName(String partialName, Pageable pageable,
-		ProductSortOptions sortOptions);
 
 }

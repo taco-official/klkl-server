@@ -44,14 +44,13 @@ import taco.klkl.domain.region.domain.currency.Currency;
 import taco.klkl.domain.region.domain.currency.CurrencyType;
 import taco.klkl.domain.region.domain.region.Region;
 import taco.klkl.domain.region.domain.region.RegionType;
-import taco.klkl.domain.user.domain.Gender;
 import taco.klkl.domain.user.domain.QUser;
 import taco.klkl.domain.user.domain.User;
 import taco.klkl.global.util.UserUtil;
 
 @ExtendWith(MockitoExtension.class)
 @Transactional
-public class NotificationServiceTest {
+public class NotificationServiceImplTest {
 
 	@Mock
 	private NotificationRepository notificationRepository;
@@ -79,8 +78,6 @@ public class NotificationServiceTest {
 	public void setUp() {
 		commentUser = User.of(
 			"윤상정",
-			Gender.FEMALE,
-			26,
 			"나는 해적왕이 될 사나이다.");
 
 		Region region = Region.from(RegionType.SOUTHEAST_ASIA);
@@ -127,7 +124,7 @@ public class NotificationServiceTest {
 		QNotification notification = QNotification.notification;
 		QUser user = QUser.user;
 
-		when(userUtil.findTestUser()).thenReturn(mockUser);
+		when(userUtil.getCurrentUser()).thenReturn(mockUser);
 		when(mockNotification.getId()).thenReturn(1L);
 		when(mockNotification.getIsRead()).thenReturn(false);
 		when(mockNotification.getCreatedAt()).thenReturn(LocalDateTime.now());
@@ -157,7 +154,7 @@ public class NotificationServiceTest {
 		QNotification notification = QNotification.notification;
 		QUser user = QUser.user;
 
-		when(userUtil.findTestUser()).thenReturn(mockUser);
+		when(userUtil.getCurrentUser()).thenReturn(mockUser);
 
 		when(queryFactory.selectFrom(any(QNotification.class))).thenReturn(mockQuery);
 		when(mockQuery.join(notification.comment.product.user, user)).thenReturn(mockQuery);
@@ -181,16 +178,18 @@ public class NotificationServiceTest {
 
 		List<Notification> notificationList = List.of(notification1, notification2);
 
-		when(userUtil.findTestUser()).thenReturn(mockUser);
-		when(notificationRepository.findAllByComment_Product_User(mockUser)).thenReturn(notificationList);
-		when(notificationRepository.count()).thenReturn(2L);
+		when(userUtil.getCurrentUser()).thenReturn(mockUser);
+		when(notificationRepository.findByComment_Product_User(mockUser)).thenReturn(notificationList);
 
 		//when
 		NotificationUpdateResponse response = notificationService.readAllNotifications();
 
 		//then
 		assertThat(response.updatedCount()).isEqualTo(2L);
-		verify(notificationRepository).findAllByComment_Product_User(mockUser);
+		verify(notificationRepository).findByComment_Product_User(mockUser);
+
+		assertTrue(notification1.getIsRead());
+		assertTrue(notification2.getIsRead());
 	}
 
 	@Test
@@ -199,14 +198,16 @@ public class NotificationServiceTest {
 		//given
 		Notification notification = Notification.of(comment);
 
-		when(notificationRepository.findById(any(Long.class))).thenReturn(Optional.of(notification));
+		when(userUtil.getCurrentUser()).thenReturn(mockUser);
+		when(notificationRepository.findById(1L)).thenReturn(Optional.of(notification));
 
 		//when
-		NotificationUpdateResponse response = notificationService.readNotificationById(any(Long.class));
+		NotificationUpdateResponse response = notificationService.readNotificationById(1L);
 
 		//then
 		assertThat(response.updatedCount()).isEqualTo(1L);
-		verify(notificationRepository).findById(any(Long.class));
+		verify(notificationRepository).findById(1L);
+		assertTrue(notification.getIsRead());
 	}
 
 	@Test

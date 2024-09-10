@@ -3,6 +3,8 @@ package taco.klkl.domain.user.service;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import java.util.Optional;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,7 +15,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import taco.klkl.domain.user.dao.UserRepository;
-import taco.klkl.domain.user.domain.Gender;
 import taco.klkl.domain.user.domain.User;
 import taco.klkl.domain.user.dto.request.UserCreateRequest;
 import taco.klkl.domain.user.dto.response.UserDetailResponse;
@@ -35,17 +36,17 @@ class UserServiceImplTest {
 
 	@Test
 	@DisplayName("내 정보 조회 서비스 테스트")
-	public void testGetCurrentUser() {
+	public void testGetUserById() {
 		// given
 
 		User user = mock(User.class);
-		when(userUtil.findCurrentUser()).thenReturn(user);
 		when(user.getId()).thenReturn(1L);
 		when(user.getName()).thenReturn("testUser");
 		when(user.getDescription()).thenReturn("테스트입니다.");
+		when(userRepository.findById(1L)).thenReturn(Optional.of(user));
 
 		// when
-		UserDetailResponse userDto = userServiceImpl.getCurrentUser();
+		UserDetailResponse userDto = userServiceImpl.getUserById(1L);
 
 		// then
 		assertThat(userDto.id()).isEqualTo(user.getId());
@@ -60,14 +61,10 @@ class UserServiceImplTest {
 		// given
 		UserCreateRequest requestDto = new UserCreateRequest(
 			"이상화",
-			"남",
-			19,
 			"저는 이상화입니다."
 		);
 		User user = User.of(
 			requestDto.name(),
-			Gender.from(requestDto.gender()),
-			requestDto.age(),
 			requestDto.description()
 		);
 		when(userRepository.save(any(User.class))).thenReturn(user);

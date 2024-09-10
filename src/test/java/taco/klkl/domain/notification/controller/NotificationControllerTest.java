@@ -35,7 +35,6 @@ import taco.klkl.domain.region.domain.country.CountryType;
 import taco.klkl.domain.region.domain.currency.Currency;
 import taco.klkl.domain.region.domain.region.Region;
 import taco.klkl.domain.user.domain.User;
-import taco.klkl.global.common.constants.UserConstants;
 
 @WebMvcTest(NotificationController.class)
 class NotificationControllerTest {
@@ -55,7 +54,7 @@ class NotificationControllerTest {
 	@MockBean
 	NotificationService notificationService;
 
-	private final User user = UserConstants.TEST_USER;
+	private final User user = User.of("testUser", "테스트입니다.");
 	private final Country country = Country.of(CountryType.MALAYSIA, region, "photo", currency);
 	private final City city = City.of(CityType.BORACAY, country);
 	private final Category category = Category.of(CategoryType.CLOTHES);

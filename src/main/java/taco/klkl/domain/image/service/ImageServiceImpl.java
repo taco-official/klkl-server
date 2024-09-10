@@ -58,7 +58,7 @@ public class ImageServiceImpl implements ImageService {
 	@Override
 	@Transactional
 	public PresignedUrlResponse createUserImageUploadUrl(final SingleImageUploadRequest uploadRequest) {
-		final User currentUser = userUtil.findCurrentUser();
+		final User currentUser = userUtil.getCurrentUser();
 		final FileExtension fileExtension = FileExtension.from(uploadRequest.fileExtension());
 		return createImageUploadUrl(ImageType.USER_IMAGE, currentUser.getId(), fileExtension);
 	}
@@ -80,7 +80,7 @@ public class ImageServiceImpl implements ImageService {
 	public SingleUploadCompleteResponse uploadCompleteUserImage(
 		final SingleImageUpdateRequest updateRequest
 	) {
-		final User currentUser = userUtil.findCurrentUser();
+		final User currentUser = userUtil.getCurrentUser();
 		expireOldImages(ImageType.USER_IMAGE, currentUser.getId());
 
 		Image updatedImage = imageUtil.findImageEntityByImageTypeAndId(ImageType.USER_IMAGE, updateRequest.imageId());

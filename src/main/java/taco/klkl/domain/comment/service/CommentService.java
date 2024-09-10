@@ -81,7 +81,7 @@ public class CommentService {
 		final CommentCreateUpdateRequest commentCreateUpdateRequest
 	) {
 		//TODO: getCurrentUser() 함수로 교채
-		final User user = userUtil.findTestUser();
+		final User user = userUtil.getCurrentUser();
 		final Product product = productUtil.findProductEntityById(productId);
 		return Comment.of(
 			product,

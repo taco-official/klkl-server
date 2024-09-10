@@ -21,18 +21,13 @@ public class UserUtil {
 
 	private final UserRepository userRepository;
 
-	public User findTestUser() {
-		return userRepository.findById(1L)
-			.orElseThrow(UserNotFoundException::new);
-	}
-
 	/**
 	 * TODO: 인증정보를 확인해 유저 엔티티를 리턴한다.
 	 * 현재 유저 조회
 	 * @return
 	 */
-	public User findCurrentUser() {
-		return findTestUser();
+	public User getCurrentUser() {
+		return getTestUser();
 	}
 
 	public String createUsername(final String name, final Long oauthMemberId) {
@@ -50,6 +45,11 @@ public class UserUtil {
 		return Optional.ofNullable(user.getImage())
 			.map(Image::getUrl)
 			.orElse(null);
+	}
+
+	private User getTestUser() {
+		return userRepository.findById(1L)
+			.orElseThrow(UserNotFoundException::new);
 	}
 
 	private String generateUsername(final String name, final Long oauthMemberId) {

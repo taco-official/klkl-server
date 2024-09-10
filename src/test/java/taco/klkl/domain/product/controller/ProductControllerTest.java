@@ -38,7 +38,7 @@ import taco.klkl.domain.region.domain.country.CountryType;
 import taco.klkl.domain.region.dto.response.city.CityResponse;
 import taco.klkl.domain.region.dto.response.currency.CurrencyResponse;
 import taco.klkl.domain.user.dto.response.UserDetailResponse;
-import taco.klkl.global.common.response.PagedResponseDto;
+import taco.klkl.global.common.response.PagedResponse;
 
 @WebMvcTest(ProductController.class)
 public class ProductControllerTest {
@@ -132,7 +132,7 @@ public class ProductControllerTest {
 	void testFindProducts_ShouldReturnPagedProductsByFilteringAndSorting() throws Exception {
 		// Given
 		List<ProductSimpleResponse> products = List.of(productSimpleResponse);
-		PagedResponseDto<ProductSimpleResponse> pagedResponse = new PagedResponseDto<>(
+		PagedResponse<ProductSimpleResponse> pagedResponse = new PagedResponse<>(
 			products, 0, 10, 1, 1, true
 		);
 		when(productService.findProductsByFilterOptionsAndSortOptions(
@@ -200,7 +200,7 @@ public class ProductControllerTest {
 	void testFindProductsByPartialNameAndSortOption() throws Exception {
 		// Given
 		List<ProductSimpleResponse> products = List.of(productSimpleResponse);
-		PagedResponseDto<ProductSimpleResponse> pagedResponse = new PagedResponseDto<>(
+		PagedResponse<ProductSimpleResponse> pagedResponse = new PagedResponse<>(
 			products, 0, 10, 1, 1, true
 		);
 		when(productService.findProductsByPartialName(

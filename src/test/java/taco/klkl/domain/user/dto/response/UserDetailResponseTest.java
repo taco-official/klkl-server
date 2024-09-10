@@ -5,7 +5,6 @@ import static org.assertj.core.api.Assertions.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import taco.klkl.domain.user.domain.Gender;
 import taco.klkl.domain.user.domain.User;
 import taco.klkl.global.common.constants.UserConstants;
 
@@ -36,12 +35,10 @@ public class UserDetailResponseTest {
 	public void testFrom() {
 		// given
 		String name = "이름";
-		Gender gender = Gender.MALE;
-		int age = 20;
 		String description = "자기소개";
 
 		// when
-		User user = User.of(name, gender, age, description);
+		User user = User.of(name, description);
 		UserDetailResponse userDetail = UserDetailResponse.from(user);
 
 		// then
