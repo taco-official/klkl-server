@@ -5,7 +5,6 @@ import static org.mockito.Mockito.*;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -22,7 +21,6 @@ import taco.klkl.domain.category.domain.category.CategoryType;
 import taco.klkl.domain.category.domain.subcategory.Subcategory;
 import taco.klkl.domain.category.domain.subcategory.SubcategoryType;
 import taco.klkl.domain.category.dto.response.category.CategoryResponse;
-import taco.klkl.domain.category.exception.category.CategoryNotFoundException;
 
 @Transactional
 @ExtendWith(MockitoExtension.class)
@@ -61,44 +59,6 @@ class CategoryServiceImplTest {
 		assertEquals(CategoryType.FOOD.getName(), result.get(1).name());
 
 		verify(categoryRepository, times(1)).findAll();
-	}
-
-	@Test
-	@DisplayName("Valid한 카테고리ID 입력시 해당하는 서브카테고리를 반환하는지 테스트")
-	void testFindSubCategoriesByCategoryIdWithValidCategoryId() {
-		//given
-		Long categoryId = 1L;
-		Category mockCategory = mock(Category.class);
-
-		//when
-		when(mockCategory.getSubcategories()).thenReturn(subcategories);
-		when(mockCategory.getName()).thenReturn(CategoryType.FOOD.getName());
-		when(categoryRepository.findById(categoryId)).thenReturn(Optional.of(mockCategory));
-		CategoryResponse response = categoryService.findSubCategoriesByCategoryId(categoryId);
-
-		//then
-		assertNotNull(response);
-		assertEquals(SubcategoryType.SNACK.getName(), response.subcategories().get(0).name());
-		assertEquals(SubcategoryType.INSTANT_FOOD.getName(), response.subcategories().get(1).name());
-
-		verify(categoryRepository, times(1)).findById(1L);
-	}
-
-	@Test
-	@DisplayName("Invalid한 카테고리 ID 입력시 CategoryNotFoundException을 반환하는지 테스트")
-	void testFindSubCategoriesByCategoryIdWithInvalidCategoryId() {
-		//given
-		Long categoryId = 1L;
-
-		//when
-		when(categoryRepository.findById(categoryId)).thenThrow(CategoryNotFoundException.class);
-
-		//then
-		assertThrows(CategoryNotFoundException.class, () -> {
-			categoryService.findSubCategoriesByCategoryId(categoryId);
-		});
-
-		verify(categoryRepository, times(1)).findById(categoryId);
 	}
 
 	@Test
