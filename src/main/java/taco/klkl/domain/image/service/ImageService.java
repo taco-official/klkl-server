@@ -8,9 +8,8 @@ import taco.klkl.domain.image.dto.request.MultipleImagesUpdateRequest;
 import taco.klkl.domain.image.dto.request.MultipleImagesUploadRequest;
 import taco.klkl.domain.image.dto.request.SingleImageUpdateRequest;
 import taco.klkl.domain.image.dto.request.SingleImageUploadRequest;
-import taco.klkl.domain.image.dto.response.MultipleUploadCompleteResponse;
+import taco.klkl.domain.image.dto.response.ImageResponse;
 import taco.klkl.domain.image.dto.response.PresignedUrlResponse;
-import taco.klkl.domain.image.dto.response.SingleUploadCompleteResponse;
 
 @Service
 public interface ImageService {
@@ -22,11 +21,9 @@ public interface ImageService {
 		final MultipleImagesUploadRequest uploadRequest
 	);
 
-	SingleUploadCompleteResponse uploadCompleteUserImage(
-		final SingleImageUpdateRequest updateRequest
-	);
+	ImageResponse uploadCompleteUserImage(final SingleImageUpdateRequest updateRequest);
 
-	MultipleUploadCompleteResponse uploadCompleteProductImages(
+	List<ImageResponse> uploadCompleteProductImages(
 		final Long productId,
 		final MultipleImagesUpdateRequest updateRequest
 	);

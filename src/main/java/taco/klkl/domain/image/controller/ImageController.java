@@ -18,9 +18,8 @@ import taco.klkl.domain.image.dto.request.MultipleImagesUpdateRequest;
 import taco.klkl.domain.image.dto.request.MultipleImagesUploadRequest;
 import taco.klkl.domain.image.dto.request.SingleImageUpdateRequest;
 import taco.klkl.domain.image.dto.request.SingleImageUploadRequest;
-import taco.klkl.domain.image.dto.response.MultipleUploadCompleteResponse;
+import taco.klkl.domain.image.dto.response.ImageResponse;
 import taco.klkl.domain.image.dto.response.PresignedUrlResponse;
-import taco.klkl.domain.image.dto.response.SingleUploadCompleteResponse;
 import taco.klkl.domain.image.service.ImageService;
 
 @Slf4j
@@ -61,7 +60,7 @@ public class ImageController {
 		summary = "유저 이미지 업로드 완료 처리",
 		description = "유저 이미지 업로드를 완료 처리합니다."
 	)
-	public SingleUploadCompleteResponse uploadCompleteUserImage(
+	public ImageResponse uploadCompleteUserImage(
 		@Valid @RequestBody final SingleImageUpdateRequest request
 	) {
 		return imageService.uploadCompleteUserImage(request);
@@ -72,7 +71,7 @@ public class ImageController {
 		summary = "상품 이미지 업로드 완료 처리",
 		description = "상품 이미지 업로드를 완료 처리합니다."
 	)
-	public MultipleUploadCompleteResponse uploadCompleteProductImages(
+	public List<ImageResponse> uploadCompleteProductImages(
 		@PathVariable final Long productId,
 		@Valid @RequestBody final MultipleImagesUpdateRequest request
 	) {

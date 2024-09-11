@@ -25,9 +25,8 @@ import taco.klkl.domain.image.dto.request.MultipleImagesUpdateRequest;
 import taco.klkl.domain.image.dto.request.MultipleImagesUploadRequest;
 import taco.klkl.domain.image.dto.request.SingleImageUpdateRequest;
 import taco.klkl.domain.image.dto.request.SingleImageUploadRequest;
-import taco.klkl.domain.image.dto.response.MultipleUploadCompleteResponse;
+import taco.klkl.domain.image.dto.response.ImageResponse;
 import taco.klkl.domain.image.dto.response.PresignedUrlResponse;
-import taco.klkl.domain.image.dto.response.SingleUploadCompleteResponse;
 import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.product.domain.ProductImage;
 import taco.klkl.domain.user.domain.User;
@@ -77,7 +76,7 @@ public class ImageServiceImpl implements ImageService {
 
 	@Override
 	@Transactional
-	public SingleUploadCompleteResponse uploadCompleteUserImage(
+	public ImageResponse uploadCompleteUserImage(
 		final SingleImageUpdateRequest updateRequest
 	) {
 		final User currentUser = userUtil.getCurrentUser();
@@ -88,12 +87,12 @@ public class ImageServiceImpl implements ImageService {
 
 		currentUser.updateImage(updatedImage);
 
-		return SingleUploadCompleteResponse.from(currentUser.getImage().getId());
+		return ImageResponse.from(currentUser.getImage());
 	}
 
 	@Override
 	@Transactional
-	public MultipleUploadCompleteResponse uploadCompleteProductImages(
+	public List<ImageResponse> uploadCompleteProductImages(
 		final Long productId,
 		final MultipleImagesUpdateRequest updateRequest
 	) {
@@ -108,12 +107,10 @@ public class ImageServiceImpl implements ImageService {
 		Product product = productUtil.findProductEntityById(productId);
 		product.updateImages(updatedImages);
 
-		final List<Long> productImageIds = product.getImages().stream()
+		return product.getImages().stream()
 			.map(ProductImage::getImage)
-			.map(Image::getId)
+			.map(ImageResponse::from)
 			.toList();
-
-		return MultipleUploadCompleteResponse.from(productImageIds);
 	}
 
 	private PresignedUrlResponse createImageUploadUrl(
