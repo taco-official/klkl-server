@@ -25,6 +25,7 @@ import taco.klkl.domain.user.dto.request.UserUpdateRequest;
 import taco.klkl.domain.user.dto.response.UserDetailResponse;
 import taco.klkl.domain.user.dto.response.UserFollowResponse;
 import taco.klkl.domain.user.dto.response.UserSimpleResponse;
+import taco.klkl.domain.user.exception.SelfFollowNotAllowedException;
 import taco.klkl.domain.user.exception.UserNotFoundException;
 import taco.klkl.global.common.response.PagedResponse;
 import taco.klkl.global.util.LikeUtil;
@@ -98,6 +99,7 @@ public class UserServiceImpl implements UserService {
 		final User follower = userUtil.getCurrentUser();
 		final User following = userRepository.findById(followRequest.userId())
 			.orElseThrow(UserNotFoundException::new);
+		validateNotMe(follower, following);
 		if (isFollowPresent(follower, following)) {
 			return UserFollowResponse.of(true, follower, following);
 		}
@@ -156,5 +158,11 @@ public class UserServiceImpl implements UserService {
 
 	private boolean isFollowPresent(final User follower, final User following) {
 		return followRepository.existsByFollowerAndFollowing(follower, following);
+	}
+
+	private void validateNotMe(final User follower, final User following) {
+		if (follower.equals(following)) {
+			throw new SelfFollowNotAllowedException();
+		}
 	}
 }

@@ -20,6 +20,7 @@ public enum ErrorCode {
 	// User
 	USER_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 사용자입니다."),
 	GENDER_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 성별입니다."),
+	SELF_FOLLOW_NOT_ALLOWED(HttpStatus.BAD_REQUEST, "자기 자신을 팔로우할 수 없습니다."),
 
 	// Product
 	PRODUCT_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 상품입니다."),
@@ -27,7 +28,7 @@ public enum ErrorCode {
 	SORT_CRITERIA_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 정렬 기준입니다."),
 	SORT_DIRECTION_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 정렬 방향입니다."),
 	INVALID_CITY_IDS(HttpStatus.BAD_REQUEST, "선택한 도시들은 동일한 국가에 속하지 않습니다."),
-	PRODUCT_USER_NOT_MATCH(HttpStatus.NOT_FOUND, "다른 유저의 상품입니다."),
+	PRODUCT_USER_NOT_MATCH(HttpStatus.BAD_REQUEST, "다른 유저의 상품입니다."),
 
 	// Like
 	LIKE_COUNT_OVER_MAXIMUM(HttpStatus.BAD_REQUEST, "상품의 좋아요수가 최대값입니다. 2147483647"),
