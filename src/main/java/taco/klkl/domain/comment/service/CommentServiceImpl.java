@@ -13,7 +13,8 @@ import taco.klkl.domain.comment.domain.Comment;
 import taco.klkl.domain.comment.dto.request.CommentCreateUpdateRequest;
 import taco.klkl.domain.comment.dto.response.CommentResponse;
 import taco.klkl.domain.comment.exception.CommentNotFoundException;
-import taco.klkl.domain.comment.exception.CommentProductNotMatch;
+import taco.klkl.domain.comment.exception.CommentProductNotMatchException;
+import taco.klkl.domain.comment.exception.CommentUserNotMatchException;
 import taco.klkl.domain.notification.service.NotificationService;
 import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.user.domain.User;
@@ -62,6 +63,7 @@ public class CommentServiceImpl implements CommentService {
 		validateProductId(productId);
 		final Comment comment = commentRepository.findById(commentId)
 			.orElseThrow(CommentNotFoundException::new);
+		validateMyComment(comment);
 		validateSameProductId(comment, productId);
 		updateCommentEntity(comment, commentUpdateRequestDto);
 
@@ -76,6 +78,7 @@ public class CommentServiceImpl implements CommentService {
 		validateProductId(productId);
 		final Comment comment = commentRepository.findById(commentId)
 			.orElseThrow(CommentNotFoundException::new);
+		validateMyComment(comment);
 		validateSameProductId(comment, productId);
 		commentRepository.delete(comment);
 	}
@@ -104,10 +107,17 @@ public class CommentServiceImpl implements CommentService {
 		productUtil.validateProductId(productId);
 	}
 
+	private void validateMyComment(final Comment comment) {
+		final User me = userUtil.getCurrentUser();
+		if (!comment.getUser().equals(me)) {
+			throw new CommentUserNotMatchException();
+		}
+	}
+
 	private void validateSameProductId(final Comment comment, final Long productId) {
 		final Long commentProductId = comment.getProduct().getId();
 		if (!commentProductId.equals(productId)) {
-			throw new CommentProductNotMatch();
+			throw new CommentProductNotMatchException();
 		}
 	}
 }

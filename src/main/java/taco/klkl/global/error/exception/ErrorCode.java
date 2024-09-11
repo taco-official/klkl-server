@@ -34,6 +34,7 @@ public enum ErrorCode {
 
 	// Comment
 	COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 댓글입니다."),
+	COMMENT_USER_NOT_MATCH(HttpStatus.BAD_REQUEST, "다른 유저의 댓글입니다."),
 	COMMENT_PRODUCT_NOT_MATCH(HttpStatus.BAD_REQUEST, "다른 상품에 있는 댓글입니다."),
 
 	// Region
