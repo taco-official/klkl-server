@@ -42,13 +42,6 @@ public class ProductUtil {
 		}
 	}
 
-	public static List<String> generateImageUrlsByProduct(final Product product) {
-		return product.getImages().stream()
-			.map(ProductImage::getImage)
-			.map(Image::getUrl)
-			.toList();
-	}
-
 	public static Set<TagResponse> generateTagsByProduct(final Product product) {
 		return Optional.ofNullable(product.getProductTags())
 			.map(productTag -> productTag.stream()

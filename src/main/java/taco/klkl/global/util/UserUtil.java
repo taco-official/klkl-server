@@ -41,12 +41,6 @@ public class UserUtil {
 		return createdName;
 	}
 
-	public static String generateProfileUrlByUser(final User user) {
-		return Optional.ofNullable(user.getImage())
-			.map(Image::getUrl)
-			.orElse(null);
-	}
-
 	private User getTestUser() {
 		return userRepository.findById(1L)
 			.orElseThrow(UserNotFoundException::new);

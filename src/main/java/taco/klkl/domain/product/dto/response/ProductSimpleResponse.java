@@ -3,12 +3,13 @@ package taco.klkl.domain.product.dto.response;
 import java.util.Set;
 
 import taco.klkl.domain.category.dto.response.tag.TagResponse;
+import taco.klkl.domain.image.dto.response.ImageResponse;
 import taco.klkl.domain.product.domain.Product;
 import taco.klkl.global.util.ProductUtil;
 
 public record ProductSimpleResponse(
 	Long id,
-	String mainImageUrl,
+	ImageResponse image,
 	String name,
 	Integer likeCount,
 	Double rating,
@@ -19,7 +20,7 @@ public record ProductSimpleResponse(
 	public static ProductSimpleResponse from(final Product product) {
 		return new ProductSimpleResponse(
 			product.getId(),
-			product.getMainImageUrl(),
+			ImageResponse.from(product.getMainImage()),
 			product.getName(),
 			product.getLikeCount(),
 			product.getRating().getValue(),

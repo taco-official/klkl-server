@@ -1,11 +1,11 @@
 package taco.klkl.domain.user.dto.response;
 
+import taco.klkl.domain.image.dto.response.ImageResponse;
 import taco.klkl.domain.user.domain.User;
-import taco.klkl.global.util.UserUtil;
 
 public record UserDetailResponse(
 	Long id,
-	String profileUrl,
+	ImageResponse image,
 	String name,
 	String description,
 	int totalLikeCount
@@ -13,7 +13,7 @@ public record UserDetailResponse(
 	public static UserDetailResponse from(final User user) {
 		return new UserDetailResponse(
 			user.getId(),
-			UserUtil.generateProfileUrlByUser(user),
+			ImageResponse.from(user.getImage()),
 			user.getName(),
 			user.getDescription(),
 			0
