@@ -2,6 +2,7 @@ package taco.klkl.domain.like.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +24,12 @@ import taco.klkl.domain.like.service.LikeService;
 public class LikeController {
 
 	private final LikeService likeService;
+
+	@GetMapping
+	@Operation(summary = "특정 상품의 좋아요 여부 조회", description = "특정 상품의 좋아요 여부를 조회합니다.")
+	public LikeResponse getLike(@PathVariable final Long productId) {
+		return likeService.getLike(productId);
+	}
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)

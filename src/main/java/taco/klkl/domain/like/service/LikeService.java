@@ -9,6 +9,8 @@ import taco.klkl.domain.user.domain.User;
 @Service
 public interface LikeService {
 
+	LikeResponse getLike(final Long productId);
+
 	/**
 	 * 상품에 좋아요를 누르는 경우
 	 * @param productId
