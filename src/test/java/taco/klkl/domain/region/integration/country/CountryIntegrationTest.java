@@ -1,4 +1,4 @@
-package taco.klkl.domain.region.integration;
+package taco.klkl.domain.region.integration.country;
 
 import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;

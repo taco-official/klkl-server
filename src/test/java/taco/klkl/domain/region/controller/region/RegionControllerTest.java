@@ -1,4 +1,4 @@
-package taco.klkl.domain.region.controller;
+package taco.klkl.domain.region.controller.region;
 
 import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.*;
@@ -17,11 +17,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import taco.klkl.domain.region.controller.region.RegionController;
-import taco.klkl.domain.region.domain.country.Country;
-import taco.klkl.domain.region.domain.country.CountryType;
-import taco.klkl.domain.region.domain.currency.Currency;
-import taco.klkl.domain.region.domain.currency.CurrencyType;
 import taco.klkl.domain.region.domain.region.Region;
 import taco.klkl.domain.region.domain.region.RegionType;
 import taco.klkl.domain.region.dto.response.region.RegionResponse;

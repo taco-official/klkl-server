@@ -1,4 +1,4 @@
-package taco.klkl.domain.category.integration;
+package taco.klkl.domain.category.integration.tag;
 
 import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;

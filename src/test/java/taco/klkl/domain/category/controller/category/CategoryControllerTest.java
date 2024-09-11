@@ -1,4 +1,4 @@
-package taco.klkl.domain.category.controller;
+package taco.klkl.domain.category.controller.category;
 
 import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.*;
@@ -17,7 +17,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import taco.klkl.domain.category.controller.category.CategoryController;
 import taco.klkl.domain.category.dao.category.CategoryRepository;
 import taco.klkl.domain.category.domain.category.Category;
 import taco.klkl.domain.category.domain.category.CategoryType;

@@ -1,12 +1,9 @@
-package taco.klkl.domain.region.controller;
+package taco.klkl.domain.region.controller.country;
 
 import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
-import java.util.Arrays;
-import java.util.List;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,10 +13,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import taco.klkl.domain.region.controller.country.CountryController;
 import taco.klkl.domain.region.dao.country.CountryRepository;
-import taco.klkl.domain.region.domain.city.City;
-import taco.klkl.domain.region.domain.city.CityType;
 import taco.klkl.domain.region.domain.country.Country;
 import taco.klkl.domain.region.domain.country.CountryType;
 import taco.klkl.domain.region.domain.currency.Currency;

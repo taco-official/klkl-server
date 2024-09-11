@@ -1,4 +1,4 @@
-package taco.klkl.domain.region.service;
+package taco.klkl.domain.region.service.country;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -23,8 +23,6 @@ import taco.klkl.domain.region.domain.region.Region;
 import taco.klkl.domain.region.domain.region.RegionType;
 import taco.klkl.domain.region.dto.response.country.CountryResponse;
 import taco.klkl.domain.region.dto.response.country.CountrySimpleResponse;
-import taco.klkl.domain.region.dto.response.country.CountryWithCitiesResponse;
-import taco.klkl.domain.region.service.country.CountryServiceImpl;
 
 @ExtendWith(MockitoExtension.class)
 public class CountryServiceImplTest {

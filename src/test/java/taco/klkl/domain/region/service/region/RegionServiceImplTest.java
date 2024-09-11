@@ -1,4 +1,4 @@
-package taco.klkl.domain.region.service;
+package taco.klkl.domain.region.service.region;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -18,7 +18,6 @@ import taco.klkl.domain.region.dao.region.RegionRepository;
 import taco.klkl.domain.region.domain.region.Region;
 import taco.klkl.domain.region.domain.region.RegionType;
 import taco.klkl.domain.region.dto.response.region.RegionResponse;
-import taco.klkl.domain.region.service.region.RegionServiceImpl;
 
 @ExtendWith(MockitoExtension.class)
 class RegionServiceImplTest {

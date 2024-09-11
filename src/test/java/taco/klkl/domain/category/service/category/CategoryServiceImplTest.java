@@ -1,4 +1,4 @@
-package taco.klkl.domain.category.service;
+package taco.klkl.domain.category.service.category;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -23,7 +23,6 @@ import taco.klkl.domain.category.domain.subcategory.Subcategory;
 import taco.klkl.domain.category.domain.subcategory.SubcategoryType;
 import taco.klkl.domain.category.dto.response.category.CategoryResponse;
 import taco.klkl.domain.category.exception.category.CategoryNotFoundException;
-import taco.klkl.domain.category.service.category.CategoryServiceImpl;
 
 @Transactional
 @ExtendWith(MockitoExtension.class)
