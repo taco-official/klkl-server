@@ -43,7 +43,7 @@ public class ProductController {
 
 	@GetMapping
 	@Operation(summary = "상품 목록 조회", description = "상품 목록을 조회합니다.")
-	public PagedResponse<ProductSimpleResponse> findProductsByFilteringAndSorting(
+	public PagedResponse<ProductSimpleResponse> getProducts(
 		@PageableDefault(size = ProductConstants.DEFAULT_PAGE_SIZE) final Pageable pageable,
 		@RequestParam(name = "city_id", required = false) final Set<Long> cityIds,
 		@RequestParam(name = "subcategory_id", required = false) final Set<Long> subcategoryIds,
@@ -65,7 +65,7 @@ public class ProductController {
 
 	@GetMapping("/search")
 	@Operation(summary = "제목으로 상품 목록 조회", description = "제목으로 상품 목록을 조회합니다.")
-	public PagedResponse<ProductSimpleResponse> findProductsByPartialNameAndSorting(
+	public PagedResponse<ProductSimpleResponse> searchProductsByName(
 		@RequestParam(value = "name") @NotBlank final String partialName,
 		@PageableDefault(size = ProductConstants.DEFAULT_PAGE_SIZE) final Pageable pageable,
 		@RequestParam(name = "sort_by", required = false, defaultValue = "created_at") final String sortBy,
@@ -80,16 +80,16 @@ public class ProductController {
 
 	@GetMapping("/following")
 	@Operation(summary = "내 팔로잉의 상품 목록 조회", description = "내 팔로잉 유저들의 상품 목록을 조회합니다.")
-	public PagedResponse<ProductSimpleResponse> findFollowingProducts(
+	public PagedResponse<ProductSimpleResponse> getMyFollowingProducts(
 		@PageableDefault(size = ProductConstants.DEFAULT_PAGE_SIZE) final Pageable pageable,
-		@RequestParam(value = "following_id", required = false) final Set<Long> followingIds
+		@RequestParam(value = "user_id", required = false) final Set<Long> userIds
 	) {
-		return productService.findMyFollowingProducts(pageable, followingIds);
+		return productService.findFollowingProducts(pageable, userIds);
 	}
 
 	@GetMapping("/{productId}")
 	@Operation(summary = "상품 상세 조회", description = "상품 상세 정보를 조회합니다.")
-	public ProductDetailResponse findProductById(
+	public ProductDetailResponse getProduct(
 		@PathVariable final Long productId
 	) {
 		return productService.findProductById(productId);
