@@ -35,22 +35,9 @@ public class SubcategoryServiceImpl implements SubcategoryService {
 	}
 
 	@Override
-	public List<Subcategory> findSubcategoriesBySubcategoryIds(final List<Long> subcategoryIds) {
-		final List<Subcategory> subcategories = subcategoryRepository.findAllById(subcategoryIds);
-		validateSubcategories(subcategoryIds.size(), subcategories.size());
-		return subcategories;
-	}
-
-	@Override
 	public SubcategoryHierarchyResponse findSubcategoryHierarchyById(final Long id) {
 		final Subcategory subcategory = subcategoryRepository.findById(id)
 			.orElseThrow(SubcategoryNotFoundException::new);
 		return SubcategoryHierarchyResponse.from(subcategory);
-	}
-
-	private void validateSubcategories(final int request, final int result) {
-		if (request != result) {
-			throw new SubcategoryNotFoundException();
-		}
 	}
 }

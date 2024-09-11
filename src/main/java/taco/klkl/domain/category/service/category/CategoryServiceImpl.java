@@ -31,13 +31,6 @@ public class CategoryServiceImpl implements CategoryService {
 	}
 
 	@Override
-	public CategoryResponse findSubCategoriesByCategoryId(final Long categoryId) {
-		final Category category = categoryRepository.findById(categoryId)
-			.orElseThrow(CategoryNotFoundException::new);
-		return CategoryResponse.from(category);
-	}
-
-	@Override
 	public List<CategoryResponse> findAllCategoriesByPartialString(final String partialString) {
 		if (partialString == null || partialString.isEmpty()) {
 			return List.of();

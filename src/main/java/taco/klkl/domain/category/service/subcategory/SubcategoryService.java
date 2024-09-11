@@ -13,7 +13,5 @@ public interface SubcategoryService {
 
 	List<SubcategoryResponse> findAllSubcategoriesByPartialString(final String partialString);
 
-	List<Subcategory> findSubcategoriesBySubcategoryIds(final List<Long> subcategoryIds);
-
 	SubcategoryHierarchyResponse findSubcategoryHierarchyById(final Long id);
 }

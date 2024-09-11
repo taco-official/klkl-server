@@ -28,10 +28,4 @@ public class CategoryController {
 	public List<CategoryResponse> getAllCategories() {
 		return categoryService.findAllCategories();
 	}
-
-	@GetMapping("/{categoryId}/subcategories")
-	@Operation(summary = "대분류의 소분류 목록 조회", description = "Category에 포함된 Subcategory 반환")
-	public CategoryResponse findSubCategoriesByCategoryId(@PathVariable Long categoryId) {
-		return categoryService.findSubCategoriesByCategoryId(categoryId);
-	}
 }
