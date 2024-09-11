@@ -32,7 +32,7 @@ public class CommentService {
 
 	public List<CommentResponse> findCommentsByProductId(final Long productId) {
 		validateProductId(productId);
-		final List<Comment> comments = commentRepository.findAllByProduct_Id(productId);
+		final List<Comment> comments = commentRepository.findByProductIdOrderByCreatedAtDesc(productId);
 		return comments.stream()
 			.map(CommentResponse::from)
 			.toList();
@@ -80,7 +80,6 @@ public class CommentService {
 		final Long productId,
 		final CommentCreateUpdateRequest commentCreateUpdateRequest
 	) {
-		//TODO: getCurrentUser() 함수로 교채
 		final User user = userUtil.getCurrentUser();
 		final Product product = productUtil.findProductEntityById(productId);
 		return Comment.of(
