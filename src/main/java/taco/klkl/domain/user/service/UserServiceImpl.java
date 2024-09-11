@@ -58,8 +58,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public PagedResponse<ProductSimpleResponse> getUserProductsById(final Long id, final Pageable pageable) {
-		userRepository.findById(id)
-			.orElseThrow(UserNotFoundException::new);
+		validateUser(id);
 		final Pageable sortedPageable = createPageableSortedByCreatedAtDesc(pageable);
 		final Page<Product> userProducts = productUtil.findProductsByUserId(id, sortedPageable);
 		return PagedResponse.of(userProducts, ProductSimpleResponse::from);
@@ -67,8 +66,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public PagedResponse<ProductSimpleResponse> getUserLikesById(final Long id, final Pageable pageable) {
-		userRepository.findById(id)
-			.orElseThrow(UserNotFoundException::new);
+		validateUser(id);
 		final Pageable sortedPageable = createPageableSortedByCreatedAtDesc(pageable);
 		final Page<Like> likes = likeUtil.findLikesByUserId(id, sortedPageable);
 		final Page<Product> likedProducts = likes.map(Like::getProduct);
@@ -165,6 +163,12 @@ public class UserServiceImpl implements UserService {
 
 	private boolean isFollowPresent(final User follower, final User following) {
 		return followRepository.existsByFollowerAndFollowing(follower, following);
+	}
+
+	private void validateUser(final Long id) {
+		if (!userRepository.existsById(id)) {
+			throw new UserNotFoundException();
+		}
 	}
 
 	private void validateNotMe(final User follower, final User following) {

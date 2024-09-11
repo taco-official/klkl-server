@@ -7,16 +7,14 @@ public record UserDetailResponse(
 	Long id,
 	ImageResponse image,
 	String name,
-	String description,
-	int totalLikeCount
+	String description
 ) {
 	public static UserDetailResponse from(final User user) {
 		return new UserDetailResponse(
 			user.getId(),
 			ImageResponse.from(user.getImage()),
 			user.getName(),
-			user.getDescription(),
-			0
+			user.getDescription()
 		);
 	}
 }
