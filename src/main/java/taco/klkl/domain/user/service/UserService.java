@@ -9,8 +9,8 @@ import taco.klkl.domain.product.dto.response.ProductSimpleResponse;
 import taco.klkl.domain.user.domain.User;
 import taco.klkl.domain.user.dto.request.UserCreateRequest;
 import taco.klkl.domain.user.dto.request.UserUpdateRequest;
-import taco.klkl.domain.user.dto.response.UserDetailResponse;
 import taco.klkl.domain.user.dto.response.FollowResponse;
+import taco.klkl.domain.user.dto.response.UserDetailResponse;
 import taco.klkl.domain.user.dto.response.UserSimpleResponse;
 import taco.klkl.global.common.response.PagedResponse;
 
