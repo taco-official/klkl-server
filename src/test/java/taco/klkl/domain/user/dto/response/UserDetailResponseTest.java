@@ -18,17 +18,15 @@ public class UserDetailResponseTest {
 		ImageResponse image = new ImageResponse(2L, "url");
 		String name = "이름";
 		String description = "자기소개";
-		int totalLikeCount = 100;
 
 		// when
-		UserDetailResponse userDetail = new UserDetailResponse(id, image, name, description, totalLikeCount);
+		UserDetailResponse userDetail = new UserDetailResponse(id, image, name, description);
 
 		// then
 		assertThat(userDetail.id()).isEqualTo(id);
 		assertThat(userDetail.image().id()).isEqualTo(image.id());
 		assertThat(userDetail.name()).isEqualTo(name);
 		assertThat(userDetail.description()).isEqualTo(description);
-		assertThat(userDetail.totalLikeCount()).isEqualTo(totalLikeCount);
 	}
 
 	@Test
@@ -45,6 +43,5 @@ public class UserDetailResponseTest {
 		// then
 		assertThat(userDetail.name()).isEqualTo(name);
 		assertThat(userDetail.description()).isEqualTo(description);
-		assertThat(userDetail.totalLikeCount()).isEqualTo(UserConstants.DEFAULT_TOTAL_LIKE_COUNT);
 	}
 }

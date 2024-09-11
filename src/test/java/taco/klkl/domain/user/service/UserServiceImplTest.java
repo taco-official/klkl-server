@@ -52,7 +52,6 @@ class UserServiceImplTest {
 		assertThat(userDto.id()).isEqualTo(user.getId());
 		assertThat(userDto.name()).isEqualTo(user.getName());
 		assertThat(userDto.description()).isEqualTo(user.getDescription());
-		assertThat(userDto.totalLikeCount()).isEqualTo(UserConstants.DEFAULT_TOTAL_LIKE_COUNT);
 	}
 
 	@Test
@@ -76,6 +75,5 @@ class UserServiceImplTest {
 		// then
 		assertThat(responseDto.name()).isEqualTo(requestDto.name());
 		assertThat(responseDto.description()).isEqualTo(requestDto.description());
-		assertThat(responseDto.totalLikeCount()).isEqualTo(UserConstants.DEFAULT_TOTAL_LIKE_COUNT);
 	}
 }

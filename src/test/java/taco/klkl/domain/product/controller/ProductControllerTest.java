@@ -63,8 +63,7 @@ public class ProductControllerTest {
 			1L,
 			new ImageResponse(2L, "url"),
 			"userName",
-			"userDescription",
-			100
+			"userDescription"
 		);
 		CityResponse cityResponse = new CityResponse(
 			1L,
@@ -261,7 +260,7 @@ public class ProductControllerTest {
 
 	@Test
 	@DisplayName("상품 상세 조회 - 성공")
-	void testFindProductById_ShouldReturnProduct() throws Exception {
+	void testGetProductById_ShouldReturnProduct() throws Exception {
 		// Given
 		when(productService.findProductById(1L)).thenReturn(productDetailResponse);
 
@@ -282,8 +281,6 @@ public class ProductControllerTest {
 			.andExpect(jsonPath("$.data.user.name", is(productDetailResponse.user().name())))
 			.andExpect(jsonPath("$.data.user.description",
 				is(productDetailResponse.user().description())))
-			.andExpect(jsonPath("$.data.user.totalLikeCount",
-				is(productDetailResponse.user().totalLikeCount())))
 			.andExpect(jsonPath("$.data.city.id",
 				is(productDetailResponse.city().id().intValue())))
 			.andExpect(jsonPath("$.data.city.name", is(productDetailResponse.city().name())))
@@ -326,8 +323,6 @@ public class ProductControllerTest {
 			.andExpect(jsonPath("$.data.user.name", is(productDetailResponse.user().name())))
 			.andExpect(jsonPath("$.data.user.description",
 				is(productDetailResponse.user().description())))
-			.andExpect(jsonPath("$.data.user.totalLikeCount",
-				is(productDetailResponse.user().totalLikeCount())))
 			.andExpect(jsonPath("$.data.city.id",
 				is(productDetailResponse.city().id().intValue())))
 			.andExpect(jsonPath("$.data.city.name", is(productDetailResponse.city().name())))
@@ -369,8 +364,6 @@ public class ProductControllerTest {
 			.andExpect(jsonPath("$.data.user.name", is(productDetailResponse.user().name())))
 			.andExpect(jsonPath("$.data.user.description",
 				is(productDetailResponse.user().description())))
-			.andExpect(jsonPath("$.data.user.totalLikeCount",
-				is(productDetailResponse.user().totalLikeCount())))
 			.andExpect(jsonPath("$.data.city.id",
 				is(productDetailResponse.city().id().intValue())))
 			.andExpect(jsonPath("$.data.city.name", is(productDetailResponse.city().name())))
