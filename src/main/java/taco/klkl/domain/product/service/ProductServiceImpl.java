@@ -43,6 +43,7 @@ import taco.klkl.domain.product.dto.response.ProductDetailResponse;
 import taco.klkl.domain.product.dto.response.ProductSimpleResponse;
 import taco.klkl.domain.product.exception.InvalidCityIdsException;
 import taco.klkl.domain.product.exception.ProductNotFoundException;
+import taco.klkl.domain.product.exception.ProductUserNotMatchException;
 import taco.klkl.domain.product.exception.SortDirectionNotFoundException;
 import taco.klkl.domain.region.domain.city.City;
 import taco.klkl.domain.region.domain.city.QCity;
@@ -369,7 +370,7 @@ public class ProductServiceImpl implements ProductService {
 	private void validateMyProduct(final Product product) {
 		final User me = userUtil.getCurrentUser();
 		if (!product.getUser().equals(me)) {
-			throw new ProductNotFoundException();
+			throw new ProductUserNotMatchException();
 		}
 	}
 }
