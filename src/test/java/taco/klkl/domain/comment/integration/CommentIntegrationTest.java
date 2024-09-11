@@ -19,7 +19,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import taco.klkl.domain.comment.dto.request.CommentCreateUpdateRequest;
 import taco.klkl.domain.comment.dto.response.CommentResponse;
-import taco.klkl.domain.comment.service.CommentService;
+import taco.klkl.domain.comment.service.CommentServiceImpl;
 import taco.klkl.global.error.exception.ErrorCode;
 
 @SpringBootTest
@@ -30,7 +30,7 @@ public class CommentIntegrationTest {
 	private MockMvc mockMvc;
 
 	@Autowired
-	private CommentService commentService;
+	private CommentServiceImpl commentServiceImpl;
 
 	@Autowired
 	private ObjectMapper objectMapper;
@@ -50,7 +50,7 @@ public class CommentIntegrationTest {
 	@DisplayName("상품에 있는 모든 댓글 반환 통합 테스트")
 	public void testGetComment() throws Exception {
 		//given
-		List<CommentResponse> commentResponses = commentService.findCommentsByProductId(productId);
+		List<CommentResponse> commentResponses = commentServiceImpl.findCommentsByProductId(productId);
 
 		//when & then
 		mockMvc.perform(get("/v1/products/{productId}/comments", productId)

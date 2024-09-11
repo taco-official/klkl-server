@@ -22,6 +22,7 @@ import taco.klkl.domain.region.domain.currency.CurrencyType;
 import taco.klkl.domain.region.domain.region.Region;
 import taco.klkl.domain.region.domain.region.RegionType;
 import taco.klkl.domain.region.dto.response.country.CountryResponse;
+import taco.klkl.domain.region.dto.response.country.CountrySimpleResponse;
 import taco.klkl.domain.region.dto.response.country.CountryWithCitiesResponse;
 import taco.klkl.domain.region.service.country.CountryServiceImpl;
 
@@ -65,16 +66,16 @@ public class CountryServiceImplTest {
 	void testGetCountriesByCountryTypes() {
 		// given
 		String partialName = "foo";
-		CountryWithCitiesResponse country1ResponseDto = CountryWithCitiesResponse.from(country1);
-		CountryWithCitiesResponse country2ResponseDto = CountryWithCitiesResponse.from(country2);
+		CountrySimpleResponse country1ResponseDto = CountrySimpleResponse.from(country1);
+		CountrySimpleResponse country2ResponseDto = CountrySimpleResponse.from(country2);
 		when(countryRepository.findAllByNameContaining(partialName)).thenReturn(Arrays.asList(country1, country2));
 
 		// when
-		List<CountryWithCitiesResponse> countryWithCitiesRespons = countryService.findAllCountriesByPartialString(
+		List<CountrySimpleResponse> countryWithCitiesResponse = countryService.findAllCountriesByPartialString(
 			partialName);
 
 		// then
-		assertThat(countryWithCitiesRespons).hasSize(2);
-		assertThat(countryWithCitiesRespons).containsExactlyInAnyOrder(country1ResponseDto, country2ResponseDto);
+		assertThat(countryWithCitiesResponse).hasSize(2);
+		assertThat(countryWithCitiesResponse).containsExactlyInAnyOrder(country1ResponseDto, country2ResponseDto);
 	}
 }

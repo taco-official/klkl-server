@@ -28,6 +28,7 @@ import taco.klkl.domain.region.domain.country.CountryType;
 import taco.klkl.domain.region.domain.currency.Currency;
 import taco.klkl.domain.region.domain.region.Region;
 import taco.klkl.domain.region.dto.response.city.CityResponse;
+import taco.klkl.domain.region.dto.response.country.CountrySimpleResponse;
 import taco.klkl.domain.region.dto.response.country.CountryWithCitiesResponse;
 import taco.klkl.domain.region.service.city.CityService;
 import taco.klkl.domain.region.service.country.CountryService;
@@ -68,8 +69,8 @@ class SearchServiceImplTest {
 		// given
 		String queryParam = "Test";
 
-		List<CountryWithCitiesResponse> mockCountries = Collections.singletonList(
-			CountryWithCitiesResponse.from(country));
+		List<CountrySimpleResponse> mockCountries = Collections.singletonList(
+			CountrySimpleResponse.from(country));
 		List<CityResponse> mockCities = Collections.singletonList(CityResponse.from(city));
 		List<CategoryResponse> mockCategories = Collections.singletonList(CategoryResponse.from(category));
 		List<SubcategoryResponse> mockSubcategories = Collections.singletonList(

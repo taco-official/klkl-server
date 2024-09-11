@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import taco.klkl.domain.image.dto.response.ImageResponse;
 import taco.klkl.domain.user.domain.User;
 
 class UserSimpleResponseTest {
@@ -13,15 +14,15 @@ class UserSimpleResponseTest {
 	public void testUserSimpleResponseDto() {
 		// given
 		Long id = 1L;
-		String profile = "image/profileUrl.png";
+		ImageResponse image = new ImageResponse(2L, "url");
 		String name = "이름";
 
 		// when
-		UserSimpleResponse userSimple = new UserSimpleResponse(id, profile, name);
+		UserSimpleResponse userSimple = new UserSimpleResponse(id, image, name);
 
 		// then
 		assertThat(userSimple.id()).isEqualTo(id);
-		assertThat(userSimple.profileUrl()).isEqualTo(profile);
+		assertThat(userSimple.image().id()).isEqualTo(image.id());
 		assertThat(userSimple.name()).isEqualTo(name);
 	}
 

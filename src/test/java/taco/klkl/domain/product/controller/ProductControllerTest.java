@@ -27,6 +27,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import taco.klkl.domain.category.domain.category.CategoryType;
 import taco.klkl.domain.category.dto.response.subcategory.SubcategoryResponse;
 import taco.klkl.domain.category.dto.response.tag.TagResponse;
+import taco.klkl.domain.image.dto.response.ImageResponse;
 import taco.klkl.domain.product.domain.Rating;
 import taco.klkl.domain.product.dto.request.ProductCreateUpdateRequest;
 import taco.klkl.domain.product.dto.request.ProductFilterOptions;
@@ -60,7 +61,7 @@ public class ProductControllerTest {
 	void setUp() {
 		UserDetailResponse userDetailResponse = new UserDetailResponse(
 			1L,
-			"image/profileUrl.jpg",
+			new ImageResponse(2L, "url"),
 			"userName",
 			"userDescription",
 			100
@@ -91,7 +92,7 @@ public class ProductControllerTest {
 
 		productSimpleResponse = new ProductSimpleResponse(
 			1L,
-			"main-image.jpg",
+			new ImageResponse(2L, "url"),
 			"productName",
 			10,
 			Rating.FIVE.getValue(),
@@ -101,7 +102,11 @@ public class ProductControllerTest {
 		);
 		productDetailResponse = new ProductDetailResponse(
 			1L,
-			List.of("image1.jpg", "image2.jpg", "image3.jpg"),
+			List.of(
+				new ImageResponse(2L, "url"),
+				new ImageResponse(3L, "url"),
+				new ImageResponse(4L, "url")
+			),
 			"productName",
 			"Description",
 			"123 Street",
@@ -272,8 +277,8 @@ public class ProductControllerTest {
 			.andExpect(jsonPath("$.data.likeCount", is(productDetailResponse.likeCount())))
 			.andExpect(jsonPath("$.data.rating", is(productSimpleResponse.rating())))
 			.andExpect(jsonPath("$.data.user.id", is(productDetailResponse.user().id().intValue())))
-			.andExpect(jsonPath("$.data.user.profileUrl",
-				is(productDetailResponse.user().profileUrl())))
+			.andExpect(jsonPath("$.data.user.image.id",
+				is(productDetailResponse.user().image().id().intValue())))
 			.andExpect(jsonPath("$.data.user.name", is(productDetailResponse.user().name())))
 			.andExpect(jsonPath("$.data.user.description",
 				is(productDetailResponse.user().description())))
@@ -316,8 +321,8 @@ public class ProductControllerTest {
 			.andExpect(jsonPath("$.data.likeCount", is(productDetailResponse.likeCount())))
 			.andExpect(jsonPath("$.data.rating", is(productSimpleResponse.rating())))
 			.andExpect(jsonPath("$.data.user.id", is(productDetailResponse.user().id().intValue())))
-			.andExpect(jsonPath("$.data.user.profileUrl",
-				is(productDetailResponse.user().profileUrl())))
+			.andExpect(jsonPath("$.data.user.image.id",
+				is(productDetailResponse.user().image().id().intValue())))
 			.andExpect(jsonPath("$.data.user.name", is(productDetailResponse.user().name())))
 			.andExpect(jsonPath("$.data.user.description",
 				is(productDetailResponse.user().description())))
@@ -359,8 +364,8 @@ public class ProductControllerTest {
 			.andExpect(jsonPath("$.data.likeCount", is(productDetailResponse.likeCount())))
 			.andExpect(jsonPath("$.data.rating", is(productSimpleResponse.rating())))
 			.andExpect(jsonPath("$.data.user.id", is(productDetailResponse.user().id().intValue())))
-			.andExpect(jsonPath("$.data.user.profileUrl",
-				is(productDetailResponse.user().profileUrl())))
+			.andExpect(jsonPath("$.data.user.image.id",
+				is(productDetailResponse.user().image().id().intValue())))
 			.andExpect(jsonPath("$.data.user.name", is(productDetailResponse.user().name())))
 			.andExpect(jsonPath("$.data.user.description",
 				is(productDetailResponse.user().description())))

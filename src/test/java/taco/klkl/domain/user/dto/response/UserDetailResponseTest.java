@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import taco.klkl.domain.image.dto.response.ImageResponse;
 import taco.klkl.domain.user.domain.User;
 import taco.klkl.global.common.constants.UserConstants;
 
@@ -14,17 +15,17 @@ public class UserDetailResponseTest {
 	public void testUserDetailResponseDto() {
 		// given
 		Long id = 1L;
-		String profile = "image/profileUrl.png";
+		ImageResponse image = new ImageResponse(2L, "url");
 		String name = "이름";
 		String description = "자기소개";
 		int totalLikeCount = 100;
 
 		// when
-		UserDetailResponse userDetail = new UserDetailResponse(id, profile, name, description, totalLikeCount);
+		UserDetailResponse userDetail = new UserDetailResponse(id, image, name, description, totalLikeCount);
 
 		// then
 		assertThat(userDetail.id()).isEqualTo(id);
-		assertThat(userDetail.profileUrl()).isEqualTo(profile);
+		assertThat(userDetail.image().id()).isEqualTo(image.id());
 		assertThat(userDetail.name()).isEqualTo(name);
 		assertThat(userDetail.description()).isEqualTo(description);
 		assertThat(userDetail.totalLikeCount()).isEqualTo(totalLikeCount);
