@@ -30,6 +30,7 @@ import taco.klkl.domain.category.domain.subcategory.Subcategory;
 import taco.klkl.domain.category.domain.tag.QTag;
 import taco.klkl.domain.category.domain.tag.Tag;
 import taco.klkl.domain.category.exception.subcategory.SubcategoryNotFoundException;
+import taco.klkl.domain.member.domain.Member;
 import taco.klkl.domain.product.dao.ProductRepository;
 import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.product.domain.QProduct;
@@ -42,8 +43,8 @@ import taco.klkl.domain.product.dto.request.ProductSortOptions;
 import taco.klkl.domain.product.dto.response.ProductDetailResponse;
 import taco.klkl.domain.product.dto.response.ProductSimpleResponse;
 import taco.klkl.domain.product.exception.InvalidCityIdsException;
+import taco.klkl.domain.product.exception.ProductMemberNotMatchException;
 import taco.klkl.domain.product.exception.ProductNotFoundException;
-import taco.klkl.domain.product.exception.ProductUserNotMatchException;
 import taco.klkl.domain.product.exception.SortDirectionNotFoundException;
 import taco.klkl.domain.region.domain.city.City;
 import taco.klkl.domain.region.domain.city.QCity;
@@ -51,13 +52,12 @@ import taco.klkl.domain.region.domain.country.QCountry;
 import taco.klkl.domain.region.domain.currency.Currency;
 import taco.klkl.domain.region.exception.city.CityNotFoundException;
 import taco.klkl.domain.region.exception.currency.CurrencyNotFoundException;
-import taco.klkl.domain.user.domain.User;
 import taco.klkl.global.common.response.PagedResponse;
 import taco.klkl.global.util.CityUtil;
 import taco.klkl.global.util.CurrencyUtil;
+import taco.klkl.global.util.MemberUtil;
 import taco.klkl.global.util.SubcategoryUtil;
 import taco.klkl.global.util.TagUtil;
-import taco.klkl.global.util.UserUtil;
 
 @Slf4j
 @Primary
@@ -69,7 +69,7 @@ public class ProductServiceImpl implements ProductService {
 	private final JPAQueryFactory queryFactory;
 	private final ProductRepository productRepository;
 
-	private final UserUtil userUtil;
+	private final MemberUtil memberUtil;
 	private final TagUtil tagUtil;
 	private final SubcategoryUtil subcategoryUtil;
 	private final CityUtil cityUtil;
@@ -125,7 +125,7 @@ public class ProductServiceImpl implements ProductService {
 		final Pageable pageable,
 		final Set<Long> userIds
 	) {
-		final User me = userUtil.getCurrentUser();
+		final Member me = memberUtil.getCurrentMember();
 		final Pageable sortedPageable = createPageableSortedByCreatedAtDesc(pageable);
 		final Page<Product> followingProducts = productRepository.findProductsOfFollowedUsers(
 			me,
@@ -269,7 +269,7 @@ public class ProductServiceImpl implements ProductService {
 
 	private Product createProductEntity(final ProductCreateUpdateRequest createRequest) {
 		final Rating rating = Rating.from(createRequest.rating());
-		final User user = userUtil.getCurrentUser();
+		final Member member = memberUtil.getCurrentMember();
 		final City city = findCityById(createRequest.cityId());
 		final Subcategory subcategory = findSubcategoryById(createRequest.subcategoryId());
 		final Currency currency = findCurrencyById(createRequest.currencyId());
@@ -280,7 +280,7 @@ public class ProductServiceImpl implements ProductService {
 			createRequest.address(),
 			createRequest.price(),
 			rating,
-			user,
+			member,
 			city,
 			subcategory,
 			currency
@@ -368,9 +368,9 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	private void validateMyProduct(final Product product) {
-		final User me = userUtil.getCurrentUser();
-		if (!product.getUser().equals(me)) {
-			throw new ProductUserNotMatchException();
+		final Member me = memberUtil.getCurrentMember();
+		if (!product.getMember().equals(me)) {
+			throw new ProductMemberNotMatchException();
 		}
 	}
 }

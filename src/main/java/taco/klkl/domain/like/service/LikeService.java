@@ -3,8 +3,8 @@ package taco.klkl.domain.like.service;
 import org.springframework.stereotype.Service;
 
 import taco.klkl.domain.like.dto.response.LikeResponse;
+import taco.klkl.domain.member.domain.Member;
 import taco.klkl.domain.product.domain.Product;
-import taco.klkl.domain.user.domain.User;
 
 @Service
 public interface LikeService {
@@ -26,8 +26,8 @@ public interface LikeService {
 	/**
 	 * 상품에 이미 사용자가 좋아요를 했는지 확인
 	 * @param product
-	 * @param user
+	 * @param member
 	 * @return
 	 */
-	boolean isLikePresent(final Product product, final User user);
+	boolean isLikePresent(final Product product, final Member member);
 }

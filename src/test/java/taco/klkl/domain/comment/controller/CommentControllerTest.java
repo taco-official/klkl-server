@@ -29,6 +29,8 @@ import taco.klkl.domain.comment.dto.response.CommentResponse;
 import taco.klkl.domain.comment.exception.CommentNotFoundException;
 import taco.klkl.domain.comment.exception.CommentProductNotMatchException;
 import taco.klkl.domain.comment.service.CommentServiceImpl;
+import taco.klkl.domain.member.domain.Member;
+import taco.klkl.domain.member.dto.request.MemberCreateRequest;
 import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.product.domain.Rating;
 import taco.klkl.domain.product.exception.ProductNotFoundException;
@@ -41,8 +43,6 @@ import taco.klkl.domain.region.domain.currency.Currency;
 import taco.klkl.domain.region.domain.currency.CurrencyType;
 import taco.klkl.domain.region.domain.region.Region;
 import taco.klkl.domain.region.domain.region.RegionType;
-import taco.klkl.domain.user.domain.User;
-import taco.klkl.domain.user.dto.request.UserCreateRequest;
 import taco.klkl.global.error.exception.ErrorCode;
 
 @WebMvcTest(CommentController.class)
@@ -63,11 +63,11 @@ public class CommentControllerTest {
 	private final Long productId = 1L;
 	private final Long commentId = 1L;
 
-	private final UserCreateRequest requestDto = new UserCreateRequest(
+	private final MemberCreateRequest requestDto = new MemberCreateRequest(
 		"이상화",
 		"저는 이상화입니다."
 	);
-	private final User user = User.of(
+	private final Member member = Member.of(
 		requestDto.name(),
 		requestDto.description()
 	);
@@ -97,14 +97,14 @@ public class CommentControllerTest {
 		"address",
 		1000,
 		Rating.FIVE,
-		user,
+		member,
 		city,
 		subcategory,
 		currency
 	);
 
-	private final Comment comment1 = Comment.of(product, user, "개추 ^^");
-	private final Comment comment2 = Comment.of(product, user, "안녕하세요");
+	private final Comment comment1 = Comment.of(product, member, "개추 ^^");
+	private final Comment comment2 = Comment.of(product, member, "안녕하세요");
 
 	private final CommentCreateUpdateRequest commentCreateRequestDto = new CommentCreateUpdateRequest(
 		"개추 ^^"
@@ -154,7 +154,7 @@ public class CommentControllerTest {
 			.andExpect(status().isCreated())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
 			.andExpect(jsonPath("$.data.id", is(comment1.getId())))
-			.andExpect(jsonPath("$.data.user.id", is(comment1.getUser().getId())))
+			.andExpect(jsonPath("$.data.user.id", is(comment1.getMember().getId())))
 			.andExpect(jsonPath("$.data.content", is(comment1.getContent())));
 
 		verify(commentServiceImpl, times(1))
@@ -200,7 +200,7 @@ public class CommentControllerTest {
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
 			.andExpect(jsonPath("$.data.id", is(comment1.getId())))
-			.andExpect(jsonPath("$.data.user.id", is(comment1.getUser().getId())))
+			.andExpect(jsonPath("$.data.user.id", is(comment1.getMember().getId())))
 			.andExpect(jsonPath("$.data.content", is(comment1.getContent())));
 
 		verify(commentServiceImpl, times(1))

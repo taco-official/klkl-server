@@ -28,6 +28,7 @@ import taco.klkl.domain.category.domain.category.CategoryType;
 import taco.klkl.domain.category.dto.response.subcategory.SubcategoryResponse;
 import taco.klkl.domain.category.dto.response.tag.TagResponse;
 import taco.klkl.domain.image.dto.response.ImageResponse;
+import taco.klkl.domain.member.dto.response.MemberDetailResponse;
 import taco.klkl.domain.product.domain.Rating;
 import taco.klkl.domain.product.dto.request.ProductCreateUpdateRequest;
 import taco.klkl.domain.product.dto.request.ProductFilterOptions;
@@ -38,7 +39,6 @@ import taco.klkl.domain.product.service.ProductService;
 import taco.klkl.domain.region.domain.country.CountryType;
 import taco.klkl.domain.region.dto.response.city.CityResponse;
 import taco.klkl.domain.region.dto.response.currency.CurrencyResponse;
-import taco.klkl.domain.user.dto.response.UserDetailResponse;
 import taco.klkl.global.common.response.PagedResponse;
 
 @WebMvcTest(ProductController.class)
@@ -59,7 +59,7 @@ public class ProductControllerTest {
 
 	@BeforeEach
 	void setUp() {
-		UserDetailResponse userDetailResponse = new UserDetailResponse(
+		MemberDetailResponse memberDetailResponse = new MemberDetailResponse(
 			1L,
 			new ImageResponse(2L, "url"),
 			"userName",
@@ -112,7 +112,7 @@ public class ProductControllerTest {
 			1000,
 			10,
 			Rating.FIVE.getValue(),
-			userDetailResponse,
+			memberDetailResponse,
 			cityResponse,
 			subcategoryResponse,
 			currencyResponse,
@@ -275,12 +275,12 @@ public class ProductControllerTest {
 			.andExpect(jsonPath("$.data.price", is(productDetailResponse.price())))
 			.andExpect(jsonPath("$.data.likeCount", is(productDetailResponse.likeCount())))
 			.andExpect(jsonPath("$.data.rating", is(productSimpleResponse.rating())))
-			.andExpect(jsonPath("$.data.user.id", is(productDetailResponse.user().id().intValue())))
+			.andExpect(jsonPath("$.data.user.id", is(productDetailResponse.member().id().intValue())))
 			.andExpect(jsonPath("$.data.user.image.id",
-				is(productDetailResponse.user().image().id().intValue())))
-			.andExpect(jsonPath("$.data.user.name", is(productDetailResponse.user().name())))
+				is(productDetailResponse.member().image().id().intValue())))
+			.andExpect(jsonPath("$.data.user.name", is(productDetailResponse.member().name())))
 			.andExpect(jsonPath("$.data.user.description",
-				is(productDetailResponse.user().description())))
+				is(productDetailResponse.member().description())))
 			.andExpect(jsonPath("$.data.city.id",
 				is(productDetailResponse.city().id().intValue())))
 			.andExpect(jsonPath("$.data.city.name", is(productDetailResponse.city().name())))
@@ -317,12 +317,12 @@ public class ProductControllerTest {
 			.andExpect(jsonPath("$.data.price", is(productDetailResponse.price())))
 			.andExpect(jsonPath("$.data.likeCount", is(productDetailResponse.likeCount())))
 			.andExpect(jsonPath("$.data.rating", is(productSimpleResponse.rating())))
-			.andExpect(jsonPath("$.data.user.id", is(productDetailResponse.user().id().intValue())))
+			.andExpect(jsonPath("$.data.user.id", is(productDetailResponse.member().id().intValue())))
 			.andExpect(jsonPath("$.data.user.image.id",
-				is(productDetailResponse.user().image().id().intValue())))
-			.andExpect(jsonPath("$.data.user.name", is(productDetailResponse.user().name())))
+				is(productDetailResponse.member().image().id().intValue())))
+			.andExpect(jsonPath("$.data.user.name", is(productDetailResponse.member().name())))
 			.andExpect(jsonPath("$.data.user.description",
-				is(productDetailResponse.user().description())))
+				is(productDetailResponse.member().description())))
 			.andExpect(jsonPath("$.data.city.id",
 				is(productDetailResponse.city().id().intValue())))
 			.andExpect(jsonPath("$.data.city.name", is(productDetailResponse.city().name())))
@@ -358,12 +358,12 @@ public class ProductControllerTest {
 			.andExpect(jsonPath("$.data.price", is(productDetailResponse.price())))
 			.andExpect(jsonPath("$.data.likeCount", is(productDetailResponse.likeCount())))
 			.andExpect(jsonPath("$.data.rating", is(productSimpleResponse.rating())))
-			.andExpect(jsonPath("$.data.user.id", is(productDetailResponse.user().id().intValue())))
+			.andExpect(jsonPath("$.data.user.id", is(productDetailResponse.member().id().intValue())))
 			.andExpect(jsonPath("$.data.user.image.id",
-				is(productDetailResponse.user().image().id().intValue())))
-			.andExpect(jsonPath("$.data.user.name", is(productDetailResponse.user().name())))
+				is(productDetailResponse.member().image().id().intValue())))
+			.andExpect(jsonPath("$.data.user.name", is(productDetailResponse.member().name())))
 			.andExpect(jsonPath("$.data.user.description",
-				is(productDetailResponse.user().description())))
+				is(productDetailResponse.member().description())))
 			.andExpect(jsonPath("$.data.city.id",
 				is(productDetailResponse.city().id().intValue())))
 			.andExpect(jsonPath("$.data.city.name", is(productDetailResponse.city().name())))

@@ -4,9 +4,9 @@ import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
-import taco.klkl.domain.user.dto.response.UserDetailResponse;
+import taco.klkl.domain.member.dto.response.MemberDetailResponse;
 
 @Service
 public interface OauthKakaoService {
-	UserDetailResponse kakaoOauthLogin(final String code) throws JsonProcessingException;
+	MemberDetailResponse kakaoOauthLogin(final String code) throws JsonProcessingException;
 }

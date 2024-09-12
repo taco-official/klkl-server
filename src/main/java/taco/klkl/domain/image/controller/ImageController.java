@@ -30,11 +30,11 @@ public class ImageController {
 
 	private final ImageService imageService;
 
-	@PostMapping("/v1/users/me/upload-url")
+	@PostMapping("/v1/members/me/upload-url")
 	@ResponseStatus(HttpStatus.CREATED)
 	@Operation(
-		summary = "유저 이미지 업로드 Presigned URL 생성",
-		description = "유저 이미지 업로드를 위한 Presigned URL를 생성합니다."
+		summary = "회원 이미지 업로드 Presigned URL 생성",
+		description = "회원 이미지 업로드를 위한 Presigned URL를 생성합니다."
 	)
 	public PresignedUrlResponse createUserImageUploadUrl(
 		@Valid @RequestBody final SingleImageUploadRequest request
@@ -55,10 +55,10 @@ public class ImageController {
 		return imageService.createProductImageUploadUrls(productId, request);
 	}
 
-	@PostMapping("/v1/users/me/upload-complete")
+	@PostMapping("/v1/members/me/upload-complete")
 	@Operation(
-		summary = "유저 이미지 업로드 완료 처리",
-		description = "유저 이미지 업로드를 완료 처리합니다."
+		summary = "회원 이미지 업로드 완료 처리",
+		description = "회원 이미지 업로드를 완료 처리합니다."
 	)
 	public ImageResponse uploadCompleteUserImage(
 		@Valid @RequestBody final SingleImageUpdateRequest request

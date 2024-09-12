@@ -10,7 +10,7 @@ import jakarta.persistence.OneToOne;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import taco.klkl.domain.user.domain.User;
+import taco.klkl.domain.member.domain.Member;
 
 @Getter
 @Entity(name = "oauth")
@@ -23,7 +23,7 @@ public class Oauth {
 	Long id;
 
 	@OneToOne(optional = false, fetch = FetchType.EAGER)
-	private User user;
+	private Member member;
 
 	@Column(
 		name = "oauth_member_id",
@@ -31,12 +31,12 @@ public class Oauth {
 	)
 	private Long oauthMemberId;
 
-	private Oauth(final User user, final Long oauthMemberId) {
-		this.user = user;
+	private Oauth(final Member member, final Long oauthMemberId) {
+		this.member = member;
 		this.oauthMemberId = oauthMemberId;
 	}
 
-	public static Oauth of(final User user, final Long oauth2MemberId) {
-		return new Oauth(user, oauth2MemberId);
+	public static Oauth of(final Member member, final Long oauth2MemberId) {
+		return new Oauth(member, oauth2MemberId);
 	}
 }

@@ -14,7 +14,7 @@ public class LikeUtil {
 
 	private final LikeRepository likeRepository;
 
-	public Page<Like> findLikesByUserId(final Long userId, final Pageable pageable) {
-		return likeRepository.findByUserId(userId, pageable);
+	public Page<Like> findLikesByMemberId(final Long memberId, final Pageable pageable) {
+		return likeRepository.findByMemberId(memberId, pageable);
 	}
 }

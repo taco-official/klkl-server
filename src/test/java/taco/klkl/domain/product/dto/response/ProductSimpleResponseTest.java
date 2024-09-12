@@ -19,6 +19,7 @@ import taco.klkl.domain.category.domain.tag.Tag;
 import taco.klkl.domain.category.domain.tag.TagType;
 import taco.klkl.domain.category.dto.response.tag.TagResponse;
 import taco.klkl.domain.image.dto.response.ImageResponse;
+import taco.klkl.domain.member.domain.Member;
 import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.product.domain.ProductTag;
 import taco.klkl.domain.product.domain.Rating;
@@ -30,13 +31,12 @@ import taco.klkl.domain.region.domain.currency.Currency;
 import taco.klkl.domain.region.domain.currency.CurrencyType;
 import taco.klkl.domain.region.domain.region.Region;
 import taco.klkl.domain.region.domain.region.RegionType;
-import taco.klkl.domain.user.domain.User;
 import taco.klkl.global.util.ProductUtil;
 
 class ProductSimpleResponseTest {
 
 	private Product product;
-	private User mockUser;
+	private Member mockMember;
 	private City city;
 	private Subcategory subcategory;
 	private Currency currency;
@@ -45,9 +45,9 @@ class ProductSimpleResponseTest {
 	void setUp() {
 		MockitoAnnotations.openMocks(this);
 
-		mockUser = mock(User.class);
-		when(mockUser.getId()).thenReturn(1L);
-		when(mockUser.getName()).thenReturn("Test User");
+		mockMember = mock(Member.class);
+		when(mockMember.getId()).thenReturn(1L);
+		when(mockMember.getName()).thenReturn("Test Member");
 
 		Region region = Region.from(RegionType.SOUTHEAST_ASIA);
 		currency = Currency.of(
@@ -84,7 +84,7 @@ class ProductSimpleResponseTest {
 		when(product.getPrice()).thenReturn(1000);
 		when(product.getLikeCount()).thenReturn(0);
 		when(product.getRating()).thenReturn(Rating.FIVE);
-		when(product.getUser()).thenReturn(mockUser);
+		when(product.getMember()).thenReturn(mockMember);
 		when(product.getCity()).thenReturn(city);
 		when(product.getSubcategory()).thenReturn(subcategory);
 		when(product.getCurrency()).thenReturn(currency);

@@ -20,8 +20,8 @@ import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.product.dto.request.ProductCreateUpdateRequest;
 import taco.klkl.domain.product.dto.response.ProductDetailResponse;
 import taco.klkl.domain.product.service.ProductService;
+import taco.klkl.global.util.MemberUtil;
 import taco.klkl.global.util.ProductUtil;
-import taco.klkl.global.util.UserUtil;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -41,7 +41,7 @@ public class LikeIntegrationTest {
 	private ProductService productService;
 
 	@Autowired
-	private UserUtil userUtil;
+	private MemberUtil memberUtil;
 
 	@Autowired
 	private ProductUtil productUtil;

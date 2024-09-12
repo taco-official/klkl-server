@@ -16,8 +16,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import taco.klkl.domain.member.dto.response.MemberDetailResponse;
 import taco.klkl.domain.oauth.service.OauthKakaoService;
-import taco.klkl.domain.user.dto.response.UserDetailResponse;
 
 @Slf4j
 @RestController
@@ -65,7 +65,7 @@ public class OauthKakaoController {
 	// TODO: JWT적용시 토큰 관리 로직 추가
 	@GetMapping("/code")
 	@Operation(summary = "kakao 사용자 정보 가져오기", description = "카카오 API를 사용하여 사용자 정보를 가져옵니다.")
-	public UserDetailResponse processKakaoOauth2(@RequestParam("code") final String code) throws
+	public MemberDetailResponse processKakaoOauth2(@RequestParam("code") final String code) throws
 		JsonProcessingException {
 
 		return oauthKakaoService.kakaoOauthLogin(code);

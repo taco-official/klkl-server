@@ -9,7 +9,7 @@ import taco.klkl.domain.image.exception.ImageTypeNotFoundException;
 @Getter
 @RequiredArgsConstructor
 public enum ImageType {
-	USER_IMAGE("user_image"),
+	MEMBER_IMAGE("member_image"),
 	PRODUCT_IMAGE("product_image"),
 	;
 

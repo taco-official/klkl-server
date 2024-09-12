@@ -28,6 +28,8 @@ import taco.klkl.domain.category.domain.category.CategoryType;
 import taco.klkl.domain.category.domain.subcategory.Subcategory;
 import taco.klkl.domain.category.domain.subcategory.SubcategoryType;
 import taco.klkl.domain.comment.domain.Comment;
+import taco.klkl.domain.member.domain.Member;
+import taco.klkl.domain.member.domain.QMember;
 import taco.klkl.domain.notification.dao.NotificationRepository;
 import taco.klkl.domain.notification.domain.Notification;
 import taco.klkl.domain.notification.domain.QNotification;
@@ -44,9 +46,7 @@ import taco.klkl.domain.region.domain.currency.Currency;
 import taco.klkl.domain.region.domain.currency.CurrencyType;
 import taco.klkl.domain.region.domain.region.Region;
 import taco.klkl.domain.region.domain.region.RegionType;
-import taco.klkl.domain.user.domain.QUser;
-import taco.klkl.domain.user.domain.User;
-import taco.klkl.global.util.UserUtil;
+import taco.klkl.global.util.MemberUtil;
 
 @ExtendWith(MockitoExtension.class)
 @Transactional
@@ -59,24 +59,24 @@ public class NotificationServiceImplTest {
 	private JPAQueryFactory queryFactory;
 
 	@Mock
-	private UserUtil userUtil;
+	private MemberUtil memberUtil;
 
 	@InjectMocks
 	private NotificationServiceImpl notificationService;
 
 	@Mock
-	private User mockUser;
+	private Member mockMember;
 
 	@Mock
 	private Notification mockNotification;
 
 	private Product product;
-	private User commentUser;
+	private Member commentMember;
 	private Comment comment;
 
 	@BeforeEach
 	public void setUp() {
-		commentUser = User.of(
+		commentMember = Member.of(
 			"윤상정",
 			"나는 해적왕이 될 사나이다.");
 
@@ -107,12 +107,12 @@ public class NotificationServiceImplTest {
 			"address",
 			1000,
 			Rating.FIVE,
-			mockUser,
+			mockMember,
 			city,
 			subcategory,
 			currency
 		);
-		comment = Comment.of(product, commentUser, "윤상정 바보");
+		comment = Comment.of(product, commentMember, "윤상정 바보");
 	}
 
 	@Test
@@ -122,16 +122,16 @@ public class NotificationServiceImplTest {
 		JPAQuery<Notification> mockQuery = mock(JPAQuery.class);
 		List<Notification> notificationList = List.of(mockNotification);
 		QNotification notification = QNotification.notification;
-		QUser user = QUser.user;
+		QMember member = QMember.member;
 
-		when(userUtil.getCurrentUser()).thenReturn(mockUser);
+		when(memberUtil.getCurrentMember()).thenReturn(mockMember);
 		when(mockNotification.getId()).thenReturn(1L);
 		when(mockNotification.getIsRead()).thenReturn(false);
 		when(mockNotification.getCreatedAt()).thenReturn(LocalDateTime.now());
 		when(mockNotification.getComment()).thenReturn(comment);
 
 		when(queryFactory.selectFrom(any(QNotification.class))).thenReturn(mockQuery);
-		when(mockQuery.join(notification.comment.product.user, user)).thenReturn(mockQuery);
+		when(mockQuery.join(notification.comment.product.member, member)).thenReturn(mockQuery);
 		when(mockQuery.where(any(BooleanExpression.class))).thenReturn(mockQuery);
 		when(mockQuery.orderBy(any(OrderSpecifier.class), any(OrderSpecifier.class))).thenReturn(mockQuery);
 		when(mockQuery.fetch()).thenReturn(notificationList);
@@ -152,12 +152,12 @@ public class NotificationServiceImplTest {
 		JPAQuery<Notification> mockQuery = mock(JPAQuery.class);
 		List<Notification> notificationList = Collections.emptyList();
 		QNotification notification = QNotification.notification;
-		QUser user = QUser.user;
+		QMember member = QMember.member;
 
-		when(userUtil.getCurrentUser()).thenReturn(mockUser);
+		when(memberUtil.getCurrentMember()).thenReturn(mockMember);
 
 		when(queryFactory.selectFrom(any(QNotification.class))).thenReturn(mockQuery);
-		when(mockQuery.join(notification.comment.product.user, user)).thenReturn(mockQuery);
+		when(mockQuery.join(notification.comment.product.member, member)).thenReturn(mockQuery);
 		when(mockQuery.where(any(BooleanExpression.class))).thenReturn(mockQuery);
 		when(mockQuery.orderBy(any(OrderSpecifier.class), any(OrderSpecifier.class))).thenReturn(mockQuery);
 		when(mockQuery.fetch()).thenReturn(notificationList);
@@ -178,15 +178,15 @@ public class NotificationServiceImplTest {
 
 		List<Notification> notificationList = List.of(notification1, notification2);
 
-		when(userUtil.getCurrentUser()).thenReturn(mockUser);
-		when(notificationRepository.findByComment_Product_User(mockUser)).thenReturn(notificationList);
+		when(memberUtil.getCurrentMember()).thenReturn(mockMember);
+		when(notificationRepository.findByComment_Product_Member(mockMember)).thenReturn(notificationList);
 
 		//when
 		NotificationUpdateResponse response = notificationService.readAllNotifications();
 
 		//then
 		assertThat(response.updatedCount()).isEqualTo(2L);
-		verify(notificationRepository).findByComment_Product_User(mockUser);
+		verify(notificationRepository).findByComment_Product_Member(mockMember);
 
 		assertTrue(notification1.getIsRead());
 		assertTrue(notification2.getIsRead());
@@ -198,7 +198,7 @@ public class NotificationServiceImplTest {
 		//given
 		Notification notification = Notification.of(comment);
 
-		when(userUtil.getCurrentUser()).thenReturn(mockUser);
+		when(memberUtil.getCurrentMember()).thenReturn(mockMember);
 		when(notificationRepository.findById(1L)).thenReturn(Optional.of(notification));
 
 		//when

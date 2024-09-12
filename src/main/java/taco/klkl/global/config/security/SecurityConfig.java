@@ -11,7 +11,7 @@ import org.springframework.security.config.annotation.web.configurers.HeadersCon
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.RegexRequestMatcher;
 
-import taco.klkl.domain.user.domain.Role;
+import taco.klkl.domain.member.domain.Role;
 
 @Configuration
 @EnableWebSecurity

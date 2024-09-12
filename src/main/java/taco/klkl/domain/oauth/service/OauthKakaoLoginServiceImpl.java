@@ -6,14 +6,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import taco.klkl.domain.member.domain.Member;
+import taco.klkl.domain.member.dto.request.MemberCreateRequest;
+import taco.klkl.domain.member.dto.response.MemberDetailResponse;
+import taco.klkl.domain.member.service.MemberService;
 import taco.klkl.domain.oauth.dao.OauthRepository;
 import taco.klkl.domain.oauth.domain.Oauth;
-import taco.klkl.domain.oauth.dto.request.KakaoUserInfoRequest;
-import taco.klkl.domain.user.domain.User;
-import taco.klkl.domain.user.dto.request.UserCreateRequest;
-import taco.klkl.domain.user.dto.response.UserDetailResponse;
-import taco.klkl.domain.user.service.UserService;
-import taco.klkl.global.util.UserUtil;
+import taco.klkl.domain.oauth.dto.request.KakaoMemberInfoRequest;
+import taco.klkl.global.util.MemberUtil;
 
 @Slf4j
 @Primary
@@ -23,8 +23,8 @@ import taco.klkl.global.util.UserUtil;
 public class OauthKakaoLoginServiceImpl implements OauthKakaoLoginService {
 
 	private final OauthRepository oauthRepository;
-	private final UserService userService;
-	private final UserUtil userUtil;
+	private final MemberService memberService;
+	private final MemberUtil memberUtil;
 
 	/**
 	 * Oauth의 결과로 사용자 로그인 처리를 수행합니다.
@@ -32,35 +32,35 @@ public class OauthKakaoLoginServiceImpl implements OauthKakaoLoginService {
 	 * @param userInfoRequest
 	 * @return
 	 */
-	public UserDetailResponse loginUser(final KakaoUserInfoRequest userInfoRequest) {
+	public MemberDetailResponse loginUser(final KakaoMemberInfoRequest userInfoRequest) {
 
 		final Long oauthMemberId = userInfoRequest.oauthMemberId();
 
 		// 이미 oauth로그인 기록이 있는 유저를 처리합니다.
 		if (oauthRepository.existsByOauthMemberId(oauthMemberId)) {
 			final Oauth oauth = oauthRepository.findFirstByOauthMemberId(oauthMemberId);
-			final User user = oauth.getUser();
-			return UserDetailResponse.from(user);
+			final Member member = oauth.getMember();
+			return MemberDetailResponse.from(member);
 		}
 
-		final User user = registerUser(userInfoRequest);
-		final Oauth oauth = Oauth.of(user, userInfoRequest.oauthMemberId());
+		final Member member = registerUser(userInfoRequest);
+		final Oauth oauth = Oauth.of(member, userInfoRequest.oauthMemberId());
 		oauthRepository.save(oauth);
 
-		return UserDetailResponse.from(user);
+		return MemberDetailResponse.from(member);
 	}
 
-	private User registerUser(final KakaoUserInfoRequest userInfoRequest) {
+	private Member registerUser(final KakaoMemberInfoRequest userInfoRequest) {
 
-		final String name = userUtil.createUsername(userInfoRequest.nickname(), userInfoRequest.oauthMemberId());
+		final String name = memberUtil.createUsername(userInfoRequest.nickname(), userInfoRequest.oauthMemberId());
 
 		// TODO: 성별, 나이는 기본값으로 넣고 있습니다.
-		final UserCreateRequest userCreateRequest = UserCreateRequest.of(
+		final MemberCreateRequest memberCreateRequest = MemberCreateRequest.of(
 			name,
 			""
 		);
 
 		// 유저를 DB에 생성합니다.
-		return userService.createUser(userCreateRequest);
+		return memberService.createUser(memberCreateRequest);
 	}
 }

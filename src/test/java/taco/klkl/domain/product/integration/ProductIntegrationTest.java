@@ -1112,7 +1112,7 @@ public class ProductIntegrationTest {
 			.andExpect(jsonPath("$.data.price", is(updateRequest.price())))
 			.andExpect(jsonPath("$.data.likeCount", is(ProductConstants.DEFAULT_LIKE_COUNT)))
 			.andExpect(jsonPath("$.data.rating", is(updateRequest.rating())))
-			.andExpect(jsonPath("$.data.user.id", is(productDto.user().id().intValue())))
+			.andExpect(jsonPath("$.data.user.id", is(productDto.member().id().intValue())))
 			.andExpect(jsonPath("$.data.city.id", is(updateRequest.cityId().intValue())))
 			.andExpect(jsonPath("$.data.subcategory.id",
 				is(updateRequest.subcategoryId().intValue())))

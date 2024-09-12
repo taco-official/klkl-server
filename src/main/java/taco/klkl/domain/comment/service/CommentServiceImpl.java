@@ -12,14 +12,14 @@ import taco.klkl.domain.comment.dao.CommentRepository;
 import taco.klkl.domain.comment.domain.Comment;
 import taco.klkl.domain.comment.dto.request.CommentCreateUpdateRequest;
 import taco.klkl.domain.comment.dto.response.CommentResponse;
+import taco.klkl.domain.comment.exception.CommentMemberNotMatchException;
 import taco.klkl.domain.comment.exception.CommentNotFoundException;
 import taco.klkl.domain.comment.exception.CommentProductNotMatchException;
-import taco.klkl.domain.comment.exception.CommentUserNotMatchException;
+import taco.klkl.domain.member.domain.Member;
 import taco.klkl.domain.notification.service.NotificationService;
 import taco.klkl.domain.product.domain.Product;
-import taco.klkl.domain.user.domain.User;
+import taco.klkl.global.util.MemberUtil;
 import taco.klkl.global.util.ProductUtil;
-import taco.klkl.global.util.UserUtil;
 
 @Slf4j
 @Primary
@@ -32,7 +32,7 @@ public class CommentServiceImpl implements CommentService {
 
 	private final NotificationService notificationService;
 
-	private final UserUtil userUtil;
+	private final MemberUtil memberUtil;
 	private final ProductUtil productUtil;
 
 	public List<CommentResponse> findCommentsByProductId(final Long productId) {
@@ -87,11 +87,11 @@ public class CommentServiceImpl implements CommentService {
 		final Long productId,
 		final CommentCreateUpdateRequest commentCreateUpdateRequest
 	) {
-		final User user = userUtil.getCurrentUser();
+		final Member member = memberUtil.getCurrentMember();
 		final Product product = productUtil.findProductEntityById(productId);
 		return Comment.of(
 			product,
-			user,
+			member,
 			commentCreateUpdateRequest.content()
 		);
 	}
@@ -108,9 +108,9 @@ public class CommentServiceImpl implements CommentService {
 	}
 
 	private void validateMyComment(final Comment comment) {
-		final User me = userUtil.getCurrentUser();
-		if (!comment.getUser().equals(me)) {
-			throw new CommentUserNotMatchException();
+		final Member me = memberUtil.getCurrentMember();
+		if (!comment.getMember().equals(me)) {
+			throw new CommentMemberNotMatchException();
 		}
 	}
 

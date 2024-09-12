@@ -11,6 +11,8 @@ import org.mockito.MockitoAnnotations;
 import taco.klkl.domain.category.domain.subcategory.Subcategory;
 import taco.klkl.domain.category.domain.subcategory.SubcategoryType;
 import taco.klkl.domain.category.dto.response.subcategory.SubcategoryResponse;
+import taco.klkl.domain.member.domain.Member;
+import taco.klkl.domain.member.dto.response.MemberDetailResponse;
 import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.product.domain.Rating;
 import taco.klkl.domain.region.domain.city.City;
@@ -19,13 +21,11 @@ import taco.klkl.domain.region.domain.currency.Currency;
 import taco.klkl.domain.region.domain.currency.CurrencyType;
 import taco.klkl.domain.region.dto.response.city.CityResponse;
 import taco.klkl.domain.region.dto.response.currency.CurrencyResponse;
-import taco.klkl.domain.user.domain.User;
-import taco.klkl.domain.user.dto.response.UserDetailResponse;
 
 class ProductDetailResponseTest {
 
 	private Product mockProduct;
-	private User mockUser;
+	private Member mockMember;
 	private City mockCity;
 	private Subcategory mockSubcategory;
 	private Currency mockCurrency;
@@ -34,9 +34,9 @@ class ProductDetailResponseTest {
 	void setUp() {
 		MockitoAnnotations.openMocks(this);
 
-		mockUser = mock(User.class);
-		when(mockUser.getId()).thenReturn(1L);
-		when(mockUser.getName()).thenReturn("Test User");
+		mockMember = mock(Member.class);
+		when(mockMember.getId()).thenReturn(1L);
+		when(mockMember.getName()).thenReturn("Test Member");
 
 		mockCity = mock(City.class);
 		when(mockCity.getId()).thenReturn(1L);
@@ -58,7 +58,7 @@ class ProductDetailResponseTest {
 		when(mockProduct.getPrice()).thenReturn(1000);
 		when(mockProduct.getLikeCount()).thenReturn(0);
 		when(mockProduct.getRating()).thenReturn(Rating.FIVE);
-		when(mockProduct.getUser()).thenReturn(mockUser);
+		when(mockProduct.getMember()).thenReturn(mockMember);
 		when(mockProduct.getCity()).thenReturn(mockCity);
 		when(mockProduct.getSubcategory()).thenReturn(mockSubcategory);
 		when(mockProduct.getCurrency()).thenReturn(mockCurrency);
@@ -78,7 +78,7 @@ class ProductDetailResponseTest {
 		assertThat(dto.price()).isEqualTo(mockProduct.getPrice());
 		assertThat(dto.likeCount()).isEqualTo(mockProduct.getLikeCount());
 		assertThat(dto.rating()).isEqualTo(mockProduct.getRating().getValue());
-		assertThat(dto.user()).isEqualTo(UserDetailResponse.from(mockUser));
+		assertThat(dto.member()).isEqualTo(MemberDetailResponse.from(mockMember));
 		assertThat(dto.city()).isEqualTo(CityResponse.from(mockCity));
 		assertThat(dto.subcategory()).isEqualTo(SubcategoryResponse.from(mockSubcategory));
 		assertThat(dto.currency()).isEqualTo(CurrencyResponse.from(mockCurrency));
@@ -98,7 +98,7 @@ class ProductDetailResponseTest {
 		assertThat(dto.price()).isEqualTo(mockProduct.getPrice());
 		assertThat(dto.likeCount()).isEqualTo(mockProduct.getLikeCount());
 		assertThat(dto.rating()).isEqualTo(mockProduct.getRating().getValue());
-		assertThat(dto.user()).isEqualTo(UserDetailResponse.from(mockUser));
+		assertThat(dto.member()).isEqualTo(MemberDetailResponse.from(mockMember));
 		assertThat(dto.city()).isEqualTo(CityResponse.from(mockCity));
 		assertThat(dto.subcategory()).isEqualTo(SubcategoryResponse.from(mockSubcategory));
 		assertThat(dto.currency()).isEqualTo(CurrencyResponse.from(mockCurrency));

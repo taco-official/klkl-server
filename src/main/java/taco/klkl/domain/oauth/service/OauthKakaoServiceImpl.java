@@ -16,8 +16,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import taco.klkl.domain.oauth.dto.request.KakaoUserInfoRequest;
-import taco.klkl.domain.user.dto.response.UserDetailResponse;
+import taco.klkl.domain.member.dto.response.MemberDetailResponse;
+import taco.klkl.domain.oauth.dto.request.KakaoMemberInfoRequest;
 import taco.klkl.global.util.StringUtil;
 
 @Slf4j
@@ -55,7 +55,7 @@ public class OauthKakaoServiceImpl implements OauthKakaoService {
 	 * @throws JsonProcessingException
 	 */
 	@Override
-	public UserDetailResponse kakaoOauthLogin(final String code) throws JsonProcessingException {
+	public MemberDetailResponse kakaoOauthLogin(final String code) throws JsonProcessingException {
 		final String accessToken = requestAccessToken(code);
 		final HttpHeaders headers = getRequestUserInfoHeader(accessToken);
 
@@ -135,7 +135,7 @@ public class OauthKakaoServiceImpl implements OauthKakaoService {
 	 * @return
 	 * @throws JsonProcessingException
 	 */
-	private KakaoUserInfoRequest requestPostUserInfo(final HttpEntity<Object> httpEntity)
+	private KakaoMemberInfoRequest requestPostUserInfo(final HttpEntity<Object> httpEntity)
 		throws JsonProcessingException {
 		final ResponseEntity<String> exchange = restTemplate.exchange(userInfoUri, HttpMethod.POST, httpEntity,
 			String.class);
@@ -147,7 +147,7 @@ public class OauthKakaoServiceImpl implements OauthKakaoService {
 		final String nickname = (jsonNode.get("properties").get("nickname").toString());
 		final String profile = (jsonNode.get("properties").get("profile_image").toString());
 
-		return KakaoUserInfoRequest.of(
+		return KakaoMemberInfoRequest.of(
 			oauthMemberId,
 			StringUtil.trimDoubleQuote(nickname),
 			StringUtil.trimDoubleQuote(profile)

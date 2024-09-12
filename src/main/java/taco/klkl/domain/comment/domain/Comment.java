@@ -13,8 +13,8 @@ import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import taco.klkl.domain.member.domain.Member;
 import taco.klkl.domain.product.domain.Product;
-import taco.klkl.domain.user.domain.User;
 
 @Getter
 @Entity(name = "comment")
@@ -30,8 +30,8 @@ public class Comment {
 	private Product product;
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "user_id", nullable = false)
-	private User user;
+	@JoinColumn(name = "member_id", nullable = false)
+	private Member member;
 
 	@Column(
 		name = "content",
@@ -48,11 +48,11 @@ public class Comment {
 
 	private Comment(
 		final Product product,
-		final User user,
+		final Member member,
 		final String content
 	) {
 		this.product = product;
-		this.user = user;
+		this.member = member;
 		this.content = content;
 		this.createdAt = LocalDateTime.now();
 	}
@@ -63,9 +63,9 @@ public class Comment {
 
 	public static Comment of(
 		final Product product,
-		final User user,
+		final Member member,
 		final String content
 	) {
-		return new Comment(product, user, content);
+		return new Comment(product, member, content);
 	}
 }

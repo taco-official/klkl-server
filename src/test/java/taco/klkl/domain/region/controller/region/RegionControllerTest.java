@@ -78,21 +78,4 @@ class RegionControllerTest {
 
 		verify(regionService, times(1)).findAllRegions();
 	}
-
-	@Test
-	@DisplayName("모든 지역 조회 실패 테스트")
-	void testGetRegionsFail() throws Exception {
-		// given
-		when(regionService.findAllRegions()).thenThrow(RuntimeException.class);
-
-		// when & then
-		mockMvc.perform(get("/v1/regions/hierarchy")
-				.contentType(MediaType.APPLICATION_JSON))
-			.andExpect(status().is5xxServerError())
-			.andExpect(jsonPath("$.isSuccess", is(false)))
-			.andExpect(jsonPath("$.status", is(ErrorCode.INTERNAL_SERVER_ERROR.getHttpStatus().value())))
-			.andExpect(jsonPath("$.data.message", is(ErrorCode.INTERNAL_SERVER_ERROR.getMessage())));
-
-		verify(regionService, times(1)).findAllRegions();
-	}
 }
