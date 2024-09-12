@@ -27,8 +27,8 @@ import taco.klkl.domain.comment.domain.Comment;
 import taco.klkl.domain.comment.dto.request.CommentCreateUpdateRequest;
 import taco.klkl.domain.comment.dto.response.CommentResponse;
 import taco.klkl.domain.comment.exception.CommentNotFoundException;
-import taco.klkl.domain.comment.exception.CommentProductNotMatch;
-import taco.klkl.domain.comment.service.CommentService;
+import taco.klkl.domain.comment.exception.CommentProductNotMatchException;
+import taco.klkl.domain.comment.service.CommentServiceImpl;
 import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.product.domain.Rating;
 import taco.klkl.domain.product.exception.ProductNotFoundException;
@@ -52,7 +52,7 @@ public class CommentControllerTest {
 	private MockMvc mockMvc;
 
 	@MockBean
-	private CommentService commentService;
+	private CommentServiceImpl commentServiceImpl;
 
 	@MockBean
 	private ProductService productService;
@@ -81,7 +81,7 @@ public class CommentControllerTest {
 	private final Country country = Country.of(
 		CountryType.MALAYSIA,
 		region,
-		"image/malaysia-photo.jpg",
+		"image/malaysia-wallpaper.jpg",
 		currency
 	);
 
@@ -121,7 +121,7 @@ public class CommentControllerTest {
 		List<CommentResponse> responseDtos = Arrays.asList(CommentResponse.from(comment1),
 			CommentResponse.from(comment2));
 
-		when(commentService.findCommentsByProductId(productId)).thenReturn(responseDtos);
+		when(commentServiceImpl.findCommentsByProductId(productId)).thenReturn(responseDtos);
 
 		//when & then
 		mockMvc.perform(get("/v1/products/{productId}/comments", productId)
@@ -134,7 +134,7 @@ public class CommentControllerTest {
 			.andExpect(jsonPath("$.data[1].id", is(comment2.getId())))
 			.andExpect(jsonPath("$.data[1].content", is(comment2.getContent())));
 
-		verify(commentService, times(1))
+		verify(commentServiceImpl, times(1))
 			.findCommentsByProductId(productId);
 	}
 
@@ -144,7 +144,7 @@ public class CommentControllerTest {
 		//given
 		CommentResponse responseDto = CommentResponse.from(comment1);
 
-		when(commentService.createComment(any(Long.class), any(CommentCreateUpdateRequest.class))).thenReturn(
+		when(commentServiceImpl.createComment(any(Long.class), any(CommentCreateUpdateRequest.class))).thenReturn(
 			responseDto);
 
 		//when & then
@@ -157,7 +157,7 @@ public class CommentControllerTest {
 			.andExpect(jsonPath("$.data.user.id", is(comment1.getUser().getId())))
 			.andExpect(jsonPath("$.data.content", is(comment1.getContent())));
 
-		verify(commentService, times(1))
+		verify(commentServiceImpl, times(1))
 			.createComment(productId, commentCreateRequestDto);
 	}
 
@@ -168,7 +168,7 @@ public class CommentControllerTest {
 		Long wrongProductId = 2L;
 
 		doThrow(new ProductNotFoundException())
-			.when(commentService)
+			.when(commentServiceImpl)
 			.createComment(any(Long.class), any(CommentCreateUpdateRequest.class));
 
 		//when & then
@@ -187,7 +187,7 @@ public class CommentControllerTest {
 		///given
 		CommentResponse responseDto = CommentResponse.from(comment1);
 
-		when(commentService.updateComment(
+		when(commentServiceImpl.updateComment(
 			any(Long.class),
 			any(Long.class),
 			any(CommentCreateUpdateRequest.class)))
@@ -203,7 +203,7 @@ public class CommentControllerTest {
 			.andExpect(jsonPath("$.data.user.id", is(comment1.getUser().getId())))
 			.andExpect(jsonPath("$.data.content", is(comment1.getContent())));
 
-		verify(commentService, times(1))
+		verify(commentServiceImpl, times(1))
 			.updateComment(productId, commentId, commentUpdateRequestDto);
 	}
 
@@ -213,7 +213,7 @@ public class CommentControllerTest {
 		///given
 		Long wrongCommentId = 2L;
 
-		when(commentService.updateComment(any(Long.class), any(Long.class), any(CommentCreateUpdateRequest.class)))
+		when(commentServiceImpl.updateComment(any(Long.class), any(Long.class), any(CommentCreateUpdateRequest.class)))
 			.thenThrow(new CommentNotFoundException());
 
 		//when & then
@@ -225,7 +225,7 @@ public class CommentControllerTest {
 			.andExpect(jsonPath("$.status", is(ErrorCode.COMMENT_NOT_FOUND.getHttpStatus().value())))
 			.andExpect(jsonPath("$.data.message", is(ErrorCode.COMMENT_NOT_FOUND.getMessage())));
 
-		verify(commentService, times(1))
+		verify(commentServiceImpl, times(1))
 			.updateComment(productId, wrongCommentId, commentUpdateRequestDto);
 	}
 
@@ -235,7 +235,7 @@ public class CommentControllerTest {
 		//given
 		Long wrongProductId = 2L;
 
-		when(commentService.updateComment(any(Long.class), any(Long.class), any(CommentCreateUpdateRequest.class)))
+		when(commentServiceImpl.updateComment(any(Long.class), any(Long.class), any(CommentCreateUpdateRequest.class)))
 			.thenThrow(new ProductNotFoundException());
 
 		//when & then
@@ -247,7 +247,7 @@ public class CommentControllerTest {
 			.andExpect(jsonPath("$.status", is(ErrorCode.PRODUCT_NOT_FOUND.getHttpStatus().value())))
 			.andExpect(jsonPath("$.data.message", is(ErrorCode.PRODUCT_NOT_FOUND.getMessage())));
 
-		verify(commentService, times(1))
+		verify(commentServiceImpl, times(1))
 			.updateComment(wrongProductId, commentId, commentUpdateRequestDto);
 	}
 
@@ -256,8 +256,8 @@ public class CommentControllerTest {
 	public void testUpdateCommentWhenExistProductButNotMatchWithComment() throws Exception {
 		//given
 
-		when(commentService.updateComment(any(Long.class), any(Long.class), any(CommentCreateUpdateRequest.class)))
-			.thenThrow(new CommentProductNotMatch());
+		when(commentServiceImpl.updateComment(any(Long.class), any(Long.class), any(CommentCreateUpdateRequest.class)))
+			.thenThrow(new CommentProductNotMatchException());
 
 		//when & then
 		mockMvc.perform(put("/v1/products/{wrongProductId}/comments/{commentId}", productId, commentId)
@@ -268,7 +268,7 @@ public class CommentControllerTest {
 			.andExpect(jsonPath("$.status", is(ErrorCode.COMMENT_PRODUCT_NOT_MATCH.getHttpStatus().value())))
 			.andExpect(jsonPath("$.data.message", is(ErrorCode.COMMENT_PRODUCT_NOT_MATCH.getMessage())));
 
-		verify(commentService, times(1))
+		verify(commentServiceImpl, times(1))
 			.updateComment(productId, commentId, commentUpdateRequestDto);
 	}
 
@@ -283,7 +283,7 @@ public class CommentControllerTest {
 			.andExpect(jsonPath("$.isSuccess", is(true)))
 			.andExpect(jsonPath("$.data", nullValue()));
 
-		verify(commentService, times(1)).deleteComment(productId, commentId);
+		verify(commentServiceImpl, times(1)).deleteComment(productId, commentId);
 	}
 
 	@Test
@@ -292,7 +292,7 @@ public class CommentControllerTest {
 		//given
 		Long wrongCommentId = 2L;
 
-		doThrow(new CommentNotFoundException()).when(commentService).deleteComment(productId, wrongCommentId);
+		doThrow(new CommentNotFoundException()).when(commentServiceImpl).deleteComment(productId, wrongCommentId);
 
 		//when & then
 		mockMvc.perform(delete("/v1/products/{productId}/comments/{wrongCommentId}", productId, wrongCommentId)
@@ -302,7 +302,7 @@ public class CommentControllerTest {
 			.andExpect(jsonPath("$.status", is(ErrorCode.COMMENT_NOT_FOUND.getHttpStatus().value())))
 			.andExpect(jsonPath("$.data.message", is(ErrorCode.COMMENT_NOT_FOUND.getMessage())));
 
-		verify(commentService, times(1)).deleteComment(productId, wrongCommentId);
+		verify(commentServiceImpl, times(1)).deleteComment(productId, wrongCommentId);
 	}
 
 	@Test
@@ -311,7 +311,7 @@ public class CommentControllerTest {
 		//given
 		Long wrongProductId = 2L;
 
-		doThrow(new ProductNotFoundException()).when(commentService).deleteComment(wrongProductId, commentId);
+		doThrow(new ProductNotFoundException()).when(commentServiceImpl).deleteComment(wrongProductId, commentId);
 
 		//when & then
 		mockMvc.perform(delete("/v1/products/{wrongProductId}/comments/{commentId}", wrongProductId, commentId)
@@ -321,7 +321,7 @@ public class CommentControllerTest {
 			.andExpect(jsonPath("$.status", is(ErrorCode.PRODUCT_NOT_FOUND.getHttpStatus().value())))
 			.andExpect(jsonPath("$.data.message", is(ErrorCode.PRODUCT_NOT_FOUND.getMessage())));
 
-		verify(commentService, times(1)).deleteComment(wrongProductId, commentId);
+		verify(commentServiceImpl, times(1)).deleteComment(wrongProductId, commentId);
 	}
 
 	@Test
@@ -329,7 +329,7 @@ public class CommentControllerTest {
 	public void testDeleteCommentWhenExistProductButNotMatchWithComment() throws Exception {
 		//given
 
-		doThrow(new CommentProductNotMatch()).when(commentService).deleteComment(productId, commentId);
+		doThrow(new CommentProductNotMatchException()).when(commentServiceImpl).deleteComment(productId, commentId);
 
 		//when & then
 		mockMvc.perform(delete("/v1/products/{wrongProductId}/comments/{commentId}", productId, commentId)
@@ -340,7 +340,7 @@ public class CommentControllerTest {
 			.andExpect(jsonPath("$.status", is(ErrorCode.COMMENT_PRODUCT_NOT_MATCH.getHttpStatus().value())))
 			.andExpect(jsonPath("$.data.message", is(ErrorCode.COMMENT_PRODUCT_NOT_MATCH.getMessage())));
 
-		verify(commentService, times(1))
+		verify(commentServiceImpl, times(1))
 			.deleteComment(productId, commentId);
 	}
 }

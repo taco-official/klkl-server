@@ -2,13 +2,11 @@ package taco.klkl.global.util;
 
 import java.time.Instant;
 import java.util.Objects;
-import java.util.Optional;
 
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import taco.klkl.domain.image.domain.Image;
 import taco.klkl.domain.user.dao.UserRepository;
 import taco.klkl.domain.user.domain.User;
 import taco.klkl.domain.user.exception.UserNotFoundException;
@@ -39,12 +37,6 @@ public class UserUtil {
 		}
 
 		return createdName;
-	}
-
-	public static String generateProfileUrlByUser(final User user) {
-		return Optional.ofNullable(user.getImage())
-			.map(Image::getUrl)
-			.orElse(null);
 	}
 
 	private User getTestUser() {

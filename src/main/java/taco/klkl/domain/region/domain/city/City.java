@@ -8,6 +8,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Transient;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,6 +19,7 @@ import taco.klkl.domain.region.domain.country.Country;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class City {
 
+	@Transient
 	private CityType cityType;
 
 	@Id

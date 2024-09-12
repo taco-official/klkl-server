@@ -3,7 +3,6 @@ package taco.klkl.domain.product.dto.response;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -19,6 +18,7 @@ import taco.klkl.domain.category.domain.subcategory.SubcategoryType;
 import taco.klkl.domain.category.domain.tag.Tag;
 import taco.klkl.domain.category.domain.tag.TagType;
 import taco.klkl.domain.category.dto.response.tag.TagResponse;
+import taco.klkl.domain.image.dto.response.ImageResponse;
 import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.product.domain.ProductTag;
 import taco.klkl.domain.product.domain.Rating;
@@ -56,7 +56,7 @@ class ProductSimpleResponseTest {
 		Country country = Country.of(
 			CountryType.JAPAN,
 			region,
-			"image/thailand-photo.jpg",
+			"image/thailand-wallpaper.jpg",
 			currency
 		);
 		city = City.of(
@@ -115,7 +115,7 @@ class ProductSimpleResponseTest {
 		// when
 		ProductSimpleResponse dto = new ProductSimpleResponse(
 			product.getId(),
-			product.getMainImageUrl(),
+			ImageResponse.from(product.getMainImage()),
 			product.getName(),
 			product.getLikeCount(),
 			product.getRating().getValue(),
@@ -126,7 +126,6 @@ class ProductSimpleResponseTest {
 
 		// then
 		assertThat(dto.id()).isEqualTo(product.getId());
-		assertThat(dto.mainImageUrl()).isEqualTo(product.getMainImageUrl());
 		assertThat(dto.name()).isEqualTo(product.getName());
 		assertThat(dto.likeCount()).isEqualTo(product.getLikeCount());
 		assertThat(dto.rating()).isEqualTo(product.getRating().getValue());

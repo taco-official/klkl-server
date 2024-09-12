@@ -11,6 +11,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Transient;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,6 +23,7 @@ import taco.klkl.domain.product.domain.ProductTag;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Tag {
 
+	@Transient
 	private TagType tagType;
 
 	@Id

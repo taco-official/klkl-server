@@ -1,4 +1,4 @@
-package taco.klkl.domain.region.service;
+package taco.klkl.domain.region.service.currency;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -17,7 +17,6 @@ import taco.klkl.domain.region.dao.currency.CurrencyRepository;
 import taco.klkl.domain.region.domain.currency.Currency;
 import taco.klkl.domain.region.domain.currency.CurrencyType;
 import taco.klkl.domain.region.dto.response.currency.CurrencyResponse;
-import taco.klkl.domain.region.service.currency.CurrencyServiceImpl;
 
 @ExtendWith(MockitoExtension.class)
 public class CurrencyServiceImplTest {

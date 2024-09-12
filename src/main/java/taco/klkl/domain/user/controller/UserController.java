@@ -22,10 +22,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import taco.klkl.domain.product.dto.response.ProductSimpleResponse;
 import taco.klkl.domain.user.domain.User;
-import taco.klkl.domain.user.dto.request.UserFollowRequest;
 import taco.klkl.domain.user.dto.request.UserUpdateRequest;
+import taco.klkl.domain.user.dto.response.FollowResponse;
 import taco.klkl.domain.user.dto.response.UserDetailResponse;
-import taco.klkl.domain.user.dto.response.UserFollowResponse;
 import taco.klkl.domain.user.dto.response.UserSimpleResponse;
 import taco.klkl.domain.user.service.UserService;
 import taco.klkl.global.common.constants.ProductConstants;
@@ -82,24 +81,29 @@ public class UserController {
 		return userService.getUserLikesById(me.getId(), pageable);
 	}
 
-	@GetMapping("/following")
+	@GetMapping("/me/following")
 	@Operation(summary = "내 팔로잉 목록 조회", description = "내 팔로잉 목록을 조회합니다.")
-	public List<UserSimpleResponse> getMyFollowing() {
-		final User me = userUtil.getCurrentUser();
-		return userService.getUserFollowingById(me.getId());
+	public List<UserSimpleResponse> getMyFollowings() {
+		return userService.getFollowings();
 	}
 
-	@PostMapping("/following")
+	@GetMapping("/me/following/{userId}")
+	@Operation(summary = "특정 유저의 팔로우 여부 조회", description = "특정 유저를 팔로우했는지 여부를 조회합니다.")
+	public FollowResponse getFollowingStatus(@PathVariable final Long userId) {
+		return userService.getFollowingStatus(userId);
+	}
+
+	@PostMapping("/me/following/{userId}")
 	@ResponseStatus(HttpStatus.CREATED)
 	@Operation(summary = "유저 팔로우", description = "유저를 팔로우합니다.")
-	public UserFollowResponse followUser(@Valid @RequestBody final UserFollowRequest request) {
-		return userService.createUserFollow(request);
+	public FollowResponse followUser(@PathVariable final Long userId) {
+		return userService.createFollow(userId);
 	}
 
-	@DeleteMapping("/following/{userId}")
-	@Operation(summary = "유저 팔로우 취소", description = "유저 팔로우를 취소합니다.")
-	public UserFollowResponse cancelUserFollow(@PathVariable final Long userId) {
-		return userService.removeUserFollow(userId);
+	@DeleteMapping("/me/following/{userId}")
+	@Operation(summary = "유저 언팔로우", description = "유저를 언팔로우합니다")
+	public FollowResponse unfollowUser(@PathVariable final Long userId) {
+		return userService.removeFollow(userId);
 	}
 
 	@PutMapping("/me")

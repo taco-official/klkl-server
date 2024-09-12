@@ -25,7 +25,7 @@ public class SearchController {
 	@GetMapping()
 	@Operation(summary = "검색 결과 조회", description = "쿼리로 검색 결과를 조회합니다.")
 	public SearchResponse findSearchByQuery(
-		@RequestParam(value = "q") @NotBlank String query
+		@RequestParam(value = "q") @NotBlank final String query
 	) {
 		return searchService.findSearchResult(query);
 	}

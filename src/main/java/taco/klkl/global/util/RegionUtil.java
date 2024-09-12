@@ -5,14 +5,14 @@ import java.util.List;
 import java.util.Optional;
 
 import taco.klkl.domain.region.domain.region.Region;
-import taco.klkl.domain.region.dto.response.country.CountrySimpleResponse;
+import taco.klkl.domain.region.dto.response.country.CountryWithCitiesResponse;
 
 public class RegionUtil {
 
-	public static List<CountrySimpleResponse> createCountriesByRegion(final Region region) {
+	public static List<CountryWithCitiesResponse> createCountriesByRegion(final Region region) {
 		return Optional.ofNullable(region.getCountries())
 			.map(regions -> regions.stream()
-				.map(CountrySimpleResponse::from)
+				.map(CountryWithCitiesResponse::from)
 				.toList())
 			.orElse(Collections.emptyList());
 	}

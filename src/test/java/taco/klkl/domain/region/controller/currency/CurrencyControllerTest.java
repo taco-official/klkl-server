@@ -1,4 +1,4 @@
-package taco.klkl.domain.region.controller;
+package taco.klkl.domain.region.controller.currency;
 
 import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.*;
@@ -16,7 +16,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import taco.klkl.domain.region.controller.currency.CurrencyController;
 import taco.klkl.domain.region.dao.currency.CurrencyRepository;
 import taco.klkl.domain.region.domain.currency.Currency;
 import taco.klkl.domain.region.domain.currency.CurrencyType;

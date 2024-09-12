@@ -10,7 +10,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import taco.klkl.domain.region.dao.city.CityRepository;
 import taco.klkl.domain.region.domain.city.City;
+import taco.klkl.domain.region.dto.response.city.CityHierarchyResponse;
 import taco.klkl.domain.region.dto.response.city.CityResponse;
+import taco.klkl.domain.region.exception.city.CityNotFoundException;
 
 @Slf4j
 @Primary
@@ -30,5 +32,12 @@ public class CityServiceImpl implements CityService {
 		return cities.stream()
 			.map(CityResponse::from)
 			.toList();
+	}
+
+	@Override
+	public CityHierarchyResponse findCityHierarchyById(final Long id) {
+		final City city = cityRepository.findById(id)
+			.orElseThrow(CityNotFoundException::new);
+		return CityHierarchyResponse.from(city);
 	}
 }

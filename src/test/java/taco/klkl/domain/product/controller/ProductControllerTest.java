@@ -27,6 +27,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import taco.klkl.domain.category.domain.category.CategoryType;
 import taco.klkl.domain.category.dto.response.subcategory.SubcategoryResponse;
 import taco.klkl.domain.category.dto.response.tag.TagResponse;
+import taco.klkl.domain.image.dto.response.ImageResponse;
 import taco.klkl.domain.product.domain.Rating;
 import taco.klkl.domain.product.dto.request.ProductCreateUpdateRequest;
 import taco.klkl.domain.product.dto.request.ProductFilterOptions;
@@ -60,24 +61,13 @@ public class ProductControllerTest {
 	void setUp() {
 		UserDetailResponse userDetailResponse = new UserDetailResponse(
 			1L,
-			"image/profileUrl.jpg",
+			new ImageResponse(2L, "url"),
 			"userName",
-			"userDescription",
-			100
+			"userDescription"
 		);
 		CityResponse cityResponse = new CityResponse(
 			1L,
 			"cityName"
-		);
-		SubcategoryResponse subcategoryResponse = new SubcategoryResponse(
-			1L,
-			"subcategoryName"
-		);
-		CurrencyResponse currencyResponse = new CurrencyResponse(
-			1L,
-			"currencyCode",
-			"통화단위",
-			"image/flagUrl.jpg"
 		);
 		TagResponse tagResponse1 = new TagResponse(
 			1L,
@@ -87,10 +77,21 @@ public class ProductControllerTest {
 			2L,
 			"tagName2"
 		);
+		SubcategoryResponse subcategoryResponse = new SubcategoryResponse(
+			1L,
+			"subcategoryName",
+			List.of(tagResponse1, tagResponse2)
+		);
+		CurrencyResponse currencyResponse = new CurrencyResponse(
+			1L,
+			"currencyCode",
+			"통화단위",
+			"image/flagUrl.jpg"
+		);
 
 		productSimpleResponse = new ProductSimpleResponse(
 			1L,
-			"main-image.jpg",
+			new ImageResponse(2L, "url"),
 			"productName",
 			10,
 			Rating.FIVE.getValue(),
@@ -100,7 +101,11 @@ public class ProductControllerTest {
 		);
 		productDetailResponse = new ProductDetailResponse(
 			1L,
-			List.of("image1.jpg", "image2.jpg", "image3.jpg"),
+			List.of(
+				new ImageResponse(2L, "url"),
+				new ImageResponse(3L, "url"),
+				new ImageResponse(4L, "url")
+			),
 			"productName",
 			"Description",
 			"123 Street",
@@ -255,7 +260,7 @@ public class ProductControllerTest {
 
 	@Test
 	@DisplayName("상품 상세 조회 - 성공")
-	void testFindProductById_ShouldReturnProduct() throws Exception {
+	void testGetProductById_ShouldReturnProduct() throws Exception {
 		// Given
 		when(productService.findProductById(1L)).thenReturn(productDetailResponse);
 
@@ -271,13 +276,11 @@ public class ProductControllerTest {
 			.andExpect(jsonPath("$.data.likeCount", is(productDetailResponse.likeCount())))
 			.andExpect(jsonPath("$.data.rating", is(productSimpleResponse.rating())))
 			.andExpect(jsonPath("$.data.user.id", is(productDetailResponse.user().id().intValue())))
-			.andExpect(jsonPath("$.data.user.profileUrl",
-				is(productDetailResponse.user().profileUrl())))
+			.andExpect(jsonPath("$.data.user.image.id",
+				is(productDetailResponse.user().image().id().intValue())))
 			.andExpect(jsonPath("$.data.user.name", is(productDetailResponse.user().name())))
 			.andExpect(jsonPath("$.data.user.description",
 				is(productDetailResponse.user().description())))
-			.andExpect(jsonPath("$.data.user.totalLikeCount",
-				is(productDetailResponse.user().totalLikeCount())))
 			.andExpect(jsonPath("$.data.city.id",
 				is(productDetailResponse.city().id().intValue())))
 			.andExpect(jsonPath("$.data.city.name", is(productDetailResponse.city().name())))
@@ -315,13 +318,11 @@ public class ProductControllerTest {
 			.andExpect(jsonPath("$.data.likeCount", is(productDetailResponse.likeCount())))
 			.andExpect(jsonPath("$.data.rating", is(productSimpleResponse.rating())))
 			.andExpect(jsonPath("$.data.user.id", is(productDetailResponse.user().id().intValue())))
-			.andExpect(jsonPath("$.data.user.profileUrl",
-				is(productDetailResponse.user().profileUrl())))
+			.andExpect(jsonPath("$.data.user.image.id",
+				is(productDetailResponse.user().image().id().intValue())))
 			.andExpect(jsonPath("$.data.user.name", is(productDetailResponse.user().name())))
 			.andExpect(jsonPath("$.data.user.description",
 				is(productDetailResponse.user().description())))
-			.andExpect(jsonPath("$.data.user.totalLikeCount",
-				is(productDetailResponse.user().totalLikeCount())))
 			.andExpect(jsonPath("$.data.city.id",
 				is(productDetailResponse.city().id().intValue())))
 			.andExpect(jsonPath("$.data.city.name", is(productDetailResponse.city().name())))
@@ -358,13 +359,11 @@ public class ProductControllerTest {
 			.andExpect(jsonPath("$.data.likeCount", is(productDetailResponse.likeCount())))
 			.andExpect(jsonPath("$.data.rating", is(productSimpleResponse.rating())))
 			.andExpect(jsonPath("$.data.user.id", is(productDetailResponse.user().id().intValue())))
-			.andExpect(jsonPath("$.data.user.profileUrl",
-				is(productDetailResponse.user().profileUrl())))
+			.andExpect(jsonPath("$.data.user.image.id",
+				is(productDetailResponse.user().image().id().intValue())))
 			.andExpect(jsonPath("$.data.user.name", is(productDetailResponse.user().name())))
 			.andExpect(jsonPath("$.data.user.description",
 				is(productDetailResponse.user().description())))
-			.andExpect(jsonPath("$.data.user.totalLikeCount",
-				is(productDetailResponse.user().totalLikeCount())))
 			.andExpect(jsonPath("$.data.city.id",
 				is(productDetailResponse.city().id().intValue())))
 			.andExpect(jsonPath("$.data.city.name", is(productDetailResponse.city().name())))

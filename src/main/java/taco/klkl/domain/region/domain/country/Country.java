@@ -11,6 +11,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Transient;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,6 +24,7 @@ import taco.klkl.domain.region.domain.region.Region;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Country {
 
+	@Transient
 	private CountryType countryType;
 
 	@Id
@@ -55,11 +57,11 @@ public class Country {
 	private String code;
 
 	@Column(
-		name = "photo",
+		name = "wallpaper",
 		length = 500,
 		nullable = false
 	)
-	private String photo;
+	private String wallpaper;
 
 	@ManyToOne(
 		fetch = FetchType.LAZY,
@@ -80,14 +82,14 @@ public class Country {
 	private Country(
 		final CountryType countryType,
 		final Region region,
-		final String photo,
+		final String wallpaper,
 		final Currency currency
 	) {
 		this.countryType = countryType;
 		this.region = region;
 		this.name = countryType.getName();
 		this.code = countryType.getCode();
-		this.photo = photo;
+		this.wallpaper = wallpaper;
 		this.currency = currency;
 	}
 

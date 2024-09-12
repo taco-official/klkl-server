@@ -12,6 +12,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Transient;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,6 +24,7 @@ import taco.klkl.domain.category.domain.category.Category;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Subcategory {
 
+	@Transient
 	private SubcategoryType subcategoryType;
 
 	@Id

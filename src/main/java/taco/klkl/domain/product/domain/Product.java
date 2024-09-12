@@ -249,12 +249,11 @@ public class Product {
 			});
 	}
 
-	public String getMainImageUrl() {
+	public Image getMainImage() {
 		if (images.isEmpty()) {
 			return null;
 		}
-		final Image mainImage = images.get(0).getImage();
-		return mainImage.getUrl();
+		return images.get(0).getImage();
 	}
 
 	private Product(

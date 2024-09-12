@@ -28,6 +28,7 @@ import taco.klkl.domain.region.domain.currency.Currency;
 import taco.klkl.domain.region.domain.region.Region;
 import taco.klkl.domain.region.dto.response.city.CityResponse;
 import taco.klkl.domain.region.dto.response.country.CountrySimpleResponse;
+import taco.klkl.domain.region.dto.response.country.CountryWithCitiesResponse;
 import taco.klkl.domain.search.dto.response.SearchResponse;
 import taco.klkl.domain.search.service.SearchService;
 
@@ -48,7 +49,7 @@ public class SearchControllerTest {
 	@Mock
 	Currency currency;
 
-	private final Country country = Country.of(CountryType.MALAYSIA, region, "photo", currency);
+	private final Country country = Country.of(CountryType.MALAYSIA, region, "wallpaper", currency);
 	private final City city = City.of(CityType.BORACAY, country);
 	private final Category category = Category.of(CategoryType.CLOTHES);
 	private final Subcategory subcategory = Subcategory.of(category, SubcategoryType.MAKEUP);

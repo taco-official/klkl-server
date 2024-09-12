@@ -9,6 +9,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Transient;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,6 +20,7 @@ import taco.klkl.domain.region.domain.country.Country;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Region {
 
+	@Transient
 	private RegionType regionType;
 
 	@Id

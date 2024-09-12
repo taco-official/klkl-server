@@ -8,10 +8,9 @@ import org.springframework.stereotype.Service;
 import taco.klkl.domain.product.dto.response.ProductSimpleResponse;
 import taco.klkl.domain.user.domain.User;
 import taco.klkl.domain.user.dto.request.UserCreateRequest;
-import taco.klkl.domain.user.dto.request.UserFollowRequest;
 import taco.klkl.domain.user.dto.request.UserUpdateRequest;
+import taco.klkl.domain.user.dto.response.FollowResponse;
 import taco.klkl.domain.user.dto.response.UserDetailResponse;
-import taco.klkl.domain.user.dto.response.UserFollowResponse;
 import taco.klkl.domain.user.dto.response.UserSimpleResponse;
 import taco.klkl.global.common.response.PagedResponse;
 
@@ -24,13 +23,15 @@ public interface UserService {
 
 	PagedResponse<ProductSimpleResponse> getUserLikesById(final Long id, final Pageable pageable);
 
-	List<UserSimpleResponse> getUserFollowingById(final Long id);
+	List<UserSimpleResponse> getFollowings();
+
+	FollowResponse getFollowingStatus(final Long followingId);
 
 	User createUser(final UserCreateRequest createRequest);
 
-	UserFollowResponse createUserFollow(final UserFollowRequest followRequest);
+	FollowResponse createFollow(final Long followingId);
 
-	UserFollowResponse removeUserFollow(final Long followerId);
+	FollowResponse removeFollow(final Long followingId);
 
 	UserDetailResponse updateUser(final UserUpdateRequest updateRequest);
 

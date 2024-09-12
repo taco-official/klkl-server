@@ -20,11 +20,11 @@ import taco.klkl.domain.user.dao.UserRepository;
 import taco.klkl.domain.user.domain.Follow;
 import taco.klkl.domain.user.domain.User;
 import taco.klkl.domain.user.dto.request.UserCreateRequest;
-import taco.klkl.domain.user.dto.request.UserFollowRequest;
 import taco.klkl.domain.user.dto.request.UserUpdateRequest;
+import taco.klkl.domain.user.dto.response.FollowResponse;
 import taco.klkl.domain.user.dto.response.UserDetailResponse;
-import taco.klkl.domain.user.dto.response.UserFollowResponse;
 import taco.klkl.domain.user.dto.response.UserSimpleResponse;
+import taco.klkl.domain.user.exception.SelfFollowNotAllowedException;
 import taco.klkl.domain.user.exception.UserNotFoundException;
 import taco.klkl.global.common.response.PagedResponse;
 import taco.klkl.global.util.LikeUtil;
@@ -58,8 +58,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public PagedResponse<ProductSimpleResponse> getUserProductsById(final Long id, final Pageable pageable) {
-		userRepository.findById(id)
-			.orElseThrow(UserNotFoundException::new);
+		validateUser(id);
 		final Pageable sortedPageable = createPageableSortedByCreatedAtDesc(pageable);
 		final Page<Product> userProducts = productUtil.findProductsByUserId(id, sortedPageable);
 		return PagedResponse.of(userProducts, ProductSimpleResponse::from);
@@ -67,8 +66,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public PagedResponse<ProductSimpleResponse> getUserLikesById(final Long id, final Pageable pageable) {
-		userRepository.findById(id)
-			.orElseThrow(UserNotFoundException::new);
+		validateUser(id);
 		final Pageable sortedPageable = createPageableSortedByCreatedAtDesc(pageable);
 		final Page<Like> likes = likeUtil.findLikesByUserId(id, sortedPageable);
 		final Page<Product> likedProducts = likes.map(Like::getProduct);
@@ -76,13 +74,21 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public List<UserSimpleResponse> getUserFollowingById(final Long id) {
-		userRepository.findById(id)
-			.orElseThrow(UserNotFoundException::new);
-		return followRepository.findByFollowerId(id).stream()
+	public List<UserSimpleResponse> getFollowings() {
+		final User follower = userUtil.getCurrentUser();
+		return followRepository.findByFollowerId(follower.getId()).stream()
 			.map(Follow::getFollowing)
 			.map(UserSimpleResponse::from)
 			.toList();
+	}
+
+	@Override
+	public FollowResponse getFollowingStatus(final Long followingId) {
+		final User follower = userUtil.getCurrentUser();
+		final User following = userRepository.findById(followingId)
+			.orElseThrow(UserNotFoundException::new);
+		final boolean isFollowing = followRepository.existsByFollowerAndFollowing(follower, following);
+		return FollowResponse.of(isFollowing, follower, following);
 	}
 
 	@Override
@@ -94,28 +100,29 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	@Transactional
-	public UserFollowResponse createUserFollow(final UserFollowRequest followRequest) {
+	public FollowResponse createFollow(final Long followingId) {
 		final User follower = userUtil.getCurrentUser();
-		final User following = userRepository.findById(followRequest.userId())
+		final User following = userRepository.findById(followingId)
 			.orElseThrow(UserNotFoundException::new);
+		validateNotMe(follower, following);
 		if (isFollowPresent(follower, following)) {
-			return UserFollowResponse.of(true, follower, following);
+			return FollowResponse.of(true, follower, following);
 		}
 		final Follow follow = Follow.of(follower, following);
 		followRepository.save(follow);
-		return UserFollowResponse.of(true, follower, following);
+		return FollowResponse.of(true, follower, following);
 	}
 
 	@Override
 	@Transactional
-	public UserFollowResponse removeUserFollow(final Long followerId) {
+	public FollowResponse removeFollow(final Long followingId) {
 		final User follower = userUtil.getCurrentUser();
-		final User following = userRepository.findById(followerId)
+		final User following = userRepository.findById(followingId)
 			.orElseThrow(UserNotFoundException::new);
 		if (isFollowPresent(follower, following)) {
 			followRepository.deleteByFollowerAndFollowing(follower, following);
 		}
-		return UserFollowResponse.of(false, follower, following);
+		return FollowResponse.of(false, follower, following);
 	}
 
 	@Override
@@ -156,5 +163,17 @@ public class UserServiceImpl implements UserService {
 
 	private boolean isFollowPresent(final User follower, final User following) {
 		return followRepository.existsByFollowerAndFollowing(follower, following);
+	}
+
+	private void validateUser(final Long id) {
+		if (!userRepository.existsById(id)) {
+			throw new UserNotFoundException();
+		}
+	}
+
+	private void validateNotMe(final User follower, final User following) {
+		if (follower.equals(following)) {
+			throw new SelfFollowNotAllowedException();
+		}
 	}
 }

@@ -29,7 +29,7 @@ public interface ProductService {
 		final ProductSortOptions sortOptions
 	);
 
-	PagedResponse<ProductSimpleResponse> findMyFollowingProducts(final Pageable pageable, final Set<Long> followingIds);
+	PagedResponse<ProductSimpleResponse> findFollowingProducts(final Pageable pageable, final Set<Long> userIds);
 
 	ProductDetailResponse findProductById(final Long id) throws ProductNotFoundException;
 

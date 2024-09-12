@@ -20,7 +20,7 @@ import taco.klkl.domain.comment.domain.Comment;
 import taco.klkl.domain.comment.dto.request.CommentCreateUpdateRequest;
 import taco.klkl.domain.comment.dto.response.CommentResponse;
 import taco.klkl.domain.comment.exception.CommentNotFoundException;
-import taco.klkl.domain.comment.exception.CommentProductNotMatch;
+import taco.klkl.domain.comment.exception.CommentProductNotMatchException;
 import taco.klkl.domain.notification.service.NotificationService;
 import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.product.exception.ProductNotFoundException;
@@ -45,7 +45,7 @@ public class CommentServiceImplTest {
 	private NotificationService notificationService;
 
 	@InjectMocks
-	private CommentService commentService;
+	private CommentServiceImpl commentServiceImpl;
 
 	private final UserCreateRequest userRequestDto = new UserCreateRequest(
 		"이상화",
@@ -77,10 +77,10 @@ public class CommentServiceImplTest {
 		List<Comment> comments = List.of(comment1, comment2);
 
 		when(product.getId()).thenReturn(productId);
-		when(commentRepository.findAllByProduct_Id(productId)).thenReturn(comments);
+		when(commentRepository.findByProductIdOrderByCreatedAtDesc(productId)).thenReturn(comments);
 
 		//when
-		List<CommentResponse> result = commentService.findCommentsByProductId(productId);
+		List<CommentResponse> result = commentServiceImpl.findCommentsByProductId(productId);
 
 		//then
 		assertThat(result.get(0).id()).isEqualTo(comment1.getId());
@@ -90,7 +90,7 @@ public class CommentServiceImplTest {
 		assertThat(result.get(0).createdAt()).isEqualTo(comment1.getCreatedAt());
 		assertThat(result.get(1).createdAt()).isEqualTo(comment2.getCreatedAt());
 
-		verify(commentRepository, times(1)).findAllByProduct_Id(productId);
+		verify(commentRepository, times(1)).findByProductIdOrderByCreatedAtDesc(productId);
 	}
 
 	@Test
@@ -104,7 +104,7 @@ public class CommentServiceImplTest {
 		when(commentRepository.save(any(Comment.class))).thenReturn(comment);
 
 		//when
-		CommentResponse result = commentService.createComment(productId, commentCreateRequestDto);
+		CommentResponse result = commentServiceImpl.createComment(productId, commentCreateRequestDto);
 
 		//then
 		assertThat(result.id()).isEqualTo(comment.getId());
@@ -121,11 +121,12 @@ public class CommentServiceImplTest {
 
 		Comment comment = Comment.of(product, user, "이거 진짜에요?");
 
+		when(userUtil.getCurrentUser()).thenReturn(user);
 		when(product.getId()).thenReturn(productId);
 		when(commentRepository.findById(commentId)).thenReturn(Optional.of(comment));
 
 		//when
-		CommentResponse result = commentService.updateComment(productId, commentId, commentUpdateRequestDto);
+		CommentResponse result = commentServiceImpl.updateComment(productId, commentId, commentUpdateRequestDto);
 
 		//then
 		assertThat(result.id()).isEqualTo(comment.getId());
@@ -146,7 +147,7 @@ public class CommentServiceImplTest {
 		when(product.getId()).thenReturn(productId);
 
 		//when & then
-		assertThrows(CommentNotFoundException.class, () -> commentService.deleteComment(productId, commentId));
+		assertThrows(CommentNotFoundException.class, () -> commentServiceImpl.deleteComment(productId, commentId));
 		verify(commentRepository, never()).save(any(Comment.class));
 	}
 
@@ -162,7 +163,7 @@ public class CommentServiceImplTest {
 
 		//when & then
 		assertThrows(ProductNotFoundException.class,
-			() -> commentService.updateComment(productId, commentId, commentUpdateRequestDto));
+			() -> commentServiceImpl.updateComment(productId, commentId, commentUpdateRequestDto));
 		verify(commentRepository, never()).save(any(Comment.class));
 	}
 
@@ -175,12 +176,13 @@ public class CommentServiceImplTest {
 		Long commentId = 1L;
 		Comment comment = Comment.of(product, user, "이거 진짜에요?");
 
+		when(userUtil.getCurrentUser()).thenReturn(user);
 		when(product.getId()).thenReturn(wrongProductId);
 		when(commentRepository.findById(commentId)).thenReturn(Optional.of(comment));
 
 		//when & then
-		assertThrows(CommentProductNotMatch.class,
-			() -> commentService.updateComment(productId, commentId, commentUpdateRequestDto));
+		assertThrows(CommentProductNotMatchException.class,
+			() -> commentServiceImpl.updateComment(productId, commentId, commentUpdateRequestDto));
 		verify(commentRepository, never()).save(any(Comment.class));
 	}
 
@@ -193,10 +195,11 @@ public class CommentServiceImplTest {
 
 		Comment comment = Comment.of(product, user, "이거 진짜에요?");
 
+		when(userUtil.getCurrentUser()).thenReturn(user);
 		when(product.getId()).thenReturn(productId);
 		when(commentRepository.findById(commentId)).thenReturn(Optional.of(comment));
 
-		commentService.deleteComment(productId, commentId);
+		commentServiceImpl.deleteComment(productId, commentId);
 
 		verify(commentRepository).findById(commentId);
 		verify(commentRepository).delete(comment);
@@ -214,7 +217,7 @@ public class CommentServiceImplTest {
 		when(commentRepository.findById(commentID)).thenReturn(Optional.empty());
 
 		//when & then
-		assertThrows(CommentNotFoundException.class, () -> commentService.deleteComment(productId, commentID));
+		assertThrows(CommentNotFoundException.class, () -> commentServiceImpl.deleteComment(productId, commentID));
 		verify(commentRepository, never()).delete(any(Comment.class));
 	}
 
@@ -227,7 +230,7 @@ public class CommentServiceImplTest {
 		doThrow(ProductNotFoundException.class).when(productUtil).validateProductId(productId);
 
 		//when & then
-		assertThrows(ProductNotFoundException.class, () -> commentService.deleteComment(productId, commentID));
+		assertThrows(ProductNotFoundException.class, () -> commentServiceImpl.deleteComment(productId, commentID));
 		verify(commentRepository, never()).delete(any(Comment.class));
 	}
 
@@ -240,12 +243,13 @@ public class CommentServiceImplTest {
 		Long commentId = 1L;
 		Comment comment = Comment.of(product, user, "이거 진짜에요?");
 
+		when(userUtil.getCurrentUser()).thenReturn(user);
 		when(product.getId()).thenReturn(wrongProductId);
 		when(commentRepository.findById(commentId)).thenReturn(Optional.of(comment));
 
 		//when & then
-		assertThrows(CommentProductNotMatch.class,
-			() -> commentService.deleteComment(productId, commentId));
+		assertThrows(CommentProductNotMatchException.class,
+			() -> commentServiceImpl.deleteComment(productId, commentId));
 		verify(commentRepository, never()).delete(any(Comment.class));
 	}
 }

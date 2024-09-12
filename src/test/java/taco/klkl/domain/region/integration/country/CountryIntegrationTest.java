@@ -1,10 +1,8 @@
-package taco.klkl.domain.region.integration;
+package taco.klkl.domain.region.integration.country;
 
 import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
-import java.util.List;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,7 +13,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import jakarta.transaction.Transactional;
-import taco.klkl.domain.region.dto.response.city.CityResponse;
 import taco.klkl.domain.region.dto.response.country.CountryResponse;
 import taco.klkl.domain.region.service.country.CountryService;
 
@@ -31,24 +28,10 @@ public class CountryIntegrationTest {
 	CountryService countryService;
 
 	@Test
-	@DisplayName("모든 국가 조회 테스트")
-	void testGetAllCountries() throws Exception {
-		// given
-		List<CountryResponse> countryResponses = countryService.findAllCountries();
-
-		// when & then
-		mockMvc.perform(get("/v1/countries")
-				.contentType(MediaType.APPLICATION_JSON))
-			.andExpect(status().isOk())
-			.andExpect(jsonPath("$.isSuccess", is(true)))
-			.andExpect(jsonPath("$.data", hasSize(countryResponses.size())));
-	}
-
-	@Test
 	@DisplayName("id로 국가 조회 테스트")
 	void testGetCountryById() throws Exception {
 		// given
-		CountryResponse countryResponse = countryService.findCountryById(403L);
+		CountryResponse countryResponse = countryService.getCountryById(403L);
 
 		// when & then
 		mockMvc.perform(get("/v1/countries/403")
@@ -56,19 +39,5 @@ public class CountryIntegrationTest {
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
 			.andExpect(jsonPath("$.data.name", is(countryResponse.name())));
-	}
-
-	@Test
-	@DisplayName("국가에 속한 모든 도시목록 조회")
-	void testGetCountryWithCitiesById() throws Exception {
-		// given
-		List<CityResponse> responseDto = countryService.findCitiesByCountryId(403L);
-
-		// when & then
-		mockMvc.perform(get("/v1/countries/403/cities")
-				.contentType(MediaType.APPLICATION_JSON))
-			.andExpect(status().isOk())
-			.andExpect(jsonPath("$.isSuccess", is(true)))
-			.andExpect(jsonPath("$.data", hasSize(responseDto.size())));
 	}
 }

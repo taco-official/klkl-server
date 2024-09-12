@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import com.querydsl.core.annotations.QueryInit;
 
@@ -41,6 +43,7 @@ public class Notification {
 	@OneToOne
 	@JoinColumn(name = "comment_id")
 	@QueryInit("product.user")
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Comment comment;
 
 	private Notification(final Comment comment) {

@@ -1,4 +1,4 @@
-package taco.klkl.domain.region.controller;
+package taco.klkl.domain.region.controller.region;
 
 import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.*;
@@ -8,7 +8,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,15 +17,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import taco.klkl.domain.region.controller.region.RegionController;
-import taco.klkl.domain.region.dao.region.RegionRepository;
-import taco.klkl.domain.region.domain.country.Country;
-import taco.klkl.domain.region.domain.country.CountryType;
-import taco.klkl.domain.region.domain.currency.Currency;
-import taco.klkl.domain.region.domain.currency.CurrencyType;
 import taco.klkl.domain.region.domain.region.Region;
 import taco.klkl.domain.region.domain.region.RegionType;
-import taco.klkl.domain.region.dto.response.country.CountryResponse;
 import taco.klkl.domain.region.dto.response.region.RegionResponse;
 import taco.klkl.domain.region.service.region.RegionService;
 import taco.klkl.global.error.exception.ErrorCode;
@@ -43,23 +35,10 @@ class RegionControllerTest {
 	private final Region region1 = Region.from(RegionType.NORTHEAST_ASIA);
 	private final Region region2 = Region.from(RegionType.SOUTHEAST_ASIA);
 	private final Region region3 = Region.from(RegionType.ETC);
-	private final Currency currency1 = Currency.of(CurrencyType.JAPANESE_YEN);
-	private final Country country1 = Country.of(
-		CountryType.JAPAN,
-		region1,
-		"image/japan",
-		currency1);
-	private final Country country2 = Country.of(
-		CountryType.TAIWAN,
-		region1,
-		"image/taiwan",
-		currency1);
-	private final List<Country> countryList = Arrays.asList(country1,
-		country2);
 
 	@Test
 	@DisplayName("모든 지역 조회 성공 테스트")
-	void testFindAllRegions() throws Exception {
+	void testGetAllRegions() throws Exception {
 		// given
 		List<RegionResponse> regionResponses = Arrays.asList(
 			RegionResponse.from(region1),
@@ -70,7 +49,7 @@ class RegionControllerTest {
 		when(regionService.findAllRegions()).thenReturn(regionResponses);
 
 		// when & then
-		mockMvc.perform(get("/v1/regions")
+		mockMvc.perform(get("/v1/regions/hierarchy")
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
@@ -85,12 +64,12 @@ class RegionControllerTest {
 
 	@Test
 	@DisplayName("모든 지역 조회 empty 테스트")
-	void testFindAllRegionsEmpty() throws Exception {
+	void testGetAllRegionsEmpty() throws Exception {
 		// given
 		when(regionService.findAllRegions()).thenReturn(Collections.emptyList());
 
 		// when & then
-		mockMvc.perform(get("/v1/regions")
+		mockMvc.perform(get("/v1/regions/hierarchy")
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
@@ -107,7 +86,7 @@ class RegionControllerTest {
 		when(regionService.findAllRegions()).thenThrow(RuntimeException.class);
 
 		// when & then
-		mockMvc.perform(get("/v1/regions")
+		mockMvc.perform(get("/v1/regions/hierarchy")
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().is5xxServerError())
 			.andExpect(jsonPath("$.isSuccess", is(false)))
@@ -115,29 +94,5 @@ class RegionControllerTest {
 			.andExpect(jsonPath("$.data.message", is(ErrorCode.INTERNAL_SERVER_ERROR.getMessage())));
 
 		verify(regionService, times(1)).findAllRegions();
-	}
-
-	@Test
-	@DisplayName("특정 지역에 속한 국가 목록 조회")
-	void testGetRegionWithCountry() throws Exception {
-		// given
-		Region mockRegion = mock(Region.class);
-		RegionRepository regionRepository = mock(RegionRepository.class);
-		when(mockRegion.getName()).thenReturn(RegionType.NORTHEAST_ASIA.getName());
-		when(regionRepository.findById(1L)).thenReturn(Optional.of(mockRegion));
-		when(mockRegion.getCountries()).thenReturn(countryList);
-		List<CountryResponse> responseDto = countryList.stream().map(CountryResponse::from).toList();
-		when(regionService.findCountriesByRegionId(1L)).thenReturn(responseDto);
-
-		// when & then
-		mockMvc.perform(get("/v1/regions/1/countries")
-				.contentType(MediaType.APPLICATION_JSON))
-			.andExpect(status().isOk())
-			.andExpect(jsonPath("$.isSuccess", is(true)))
-			.andExpect(jsonPath("$.data[0].name", is(countryList.get(0).getName())))
-			.andExpect(jsonPath("$.data[1].name", is(countryList.get(1).getName())))
-			.andExpect(jsonPath("$.timestamp", notNullValue()));
-
-		verify(regionService, times(1)).findCountriesByRegionId(1L);
 	}
 }

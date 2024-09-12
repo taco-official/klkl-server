@@ -3,7 +3,7 @@ package taco.klkl.domain.region.dto.response.region;
 import java.util.List;
 
 import taco.klkl.domain.region.domain.region.Region;
-import taco.klkl.domain.region.dto.response.country.CountrySimpleResponse;
+import taco.klkl.domain.region.dto.response.country.CountryWithCitiesResponse;
 import taco.klkl.global.util.RegionUtil;
 
 /**
@@ -15,7 +15,7 @@ import taco.klkl.global.util.RegionUtil;
 public record RegionResponse(
 	Long id,
 	String name,
-	List<CountrySimpleResponse> countries
+	List<CountryWithCitiesResponse> countries
 ) {
 
 	public static RegionResponse from(final Region region) {

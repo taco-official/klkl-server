@@ -11,7 +11,5 @@ public interface CategoryService {
 
 	List<CategoryResponse> findAllCategories();
 
-	CategoryResponse findSubCategoriesByCategoryId(final Long categoryId);
-
 	List<CategoryResponse> findAllCategoriesByPartialString(final String partialString);
 }

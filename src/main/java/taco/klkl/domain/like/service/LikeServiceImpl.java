@@ -31,6 +31,17 @@ public class LikeServiceImpl implements LikeService {
 	private final ProductUtil productUtil;
 
 	@Override
+	@Transactional(readOnly = true)
+	public LikeResponse getLike(final Long productId) {
+		final Product product = findProductById(productId);
+		final User user = findCurrentUser();
+		if (likeRepository.existsByProductAndUser(product, user)) {
+			return LikeResponse.of(true, product.getLikeCount());
+		}
+		return LikeResponse.of(false, product.getLikeCount());
+	}
+
+	@Override
 	public LikeResponse createLike(final Long productId) {
 		final Product product = findProductById(productId);
 		final User user = findCurrentUser();

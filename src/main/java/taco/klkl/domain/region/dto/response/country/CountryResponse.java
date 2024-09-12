@@ -1,29 +1,17 @@
 package taco.klkl.domain.region.dto.response.country;
 
-import java.util.List;
-
-import taco.klkl.domain.region.domain.FlagUrlGenerator;
 import taco.klkl.domain.region.domain.country.Country;
-import taco.klkl.domain.region.dto.response.city.CityResponse;
-import taco.klkl.domain.region.dto.response.currency.CurrencyResponse;
-import taco.klkl.global.util.CountryUtil;
 
 /**
  *
  * @param id
  * @param name
- * @param flagUrl
- * @param photo
- * @param currency
- * @param cities
+ * @param wallpaper
  */
 public record CountryResponse(
 	Long id,
 	String name,
-	String flagUrl,
-	String photo,
-	CurrencyResponse currency,
-	List<CityResponse> cities
+	String wallpaper
 ) {
 	/**
 	 *
@@ -34,10 +22,7 @@ public record CountryResponse(
 		return new CountryResponse(
 			country.getId(),
 			country.getName(),
-			FlagUrlGenerator.generateSvgUrlByCountryCode(country.getCode()),
-			country.getPhoto(),
-			CurrencyResponse.from(country.getCurrency()),
-			CountryUtil.createCitiesByCountry(country)
+			country.getWallpaper()
 		);
 	}
 }

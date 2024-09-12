@@ -1,4 +1,4 @@
-package taco.klkl.domain.category.integration;
+package taco.klkl.domain.category.integration.category;
 
 import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -37,7 +37,7 @@ class CategoryIntegrationTest {
 		List<CategoryResponse> categoryResponse = categoryService.findAllCategories();
 
 		//then
-		mockMvc.perform(get("/v1/categories")
+		mockMvc.perform(get("/v1/categories/hierarchy")
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.data", hasSize(categoryResponse.size())))
@@ -50,43 +50,5 @@ class CategoryIntegrationTest {
 				hasSize(categoryResponse.get(2).subcategories().size())))
 			.andExpect(jsonPath("$.data[3].subcategories",
 				hasSize(categoryResponse.get(3).subcategories().size())));
-	}
-
-	@Test
-	@DisplayName("valid한 id값이 들어왔을 때 테스트")
-	public void testGetCategoriesWithValidId() throws Exception {
-		//given
-		CategoryResponse categoryResponse =
-			categoryService.findSubCategoriesByCategoryId(300L);
-
-		//when, then
-		mockMvc.perform(get("/v1/categories/300/subcategories")
-				.contentType(MediaType.APPLICATION_JSON))
-			.andExpect(status().isOk())
-			.andExpect(jsonPath("$.isSuccess", is(true)))
-			.andExpect(jsonPath("$.data.id", is(categoryResponse.id().intValue())))
-			.andExpect(jsonPath("$.data.name", is(categoryResponse.name())))
-			.andExpect(jsonPath("$.data.subcategories[0].id",
-				is(categoryResponse.subcategories().get(0).id().intValue())))
-			.andExpect(jsonPath("$.data.subcategories[0].name",
-				is(categoryResponse.subcategories().get(0).name())))
-			.andExpect(jsonPath("$.data.subcategories[1].id",
-				is(categoryResponse.subcategories().get(1).id().intValue())))
-			.andExpect(jsonPath("$.data.subcategories[1].name",
-				is(categoryResponse.subcategories().get(1).name())));
-	}
-
-	@Test
-	@DisplayName("invalid한 id값이 들어왔을 때 테스트")
-	public void testGetCategoriesWithInvalidId() throws Exception {
-		//given
-
-		//when, then
-		mockMvc.perform(get("/v1/categories/999/subcategories")
-				.contentType(MediaType.APPLICATION_JSON))
-			.andExpect(status().isNotFound())
-			.andExpect(jsonPath("$.isSuccess", is(false)))
-			.andExpect(jsonPath("$.status", is(ErrorCode.CATEGORY_NOT_FOUND.getHttpStatus().value())))
-			.andExpect(jsonPath("$.data.message", is(ErrorCode.CATEGORY_NOT_FOUND.getMessage())));
 	}
 }
