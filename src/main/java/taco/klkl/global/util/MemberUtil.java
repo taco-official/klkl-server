@@ -28,12 +28,12 @@ public class MemberUtil {
 		return getTestMember();
 	}
 
-	public String createUsername(final String name, final Long oauthMemberId) {
+	public String createName(final String nickname, final Long providerId) {
 
-		String createdName = generateUsername(name, oauthMemberId);
+		String createdName = generateNameByNicknameAndProviderId(nickname, providerId);
 
 		while (memberRepository.existsByName(createdName)) {
-			createdName = generateUsername(name, oauthMemberId);
+			createdName = generateNameByNicknameAndProviderId(nickname, providerId);
 		}
 
 		return createdName;
@@ -44,14 +44,14 @@ public class MemberUtil {
 			.orElseThrow(MemberNotFoundException::new);
 	}
 
-	private String generateUsername(final String name, final Long oauthMemberId) {
+	private String generateNameByNicknameAndProviderId(final String nickname, final Long providerId) {
 
 		final Long currentTimeMillis = Instant.now().toEpochMilli();
-		final int hashCode = Objects.hash(name, oauthMemberId, currentTimeMillis);
+		final int hashCode = Objects.hash(nickname, providerId, currentTimeMillis);
 
 		final String suffix = String.format("%04d", Math.abs(hashCode) % MemberConstants.USERNAME_SUFFIX_MOD);
 
-		return name + suffix;
+		return nickname + suffix;
 	}
 
 }

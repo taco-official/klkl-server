@@ -93,7 +93,7 @@ public class MemberServiceImpl implements MemberService {
 
 	@Override
 	@Transactional
-	public Member createUser(final MemberCreateRequest createRequest) {
+	public Member createMember(final MemberCreateRequest createRequest) {
 		final Member member = createUserEntity(createRequest);
 		return memberRepository.save(member);
 	}

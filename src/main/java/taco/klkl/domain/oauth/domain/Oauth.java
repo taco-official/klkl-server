@@ -2,6 +2,8 @@ package taco.klkl.domain.oauth.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -25,18 +27,34 @@ public class Oauth {
 	@OneToOne(optional = false, fetch = FetchType.EAGER)
 	private Member member;
 
+	@Enumerated(EnumType.STRING)
 	@Column(
-		name = "oauth_member_id",
+		name = "provider",
 		nullable = false
 	)
-	private Long oauthMemberId;
+	private Provider provider;
 
-	private Oauth(final Member member, final Long oauthMemberId) {
+	@Column(
+		name = "provider_id",
+		nullable = false
+	)
+	private Long providerId;
+
+	private Oauth(
+		final Member member,
+		final Provider provider,
+		final Long providerId
+	) {
 		this.member = member;
-		this.oauthMemberId = oauthMemberId;
+		this.provider = provider;
+		this.providerId = providerId;
 	}
 
-	public static Oauth of(final Member member, final Long oauth2MemberId) {
-		return new Oauth(member, oauth2MemberId);
+	public static Oauth of(
+		final Member member,
+		final Provider provider,
+		final Long providerId
+	) {
+		return new Oauth(member, provider, providerId);
 	}
 }

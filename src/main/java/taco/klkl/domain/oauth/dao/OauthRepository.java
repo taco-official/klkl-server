@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import taco.klkl.domain.oauth.domain.Oauth;
 
 public interface OauthRepository extends JpaRepository<Oauth, Long> {
-	boolean existsByOauthMemberId(final Long oauthMemberId);
+	boolean existsByProviderId(final Long providerId);
 
-	Oauth findFirstByOauthMemberId(final Long oauthMemberId);
+	Oauth findFirstByProviderId(final Long providerId);
 }

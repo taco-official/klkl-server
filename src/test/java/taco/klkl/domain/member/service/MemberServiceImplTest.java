@@ -55,7 +55,7 @@ class MemberServiceImplTest {
 
 	@Test
 	@DisplayName("사용자 등록 서비스 테스트")
-	public void testCreateUser() {
+	public void testCreateMember() {
 		// given
 		MemberCreateRequest requestDto = new MemberCreateRequest(
 			"이상화",
@@ -68,7 +68,7 @@ class MemberServiceImplTest {
 		when(memberRepository.save(any(Member.class))).thenReturn(member);
 
 		// when
-		Member member1 = memberService.createUser(requestDto);
+		Member member1 = memberService.createMember(requestDto);
 		MemberDetailResponse responseDto = MemberDetailResponse.from(member1);
 
 		// then

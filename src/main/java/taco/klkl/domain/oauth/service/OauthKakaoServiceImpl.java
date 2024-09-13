@@ -60,7 +60,7 @@ public class OauthKakaoServiceImpl implements OauthKakaoService {
 		final HttpHeaders headers = getRequestUserInfoHeader(accessToken);
 
 		final HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
-		return oauthKakaoLoginService.loginUser(requestPostUserInfo(httpEntity));
+		return oauthKakaoLoginService.loginMember(requestPostUserInfo(httpEntity));
 	}
 
 	/**

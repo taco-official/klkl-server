@@ -7,5 +7,5 @@ import taco.klkl.domain.oauth.dto.request.KakaoMemberInfoRequest;
 
 @Service
 public interface OauthKakaoLoginService {
-	MemberDetailResponse loginUser(final KakaoMemberInfoRequest userInfoRequest);
+	MemberDetailResponse loginMember(final KakaoMemberInfoRequest userInfoRequest);
 }

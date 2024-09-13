@@ -27,7 +27,7 @@ public interface MemberService {
 
 	FollowResponse getFollowingStatus(final Long followingId);
 
-	Member createUser(final MemberCreateRequest createRequest);
+	Member createMember(final MemberCreateRequest createRequest);
 
 	FollowResponse createFollow(final Long followingId);
 
