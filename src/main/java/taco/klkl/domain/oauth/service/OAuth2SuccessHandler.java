@@ -2,6 +2,8 @@ package taco.klkl.domain.oauth.service;
 
 import java.io.IOException;
 
+import jakarta.servlet.http.Cookie;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
@@ -10,7 +12,6 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.util.UriComponentsBuilder;
 import taco.klkl.domain.token.service.TokenProvider;
 
 @Component
@@ -18,7 +19,12 @@ import taco.klkl.domain.token.service.TokenProvider;
 public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
 
 	private final TokenProvider tokenProvider;
-	private static final String URI = "/auth/success";
+
+	@Value("${jwt.redirect}")
+	private String redirectUri;
+
+	@Value("${jwt.expiration.access}")
+	private int accessTokenExpiration;
 
 	@Override
 	public void onAuthenticationSuccess(
@@ -30,10 +36,20 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
 		final String accessToken = tokenProvider.generateAccessToken(authentication);
 		tokenProvider.generateRefreshToken(authentication, accessToken);
 
-		String redirectUrl = UriComponentsBuilder.fromUriString(URI)
-				.queryParam("accessToken", accessToken)
-				.build().toUriString();
+		addTokenCookie(response, "access_token", accessToken, accessTokenExpiration);
+	}
 
-		response.sendRedirect(redirectUrl);
+	private void addTokenCookie(
+			HttpServletResponse response,
+			String name,
+			String value,
+			int maxAge
+	) {
+		Cookie cookie = new Cookie(name, value);
+		cookie.setHttpOnly(true);
+		cookie.setSecure(false); // TODO: HTTPS 사용 시 활성화
+		cookie.setPath("/");
+		cookie.setMaxAge(maxAge);
+		response.addCookie(cookie);
 	}
 }

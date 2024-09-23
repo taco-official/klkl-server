@@ -80,7 +80,7 @@ public class SecurityConfig {
 								.requestMatchers(HttpMethod.PUT).authenticated()
 								.requestMatchers(HttpMethod.DELETE).authenticated()
 								.requestMatchers(
-										"/v1/users/me/**",
+										"/v1/members/me/**",
 										"/v1/products/following/**",
 										"/v1/notifications/**"
 								).hasRole(Role.USER.name())
@@ -88,8 +88,9 @@ public class SecurityConfig {
 										RegexRequestMatcher.regexMatcher("/v1/products/\\d+/likes(/.*)?"))
 								.hasRole(Role.USER.name())
 								.requestMatchers(
+										"/v1/login/**",
 										"/v1/oauth/**",
-										"/v1/users/**",
+										"/v1/members/**",
 										"/v1/products/**",
 										"/v1/regions/**",
 										"/v1/countries/**",
@@ -107,6 +108,10 @@ public class SecurityConfig {
 						oauth2
 								.userInfoEndpoint(userInfo -> userInfo.userService(oAuth2UserService))
 								.successHandler(oAuth2SuccessHandler)
+								.authorizationEndpoint(authorization -> authorization
+										.baseUri("/v1/oauth2/authorization"))
+								.redirectionEndpoint(redirection -> redirection
+										.baseUri("/v1/login/oauth2/code/*"))
 				)
 
 				// jwt
