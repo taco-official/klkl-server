@@ -75,6 +75,10 @@ public class Member {
 		return new Member(name, description);
 	}
 
+	public String getMemberKey() {
+		return name;
+	}
+
 	public void update(
 		final String name,
 		final String description
