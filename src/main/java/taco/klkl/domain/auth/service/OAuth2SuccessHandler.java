@@ -1,4 +1,4 @@
-package taco.klkl.domain.oauth.service;
+package taco.klkl.domain.auth.service;
 
 import java.io.IOException;
 
@@ -28,9 +28,9 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
 
 	@Override
 	public void onAuthenticationSuccess(
-			HttpServletRequest request,
-			HttpServletResponse response,
-			Authentication authentication
+		HttpServletRequest request,
+		HttpServletResponse response,
+		Authentication authentication
 	) throws IOException, ServletException {
 
 		final String accessToken = tokenProvider.generateAccessToken(authentication);
@@ -40,10 +40,10 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
 	}
 
 	private void addTokenCookie(
-			HttpServletResponse response,
-			String name,
-			String value,
-			int maxAge
+		HttpServletResponse response,
+		String name,
+		String value,
+		int maxAge
 	) {
 		Cookie cookie = new Cookie(name, value);
 		cookie.setHttpOnly(true);

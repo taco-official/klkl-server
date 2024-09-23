@@ -1,4 +1,4 @@
-package taco.klkl.domain.oauth.dto.response;
+package taco.klkl.domain.auth.dto.response;
 
 import java.util.Map;
 

@@ -1,6 +1,6 @@
 package taco.klkl.domain.token.service;
 
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,6 +22,8 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.util.StringUtils;
 import taco.klkl.domain.token.domain.Token;
+import taco.klkl.domain.token.exception.TokenExpiredException;
+import taco.klkl.domain.token.exception.TokenGenerationFailedException;
 import taco.klkl.domain.token.exception.TokenInvalidException;
 
 @Component
@@ -87,26 +89,38 @@ public class TokenProvider {
 				.map(GrantedAuthority::getAuthority)
 				.collect(Collectors.joining());
 
-		return Jwts.builder()
-				.subject(authentication.getName())
-				.claim(KEY_ROLE, authorities)
-				.issuedAt(now)
-				.expiration(expiredDate)
-				.signWith(secretKey, Jwts.SIG.HS512)
-				.compact();
+		try {
+			return Jwts.builder()
+					.subject(authentication.getName())
+					.claim(KEY_ROLE, authorities)
+					.issuedAt(now)
+					.expiration(expiredDate)
+					.signWith(secretKey)
+					.compact();
+		} catch (JwtException e) {
+			throw new TokenGenerationFailedException();
+		}
 	}
 
 	private List<SimpleGrantedAuthority> getAuthorities(final Claims claims) {
-		return Collections.singletonList(new SimpleGrantedAuthority(
-				claims.get(KEY_ROLE).toString()));
+		String roles = (String) claims.get(KEY_ROLE);
+		return Arrays.stream(roles.split(","))
+				.map(SimpleGrantedAuthority::new)
+				.collect(Collectors.toList());
 	}
 
 	public boolean validateToken(final String token) {
 		if (!StringUtils.hasText(token)) {
 			return false;
 		}
-		Claims claims = parseClaims(token);
-		return claims.getExpiration().after(new Date());
+		try {
+			Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token);
+			return true;
+		} catch (ExpiredJwtException e) {
+			throw new TokenExpiredException();
+		} catch (JwtException | IllegalArgumentException e) {
+			throw new TokenInvalidException();
+		}
 	}
 
 	private Claims parseClaims(final String token) {
@@ -115,7 +129,7 @@ public class TokenProvider {
 					.parseSignedClaims(token).getPayload();
 		} catch (ExpiredJwtException e) {
 			return e.getClaims();
-		} catch (MalformedJwtException | SecurityException e) {
+		} catch (JwtException | IllegalArgumentException e) {
 			throw new TokenInvalidException();
 		}
 	}

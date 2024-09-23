@@ -1,4 +1,4 @@
-package taco.klkl.domain.oauth.service;
+package taco.klkl.domain.auth.service;
 
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -10,8 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 import taco.klkl.domain.member.dao.MemberRepository;
 import taco.klkl.domain.member.domain.Member;
-import taco.klkl.domain.oauth.domain.PrincipalDetails;
-import taco.klkl.domain.oauth.dto.response.OAuth2UserInfo;
+import taco.klkl.domain.auth.domain.PrincipalDetails;
+import taco.klkl.domain.auth.dto.response.OAuth2UserInfo;
 
 import java.util.Map;
 

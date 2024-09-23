@@ -34,7 +34,7 @@ public class LikeServiceImpl implements LikeService {
 	@Transactional(readOnly = true)
 	public LikeResponse getLike(final Long productId) {
 		final Product product = findProductById(productId);
-		final Member member = findCurrentUser();
+		final Member member = memberUtil.getCurrentMember();
 		if (likeRepository.existsByProductAndMember(product, member)) {
 			return LikeResponse.of(true, product.getLikeCount());
 		}
@@ -44,7 +44,7 @@ public class LikeServiceImpl implements LikeService {
 	@Override
 	public LikeResponse createLike(final Long productId) {
 		final Product product = findProductById(productId);
-		final Member member = findCurrentUser();
+		final Member member = memberUtil.getCurrentMember();
 		if (isLikePresent(product, member)) {
 			return LikeResponse.of(true, product.getLikeCount());
 		}
@@ -57,7 +57,7 @@ public class LikeServiceImpl implements LikeService {
 	@Override
 	public LikeResponse deleteLike(final Long productId) {
 		final Product product = findProductById(productId);
-		final Member member = findCurrentUser();
+		final Member member = memberUtil.getCurrentMember();
 		if (isLikePresent(product, member)) {
 			likeRepository.deleteByProductAndMember(product, member);
 			int likeCount = productService.decreaseLikeCount(product);
@@ -68,10 +68,6 @@ public class LikeServiceImpl implements LikeService {
 
 	private Product findProductById(final Long productId) {
 		return productUtil.findProductEntityById(productId);
-	}
-
-	private Member findCurrentUser() {
-		return memberUtil.getCurrentMember();
 	}
 
 	@Override

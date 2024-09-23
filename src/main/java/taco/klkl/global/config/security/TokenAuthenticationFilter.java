@@ -14,7 +14,11 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import taco.klkl.domain.auth.exception.UnauthorizedException;
+import taco.klkl.domain.token.exception.TokenExpiredException;
+import taco.klkl.domain.token.exception.TokenInvalidException;
 import taco.klkl.domain.token.service.TokenProvider;
+import taco.klkl.global.util.ResponseUtil;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
@@ -25,25 +29,33 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 	private static final String TOKEN_PREFIX = "Bearer ";
 
 	private final TokenProvider tokenProvider;
+	private final ResponseUtil responseUtil;
 
 	@Override
 	protected void doFilterInternal(
-			HttpServletRequest request,
-			HttpServletResponse response,
-			FilterChain filterChain
+		HttpServletRequest request,
+		HttpServletResponse response,
+		FilterChain filterChain
 	) throws ServletException, IOException {
-		String accessToken = resolveToken(request);
-
-		if (tokenProvider.validateToken(accessToken)) {
-			setAuthentication(accessToken);
-		} else {
-			String reissueAccessToken = tokenProvider.reissueAccessToken(accessToken);
-
-			if (StringUtils.hasText(reissueAccessToken)) {
-				setAuthentication(reissueAccessToken);
-
-				response.setHeader(AUTHORIZATION, TOKEN_PREFIX + reissueAccessToken);
+		try {
+			String accessToken = resolveToken(request);
+			if (tokenProvider.validateToken(accessToken)) {
+				setAuthentication(accessToken);
+			} else {
+				String reissueAccessToken = tokenProvider.reissueAccessToken(accessToken);
+				if (StringUtils.hasText(reissueAccessToken)) {
+					setAuthentication(reissueAccessToken);
+					response.setHeader(AUTHORIZATION, TOKEN_PREFIX + reissueAccessToken);
+				}
 			}
+		} catch (TokenInvalidException | TokenExpiredException e) {
+			SecurityContextHolder.clearContext();
+			responseUtil.sendErrorResponse(response, e);
+			return;
+		} catch (Exception e) {
+			SecurityContextHolder.clearContext();
+			responseUtil.sendErrorResponse(response, new UnauthorizedException());
+			return;
 		}
 
 		filterChain.doFilter(request, response);
