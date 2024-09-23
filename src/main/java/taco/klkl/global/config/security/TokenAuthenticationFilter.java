@@ -1,5 +1,7 @@
 package taco.klkl.global.config.security;
 
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
+
 import java.io.IOException;
 
 import org.springframework.security.core.Authentication;
@@ -20,7 +22,6 @@ import taco.klkl.domain.token.exception.TokenInvalidException;
 import taco.klkl.domain.token.service.TokenProvider;
 import taco.klkl.global.util.ResponseUtil;
 
-import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 @Component
 @RequiredArgsConstructor

@@ -1,19 +1,19 @@
 package taco.klkl.domain.auth.service;
 
+import java.util.Map;
+
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.transaction.annotation.Transactional;
-import taco.klkl.domain.member.dao.MemberRepository;
-import taco.klkl.domain.member.domain.Member;
 import taco.klkl.domain.auth.domain.PrincipalDetails;
 import taco.klkl.domain.auth.dto.response.OAuth2UserInfo;
-
-import java.util.Map;
+import taco.klkl.domain.member.dao.MemberRepository;
+import taco.klkl.domain.member.domain.Member;
 
 @Service
 @Transactional(readOnly = true)
@@ -29,13 +29,13 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
 		final String registrationId = userRequest.getClientRegistration().getRegistrationId();
 		final String userNameAttributeName = userRequest.getClientRegistration()
-			.getProviderDetails()
-			.getUserInfoEndpoint()
-			.getUserNameAttributeName();
+				.getProviderDetails()
+				.getUserInfoEndpoint()
+				.getUserNameAttributeName();
 
 		final OAuth2UserInfo oAuth2UserInfo = OAuth2UserInfo.of(
-			registrationId,
-			oAuth2UserAttributes
+				registrationId,
+				oAuth2UserAttributes
 		);
 
 		Member member = getOrSave(oAuth2UserInfo);

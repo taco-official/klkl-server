@@ -1,15 +1,17 @@
 package taco.klkl.global.util;
 
+import java.io.IOException;
+
+import org.springframework.stereotype.Component;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
 import taco.klkl.global.common.response.GlobalResponse;
 import taco.klkl.global.error.ErrorResponse;
 import taco.klkl.global.error.exception.CustomException;
 import taco.klkl.global.error.exception.ErrorCode;
-
-import java.io.IOException;
 
 @Component
 @RequiredArgsConstructor

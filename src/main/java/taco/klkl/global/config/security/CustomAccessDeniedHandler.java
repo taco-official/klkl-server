@@ -1,15 +1,16 @@
 package taco.klkl.global.config.security;
 
+import java.io.IOException;
+
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.stereotype.Component;
+
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.web.access.AccessDeniedHandler;
-import org.springframework.stereotype.Component;;
 import taco.klkl.domain.auth.exception.PermissionDeniedException;
 import taco.klkl.global.util.ResponseUtil;
-
-import java.io.IOException;
 
 @Component
 @RequiredArgsConstructor
