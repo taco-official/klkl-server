@@ -70,6 +70,9 @@ public enum ErrorCode {
 	IMAGE_UPLOAD_NOT_COMPLETE(HttpStatus.BAD_REQUEST, "이미지 업로드가 완료되지 않았습니다."),
 	IMAGE_URL_INVALID(HttpStatus.BAD_REQUEST, "유효하지 않은 이미지 url 형식입니다."),
 
+	// Token
+	TOKEN_INVALID(HttpStatus.UNAUTHORIZED, "유효하지 않은 토큰입니다."),
+
 	// Sample
 	SAMPLE_ERROR(HttpStatus.BAD_REQUEST, "샘플 에러입니다."),
 	;
