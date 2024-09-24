@@ -6,9 +6,13 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum Role {
-	USER("ROLE_USER"),
-	ADMIN("ROLE_ADMIN"),
+	USER,
+	ADMIN,
 	;
 
-	private final String value;
+	private static final String AUTHORITY_PREFIX = "ROLE_";
+
+	public String getAuthority() {
+		return AUTHORITY_PREFIX + name();
+	}
 }

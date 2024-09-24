@@ -29,7 +29,7 @@ public record PrincipalDetails(
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return Collections.singletonList(new SimpleGrantedAuthority(member.getRole().name()));
+		return Collections.singletonList(new SimpleGrantedAuthority(member.getRole().getAuthority()));
 	}
 
 	@Override

@@ -1,5 +1,7 @@
 package taco.klkl.global.config.security;
 
+import static taco.klkl.domain.member.domain.Role.*;
+
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,7 +21,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import taco.klkl.domain.auth.service.CustomOAuth2UserService;
 import taco.klkl.domain.auth.service.OAuth2SuccessHandler;
-import taco.klkl.domain.member.domain.Role;
 
 @Slf4j
 @Configuration
@@ -72,17 +73,17 @@ public class SecurityConfig {
 								.requestMatchers("/", "/login/**", "/swagger-ui/**").permitAll()
 								.requestMatchers("/error", "/favicon.ico").permitAll()
 								.requestMatchers(PathRequest.toH2Console()).permitAll()
-								.requestMatchers(HttpMethod.POST).authenticated()
-								.requestMatchers(HttpMethod.PUT).authenticated()
-								.requestMatchers(HttpMethod.DELETE).authenticated()
+								.requestMatchers(HttpMethod.POST).hasAnyRole(USER.name(), ADMIN.name())
+								.requestMatchers(HttpMethod.PUT).hasAnyRole(USER.name(), ADMIN.name())
+								.requestMatchers(HttpMethod.DELETE).hasAnyRole(USER.name(), ADMIN.name())
 								.requestMatchers(
 										"/v1/members/me/**",
 										"/v1/products/following/**",
 										"/v1/notifications/**"
-								).hasAuthority(Role.USER.name())
+								).hasRole(USER.name())
 								.requestMatchers(
 										RegexRequestMatcher.regexMatcher("/v1/products/\\d+/likes(/.*)?"))
-								.hasAuthority(Role.USER.name())
+								.hasRole(USER.name())
 								.requestMatchers(
 										"/v1/login/**",
 										"/v1/oauth/**",
