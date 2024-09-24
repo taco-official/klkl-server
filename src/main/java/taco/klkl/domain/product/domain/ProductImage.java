@@ -19,6 +19,7 @@ import taco.klkl.domain.image.domain.Image;
 public class ProductImage {
 
 	@Id
+	@Column(name = "product_image_id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
