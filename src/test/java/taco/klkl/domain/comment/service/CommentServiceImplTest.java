@@ -22,7 +22,6 @@ import taco.klkl.domain.comment.dto.response.CommentResponse;
 import taco.klkl.domain.comment.exception.CommentNotFoundException;
 import taco.klkl.domain.comment.exception.CommentProductNotMatchException;
 import taco.klkl.domain.member.domain.Member;
-import taco.klkl.domain.member.dto.request.MemberCreateRequest;
 import taco.klkl.domain.notification.service.NotificationService;
 import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.product.exception.ProductNotFoundException;
@@ -47,15 +46,7 @@ public class CommentServiceImplTest {
 	@InjectMocks
 	private CommentServiceImpl commentServiceImpl;
 
-	private final MemberCreateRequest memberCreateRequest = new MemberCreateRequest(
-		"이상화",
-		"저는 이상화입니다."
-	);
-
-	private final Member member = Member.of(
-		memberCreateRequest.name(),
-		memberCreateRequest.description()
-	);
+	private final Member member = Member.of("name");
 
 	private final Product product = mock(Product.class);
 

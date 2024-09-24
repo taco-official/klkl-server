@@ -31,10 +31,9 @@ class MemberSimpleResponseTest {
 	public void testFrom() {
 		// given
 		String name = "이름";
-		String description = "자기소개";
 
 		// when
-		Member member = Member.of(name, description);
+		Member member = Member.of(name);
 		MemberSimpleResponse memberResponse = MemberSimpleResponse.from(member);
 
 		// then

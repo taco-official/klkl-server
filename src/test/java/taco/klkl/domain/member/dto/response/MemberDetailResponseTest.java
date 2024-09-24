@@ -33,14 +33,12 @@ public class MemberDetailResponseTest {
 	public void testFrom() {
 		// given
 		String name = "이름";
-		String description = "자기소개";
 
 		// when
-		Member member = Member.of(name, description);
+		Member member = Member.of(name);
 		MemberDetailResponse memberResponse = MemberDetailResponse.from(member);
 
 		// then
 		assertThat(memberResponse.name()).isEqualTo(name);
-		assertThat(memberResponse.description()).isEqualTo(description);
 	}
 }

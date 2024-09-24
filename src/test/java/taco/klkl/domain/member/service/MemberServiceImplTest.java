@@ -16,7 +16,6 @@ import org.slf4j.LoggerFactory;
 
 import taco.klkl.domain.member.dao.MemberRepository;
 import taco.klkl.domain.member.domain.Member;
-import taco.klkl.domain.member.dto.request.MemberCreateRequest;
 import taco.klkl.domain.member.dto.response.MemberDetailResponse;
 import taco.klkl.global.util.MemberUtil;
 
@@ -51,28 +50,5 @@ class MemberServiceImplTest {
 		assertThat(userDto.id()).isEqualTo(member.getId());
 		assertThat(userDto.name()).isEqualTo(member.getName());
 		assertThat(userDto.description()).isEqualTo(member.getDescription());
-	}
-
-	@Test
-	@DisplayName("사용자 등록 서비스 테스트")
-	public void testCreateMember() {
-		// given
-		MemberCreateRequest requestDto = new MemberCreateRequest(
-			"이상화",
-			"저는 이상화입니다."
-		);
-		Member member = Member.of(
-			requestDto.name(),
-			requestDto.description()
-		);
-		when(memberRepository.save(any(Member.class))).thenReturn(member);
-
-		// when
-		Member member1 = memberService.createMember(requestDto);
-		MemberDetailResponse responseDto = MemberDetailResponse.from(member1);
-
-		// then
-		assertThat(responseDto.name()).isEqualTo(requestDto.name());
-		assertThat(responseDto.description()).isEqualTo(requestDto.description());
 	}
 }

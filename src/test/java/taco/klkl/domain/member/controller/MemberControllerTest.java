@@ -36,7 +36,7 @@ class MemberControllerTest {
 
 	@BeforeEach
 	public void setUp() {
-		member = Member.of("name", "description");
+		member = Member.of("name");
 		memberDetailResponse = MemberDetailResponse.from(member);
 	}
 

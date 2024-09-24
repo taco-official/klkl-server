@@ -108,7 +108,7 @@ class ProductServiceImplTest {
 	void setUp() {
 		MockitoAnnotations.openMocks(this);
 
-		member = Member.of("test", "테스트입니다.");
+		member = Member.of("name");
 
 		Region region = Region.from(RegionType.SOUTHEAST_ASIA);
 		currency = Currency.of(

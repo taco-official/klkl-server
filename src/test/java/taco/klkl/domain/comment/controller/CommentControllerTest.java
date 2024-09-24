@@ -30,7 +30,6 @@ import taco.klkl.domain.comment.exception.CommentNotFoundException;
 import taco.klkl.domain.comment.exception.CommentProductNotMatchException;
 import taco.klkl.domain.comment.service.CommentServiceImpl;
 import taco.klkl.domain.member.domain.Member;
-import taco.klkl.domain.member.dto.request.MemberCreateRequest;
 import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.product.domain.Rating;
 import taco.klkl.domain.product.exception.ProductNotFoundException;
@@ -63,14 +62,7 @@ public class CommentControllerTest {
 	private final Long productId = 1L;
 	private final Long commentId = 1L;
 
-	private final MemberCreateRequest requestDto = new MemberCreateRequest(
-		"이상화",
-		"저는 이상화입니다."
-	);
-	private final Member member = Member.of(
-		requestDto.name(),
-		requestDto.description()
-	);
+	private final Member member = Member.of("name");
 
 	private final Region region = Region.from(RegionType.SOUTHEAST_ASIA);
 
