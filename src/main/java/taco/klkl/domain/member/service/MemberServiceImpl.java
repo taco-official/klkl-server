@@ -17,7 +17,6 @@ import taco.klkl.domain.member.dao.FollowRepository;
 import taco.klkl.domain.member.dao.MemberRepository;
 import taco.klkl.domain.member.domain.Follow;
 import taco.klkl.domain.member.domain.Member;
-import taco.klkl.domain.member.dto.request.MemberCreateRequest;
 import taco.klkl.domain.member.dto.request.MemberUpdateRequest;
 import taco.klkl.domain.member.dto.response.FollowResponse;
 import taco.klkl.domain.member.dto.response.MemberDetailResponse;
@@ -93,13 +92,6 @@ public class MemberServiceImpl implements MemberService {
 
 	@Override
 	@Transactional
-	public Member createMember(final MemberCreateRequest createRequest) {
-		final Member member = createUserEntity(createRequest);
-		return memberRepository.save(member);
-	}
-
-	@Override
-	@Transactional
 	public FollowResponse createFollow(final Long followingId) {
 		final Member follower = memberUtil.getCurrentMember();
 		final Member following = memberRepository.findById(followingId)
@@ -129,28 +121,15 @@ public class MemberServiceImpl implements MemberService {
 	@Transactional
 	public MemberDetailResponse updateMember(final MemberUpdateRequest updateRequest) {
 		Member member = memberUtil.getCurrentMember();
-		updateUserEntity(member, updateRequest);
+		updateMemberEntity(member, updateRequest);
 		return MemberDetailResponse.from(member);
 	}
 
-	private Member createUserEntity(final MemberCreateRequest createRequest) {
-		final String name = createRequest.name();
-		final String description = createRequest.description();
-
-		return Member.of(
-			name,
-			description
-		);
-	}
-
-	private void updateUserEntity(final Member member, final MemberUpdateRequest updateRequest) {
+	private void updateMemberEntity(final Member member, final MemberUpdateRequest updateRequest) {
 		final String name = updateRequest.name();
 		final String description = updateRequest.description();
 
-		member.update(
-			name,
-			description
-		);
+		member.update(name, description);
 	}
 
 	private Pageable createPageableSortedByCreatedAtDesc(final Pageable pageable) {
