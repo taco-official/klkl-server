@@ -45,6 +45,8 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 	private Member getOrSave(final OAuth2UserInfo oAuth2UserInfo) {
 		final Member member = memberRepository.findByName(oAuth2UserInfo.name())
 				.orElseGet(oAuth2UserInfo::toEntity);
-		return memberRepository.save(member);
+		memberRepository.save(member);
+		member.updateProfileImage(oAuth2UserInfo.profileImageUrl());
+		return member;
 	}
 }

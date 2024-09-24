@@ -6,7 +6,7 @@ import taco.klkl.domain.member.domain.Member;
 
 public record OAuth2UserInfo(
 	String name,
-	String profile
+	String profileImageUrl
 ) {
 
 	public static OAuth2UserInfo of(
@@ -32,6 +32,6 @@ public record OAuth2UserInfo(
 	}
 
 	public Member toEntity() {
-		return Member.of(name, "");
+		return Member.of(name);
 	}
 }

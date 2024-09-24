@@ -10,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.ObjectCannedACL;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import software.amazon.awssdk.services.s3.presigner.S3Presigner;
@@ -44,7 +43,6 @@ public class ImageServiceImpl implements ImageService {
 	private static final Duration SIGNATURE_DURATION = Duration.ofMinutes(5);
 	private static final ObjectCannedACL REQUEST_ACL = ObjectCannedACL.PRIVATE;
 
-	private final S3Client s3Client;
 	private final S3Presigner s3Presigner;
 	private final ImageRepository imageRepository;
 	private final MemberUtil memberUtil;
@@ -85,9 +83,9 @@ public class ImageServiceImpl implements ImageService {
 		Image updatedImage = imageUtil.findImageEntityByImageTypeAndId(ImageType.MEMBER_IMAGE, updateRequest.imageId());
 		updatedImage.markAsComplete();
 
-		currentMember.updateImage(updatedImage);
+		currentMember.updateProfileImage(updatedImage);
 
-		return ImageResponse.from(currentMember.getImage());
+		return ImageResponse.from(currentMember.getProfileImage());
 	}
 
 	@Override

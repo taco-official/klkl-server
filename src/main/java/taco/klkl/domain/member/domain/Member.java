@@ -9,6 +9,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import lombok.AccessLevel;
@@ -26,9 +27,12 @@ public class Member {
 	@Column(name = "member_id")
 	private Long id;
 
-	@OneToOne
-	@JoinColumn(name = "image_id")
-	private Image image;
+	@OneToOne(
+		cascade = CascadeType.ALL,
+		orphanRemoval = true
+	)
+	@JoinColumn(name = "profile_image_id")
+	private ProfileImage profileImage;
 
 	@Column(
 		name = "name",
@@ -58,21 +62,15 @@ public class Member {
 	)
 	private LocalDateTime createdAt;
 
-	private Member(
-		final String name,
-		final String description
-	) {
+	private Member(final String name) {
 		this.name = name;
-		this.description = description;
+		this.description = "";
 		this.role = Role.USER;
 		this.createdAt = LocalDateTime.now();
 	}
 
-	public static Member of(
-		final String name,
-		final String description
-	) {
-		return new Member(name, description);
+	public static Member of(final String name) {
+		return new Member(name);
 	}
 
 	public String getMemberKey() {
@@ -87,7 +85,11 @@ public class Member {
 		this.description = description;
 	}
 
-	public void updateImage(final Image image) {
-		this.image = image;
+	public void updateProfileImage(final String url) {
+		this.profileImage = ProfileImage.ofExternal(this.id, url);
+	}
+
+	public void updateProfileImage(final Image image) {
+		this.profileImage = ProfileImage.ofInternal(this.id, image);
 	}
 }

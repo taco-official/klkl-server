@@ -11,7 +11,7 @@ public record MemberSimpleResponse(
 	public static MemberSimpleResponse from(final Member member) {
 		return new MemberSimpleResponse(
 			member.getId(),
-			ImageResponse.from(member.getImage()),
+			ImageResponse.from(member.getProfileImage()),
 			member.getName()
 		);
 	}

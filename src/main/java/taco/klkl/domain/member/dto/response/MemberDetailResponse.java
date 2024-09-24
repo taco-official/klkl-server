@@ -12,7 +12,7 @@ public record MemberDetailResponse(
 	public static MemberDetailResponse from(final Member member) {
 		return new MemberDetailResponse(
 			member.getId(),
-			ImageResponse.from(member.getImage()),
+			ImageResponse.from(member.getProfileImage()),
 			member.getName(),
 			member.getDescription()
 		);
