@@ -7,6 +7,7 @@ public record MemberDetailResponse(
 	Long id,
 	ImageResponse image,
 	String name,
+	String tag,
 	String description
 ) {
 	public static MemberDetailResponse from(final Member member) {
@@ -14,6 +15,7 @@ public record MemberDetailResponse(
 			member.getId(),
 			ImageResponse.from(member.getProfileImage()),
 			member.getName(),
+			member.getTag(),
 			member.getDescription()
 		);
 	}
