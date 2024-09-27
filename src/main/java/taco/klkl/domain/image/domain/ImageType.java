@@ -17,7 +17,7 @@ public enum ImageType {
 
 	public static ImageType from(final String value) throws ImageTypeNotFoundException {
 		return Arrays.stream(ImageType.values())
-			.filter(type -> type.getValue().equals(value))
+			.filter(image -> image.getValue().equals(value))
 			.findFirst()
 			.orElseThrow(ImageTypeNotFoundException::new);
 	}
