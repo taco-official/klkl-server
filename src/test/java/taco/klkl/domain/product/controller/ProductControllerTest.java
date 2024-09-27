@@ -63,6 +63,7 @@ public class ProductControllerTest {
 			1L,
 			new ImageResponse(2L, "url"),
 			"userName",
+			"userTag",
 			"userDescription"
 		);
 		CityResponse cityResponse = new CityResponse(

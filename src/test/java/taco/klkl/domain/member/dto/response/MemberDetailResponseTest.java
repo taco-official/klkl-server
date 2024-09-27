@@ -16,10 +16,11 @@ public class MemberDetailResponseTest {
 		Long id = 1L;
 		ImageResponse image = new ImageResponse(2L, "url");
 		String name = "이름";
+		String tag = "0000";
 		String description = "자기소개";
 
 		// when
-		MemberDetailResponse memberResponse = new MemberDetailResponse(id, image, name, description);
+		MemberDetailResponse memberResponse = new MemberDetailResponse(id, image, name, tag, description);
 
 		// then
 		assertThat(memberResponse.id()).isEqualTo(id);
