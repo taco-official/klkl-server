@@ -13,19 +13,30 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.web.servlet.MockMvc;
 
 import taco.klkl.domain.like.dto.response.LikeResponse;
 import taco.klkl.domain.like.exception.LikeCountBelowMinimumException;
 import taco.klkl.domain.like.exception.LikeCountOverMaximumException;
 import taco.klkl.domain.like.service.LikeService;
+import taco.klkl.domain.token.service.TokenProvider;
+import taco.klkl.global.config.security.TestSecurityConfig;
 import taco.klkl.global.error.exception.ErrorCode;
+import taco.klkl.global.util.ResponseUtil;
 
 @WebMvcTest(LikeController.class)
+@Import(TestSecurityConfig.class)
 class LikeControllerTest {
 
 	@Autowired
 	private MockMvc mockMvc;
+
+	@MockBean
+	private TokenProvider tokenProvider;
+
+	@MockBean
+	private ResponseUtil responseUtil;
 
 	@MockBean
 	private LikeService likeService;

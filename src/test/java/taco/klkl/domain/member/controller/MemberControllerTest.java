@@ -11,19 +11,30 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import taco.klkl.domain.member.domain.Member;
 import taco.klkl.domain.member.dto.response.MemberDetailResponse;
 import taco.klkl.domain.member.service.MemberService;
+import taco.klkl.domain.token.service.TokenProvider;
+import taco.klkl.global.config.security.TestSecurityConfig;
 import taco.klkl.global.util.MemberUtil;
+import taco.klkl.global.util.ResponseUtil;
 
 @WebMvcTest(MemberController.class)
+@Import(TestSecurityConfig.class)
 class MemberControllerTest {
 
 	@Autowired
 	MockMvc mockMvc;
+
+	@MockBean
+	private TokenProvider tokenProvider;
+
+	@MockBean
+	private ResponseUtil responseUtil;
 
 	@MockBean
 	MemberService memberService;

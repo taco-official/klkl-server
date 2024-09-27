@@ -14,6 +14,7 @@ import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.web.servlet.MockMvc;
 
 import taco.klkl.domain.category.domain.category.Category;
@@ -35,12 +36,25 @@ import taco.klkl.domain.region.domain.country.Country;
 import taco.klkl.domain.region.domain.country.CountryType;
 import taco.klkl.domain.region.domain.currency.Currency;
 import taco.klkl.domain.region.domain.region.Region;
+import taco.klkl.domain.token.service.TokenProvider;
+import taco.klkl.global.config.security.TestSecurityConfig;
+import taco.klkl.global.util.ResponseUtil;
 
 @WebMvcTest(NotificationController.class)
+@Import(TestSecurityConfig.class)
 class NotificationControllerTest {
 
 	@Autowired
 	MockMvc mockMvc;
+
+	@MockBean
+	private TokenProvider tokenProvider;
+
+	@MockBean
+	private ResponseUtil responseUtil;
+
+	@MockBean
+	NotificationService notificationService;
 
 	@Mock
 	Region region;
@@ -50,9 +64,6 @@ class NotificationControllerTest {
 
 	@Mock
 	private NotificationRepository notificationRepository;
-
-	@MockBean
-	NotificationService notificationService;
 
 	private final Member member = Member.ofUser("name", "0000", null, null);
 	private final Country country = Country.of(CountryType.MALAYSIA, region, "wallpaper", currency);

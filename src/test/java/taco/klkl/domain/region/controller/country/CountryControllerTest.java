@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -22,12 +23,22 @@ import taco.klkl.domain.region.domain.region.Region;
 import taco.klkl.domain.region.domain.region.RegionType;
 import taco.klkl.domain.region.dto.response.country.CountryResponse;
 import taco.klkl.domain.region.service.country.CountryService;
+import taco.klkl.domain.token.service.TokenProvider;
+import taco.klkl.global.config.security.TestSecurityConfig;
+import taco.klkl.global.util.ResponseUtil;
 
 @WebMvcTest(CountryController.class)
+@Import(TestSecurityConfig.class)
 public class CountryControllerTest {
 
 	@Autowired
 	MockMvc mockMvc;
+
+	@MockBean
+	private TokenProvider tokenProvider;
+
+	@MockBean
+	private ResponseUtil responseUtil;
 
 	@MockBean
 	CountryService countryService;

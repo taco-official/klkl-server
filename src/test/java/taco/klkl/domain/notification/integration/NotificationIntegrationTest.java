@@ -11,20 +11,33 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
 import taco.klkl.domain.notification.dto.response.NotificationResponse;
 import taco.klkl.domain.notification.service.NotificationService;
+import taco.klkl.domain.token.service.TokenProvider;
+import taco.klkl.global.config.security.TestSecurityConfig;
 import taco.klkl.global.error.exception.ErrorCode;
+import taco.klkl.global.util.ResponseUtil;
 
 @SpringBootTest
 @AutoConfigureMockMvc
 @Transactional
+@Import(TestSecurityConfig.class)
 public class NotificationIntegrationTest {
+
 	@Autowired
 	private MockMvc mockMvc;
+
+	@MockBean
+	private TokenProvider tokenProvider;
+
+	@MockBean
+	private ResponseUtil responseUtil;
 
 	@Autowired
 	private NotificationService notificationService;

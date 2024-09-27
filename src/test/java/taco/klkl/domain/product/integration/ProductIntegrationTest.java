@@ -12,6 +12,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,16 +25,25 @@ import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.product.dto.request.ProductCreateUpdateRequest;
 import taco.klkl.domain.product.dto.response.ProductDetailResponse;
 import taco.klkl.domain.product.service.ProductService;
+import taco.klkl.domain.token.service.TokenProvider;
 import taco.klkl.global.common.constants.ProductConstants;
+import taco.klkl.global.config.security.TestSecurityConfig;
+import taco.klkl.global.util.ResponseUtil;
 
 @SpringBootTest
 @AutoConfigureMockMvc
 @Transactional
-@DisplayName("Product 통합 테스트")
+@Import(TestSecurityConfig.class)
 public class ProductIntegrationTest {
 
 	@Autowired
 	MockMvc mockMvc;
+
+	@MockBean
+	private TokenProvider tokenProvider;
+
+	@MockBean
+	private ResponseUtil responseUtil;
 
 	@Autowired
 	ProductService productService;

@@ -8,6 +8,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,14 +17,25 @@ import taco.klkl.domain.member.dao.MemberRepository;
 import taco.klkl.domain.member.domain.Member;
 import taco.klkl.domain.member.dto.response.MemberDetailResponse;
 import taco.klkl.domain.member.service.MemberService;
+import taco.klkl.domain.token.service.TokenProvider;
+import taco.klkl.global.config.security.TestSecurityConfig;
 import taco.klkl.global.util.MemberUtil;
+import taco.klkl.global.util.ResponseUtil;
 
 @SpringBootTest
 @AutoConfigureMockMvc
 @Transactional
+@Import(TestSecurityConfig.class)
 public class MemberIntegrationTest {
+
 	@Autowired
 	MockMvc mockMvc;
+
+	@MockBean
+	private TokenProvider tokenProvider;
+
+	@MockBean
+	private ResponseUtil responseUtil;
 
 	@Autowired
 	MemberService memberService;

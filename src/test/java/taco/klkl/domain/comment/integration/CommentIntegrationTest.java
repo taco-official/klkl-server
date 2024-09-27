@@ -11,6 +11,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,14 +22,25 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import taco.klkl.domain.comment.dto.request.CommentCreateUpdateRequest;
 import taco.klkl.domain.comment.dto.response.CommentResponse;
 import taco.klkl.domain.comment.service.CommentServiceImpl;
+import taco.klkl.domain.token.service.TokenProvider;
+import taco.klkl.global.config.security.TestSecurityConfig;
 import taco.klkl.global.error.exception.ErrorCode;
+import taco.klkl.global.util.ResponseUtil;
 
 @SpringBootTest
 @AutoConfigureMockMvc
 @Transactional
+@Import(TestSecurityConfig.class)
 public class CommentIntegrationTest {
+
 	@Autowired
 	private MockMvc mockMvc;
+
+	@MockBean
+	private TokenProvider tokenProvider;
+
+	@MockBean
+	private ResponseUtil responseUtil;
 
 	@Autowired
 	private CommentServiceImpl commentServiceImpl;

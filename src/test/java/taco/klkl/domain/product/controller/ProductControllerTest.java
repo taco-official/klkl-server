@@ -18,6 +18,7 @@ import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -39,13 +40,23 @@ import taco.klkl.domain.product.service.ProductService;
 import taco.klkl.domain.region.domain.country.CountryType;
 import taco.klkl.domain.region.dto.response.city.CityResponse;
 import taco.klkl.domain.region.dto.response.currency.CurrencyResponse;
+import taco.klkl.domain.token.service.TokenProvider;
 import taco.klkl.global.common.response.PagedResponse;
+import taco.klkl.global.config.security.TestSecurityConfig;
+import taco.klkl.global.util.ResponseUtil;
 
 @WebMvcTest(ProductController.class)
+@Import(TestSecurityConfig.class)
 public class ProductControllerTest {
 
 	@Autowired
 	private MockMvc mockMvc;
+
+	@MockBean
+	private TokenProvider tokenProvider;
+
+	@MockBean
+	private ResponseUtil responseUtil;
 
 	@MockBean
 	private ProductService productService;
