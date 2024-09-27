@@ -43,83 +43,83 @@ public class SecurityConfig {
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
 		httpSecurity
-				// disable csrf
-				.csrf(AbstractHttpConfigurer::disable)
+			// disable csrf
+			.csrf(AbstractHttpConfigurer::disable)
 
-				// disable cors
-				.cors(AbstractHttpConfigurer::disable)
+			// disable cors
+			.cors(AbstractHttpConfigurer::disable)
 
-				// disable default authentication
-				.httpBasic(AbstractHttpConfigurer::disable)
+			// disable default authentication
+			.httpBasic(AbstractHttpConfigurer::disable)
 
-				// disable default login form
-				.formLogin(AbstractHttpConfigurer::disable)
+			// disable default login form
+			.formLogin(AbstractHttpConfigurer::disable)
 
-				// disable default logout
-				.logout(AbstractHttpConfigurer::disable)
+			// disable default logout
+			.logout(AbstractHttpConfigurer::disable)
 
-				// disable X-Frame-Options (enable h2-console)
-				.headers((headers) ->
-						headers.contentTypeOptions(contentTypeOptionsConfig ->
-								headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin)))
+			// disable X-Frame-Options (enable h2-console)
+			.headers((headers) ->
+				headers.contentTypeOptions(contentTypeOptionsConfig ->
+					headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin)))
 
-				// disable session
-				.sessionManagement(sessionManagement ->
-						sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+			// disable session
+			.sessionManagement(sessionManagement ->
+				sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
-				// request authentication & authorization
-				.authorizeHttpRequests(authorizeRequests ->
-						authorizeRequests
-								.requestMatchers("/", "/login/**", "/swagger-ui/**").permitAll()
-								.requestMatchers("/error", "/favicon.ico").permitAll()
-								.requestMatchers(PathRequest.toH2Console()).permitAll()
-								.requestMatchers(HttpMethod.POST).hasAnyRole(USER.name(), ADMIN.name())
-								.requestMatchers(HttpMethod.PUT).hasAnyRole(USER.name(), ADMIN.name())
-								.requestMatchers(HttpMethod.DELETE).hasAnyRole(USER.name(), ADMIN.name())
-								.requestMatchers(
-										"/v1/members/me/**",
-										"/v1/products/following/**",
-										"/v1/notifications/**"
-								).hasRole(USER.name())
-								.requestMatchers(
-										RegexRequestMatcher.regexMatcher("/v1/products/\\d+/likes(/.*)?"))
-								.hasRole(USER.name())
-								.requestMatchers(
-										"/v1/login/**",
-										"/v1/oauth/**",
-										"/v1/members/**",
-										"/v1/products/**",
-										"/v1/regions/**",
-										"/v1/countries/**",
-										"/v1/cities/**",
-										"/v1/currencies/**",
-										"/v1/categories/**",
-										"/v1/subcategories/**",
-										"/v1/search/**"
-								).permitAll()
-								.anyRequest().authenticated()
-				)
+			// request authentication & authorization
+			.authorizeHttpRequests(authorizeRequests ->
+				authorizeRequests
+					.requestMatchers("/", "/login/**", "/swagger-ui/**").permitAll()
+					.requestMatchers("/error", "/favicon.ico").permitAll()
+					.requestMatchers(PathRequest.toH2Console()).permitAll()
+					.requestMatchers(HttpMethod.POST).hasAnyRole(USER.name(), ADMIN.name())
+					.requestMatchers(HttpMethod.PUT).hasAnyRole(USER.name(), ADMIN.name())
+					.requestMatchers(HttpMethod.DELETE).hasAnyRole(USER.name(), ADMIN.name())
+					.requestMatchers(
+						"/v1/members/me/**",
+						"/v1/products/following/**",
+						"/v1/notifications/**"
+					).hasRole(USER.name())
+					.requestMatchers(
+						RegexRequestMatcher.regexMatcher("/v1/products/\\d+/likes(/.*)?"))
+					.hasRole(USER.name())
+					.requestMatchers(
+						"/v1/login/**",
+						"/v1/oauth/**",
+						"/v1/members/**",
+						"/v1/products/**",
+						"/v1/regions/**",
+						"/v1/countries/**",
+						"/v1/cities/**",
+						"/v1/currencies/**",
+						"/v1/categories/**",
+						"/v1/subcategories/**",
+						"/v1/search/**"
+					).permitAll()
+					.anyRequest().authenticated()
+			)
 
-				// oauth2
-				.oauth2Login(oauth2 ->
-						oauth2
-								.userInfoEndpoint(userInfo -> userInfo.userService(oAuth2UserService))
-								.successHandler(oAuth2SuccessHandler)
-								.authorizationEndpoint(authorization -> authorization
-										.baseUri("/v1/oauth2/authorization"))
-								.redirectionEndpoint(redirection -> redirection
-										.baseUri("/v1/login/oauth2/code/*"))
-				)
+			// oauth2
+			.oauth2Login(oauth2 ->
+				oauth2
+					.userInfoEndpoint(userInfo -> userInfo.userService(oAuth2UserService))
+					.successHandler(oAuth2SuccessHandler)
+					.authorizationEndpoint(authorization -> authorization
+						.baseUri("/v1/oauth2/authorization"))
+					.redirectionEndpoint(redirection -> redirection
+						.baseUri("/v1/login/oauth2/code/*"))
+			)
 
-				// auth exception handling
-				.exceptionHandling(exception ->
-						exception
-								.accessDeniedHandler(accessDeniedHandler)
-								.authenticationEntryPoint(authenticationEntryPoint)
-				)
+			// auth exception handling
+			.exceptionHandling(exception ->
+				exception
+					.accessDeniedHandler(accessDeniedHandler)
+					.authenticationEntryPoint(authenticationEntryPoint)
+			)
 
-				// jwt exception handling
-				.addFilterBefore(tokenAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+			// jwt exception handling
+			.addFilterBefore(tokenAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
 		return httpSecurity.build();
 	}
