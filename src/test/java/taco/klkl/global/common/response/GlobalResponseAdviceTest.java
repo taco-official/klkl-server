@@ -1,4 +1,4 @@
-package taco.klkl.global.response;
+package taco.klkl.global.common.response;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -13,9 +13,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServletServerHttpResponse;
 import org.springframework.mock.web.MockHttpServletResponse;
-
-import taco.klkl.global.common.response.GlobalResponse;
-import taco.klkl.global.common.response.GlobalResponseAdvice;
 
 class GlobalResponseAdviceTest {
 
