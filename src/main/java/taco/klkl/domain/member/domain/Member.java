@@ -2,23 +2,19 @@ package taco.klkl.domain.member.domain;
 
 import java.time.LocalDateTime;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import taco.klkl.domain.image.domain.Image;
 
 @Getter
-@Entity(name = "member")
+@Entity
+@Table(
+	uniqueConstraints = {
+		@UniqueConstraint(columnNames = {"name", "tag"})
+	}
+)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member {
 
@@ -30,8 +26,11 @@ public class Member {
 	@JoinColumn(name = "profile_image_id")
 	private ProfileImage profileImage;
 
-	@Column(unique = true, length = 30, nullable = false)
+	@Column(length = 30, nullable = false)
 	private String name;
+
+	@Column(length = 4, nullable = false)
+	private String tag;
 
 	@Column(length = 100)
 	private String description;
@@ -49,11 +48,13 @@ public class Member {
 
 	private Member(
 		final String name,
+		final String tag,
 		final String provider,
 		final String providerId,
 		final Role role
 	) {
 		this.name = name;
+		this.tag = tag;
 		this.description = "";
 		this.provider = provider;
 		this.providerId = providerId;
@@ -63,10 +64,11 @@ public class Member {
 
 	public static Member ofUser(
 		final String name,
+		final String tag,
 		final String provider,
 		final String providerId
 	) {
-		return new Member(name, provider, providerId, Role.USER);
+		return new Member(name, tag, provider, providerId, Role.USER);
 	}
 
 	public String getMemberKey() {

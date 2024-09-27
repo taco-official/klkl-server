@@ -1,7 +1,6 @@
 package taco.klkl.global.util;
 
-import java.time.Instant;
-import java.util.Objects;
+import java.util.Random;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -11,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import taco.klkl.domain.member.dao.MemberRepository;
 import taco.klkl.domain.member.domain.Member;
 import taco.klkl.domain.member.exception.MemberNotFoundException;
-import taco.klkl.global.common.constants.MemberConstants;
 
 @Component
 @RequiredArgsConstructor
@@ -31,25 +29,7 @@ public class MemberUtil {
 				.orElseThrow(MemberNotFoundException::new);
 	}
 
-	public String createName(final String nickname, final Long providerId) {
-
-		String createdName = generateNameByNicknameAndProviderId(nickname, providerId);
-
-		while (memberRepository.existsByName(createdName)) {
-			createdName = generateNameByNicknameAndProviderId(nickname, providerId);
-		}
-
-		return createdName;
+	public static String generateRandomTag() {
+		return String.format("%04d", new Random().nextInt(10000));
 	}
-
-	private String generateNameByNicknameAndProviderId(final String nickname, final Long providerId) {
-
-		final Long currentTimeMillis = Instant.now().toEpochMilli();
-		final int hashCode = Objects.hash(nickname, providerId, currentTimeMillis);
-
-		final String suffix = String.format("%04d", Math.abs(hashCode) % MemberConstants.USERNAME_SUFFIX_MOD);
-
-		return nickname + suffix;
-	}
-
 }

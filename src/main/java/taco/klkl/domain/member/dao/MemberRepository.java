@@ -10,7 +10,7 @@ import taco.klkl.domain.member.domain.Member;
 @Repository
 public interface MemberRepository extends JpaRepository<Member, Long> {
 
-	boolean existsByName(final String name);
+	boolean existsByNameAndTag(final String name, final String tag);
 
 	Optional<Member> findByName(final String name);
 

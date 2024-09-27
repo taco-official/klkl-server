@@ -135,7 +135,8 @@ public class MemberServiceImpl implements MemberService {
 
 		return memberRepository.findByProviderAndProviderId(provider, providerId)
 			.orElseGet(() -> {
-				final Member newMember = Member.ofUser(name, provider, providerId);
+				final String tag = generateUniqueTag(name);
+				final Member newMember = Member.ofUser(name, tag, provider, providerId);
 				memberRepository.save(newMember);
 				newMember.updateProfileImage(userInfo.imageUrl());
 				return newMember;
@@ -155,6 +156,14 @@ public class MemberServiceImpl implements MemberService {
 			pageable.getPageSize(),
 			Sort.by(Sort.Direction.DESC, "createdAt")
 		);
+	}
+
+	private String generateUniqueTag(final String name) {
+		String tag;
+		do {
+			tag = MemberUtil.generateRandomTag();
+		} while (memberRepository.existsByNameAndTag(name, tag));
+		return tag;
 	}
 
 	private boolean isFollowPresent(final Member follower, final Member following) {
