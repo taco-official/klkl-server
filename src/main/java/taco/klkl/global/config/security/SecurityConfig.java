@@ -70,7 +70,13 @@ public class SecurityConfig {
 			// request authentication & authorization
 			.authorizeHttpRequests(authorizeRequests ->
 				authorizeRequests
-					.requestMatchers("/", "/login/**", "/swagger-ui/**").permitAll()
+					.requestMatchers("/", "/login/**").permitAll()
+					.requestMatchers(
+						"/swagger-ui/**",
+						"/swagger-ui.html",
+						"/api-docs/**",
+						"/v3/api-docs/**"
+					).permitAll()
 					.requestMatchers("/error", "/favicon.ico").permitAll()
 					.requestMatchers(PathRequest.toH2Console()).permitAll()
 					.requestMatchers(HttpMethod.POST).hasAnyRole(USER.name(), ADMIN.name())
