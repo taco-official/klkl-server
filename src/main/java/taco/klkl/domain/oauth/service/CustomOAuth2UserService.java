@@ -10,10 +10,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
-import taco.klkl.domain.oauth.domain.PrincipalDetails;
-import taco.klkl.domain.oauth.dto.response.OAuth2UserInfo;
 import taco.klkl.domain.member.domain.Member;
 import taco.klkl.domain.member.service.MemberService;
+import taco.klkl.domain.oauth.domain.PrincipalDetails;
+import taco.klkl.domain.oauth.dto.response.OAuth2UserInfo;
 
 @Service
 @Transactional(readOnly = true)

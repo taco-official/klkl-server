@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import taco.klkl.domain.oauth.dto.response.OAuth2UserInfo;
 import taco.klkl.domain.like.domain.Like;
 import taco.klkl.domain.member.dao.FollowRepository;
 import taco.klkl.domain.member.dao.MemberRepository;
@@ -24,6 +23,7 @@ import taco.klkl.domain.member.dto.response.MemberDetailResponse;
 import taco.klkl.domain.member.dto.response.MemberSimpleResponse;
 import taco.klkl.domain.member.exception.MemberNotFoundException;
 import taco.klkl.domain.member.exception.SelfFollowNotAllowedException;
+import taco.klkl.domain.oauth.dto.response.OAuth2UserInfo;
 import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.product.dto.response.ProductSimpleResponse;
 import taco.klkl.global.common.response.PagedResponse;
