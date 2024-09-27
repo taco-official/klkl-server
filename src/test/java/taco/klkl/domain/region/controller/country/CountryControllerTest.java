@@ -51,7 +51,7 @@ public class CountryControllerTest {
 	private final Country country1 = Country.of(
 		CountryType.JAPAN,
 		region,
-		"photo",
+		"wallpaper",
 		currency1);
 
 	@Test

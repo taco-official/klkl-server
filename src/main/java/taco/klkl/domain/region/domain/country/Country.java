@@ -96,10 +96,10 @@ public class Country {
 	public static Country of(
 		final CountryType countryType,
 		final Region region,
-		final String photo,
+		final String wallpaper,
 		final Currency currency
 	) {
-		return new Country(countryType, region, photo, currency);
+		return new Country(countryType, region, wallpaper, currency);
 	}
 
 }
