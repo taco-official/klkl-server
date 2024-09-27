@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import taco.klkl.domain.auth.dto.response.OAuth2UserInfo;
 import taco.klkl.domain.like.domain.Like;
 import taco.klkl.domain.member.dao.FollowRepository;
 import taco.klkl.domain.member.dao.MemberRepository;
@@ -123,6 +124,22 @@ public class MemberServiceImpl implements MemberService {
 		Member member = memberUtil.getCurrentMember();
 		updateMemberEntity(member, updateRequest);
 		return MemberDetailResponse.from(member);
+	}
+
+	@Override
+	@Transactional
+	public Member createOrGetMemberByOAuth2(final OAuth2UserInfo userInfo) {
+		final String name = userInfo.name();
+		final String provider = userInfo.provider();
+		final String providerId = userInfo.providerId();
+
+		return memberRepository.findByProviderAndProviderId(provider, providerId)
+			.orElseGet(() -> {
+				final Member newMember = Member.ofUser(name, provider, providerId);
+				memberRepository.save(newMember);
+				newMember.updateProfileImage(userInfo.imageUrl());
+				return newMember;
+			});
 	}
 
 	private void updateMemberEntity(final Member member, final MemberUpdateRequest updateRequest) {

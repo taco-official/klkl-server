@@ -2,11 +2,13 @@ package taco.klkl.domain.auth.dto.response;
 
 import java.util.Map;
 
-import taco.klkl.domain.member.domain.Member;
+import taco.klkl.domain.auth.exception.RegistrationIdNotFoundException;
 
 public record OAuth2UserInfo(
 	String name,
-	String profileImageUrl
+	String imageUrl,
+	String provider,
+	String providerId
 ) {
 
 	public static OAuth2UserInfo of(
@@ -15,7 +17,7 @@ public record OAuth2UserInfo(
 	) {
 		return switch (registrationId) {
 			case "kakao" -> ofKakao(attributes);
-			default -> throw new IllegalArgumentException();
+			default -> throw new RegistrationIdNotFoundException();
 		};
 	}
 
@@ -27,11 +29,9 @@ public record OAuth2UserInfo(
 
 		return new OAuth2UserInfo(
 			(String)kakaoProfile.get("nickname"),
-			(String)kakaoProfile.get("profile_image_url")
+			(String)kakaoProfile.get("profile_image_url"),
+			"kakao",
+			String.valueOf(attributes.get("id"))
 		);
-	}
-
-	public Member toEntity() {
-		return Member.of(name);
 	}
 }

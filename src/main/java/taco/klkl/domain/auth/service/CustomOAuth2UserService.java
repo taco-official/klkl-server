@@ -12,15 +12,15 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import taco.klkl.domain.auth.domain.PrincipalDetails;
 import taco.klkl.domain.auth.dto.response.OAuth2UserInfo;
-import taco.klkl.domain.member.dao.MemberRepository;
 import taco.klkl.domain.member.domain.Member;
+import taco.klkl.domain.member.service.MemberService;
 
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
-	private final MemberRepository memberRepository;
+	private final MemberService memberService;
 
 	@Override
 	@Transactional
@@ -29,24 +29,16 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
 		final String registrationId = userRequest.getClientRegistration().getRegistrationId();
 		final String userNameAttributeName = userRequest.getClientRegistration()
-				.getProviderDetails()
-				.getUserInfoEndpoint()
-				.getUserNameAttributeName();
+			.getProviderDetails()
+			.getUserInfoEndpoint()
+			.getUserNameAttributeName();
 
 		final OAuth2UserInfo oAuth2UserInfo = OAuth2UserInfo.of(
-				registrationId,
-				oAuth2UserAttributes
+			registrationId,
+			oAuth2UserAttributes
 		);
 
-		Member member = getOrSave(oAuth2UserInfo);
+		final Member member = memberService.createOrGetMemberByOAuth2(oAuth2UserInfo);
 		return new PrincipalDetails(member, oAuth2UserAttributes, userNameAttributeName);
-	}
-
-	private Member getOrSave(final OAuth2UserInfo oAuth2UserInfo) {
-		final Member member = memberRepository.findByName(oAuth2UserInfo.name())
-				.orElseGet(oAuth2UserInfo::toEntity);
-		memberRepository.save(member);
-		member.updateProfileImage(oAuth2UserInfo.profileImageUrl());
-		return member;
 	}
 }

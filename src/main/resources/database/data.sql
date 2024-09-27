@@ -1,5 +1,5 @@
 /* Member */
-INSERT INTO member(member_id, name, description, role, created_at)
+INSERT INTO member(id, name, description, role, created_at)
 VALUES (101, 'test', '테스트입니다.', 'USER', now()),
        (102, 'dummy', '덤덤댄스', 'USER', now()),
        (103, 'dumdummy', '덤더미댄스', 'USER', now());

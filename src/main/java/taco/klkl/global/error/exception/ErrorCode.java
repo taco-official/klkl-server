@@ -78,6 +78,7 @@ public enum ErrorCode {
 	// Authentication
 	UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "인증되지 않은 사용자입니다."),
 	PERMISSION_DENIED(HttpStatus.FORBIDDEN, "권한이 거부되었습니다."),
+	REGISTRATION_ID_NOT_FOUND(HttpStatus.NOT_FOUND, "유효하지 않은 접속 ID 입니다."),
 
 	// Sample
 	SAMPLE_ERROR(HttpStatus.BAD_REQUEST, "샘플 에러입니다."),

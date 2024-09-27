@@ -24,53 +24,49 @@ public class Member {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "member_id")
 	private Long id;
 
-	@OneToOne(
-		cascade = CascadeType.ALL,
-		orphanRemoval = true
-	)
+	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "profile_image_id")
 	private ProfileImage profileImage;
 
-	@Column(
-		name = "name",
-		unique = true,
-		length = 30,
-		nullable = false
-	)
+	@Column(unique = true, length = 30, nullable = false)
 	private String name;
 
-	@Column(
-		name = "description",
-		length = 100
-	)
+	@Column(length = 100)
 	private String description;
 
+	private String provider;
+
+	private String providerId;
+
 	@Enumerated(EnumType.STRING)
-	@Column(
-		name = "role",
-		nullable = false
-	)
+	@Column(nullable = false)
 	private Role role;
 
-	@Column(
-		name = "created_at",
-		nullable = false,
-		updatable = false
-	)
+	@Column(nullable = false, updatable = false)
 	private LocalDateTime createdAt;
 
-	private Member(final String name) {
+	private Member(
+		final String name,
+		final String provider,
+		final String providerId,
+		final Role role
+	) {
 		this.name = name;
 		this.description = "";
-		this.role = Role.USER;
+		this.provider = provider;
+		this.providerId = providerId;
+		this.role = role;
 		this.createdAt = LocalDateTime.now();
 	}
 
-	public static Member of(final String name) {
-		return new Member(name);
+	public static Member ofUser(
+		final String name,
+		final String provider,
+		final String providerId
+	) {
+		return new Member(name, provider, providerId, Role.USER);
 	}
 
 	public String getMemberKey() {
