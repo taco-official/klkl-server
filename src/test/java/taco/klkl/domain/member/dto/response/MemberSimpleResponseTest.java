@@ -33,7 +33,7 @@ class MemberSimpleResponseTest {
 		String name = "이름";
 
 		// when
-		Member member = Member.of(name);
+		Member member = Member.ofUser(name, null, null);
 		MemberSimpleResponse memberResponse = MemberSimpleResponse.from(member);
 
 		// then

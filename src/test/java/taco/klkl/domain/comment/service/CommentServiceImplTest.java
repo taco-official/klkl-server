@@ -46,7 +46,7 @@ public class CommentServiceImplTest {
 	@InjectMocks
 	private CommentServiceImpl commentServiceImpl;
 
-	private final Member member = Member.of("name");
+	private final Member member = Member.ofUser("name", null, null);
 
 	private final Product product = mock(Product.class);
 
