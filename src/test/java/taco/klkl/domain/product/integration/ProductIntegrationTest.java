@@ -3,6 +3,7 @@ package taco.klkl.domain.product.integration;
 import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static taco.klkl.global.common.constants.TestConstants.TEST_UUID;
 
 import java.util.List;
 import java.util.Set;
@@ -15,6 +16,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,6 +36,7 @@ import taco.klkl.global.util.ResponseUtil;
 @AutoConfigureMockMvc
 @Transactional
 @Import(TestSecurityConfig.class)
+@WithMockUser(username = TEST_UUID, roles = "USER")
 public class ProductIntegrationTest {
 
 	@Autowired
@@ -80,7 +83,7 @@ public class ProductIntegrationTest {
 			.andExpect(jsonPath("$.data.price", is(createRequest.price())))
 			.andExpect(jsonPath("$.data.likeCount", is(ProductConstants.DEFAULT_LIKE_COUNT)))
 			.andExpect(jsonPath("$.data.rating", is(createRequest.rating())))
-			.andExpect(jsonPath("$.data.user.id", notNullValue()))
+			.andExpect(jsonPath("$.data.member.id", notNullValue()))
 			.andExpect(jsonPath("$.data.city.id", is(createRequest.cityId().intValue())))
 			.andExpect(jsonPath("$.data.subcategory.id", is(createRequest.subcategoryId().intValue())))
 			.andExpect(jsonPath("$.data.currency.id", is(createRequest.currencyId().intValue())))
@@ -118,7 +121,7 @@ public class ProductIntegrationTest {
 			.andExpect(jsonPath("$.data.price", is(createRequest.price())))
 			.andExpect(jsonPath("$.data.likeCount", is(ProductConstants.DEFAULT_LIKE_COUNT)))
 			.andExpect(jsonPath("$.data.rating", is(createRequest.rating())))
-			.andExpect(jsonPath("$.data.user.id", notNullValue()))
+			.andExpect(jsonPath("$.data.member.id", notNullValue()))
 			.andExpect(jsonPath("$.data.city.id", is(createRequest.cityId().intValue())))
 			.andExpect(jsonPath("$.data.subcategory.id", is(createRequest.subcategoryId().intValue())))
 			.andExpect(jsonPath("$.data.currency.id", is(createRequest.currencyId().intValue())))
@@ -1044,9 +1047,10 @@ public class ProductIntegrationTest {
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
 			.andExpect(jsonPath("$.data.content", hasSize(all.size())))
-			.andExpect(jsonPath("$.data.content[0].name", is("왕족발 보쌈 과자")))
-			.andExpect(jsonPath("$.data.content[1].name", is("곤약젤리")))
+			.andExpect(jsonPath("$.data.content[0].name", is("곤약젤리")))
+			.andExpect(jsonPath("$.data.content[1].name", is("왕족발 보쌈 과자")))
 			.andExpect(jsonPath("$.data.content[2].name", is("여름 원피스")))
+			.andExpect(jsonPath("$.data.content[3].name", is("하오하오 봉지라면 핑크색")))
 			.andExpect(jsonPath("$.data.pageNumber", is(0)))
 			.andExpect(jsonPath("$.data.pageSize", is(ProductConstants.DEFAULT_PAGE_SIZE)))
 			.andExpect(jsonPath("$.data.totalElements", is(all.size())))
@@ -1071,8 +1075,8 @@ public class ProductIntegrationTest {
 			.andExpect(jsonPath("$.data.content", hasSize(all.size())))
 			.andExpect(jsonPath("$.data.content[0].name", is("하오하오 봉지라면 핑크색")))
 			.andExpect(jsonPath("$.data.content[1].name", is("여름 원피스")))
-			.andExpect(jsonPath("$.data.content[2].name", is("곤약젤리")))
-			.andExpect(jsonPath("$.data.content[3].name", is("왕족발 보쌈 과자")))
+			.andExpect(jsonPath("$.data.content[2].name", is("왕족발 보쌈 과자")))
+			.andExpect(jsonPath("$.data.content[3].name", is("곤약젤리")))
 			.andExpect(jsonPath("$.data.pageNumber", is(0)))
 			.andExpect(jsonPath("$.data.pageSize", is(ProductConstants.DEFAULT_PAGE_SIZE)))
 			.andExpect(jsonPath("$.data.totalElements", is(all.size())))
@@ -1123,7 +1127,7 @@ public class ProductIntegrationTest {
 			.andExpect(jsonPath("$.data.price", is(updateRequest.price())))
 			.andExpect(jsonPath("$.data.likeCount", is(ProductConstants.DEFAULT_LIKE_COUNT)))
 			.andExpect(jsonPath("$.data.rating", is(updateRequest.rating())))
-			.andExpect(jsonPath("$.data.user.id", is(productDto.member().id().intValue())))
+			.andExpect(jsonPath("$.data.member.id", is(productDto.member().id().intValue())))
 			.andExpect(jsonPath("$.data.city.id", is(updateRequest.cityId().intValue())))
 			.andExpect(jsonPath("$.data.subcategory.id",
 				is(updateRequest.subcategoryId().intValue())))

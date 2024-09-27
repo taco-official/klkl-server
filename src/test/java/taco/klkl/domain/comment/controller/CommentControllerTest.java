@@ -5,6 +5,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static taco.klkl.global.common.constants.TestConstants.TEST_UUID;
 
 import java.util.Arrays;
 import java.util.List;
@@ -16,6 +17,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -50,6 +52,7 @@ import taco.klkl.global.util.ResponseUtil;
 
 @WebMvcTest(CommentController.class)
 @Import(TestSecurityConfig.class)
+@WithMockUser(username = TEST_UUID, roles = "USER")
 public class CommentControllerTest {
 
 	@Autowired
@@ -110,11 +113,11 @@ public class CommentControllerTest {
 	private final Comment comment2 = Comment.of(product, member, "안녕하세요");
 
 	private final CommentCreateUpdateRequest commentCreateRequestDto = new CommentCreateUpdateRequest(
-		"개추 ^^"
+		"createdContent"
 	);
 
 	private final CommentCreateUpdateRequest commentUpdateRequestDto = new CommentCreateUpdateRequest(
-		"윤상정은 바보다, 반박시 님 말이 틀림."
+		"updatedContent"
 	);
 
 	@Test
@@ -157,7 +160,7 @@ public class CommentControllerTest {
 			.andExpect(status().isCreated())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
 			.andExpect(jsonPath("$.data.id", is(comment1.getId())))
-			.andExpect(jsonPath("$.data.user.id", is(comment1.getMember().getId())))
+			.andExpect(jsonPath("$.data.member.id", is(comment1.getMember().getId())))
 			.andExpect(jsonPath("$.data.content", is(comment1.getContent())));
 
 		verify(commentServiceImpl, times(1))
@@ -203,7 +206,7 @@ public class CommentControllerTest {
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
 			.andExpect(jsonPath("$.data.id", is(comment1.getId())))
-			.andExpect(jsonPath("$.data.user.id", is(comment1.getMember().getId())))
+			.andExpect(jsonPath("$.data.member.id", is(comment1.getMember().getId())))
 			.andExpect(jsonPath("$.data.content", is(comment1.getContent())));
 
 		verify(commentServiceImpl, times(1))

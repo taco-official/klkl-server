@@ -6,6 +6,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static taco.klkl.global.common.constants.TestConstants.TEST_UUID;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -21,6 +22,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -47,6 +49,7 @@ import taco.klkl.global.util.ResponseUtil;
 
 @WebMvcTest(ProductController.class)
 @Import(TestSecurityConfig.class)
+@WithMockUser(username = TEST_UUID, roles = "USER")
 public class ProductControllerTest {
 
 	@Autowired
@@ -287,11 +290,11 @@ public class ProductControllerTest {
 			.andExpect(jsonPath("$.data.price", is(productDetailResponse.price())))
 			.andExpect(jsonPath("$.data.likeCount", is(productDetailResponse.likeCount())))
 			.andExpect(jsonPath("$.data.rating", is(productSimpleResponse.rating())))
-			.andExpect(jsonPath("$.data.user.id", is(productDetailResponse.member().id().intValue())))
-			.andExpect(jsonPath("$.data.user.image.id",
+			.andExpect(jsonPath("$.data.member.id", is(productDetailResponse.member().id().intValue())))
+			.andExpect(jsonPath("$.data.member.image.id",
 				is(productDetailResponse.member().image().id().intValue())))
-			.andExpect(jsonPath("$.data.user.name", is(productDetailResponse.member().name())))
-			.andExpect(jsonPath("$.data.user.description",
+			.andExpect(jsonPath("$.data.member.name", is(productDetailResponse.member().name())))
+			.andExpect(jsonPath("$.data.member.description",
 				is(productDetailResponse.member().description())))
 			.andExpect(jsonPath("$.data.city.id",
 				is(productDetailResponse.city().id().intValue())))
@@ -329,11 +332,11 @@ public class ProductControllerTest {
 			.andExpect(jsonPath("$.data.price", is(productDetailResponse.price())))
 			.andExpect(jsonPath("$.data.likeCount", is(productDetailResponse.likeCount())))
 			.andExpect(jsonPath("$.data.rating", is(productSimpleResponse.rating())))
-			.andExpect(jsonPath("$.data.user.id", is(productDetailResponse.member().id().intValue())))
-			.andExpect(jsonPath("$.data.user.image.id",
+			.andExpect(jsonPath("$.data.member.id", is(productDetailResponse.member().id().intValue())))
+			.andExpect(jsonPath("$.data.member.image.id",
 				is(productDetailResponse.member().image().id().intValue())))
-			.andExpect(jsonPath("$.data.user.name", is(productDetailResponse.member().name())))
-			.andExpect(jsonPath("$.data.user.description",
+			.andExpect(jsonPath("$.data.member.name", is(productDetailResponse.member().name())))
+			.andExpect(jsonPath("$.data.member.description",
 				is(productDetailResponse.member().description())))
 			.andExpect(jsonPath("$.data.city.id",
 				is(productDetailResponse.city().id().intValue())))
@@ -370,11 +373,11 @@ public class ProductControllerTest {
 			.andExpect(jsonPath("$.data.price", is(productDetailResponse.price())))
 			.andExpect(jsonPath("$.data.likeCount", is(productDetailResponse.likeCount())))
 			.andExpect(jsonPath("$.data.rating", is(productSimpleResponse.rating())))
-			.andExpect(jsonPath("$.data.user.id", is(productDetailResponse.member().id().intValue())))
-			.andExpect(jsonPath("$.data.user.image.id",
+			.andExpect(jsonPath("$.data.member.id", is(productDetailResponse.member().id().intValue())))
+			.andExpect(jsonPath("$.data.member.image.id",
 				is(productDetailResponse.member().image().id().intValue())))
-			.andExpect(jsonPath("$.data.user.name", is(productDetailResponse.member().name())))
-			.andExpect(jsonPath("$.data.user.description",
+			.andExpect(jsonPath("$.data.member.name", is(productDetailResponse.member().name())))
+			.andExpect(jsonPath("$.data.member.description",
 				is(productDetailResponse.member().description())))
 			.andExpect(jsonPath("$.data.city.id",
 				is(productDetailResponse.city().id().intValue())))

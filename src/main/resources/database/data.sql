@@ -1,6 +1,6 @@
 /* Member */
 INSERT INTO member(id, uuid, name, tag, description, role, created_at)
-VALUES (101, UUID(), 'test', '0001', '테스트입니다.', 'USER', now()),
+VALUES (101, '550e8400-e29b-41d4-a716-446655440000', 'test', '0001', '테스트입니다.', 'USER', now()),
        (102, UUID(), 'dummy', '0002', '덤덤댄스', 'USER', now()),
        (103, UUID(), 'dumdummy', '0003', '덤더미댄스', 'USER', now());
 
@@ -135,7 +135,7 @@ VALUES
 /* Product */
 INSERT INTO product(product_id, member_id, name, description, address, price, like_count, rating,
                     city_id, subcategory_id, currency_id, created_at)
-VALUES (101, 102, '곤약젤리', '탱글탱글 맛있는 곤약젤리', '신사이바시 메가돈키호테', 1000, 100, 5.0, 414, 311, 438, now()),
+VALUES (101, 102, '곤약젤리', '탱글탱글 맛있는 곤약젤리', '신사이바시 메가돈키호테', 1000, 0, 5.0, 414, 311, 438, now()),
        (102, 102, '여름 원피스', '시원하고 여름 휴양지 느낌의 원피스', '방콕 짜뚜짝 시장', 300, 333, 4.5, 425, 323, 441, now()),
        (103, 103, '하오하오 봉지라면 핑크색', '새우맛이 나는 맛있는 라면', '롯데마트 나트랑', 15000, 500, 5.0, 429, 310, 442, now()),
        (390, 101, '왕족발 보쌈 과자', '맛있는 왕족발 보쌈 과자', '상하이 장충동', 3000, 10, 3.0, 422, 311, 439, now());

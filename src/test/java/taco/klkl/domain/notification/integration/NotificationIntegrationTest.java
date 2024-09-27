@@ -3,6 +3,7 @@ package taco.klkl.domain.notification.integration;
 import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static taco.klkl.global.common.constants.TestConstants.TEST_UUID;
 
 import java.util.List;
 
@@ -14,6 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,6 +30,7 @@ import taco.klkl.global.util.ResponseUtil;
 @AutoConfigureMockMvc
 @Transactional
 @Import(TestSecurityConfig.class)
+@WithMockUser(username = TEST_UUID, roles = "USER")
 public class NotificationIntegrationTest {
 
 	@Autowired
