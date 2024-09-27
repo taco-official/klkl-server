@@ -54,7 +54,7 @@ class NotificationControllerTest {
 	@MockBean
 	NotificationService notificationService;
 
-	private final Member member = Member.ofUser("name", null, null);
+	private final Member member = Member.ofUser("name", "0000", null, null);
 	private final Country country = Country.of(CountryType.MALAYSIA, region, "wallpaper", currency);
 	private final City city = City.of(CityType.BORACAY, country);
 	private final Category category = Category.of(CategoryType.CLOTHES);

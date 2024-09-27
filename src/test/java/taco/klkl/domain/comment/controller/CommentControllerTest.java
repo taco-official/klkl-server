@@ -62,7 +62,7 @@ public class CommentControllerTest {
 	private final Long productId = 1L;
 	private final Long commentId = 1L;
 
-	private final Member member = Member.ofUser("name", null, null);
+	private final Member member = Member.ofUser("name", "0000", null, null);
 
 	private final Region region = Region.from(RegionType.SOUTHEAST_ASIA);
 

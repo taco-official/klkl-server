@@ -35,7 +35,7 @@ public class MemberDetailResponseTest {
 		String name = "이름";
 
 		// when
-		Member member = Member.ofUser(name, null, null);
+		Member member = Member.ofUser(name, "0000", null, null);
 		MemberDetailResponse memberResponse = MemberDetailResponse.from(member);
 
 		// then
