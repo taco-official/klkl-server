@@ -24,9 +24,9 @@ public class Token {
 	private String accessToken;
 
 	private Token(
-			final String name,
-			final String refreshToken,
-			final String accessToken
+		final String name,
+		final String refreshToken,
+		final String accessToken
 	) {
 		this.name = name;
 		this.refreshToken = refreshToken;
@@ -34,16 +34,16 @@ public class Token {
 	}
 
 	public static Token of(
-			final String name,
-			final String refreshToken,
-			final String accessToken
+		final String name,
+		final String refreshToken,
+		final String accessToken
 	) {
 		return new Token(name, refreshToken, accessToken);
 	}
 
 	public void update(
-			final String refreshToken,
-			final String accessToken
+		final String refreshToken,
+		final String accessToken
 	) {
 		this.refreshToken = refreshToken;
 		this.accessToken = accessToken;

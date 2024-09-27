@@ -12,9 +12,9 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import taco.klkl.domain.member.domain.Member;
 
 public record PrincipalDetails(
-		Member member,
-		Map<String, Object> attributes,
-		String attributeKey
+	Member member,
+	Map<String, Object> attributes,
+	String attributeKey
 ) implements OAuth2User, UserDetails {
 
 	@Override
