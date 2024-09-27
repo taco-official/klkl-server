@@ -1,6 +1,7 @@
 package taco.klkl.domain.member.domain;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -21,6 +22,9 @@ public class Member {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
+
+	@Column(unique = true, nullable = false, updatable = false)
+	private UUID uuid;
 
 	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "profile_image_id")
@@ -53,6 +57,7 @@ public class Member {
 		final String providerId,
 		final Role role
 	) {
+		this.uuid = UUID.randomUUID();
 		this.name = name;
 		this.tag = tag;
 		this.description = "";
@@ -72,7 +77,7 @@ public class Member {
 	}
 
 	public String getMemberKey() {
-		return name;
+		return uuid.toString();
 	}
 
 	public void update(

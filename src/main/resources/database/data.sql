@@ -1,8 +1,8 @@
 /* Member */
-INSERT INTO member(id, name, description, role, created_at)
-VALUES (101, 'test', '테스트입니다.', 'USER', now()),
-       (102, 'dummy', '덤덤댄스', 'USER', now()),
-       (103, 'dumdummy', '덤더미댄스', 'USER', now());
+INSERT INTO member(id, uuid, name, tag, description, role, created_at)
+VALUES (101, UUID(), 'test', '0001', '테스트입니다.', 'USER', now()),
+       (102, UUID(), 'dummy', '0002', '덤덤댄스', 'USER', now()),
+       (103, UUID(), 'dumdummy', '0003', '덤더미댄스', 'USER', now());
 
 /* Like */
 

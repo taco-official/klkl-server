@@ -1,6 +1,7 @@
 package taco.klkl.global.util;
 
 import java.util.Random;
+import java.util.UUID;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -24,9 +25,18 @@ public class MemberUtil {
 	 * @return
 	 */
 	public Member getCurrentMember() {
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		return memberRepository.findByName(authentication.getName())
+		final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		final UUID uuid = getCurrentMemberUuid(authentication.getName());
+		return memberRepository.findByUuid(uuid)
 				.orElseThrow(MemberNotFoundException::new);
+	}
+
+	private UUID getCurrentMemberUuid(final String authName) {
+		try {
+			return UUID.fromString(authName);
+		} catch (IllegalArgumentException e) {
+			throw new MemberNotFoundException();
+		}
 	}
 
 	public static String generateRandomTag() {
