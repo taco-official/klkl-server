@@ -82,7 +82,7 @@ public class ProductController {
 	@Operation(summary = "내 팔로잉의 상품 목록 조회", description = "내 팔로잉 유저들의 상품 목록을 조회합니다.")
 	public PagedResponse<ProductSimpleResponse> getMyFollowingProducts(
 		@PageableDefault(size = ProductConstants.DEFAULT_PAGE_SIZE) final Pageable pageable,
-		@RequestParam(value = "memberIds", required = false) final Set<Long> memberIds
+		@RequestParam(value = "member_id", required = false) final Set<Long> memberIds
 	) {
 		return productService.findFollowingProducts(pageable, memberIds);
 	}
