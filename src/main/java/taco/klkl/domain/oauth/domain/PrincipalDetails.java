@@ -1,4 +1,4 @@
-package taco.klkl.domain.auth.domain;
+package taco.klkl.domain.oauth.domain;
 
 import java.util.Collection;
 import java.util.Collections;

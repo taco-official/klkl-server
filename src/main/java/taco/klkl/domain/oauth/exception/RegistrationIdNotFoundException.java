@@ -1,4 +1,4 @@
-package taco.klkl.domain.auth.exception;
+package taco.klkl.domain.oauth.exception;
 
 import taco.klkl.global.error.exception.CustomException;
 import taco.klkl.global.error.exception.ErrorCode;

@@ -1,4 +1,4 @@
-package taco.klkl.domain.auth.service;
+package taco.klkl.domain.oauth.service;
 
 import java.io.IOException;
 

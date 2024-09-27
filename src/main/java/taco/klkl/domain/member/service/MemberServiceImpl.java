@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import taco.klkl.domain.auth.dto.response.OAuth2UserInfo;
+import taco.klkl.domain.oauth.dto.response.OAuth2UserInfo;
 import taco.klkl.domain.like.domain.Like;
 import taco.klkl.domain.member.dao.FollowRepository;
 import taco.klkl.domain.member.dao.MemberRepository;

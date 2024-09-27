@@ -1,8 +1,8 @@
-package taco.klkl.domain.auth.dto.response;
+package taco.klkl.domain.oauth.dto.response;
 
 import java.util.Map;
 
-import taco.klkl.domain.auth.exception.RegistrationIdNotFoundException;
+import taco.klkl.domain.oauth.exception.RegistrationIdNotFoundException;
 
 public record OAuth2UserInfo(
 	String name,

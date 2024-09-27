@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import taco.klkl.domain.auth.dto.response.OAuth2UserInfo;
+import taco.klkl.domain.oauth.dto.response.OAuth2UserInfo;
 import taco.klkl.domain.member.domain.Member;
 import taco.klkl.domain.member.dto.request.MemberUpdateRequest;
 import taco.klkl.domain.member.dto.response.FollowResponse;

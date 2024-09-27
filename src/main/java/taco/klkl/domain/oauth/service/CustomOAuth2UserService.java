@@ -1,4 +1,4 @@
-package taco.klkl.domain.auth.service;
+package taco.klkl.domain.oauth.service;
 
 import java.util.Map;
 
@@ -10,8 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
-import taco.klkl.domain.auth.domain.PrincipalDetails;
-import taco.klkl.domain.auth.dto.response.OAuth2UserInfo;
+import taco.klkl.domain.oauth.domain.PrincipalDetails;
+import taco.klkl.domain.oauth.dto.response.OAuth2UserInfo;
 import taco.klkl.domain.member.domain.Member;
 import taco.klkl.domain.member.service.MemberService;
 

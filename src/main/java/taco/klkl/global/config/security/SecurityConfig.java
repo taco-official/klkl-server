@@ -19,8 +19,8 @@ import org.springframework.security.web.util.matcher.RegexRequestMatcher;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import taco.klkl.domain.auth.service.CustomOAuth2UserService;
-import taco.klkl.domain.auth.service.OAuth2SuccessHandler;
+import taco.klkl.domain.oauth.service.CustomOAuth2UserService;
+import taco.klkl.domain.oauth.service.OAuth2SuccessHandler;
 
 @Slf4j
 @Configuration
