@@ -17,7 +17,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@Entity
+@Entity(name = "follow")
 @Table(
 	uniqueConstraints = {
 		@UniqueConstraint(columnNames = {"follower_id", "following_id"})
