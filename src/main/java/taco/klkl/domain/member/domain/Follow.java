@@ -12,17 +12,18 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor
-@Entity(name = "follow")
+@Entity
 @Table(
 	uniqueConstraints = {
 		@UniqueConstraint(columnNames = {"follower_id", "following_id"})
 	}
 )
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Follow {
 
 	@Id
