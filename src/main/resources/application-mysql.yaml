@@ -18,5 +18,5 @@ spring:
     database-platform: org.hibernate.dialect.MySQLDialect
   sql:
     init:
-      data-locations: classpath:database/data.sql
+      data-locations: classpath:database/data-mysql.sql
       mode: always

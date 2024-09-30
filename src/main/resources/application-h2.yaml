@@ -14,7 +14,7 @@ spring:
         format_sql: true
   datasource:
     driver-class-name: org.h2.Driver
-    url: jdbc:h2:mem:klkldb;NON_KEYWORDS=USER;MODE=MySQL
+    url: jdbc:h2:mem:klkldb;MODE=MySQL
     username: sa
     password:
   h2:
@@ -25,6 +25,6 @@ spring:
         web-allow-others: true
   sql:
     init:
-      data-locations: classpath:database/data.sql
+      data-locations: classpath:database/data-h2.sql
       mode: always
       platform: h2

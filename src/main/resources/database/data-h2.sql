@@ -1,8 +1,8 @@
 /* Member */
 INSERT INTO member(id, uuid, name, tag, description, role, created_at)
-VALUES (101, '550e8400-e29b-41d4-a716-446655440000', 'test', '0001', '테스트입니다.', 'USER', now()),
-       (102, UUID(), 'dummy', '0002', '덤덤댄스', 'USER', now()),
-       (103, UUID(), 'dumdummy', '0003', '덤더미댄스', 'USER', now());
+VALUES (101, CAST(X'550e8400e29b41d4a716446655440000' AS UUID), 'test', '0001', '테스트입니다.', 'USER', CURRENT_TIMESTAMP),
+       (102, RANDOM_UUID(), 'dummy1', '0002', '더미1', 'USER', CURRENT_TIMESTAMP),
+       (103, RANDOM_UUID(), 'dummy2', '0003', '더미2', 'USER', CURRENT_TIMESTAMP);
 
 /* Like */
 
