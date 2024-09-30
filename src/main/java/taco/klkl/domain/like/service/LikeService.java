@@ -1,12 +1,9 @@
 package taco.klkl.domain.like.service;
 
-import org.springframework.stereotype.Service;
-
 import taco.klkl.domain.like.dto.response.LikeResponse;
 import taco.klkl.domain.member.domain.Member;
 import taco.klkl.domain.product.domain.Product;
 
-@Service
 public interface LikeService {
 
 	LikeResponse getLike(final Long productId);

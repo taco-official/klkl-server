@@ -2,12 +2,9 @@ package taco.klkl.domain.comment.service;
 
 import java.util.List;
 
-import org.springframework.stereotype.Service;
-
 import taco.klkl.domain.comment.dto.request.CommentCreateUpdateRequest;
 import taco.klkl.domain.comment.dto.response.CommentResponse;
 
-@Service
 public interface CommentService {
 
 	List<CommentResponse> findCommentsByProductId(final Long productId);

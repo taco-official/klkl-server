@@ -3,7 +3,6 @@ package taco.klkl.domain.product.service;
 import java.util.Set;
 
 import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
 
 import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.product.dto.request.ProductCreateUpdateRequest;
@@ -14,7 +13,6 @@ import taco.klkl.domain.product.dto.response.ProductSimpleResponse;
 import taco.klkl.domain.product.exception.ProductNotFoundException;
 import taco.klkl.global.common.response.PagedResponse;
 
-@Service
 public interface ProductService {
 
 	PagedResponse<ProductSimpleResponse> findProductsByFilterOptionsAndSortOptions(
