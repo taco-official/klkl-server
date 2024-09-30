@@ -25,6 +25,6 @@ spring:
         web-allow-others: true
   sql:
     init:
-      data-locations: classpath:database/data.sql
+      data-locations: classpath:database/data-h2.sql
       mode: always
       platform: h2

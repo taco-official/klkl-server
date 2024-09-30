@@ -34,7 +34,7 @@ public class Member {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
-	@Column(unique = true, nullable = false, updatable = false)
+	@Column(columnDefinition = "BINARY(16)", unique = true, nullable = false, updatable = false)
 	private UUID uuid;
 
 	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
