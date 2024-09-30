@@ -11,13 +11,14 @@ public record ProductSimpleResponse(
 	Long id,
 	ImageResponse image,
 	String name,
-	Integer likeCount,
-	Double rating,
+	int likeCount,
+	double rating,
 	String countryName,
 	String categoryName,
-	Set<TagSimpleResponse> tags
+	Set<TagSimpleResponse> tags,
+	boolean isLiked
 ) {
-	public static ProductSimpleResponse from(final Product product) {
+	public static ProductSimpleResponse from(final Product product, final boolean isLiked) {
 		return new ProductSimpleResponse(
 			product.getId(),
 			ImageResponse.from(product.getMainImage()),
@@ -26,7 +27,8 @@ public record ProductSimpleResponse(
 			product.getRating().getValue(),
 			product.getCity().getCountry().getName(),
 			product.getSubcategory().getCategory().getName(),
-			ProductUtil.generateTagsByProduct(product)
+			ProductUtil.generateTagsByProduct(product),
+			isLiked
 		);
 	}
 }

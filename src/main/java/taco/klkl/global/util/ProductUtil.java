@@ -12,9 +12,12 @@ import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
 import taco.klkl.domain.category.dto.response.tag.TagSimpleResponse;
+import taco.klkl.domain.member.domain.Member;
+import taco.klkl.domain.member.exception.MemberNotFoundException;
 import taco.klkl.domain.product.dao.ProductRepository;
 import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.product.domain.ProductTag;
+import taco.klkl.domain.product.dto.response.ProductSimpleResponse;
 import taco.klkl.domain.product.exception.ProductNotFoundException;
 
 @Component
@@ -23,6 +26,9 @@ public class ProductUtil {
 
 	private final ProductRepository productRepository;
 
+	private final MemberUtil memberUtil;
+	private final LikeUtil likeUtil;
+
 	public Product findProductEntityById(final Long id) {
 		return productRepository.findById(id)
 			.orElseThrow(ProductNotFoundException::new);
@@ -30,6 +36,16 @@ public class ProductUtil {
 
 	public Page<Product> findProductsByMemberId(final Long memberId, final Pageable pageable) {
 		return productRepository.findByMemberId(memberId, pageable);
+	}
+
+	public ProductSimpleResponse createProductSimpleResponse(final Product product) {
+		try {
+			Member currentMember = memberUtil.getCurrentMember();
+			boolean isLiked = likeUtil.isLikedByProductAndMember(product, currentMember);
+			return ProductSimpleResponse.from(product, isLiked);
+		} catch (MemberNotFoundException e) {
+			return ProductSimpleResponse.from(product, false);
+		}
 	}
 
 	public void validateProductId(final Long id) {

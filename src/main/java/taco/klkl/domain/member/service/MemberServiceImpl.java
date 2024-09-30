@@ -61,7 +61,7 @@ public class MemberServiceImpl implements MemberService {
 		validateUser(id);
 		final Pageable sortedPageable = createPageableSortedByCreatedAtDesc(pageable);
 		final Page<Product> userProducts = productUtil.findProductsByMemberId(id, sortedPageable);
-		return PagedResponse.of(userProducts, ProductSimpleResponse::from);
+		return PagedResponse.of(userProducts, productUtil::createProductSimpleResponse);
 	}
 
 	@Override
@@ -70,7 +70,7 @@ public class MemberServiceImpl implements MemberService {
 		final Pageable sortedPageable = createPageableSortedByCreatedAtDesc(pageable);
 		final Page<Like> likes = likeUtil.findLikesByMemberId(id, sortedPageable);
 		final Page<Product> likedProducts = likes.map(Like::getProduct);
-		return PagedResponse.of(likedProducts, ProductSimpleResponse::from);
+		return PagedResponse.of(likedProducts, productUtil::createProductSimpleResponse);
 	}
 
 	@Override

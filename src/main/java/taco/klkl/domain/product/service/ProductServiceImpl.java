@@ -53,11 +53,7 @@ import taco.klkl.domain.region.domain.currency.Currency;
 import taco.klkl.domain.region.exception.city.CityNotFoundException;
 import taco.klkl.domain.region.exception.currency.CurrencyNotFoundException;
 import taco.klkl.global.common.response.PagedResponse;
-import taco.klkl.global.util.CityUtil;
-import taco.klkl.global.util.CurrencyUtil;
-import taco.klkl.global.util.MemberUtil;
-import taco.klkl.global.util.SubcategoryUtil;
-import taco.klkl.global.util.TagUtil;
+import taco.klkl.global.util.*;
 
 @Slf4j
 @Primary
@@ -74,6 +70,7 @@ public class ProductServiceImpl implements ProductService {
 	private final SubcategoryUtil subcategoryUtil;
 	private final CityUtil cityUtil;
 	private final CurrencyUtil currencyUtil;
+	private final ProductUtil productUtil;
 
 	@Override
 	public PagedResponse<ProductSimpleResponse> findProductsByFilterOptionsAndSortOptions(
@@ -88,7 +85,7 @@ public class ProductServiceImpl implements ProductService {
 		final List<Product> products = fetchProducts(baseQuery, pageable, sortOptions);
 		final Page<Product> productPage = new PageImpl<>(products, pageable, total);
 
-		return PagedResponse.of(productPage, ProductSimpleResponse::from);
+		return PagedResponse.of(productPage, productUtil::createProductSimpleResponse);
 	}
 
 	@Override
@@ -117,7 +114,7 @@ public class ProductServiceImpl implements ProductService {
 		final List<Product> products = fetchProducts(baseQuery, pageable, sortOptions);
 		final Page<Product> productPage = new PageImpl<>(products, pageable, total);
 
-		return PagedResponse.of(productPage, ProductSimpleResponse::from);
+		return PagedResponse.of(productPage, productUtil::createProductSimpleResponse);
 	}
 
 	@Override
@@ -132,7 +129,7 @@ public class ProductServiceImpl implements ProductService {
 			userIds,
 			sortedPageable
 		);
-		return PagedResponse.of(followingProducts, ProductSimpleResponse::from);
+		return PagedResponse.of(followingProducts, productUtil::createProductSimpleResponse);
 	}
 
 	@Override
