@@ -18,9 +18,8 @@ import jakarta.transaction.Transactional;
 import taco.klkl.domain.category.dao.category.CategoryRepository;
 import taco.klkl.domain.category.domain.category.Category;
 import taco.klkl.domain.category.domain.category.CategoryType;
-import taco.klkl.domain.category.domain.subcategory.Subcategory;
-import taco.klkl.domain.category.domain.subcategory.SubcategoryType;
-import taco.klkl.domain.category.dto.response.category.CategoryResponse;
+import taco.klkl.domain.category.dto.response.category.CategoryDetailResponse;
+import taco.klkl.domain.category.dto.response.category.CategorySimpleResponse;
 
 @Transactional
 @ExtendWith(MockitoExtension.class)
@@ -34,12 +33,9 @@ class CategoryServiceImplTest {
 
 	private final Category category = Category.of(CategoryType.FOOD);
 	private final Category category2 = Category.of(CategoryType.CLOTHES);
-	private final Subcategory subcategory1 = Subcategory.of(category, SubcategoryType.SNACK);
-	private final Subcategory subcategory2 = Subcategory.of(category, SubcategoryType.INSTANT_FOOD);
-	private final List<Subcategory> subcategories = Arrays.asList(subcategory1, subcategory2);
 
 	@Test
-	@DisplayName("카테고리 Service CategoryResponse(DTO)에 담겨 나오는지 Test")
+	@DisplayName("CategoryDetailResponse 에 담겨 나오는지 Test")
 	void testFindAllCategories() {
 		// given
 		Category category1 = Category.of(CategoryType.CLOTHES);
@@ -49,7 +45,7 @@ class CategoryServiceImplTest {
 		when(categoryRepository.findAll()).thenReturn(categories);
 
 		// when
-		List<CategoryResponse> result = categoryService.findAllCategories();
+		List<CategoryDetailResponse> result = categoryService.findAllCategories();
 
 		// then
 		assertNotNull(result);
@@ -62,21 +58,22 @@ class CategoryServiceImplTest {
 	}
 
 	@Test
-	@DisplayName("CategoryName리스트로 Category 조회")
+	@DisplayName("이름 부분 문자열로 Category 조회")
 	void testFindAllCategoriesByPartialString() {
 		// given
 		String partialName = "foo";
 		List<Category> categories = Arrays.asList(category, category2);
-		CategoryResponse category1ResponseDto = CategoryResponse.from(category);
-		CategoryResponse category2ResponseDto = CategoryResponse.from(category2);
+		CategorySimpleResponse category1Response = CategorySimpleResponse.from(category);
+		CategorySimpleResponse category2Response = CategorySimpleResponse.from(category2);
 
 		when(categoryRepository.findAllByNameContaining(partialName)).thenReturn(categories);
 
 		// when
-		List<CategoryResponse> categoryResponses = categoryService.findAllCategoriesByPartialString(partialName);
+		List<CategorySimpleResponse> categorySimpleResponses =
+				categoryService.findAllCategoriesByPartialString(partialName);
 
 		// then
-		Assertions.assertThat(categoryResponses.size()).isEqualTo(2);
-		Assertions.assertThat(categoryResponses).containsExactly(category1ResponseDto, category2ResponseDto);
+		Assertions.assertThat(categorySimpleResponses.size()).isEqualTo(2);
+		Assertions.assertThat(categorySimpleResponses).containsExactly(category1Response, category2Response);
 	}
 }

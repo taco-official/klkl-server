@@ -19,7 +19,7 @@ import taco.klkl.domain.category.domain.category.Category;
 import taco.klkl.domain.category.domain.category.CategoryType;
 import taco.klkl.domain.category.domain.subcategory.Subcategory;
 import taco.klkl.domain.category.domain.subcategory.SubcategoryType;
-import taco.klkl.domain.category.dto.response.subcategory.SubcategoryResponse;
+import taco.klkl.domain.category.dto.response.subcategory.SubcategorySimpleResponse;
 
 @ExtendWith(MockitoExtension.class)
 @Transactional
@@ -42,19 +42,19 @@ public class SubcategoryServiceImplTest {
 		// given
 		String partialName = "foo";
 		List<Subcategory> subcategories = Arrays.asList(subcategory1, subcategory2, subcategory3);
-		SubcategoryResponse subcategory1ResponseDto = SubcategoryResponse.from(subcategory1);
-		SubcategoryResponse subcategory2ResponseDto = SubcategoryResponse.from(subcategory2);
-		SubcategoryResponse subcategory3ResponseDto = SubcategoryResponse.from(subcategory3);
+		SubcategorySimpleResponse subcategory1Response = SubcategorySimpleResponse.from(subcategory1);
+		SubcategorySimpleResponse subcategory2Response = SubcategorySimpleResponse.from(subcategory2);
+		SubcategorySimpleResponse subcategory3Response = SubcategorySimpleResponse.from(subcategory3);
 
 		when(subcategoryRepository.findAllByNameContaining(partialName)).thenReturn(subcategories);
 
 		// when
-		List<SubcategoryResponse> subcategoryResponseList = subcategoryService
+		List<SubcategorySimpleResponse> subcategorySimpleResponses = subcategoryService
 			.findAllSubcategoriesByPartialString(partialName);
 
 		// then
-		Assertions.assertThat(subcategoryResponseList.size()).isEqualTo(3);
-		Assertions.assertThat(subcategoryResponseList)
-			.containsExactly(subcategory1ResponseDto, subcategory2ResponseDto, subcategory3ResponseDto);
+		Assertions.assertThat(subcategorySimpleResponses.size()).isEqualTo(3);
+		Assertions.assertThat(subcategorySimpleResponses)
+			.containsExactly(subcategory1Response, subcategory2Response, subcategory3Response);
 	}
 }

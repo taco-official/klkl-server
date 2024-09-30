@@ -17,7 +17,7 @@ import taco.klkl.domain.category.domain.subcategory.Subcategory;
 import taco.klkl.domain.category.domain.subcategory.SubcategoryType;
 import taco.klkl.domain.category.domain.tag.Tag;
 import taco.klkl.domain.category.domain.tag.TagType;
-import taco.klkl.domain.category.dto.response.tag.TagResponse;
+import taco.klkl.domain.category.dto.response.tag.TagSimpleResponse;
 import taco.klkl.domain.image.dto.response.ImageResponse;
 import taco.klkl.domain.member.domain.Member;
 import taco.klkl.domain.product.domain.Product;
@@ -110,7 +110,7 @@ class ProductSimpleResponseTest {
 	@DisplayName("생성자를 통해 ProductSimpleResponse 생성 테스트")
 	void testConstructor() {
 		// given
-		Set<TagResponse> tags = ProductUtil.generateTagsByProduct(product);
+		Set<TagSimpleResponse> tags = ProductUtil.generateTagsByProduct(product);
 
 		// when
 		ProductSimpleResponse dto = new ProductSimpleResponse(

@@ -28,8 +28,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import taco.klkl.domain.category.domain.category.CategoryType;
-import taco.klkl.domain.category.dto.response.subcategory.SubcategoryResponse;
-import taco.klkl.domain.category.dto.response.tag.TagResponse;
+import taco.klkl.domain.category.dto.response.subcategory.SubcategorySimpleResponse;
+import taco.klkl.domain.category.dto.response.tag.TagSimpleResponse;
 import taco.klkl.domain.image.dto.response.ImageResponse;
 import taco.klkl.domain.member.dto.response.MemberDetailResponse;
 import taco.klkl.domain.product.domain.Rating;
@@ -40,7 +40,7 @@ import taco.klkl.domain.product.dto.response.ProductDetailResponse;
 import taco.klkl.domain.product.dto.response.ProductSimpleResponse;
 import taco.klkl.domain.product.service.ProductService;
 import taco.klkl.domain.region.domain.country.CountryType;
-import taco.klkl.domain.region.dto.response.city.CityResponse;
+import taco.klkl.domain.region.dto.response.city.CitySimpleResponse;
 import taco.klkl.domain.region.dto.response.currency.CurrencyResponse;
 import taco.klkl.domain.token.service.TokenProvider;
 import taco.klkl.global.common.response.PagedResponse;
@@ -80,22 +80,21 @@ public class ProductControllerTest {
 			"userTag",
 			"userDescription"
 		);
-		CityResponse cityResponse = new CityResponse(
+		CitySimpleResponse citySimpleResponse = new CitySimpleResponse(
 			1L,
 			"cityName"
 		);
-		TagResponse tagResponse1 = new TagResponse(
+		TagSimpleResponse tagSimpleResponse1 = new TagSimpleResponse(
 			1L,
 			"tagName1"
 		);
-		TagResponse tagResponse2 = new TagResponse(
+		TagSimpleResponse tagSimpleResponse2 = new TagSimpleResponse(
 			2L,
 			"tagName2"
 		);
-		SubcategoryResponse subcategoryResponse = new SubcategoryResponse(
+		SubcategorySimpleResponse subcategorySimpleResponse = new SubcategorySimpleResponse(
 			1L,
-			"subcategoryName",
-			List.of(tagResponse1, tagResponse2)
+			"subcategoryName"
 		);
 		CurrencyResponse currencyResponse = new CurrencyResponse(
 			1L,
@@ -112,7 +111,7 @@ public class ProductControllerTest {
 			Rating.FIVE.getValue(),
 			CountryType.THAILAND.getName(),
 			CategoryType.FOOD.getName(),
-			Set.of(tagResponse1, tagResponse2)
+			Set.of(tagSimpleResponse1, tagSimpleResponse2)
 		);
 		productDetailResponse = new ProductDetailResponse(
 			1L,
@@ -128,10 +127,10 @@ public class ProductControllerTest {
 			10,
 			Rating.FIVE.getValue(),
 			memberDetailResponse,
-			cityResponse,
-			subcategoryResponse,
+			citySimpleResponse,
+			subcategorySimpleResponse,
 			currencyResponse,
-			Set.of(tagResponse1, tagResponse2),
+			Set.of(tagSimpleResponse1, tagSimpleResponse2),
 			LocalDateTime.now()
 		);
 		productCreateUpdateRequest = new ProductCreateUpdateRequest(

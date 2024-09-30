@@ -36,7 +36,7 @@ import taco.klkl.domain.category.domain.subcategory.Subcategory;
 import taco.klkl.domain.category.domain.subcategory.SubcategoryType;
 import taco.klkl.domain.category.domain.tag.QTag;
 import taco.klkl.domain.category.domain.tag.Tag;
-import taco.klkl.domain.category.dto.response.tag.TagResponse;
+import taco.klkl.domain.category.dto.response.tag.TagSimpleResponse;
 import taco.klkl.domain.like.exception.LikeCountBelowMinimumException;
 import taco.klkl.domain.like.exception.LikeCountOverMaximumException;
 import taco.klkl.domain.member.domain.Member;
@@ -340,7 +340,7 @@ class ProductServiceImplTest {
 			assertThat(result.tags()).isNotNull();
 			assertThat(result.tags()).hasSize(testProduct.getProductTags().size());
 			Set<Long> resultTagIds = result.tags().stream()
-				.map(TagResponse::id)
+				.map(TagSimpleResponse::id)
 				.collect(Collectors.toSet());
 
 			Set<Long> testProductTagIds = testProduct.getProductTags().stream()

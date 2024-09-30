@@ -10,7 +10,7 @@ import org.mockito.MockitoAnnotations;
 
 import taco.klkl.domain.category.domain.subcategory.Subcategory;
 import taco.klkl.domain.category.domain.subcategory.SubcategoryType;
-import taco.klkl.domain.category.dto.response.subcategory.SubcategoryResponse;
+import taco.klkl.domain.category.dto.response.subcategory.SubcategorySimpleResponse;
 import taco.klkl.domain.member.domain.Member;
 import taco.klkl.domain.member.dto.response.MemberDetailResponse;
 import taco.klkl.domain.product.domain.Product;
@@ -19,7 +19,7 @@ import taco.klkl.domain.region.domain.city.City;
 import taco.klkl.domain.region.domain.city.CityType;
 import taco.klkl.domain.region.domain.currency.Currency;
 import taco.klkl.domain.region.domain.currency.CurrencyType;
-import taco.klkl.domain.region.dto.response.city.CityResponse;
+import taco.klkl.domain.region.dto.response.city.CitySimpleResponse;
 import taco.klkl.domain.region.dto.response.currency.CurrencyResponse;
 
 class ProductDetailResponseTest {
@@ -68,7 +68,7 @@ class ProductDetailResponseTest {
 	@DisplayName("Product 객체로부터 ProductDetailResponse 생성 테스트")
 	void testFromProduct() {
 		// when
-		ProductDetailResponse dto = taco.klkl.domain.product.dto.response.ProductDetailResponse.from(mockProduct);
+		ProductDetailResponse dto = ProductDetailResponse.from(mockProduct);
 
 		// then
 		assertThat(dto.id()).isEqualTo(mockProduct.getId());
@@ -79,8 +79,8 @@ class ProductDetailResponseTest {
 		assertThat(dto.likeCount()).isEqualTo(mockProduct.getLikeCount());
 		assertThat(dto.rating()).isEqualTo(mockProduct.getRating().getValue());
 		assertThat(dto.member()).isEqualTo(MemberDetailResponse.from(mockMember));
-		assertThat(dto.city()).isEqualTo(CityResponse.from(mockCity));
-		assertThat(dto.subcategory()).isEqualTo(SubcategoryResponse.from(mockSubcategory));
+		assertThat(dto.city()).isEqualTo(CitySimpleResponse.from(mockCity));
+		assertThat(dto.subcategory()).isEqualTo(SubcategorySimpleResponse.from(mockSubcategory));
 		assertThat(dto.currency()).isEqualTo(CurrencyResponse.from(mockCurrency));
 	}
 
@@ -88,7 +88,7 @@ class ProductDetailResponseTest {
 	@DisplayName("ProductDetailResponse 생성자 테스트")
 	void testConstructor() {
 		// when
-		ProductDetailResponse dto = taco.klkl.domain.product.dto.response.ProductDetailResponse.from(mockProduct);
+		ProductDetailResponse dto = ProductDetailResponse.from(mockProduct);
 
 		// then
 		assertThat(dto.id()).isEqualTo(mockProduct.getId());
@@ -99,8 +99,8 @@ class ProductDetailResponseTest {
 		assertThat(dto.likeCount()).isEqualTo(mockProduct.getLikeCount());
 		assertThat(dto.rating()).isEqualTo(mockProduct.getRating().getValue());
 		assertThat(dto.member()).isEqualTo(MemberDetailResponse.from(mockMember));
-		assertThat(dto.city()).isEqualTo(CityResponse.from(mockCity));
-		assertThat(dto.subcategory()).isEqualTo(SubcategoryResponse.from(mockSubcategory));
+		assertThat(dto.city()).isEqualTo(CitySimpleResponse.from(mockCity));
+		assertThat(dto.subcategory()).isEqualTo(SubcategorySimpleResponse.from(mockSubcategory));
 		assertThat(dto.currency()).isEqualTo(CurrencyResponse.from(mockCurrency));
 	}
 }

@@ -17,8 +17,8 @@ import taco.klkl.domain.category.domain.category.Category;
 import taco.klkl.domain.category.domain.category.CategoryType;
 import taco.klkl.domain.category.domain.subcategory.Subcategory;
 import taco.klkl.domain.category.domain.subcategory.SubcategoryType;
-import taco.klkl.domain.category.dto.response.category.CategoryResponse;
-import taco.klkl.domain.category.dto.response.subcategory.SubcategoryResponse;
+import taco.klkl.domain.category.dto.response.category.CategorySimpleResponse;
+import taco.klkl.domain.category.dto.response.subcategory.SubcategorySimpleResponse;
 import taco.klkl.domain.category.service.category.CategoryService;
 import taco.klkl.domain.category.service.subcategory.SubcategoryService;
 import taco.klkl.domain.region.domain.city.City;
@@ -27,9 +27,8 @@ import taco.klkl.domain.region.domain.country.Country;
 import taco.klkl.domain.region.domain.country.CountryType;
 import taco.klkl.domain.region.domain.currency.Currency;
 import taco.klkl.domain.region.domain.region.Region;
-import taco.klkl.domain.region.dto.response.city.CityResponse;
+import taco.klkl.domain.region.dto.response.city.CitySimpleResponse;
 import taco.klkl.domain.region.dto.response.country.CountrySimpleResponse;
-import taco.klkl.domain.region.dto.response.country.CountryWithCitiesResponse;
 import taco.klkl.domain.region.service.city.CityService;
 import taco.klkl.domain.region.service.country.CountryService;
 import taco.klkl.domain.search.dto.response.SearchResponse;
@@ -69,12 +68,12 @@ class SearchServiceImplTest {
 		// given
 		String queryParam = "Test";
 
-		List<CountrySimpleResponse> mockCountries = Collections.singletonList(
-			CountrySimpleResponse.from(country));
-		List<CityResponse> mockCities = Collections.singletonList(CityResponse.from(city));
-		List<CategoryResponse> mockCategories = Collections.singletonList(CategoryResponse.from(category));
-		List<SubcategoryResponse> mockSubcategories = Collections.singletonList(
-			SubcategoryResponse.from(subcategory));
+		List<CountrySimpleResponse> mockCountries =
+			Collections.singletonList(CountrySimpleResponse.from(country));
+		List<CitySimpleResponse> mockCities = Collections.singletonList(CitySimpleResponse.from(city));
+		List<CategorySimpleResponse> mockCategories = Collections.singletonList(CategorySimpleResponse.from(category));
+		List<SubcategorySimpleResponse> mockSubcategories =
+			Collections.singletonList(SubcategorySimpleResponse.from(subcategory));
 
 		when(countryService.findAllCountriesByPartialString(any(String.class))).thenReturn(mockCountries);
 		when(cityService.findAllCitiesByPartialString(any(String.class))).thenReturn(mockCities);
