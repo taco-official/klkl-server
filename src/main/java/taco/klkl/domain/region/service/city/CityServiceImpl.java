@@ -11,7 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import taco.klkl.domain.region.dao.city.CityRepository;
 import taco.klkl.domain.region.domain.city.City;
 import taco.klkl.domain.region.dto.response.city.CityHierarchyResponse;
-import taco.klkl.domain.region.dto.response.city.CityResponse;
+import taco.klkl.domain.region.dto.response.city.CitySimpleResponse;
 import taco.klkl.domain.region.exception.city.CityNotFoundException;
 
 @Slf4j
@@ -24,13 +24,13 @@ public class CityServiceImpl implements CityService {
 	private final CityRepository cityRepository;
 
 	@Override
-	public List<CityResponse> findAllCitiesByPartialString(final String partialString) {
+	public List<CitySimpleResponse> findAllCitiesByPartialString(final String partialString) {
 		if (partialString == null || partialString.isEmpty()) {
 			return List.of();
 		}
 		final List<City> cities = cityRepository.findAllByNameContaining(partialString);
 		return cities.stream()
-			.map(CityResponse::from)
+			.map(CitySimpleResponse::from)
 			.toList();
 	}
 

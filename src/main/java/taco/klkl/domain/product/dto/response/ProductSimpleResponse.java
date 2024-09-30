@@ -2,7 +2,7 @@ package taco.klkl.domain.product.dto.response;
 
 import java.util.Set;
 
-import taco.klkl.domain.category.dto.response.tag.TagResponse;
+import taco.klkl.domain.category.dto.response.tag.TagSimpleResponse;
 import taco.klkl.domain.image.dto.response.ImageResponse;
 import taco.klkl.domain.product.domain.Product;
 import taco.klkl.global.util.ProductUtil;
@@ -15,7 +15,7 @@ public record ProductSimpleResponse(
 	Double rating,
 	String countryName,
 	String categoryName,
-	Set<TagResponse> tags
+	Set<TagSimpleResponse> tags
 ) {
 	public static ProductSimpleResponse from(final Product product) {
 		return new ProductSimpleResponse(

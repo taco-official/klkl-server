@@ -4,14 +4,13 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import taco.klkl.domain.category.domain.subcategory.Subcategory;
 import taco.klkl.domain.category.dto.response.subcategory.SubcategoryHierarchyResponse;
-import taco.klkl.domain.category.dto.response.subcategory.SubcategoryResponse;
+import taco.klkl.domain.category.dto.response.subcategory.SubcategorySimpleResponse;
 
 @Service
 public interface SubcategoryService {
 
-	List<SubcategoryResponse> findAllSubcategoriesByPartialString(final String partialString);
+	List<SubcategorySimpleResponse> findAllSubcategoriesByPartialString(final String partialString);
 
 	SubcategoryHierarchyResponse findSubcategoryHierarchyById(final Long id);
 }

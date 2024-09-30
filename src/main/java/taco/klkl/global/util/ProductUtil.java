@@ -11,7 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
-import taco.klkl.domain.category.dto.response.tag.TagResponse;
+import taco.klkl.domain.category.dto.response.tag.TagSimpleResponse;
 import taco.klkl.domain.product.dao.ProductRepository;
 import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.product.domain.ProductTag;
@@ -39,12 +39,12 @@ public class ProductUtil {
 		}
 	}
 
-	public static Set<TagResponse> generateTagsByProduct(final Product product) {
+	public static Set<TagSimpleResponse> generateTagsByProduct(final Product product) {
 		return Optional.ofNullable(product.getProductTags())
 			.map(productTag -> productTag.stream()
 				.map(ProductTag::getTag)
 				.filter(Objects::nonNull)
-				.map(TagResponse::from)
+				.map(TagSimpleResponse::from)
 				.collect(Collectors.toSet()))
 			.orElse(Collections.emptySet());
 	}
