@@ -4,8 +4,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 import taco.klkl.domain.category.dto.response.subcategory.SubcategorySimpleResponse;
 import taco.klkl.domain.category.dto.response.tag.TagSimpleResponse;
 import taco.klkl.domain.image.dto.response.ImageResponse;
@@ -14,7 +12,6 @@ import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.product.domain.ProductImage;
 import taco.klkl.domain.region.dto.response.city.CitySimpleResponse;
 import taco.klkl.domain.region.dto.response.currency.CurrencyResponse;
-import taco.klkl.global.common.constants.DefaultConstants;
 import taco.klkl.global.util.ProductUtil;
 
 public record ProductDetailResponse(
@@ -31,7 +28,7 @@ public record ProductDetailResponse(
 	SubcategorySimpleResponse subcategory,
 	CurrencyResponse currency,
 	Set<TagSimpleResponse> tags,
-	@JsonFormat(pattern = DefaultConstants.DEFAULT_DATETIME_FORMAT) LocalDateTime createdAt
+	LocalDateTime createdAt
 ) {
 	public static ProductDetailResponse from(final Product product) {
 		final List<ImageResponse> images = product.getImages().stream()
