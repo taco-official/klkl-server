@@ -10,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.ObjectCannedACL;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import software.amazon.awssdk.services.s3.presigner.S3Presigner;
@@ -27,12 +26,12 @@ import taco.klkl.domain.image.dto.request.SingleImageUpdateRequest;
 import taco.klkl.domain.image.dto.request.SingleImageUploadRequest;
 import taco.klkl.domain.image.dto.response.ImageResponse;
 import taco.klkl.domain.image.dto.response.PresignedUrlResponse;
+import taco.klkl.domain.member.domain.Member;
 import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.product.domain.ProductImage;
-import taco.klkl.domain.user.domain.User;
 import taco.klkl.global.util.ImageUtil;
+import taco.klkl.global.util.MemberUtil;
 import taco.klkl.global.util.ProductUtil;
-import taco.klkl.global.util.UserUtil;
 
 @Slf4j
 @Primary
@@ -44,10 +43,9 @@ public class ImageServiceImpl implements ImageService {
 	private static final Duration SIGNATURE_DURATION = Duration.ofMinutes(5);
 	private static final ObjectCannedACL REQUEST_ACL = ObjectCannedACL.PRIVATE;
 
-	private final S3Client s3Client;
 	private final S3Presigner s3Presigner;
 	private final ImageRepository imageRepository;
-	private final UserUtil userUtil;
+	private final MemberUtil memberUtil;
 	private final ProductUtil productUtil;
 	private final ImageUtil imageUtil;
 
@@ -57,9 +55,9 @@ public class ImageServiceImpl implements ImageService {
 	@Override
 	@Transactional
 	public PresignedUrlResponse createUserImageUploadUrl(final SingleImageUploadRequest uploadRequest) {
-		final User currentUser = userUtil.getCurrentUser();
+		final Member currentMember = memberUtil.getCurrentMember();
 		final FileExtension fileExtension = FileExtension.from(uploadRequest.fileExtension());
-		return createImageUploadUrl(ImageType.USER_IMAGE, currentUser.getId(), fileExtension);
+		return createImageUploadUrl(ImageType.MEMBER_IMAGE, currentMember.getId(), fileExtension);
 	}
 
 	@Override
@@ -79,15 +77,15 @@ public class ImageServiceImpl implements ImageService {
 	public ImageResponse uploadCompleteUserImage(
 		final SingleImageUpdateRequest updateRequest
 	) {
-		final User currentUser = userUtil.getCurrentUser();
-		expireOldImages(ImageType.USER_IMAGE, currentUser.getId());
+		final Member currentMember = memberUtil.getCurrentMember();
+		expireOldImages(ImageType.MEMBER_IMAGE, currentMember.getId());
 
-		Image updatedImage = imageUtil.findImageEntityByImageTypeAndId(ImageType.USER_IMAGE, updateRequest.imageId());
+		Image updatedImage = imageUtil.findImageEntityByImageTypeAndId(ImageType.MEMBER_IMAGE, updateRequest.imageId());
 		updatedImage.markAsComplete();
 
-		currentUser.updateImage(updatedImage);
+		currentMember.updateProfileImage(updatedImage);
 
-		return ImageResponse.from(currentUser.getImage());
+		return ImageResponse.from(currentMember.getProfileImage());
 	}
 
 	@Override

@@ -42,7 +42,7 @@ public class Notification {
 
 	@OneToOne
 	@JoinColumn(name = "comment_id")
-	@QueryInit("product.user")
+	@QueryInit("product.member")
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Comment comment;
 

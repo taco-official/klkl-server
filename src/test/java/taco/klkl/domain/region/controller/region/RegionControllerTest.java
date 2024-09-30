@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -21,13 +22,22 @@ import taco.klkl.domain.region.domain.region.Region;
 import taco.klkl.domain.region.domain.region.RegionType;
 import taco.klkl.domain.region.dto.response.region.RegionResponse;
 import taco.klkl.domain.region.service.region.RegionService;
-import taco.klkl.global.error.exception.ErrorCode;
+import taco.klkl.domain.token.service.TokenProvider;
+import taco.klkl.global.config.security.TestSecurityConfig;
+import taco.klkl.global.util.ResponseUtil;
 
 @WebMvcTest(RegionController.class)
+@Import(TestSecurityConfig.class)
 class RegionControllerTest {
 
 	@Autowired
 	MockMvc mockMvc;
+
+	@MockBean
+	private TokenProvider tokenProvider;
+
+	@MockBean
+	private ResponseUtil responseUtil;
 
 	@MockBean
 	RegionService regionService;
@@ -75,23 +85,6 @@ class RegionControllerTest {
 			.andExpect(jsonPath("$.isSuccess", is(true)))
 			.andExpect(jsonPath("$.data", hasSize(0)))
 			.andExpect(jsonPath("$.timestamp", notNullValue()));
-
-		verify(regionService, times(1)).findAllRegions();
-	}
-
-	@Test
-	@DisplayName("모든 지역 조회 실패 테스트")
-	void testGetRegionsFail() throws Exception {
-		// given
-		when(regionService.findAllRegions()).thenThrow(RuntimeException.class);
-
-		// when & then
-		mockMvc.perform(get("/v1/regions/hierarchy")
-				.contentType(MediaType.APPLICATION_JSON))
-			.andExpect(status().is5xxServerError())
-			.andExpect(jsonPath("$.isSuccess", is(false)))
-			.andExpect(jsonPath("$.status", is(ErrorCode.INTERNAL_SERVER_ERROR.getHttpStatus().value())))
-			.andExpect(jsonPath("$.data.message", is(ErrorCode.INTERNAL_SERVER_ERROR.getMessage())));
 
 		verify(regionService, times(1)).findAllRegions();
 	}

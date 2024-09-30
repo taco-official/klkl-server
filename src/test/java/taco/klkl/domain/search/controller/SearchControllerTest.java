@@ -12,6 +12,7 @@ import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.web.servlet.MockMvc;
 
 import taco.klkl.domain.category.domain.category.Category;
@@ -28,26 +29,35 @@ import taco.klkl.domain.region.domain.currency.Currency;
 import taco.klkl.domain.region.domain.region.Region;
 import taco.klkl.domain.region.dto.response.city.CityResponse;
 import taco.klkl.domain.region.dto.response.country.CountrySimpleResponse;
-import taco.klkl.domain.region.dto.response.country.CountryWithCitiesResponse;
 import taco.klkl.domain.search.dto.response.SearchResponse;
 import taco.klkl.domain.search.service.SearchService;
+import taco.klkl.domain.token.service.TokenProvider;
+import taco.klkl.global.config.security.TestSecurityConfig;
+import taco.klkl.global.util.ResponseUtil;
 
 @WebMvcTest(SearchController.class)
+@Import(TestSecurityConfig.class)
 public class SearchControllerTest {
 
 	@Autowired
 	private MockMvc mockMvc;
 
 	@MockBean
-	private SearchService searchService;
+	private TokenProvider tokenProvider;
 
-	private SearchResponse mockResponse;
+	@MockBean
+	private ResponseUtil responseUtil;
+
+	@MockBean
+	private SearchService searchService;
 
 	@Mock
 	Region region;
 
 	@Mock
 	Currency currency;
+
+	private SearchResponse mockResponse;
 
 	private final Country country = Country.of(CountryType.MALAYSIA, region, "wallpaper", currency);
 	private final City city = City.of(CityType.BORACAY, country);

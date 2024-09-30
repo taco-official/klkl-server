@@ -10,11 +10,11 @@ import lombok.extern.slf4j.Slf4j;
 import taco.klkl.domain.like.dao.LikeRepository;
 import taco.klkl.domain.like.domain.Like;
 import taco.klkl.domain.like.dto.response.LikeResponse;
+import taco.klkl.domain.member.domain.Member;
 import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.product.service.ProductService;
-import taco.klkl.domain.user.domain.User;
+import taco.klkl.global.util.MemberUtil;
 import taco.klkl.global.util.ProductUtil;
-import taco.klkl.global.util.UserUtil;
 
 @Slf4j
 @Primary
@@ -27,15 +27,15 @@ public class LikeServiceImpl implements LikeService {
 
 	private final ProductService productService;
 
-	private final UserUtil userUtil;
+	private final MemberUtil memberUtil;
 	private final ProductUtil productUtil;
 
 	@Override
 	@Transactional(readOnly = true)
 	public LikeResponse getLike(final Long productId) {
 		final Product product = findProductById(productId);
-		final User user = findCurrentUser();
-		if (likeRepository.existsByProductAndUser(product, user)) {
+		final Member member = memberUtil.getCurrentMember();
+		if (likeRepository.existsByProductAndMember(product, member)) {
 			return LikeResponse.of(true, product.getLikeCount());
 		}
 		return LikeResponse.of(false, product.getLikeCount());
@@ -44,11 +44,11 @@ public class LikeServiceImpl implements LikeService {
 	@Override
 	public LikeResponse createLike(final Long productId) {
 		final Product product = findProductById(productId);
-		final User user = findCurrentUser();
-		if (isLikePresent(product, user)) {
+		final Member member = memberUtil.getCurrentMember();
+		if (isLikePresent(product, member)) {
 			return LikeResponse.of(true, product.getLikeCount());
 		}
-		Like like = Like.of(product, user);
+		Like like = Like.of(product, member);
 		likeRepository.save(like);
 		int likeCount = productService.increaseLikeCount(product);
 		return LikeResponse.of(true, likeCount);
@@ -57,9 +57,9 @@ public class LikeServiceImpl implements LikeService {
 	@Override
 	public LikeResponse deleteLike(final Long productId) {
 		final Product product = findProductById(productId);
-		final User user = findCurrentUser();
-		if (isLikePresent(product, user)) {
-			likeRepository.deleteByProductAndUser(product, user);
+		final Member member = memberUtil.getCurrentMember();
+		if (isLikePresent(product, member)) {
+			likeRepository.deleteByProductAndMember(product, member);
 			int likeCount = productService.decreaseLikeCount(product);
 			return LikeResponse.of(false, likeCount);
 		}
@@ -70,12 +70,8 @@ public class LikeServiceImpl implements LikeService {
 		return productUtil.findProductEntityById(productId);
 	}
 
-	private User findCurrentUser() {
-		return userUtil.getCurrentUser();
-	}
-
 	@Override
-	public boolean isLikePresent(Product product, User user) {
-		return likeRepository.existsByProductAndUser(product, user);
+	public boolean isLikePresent(Product product, Member member) {
+		return likeRepository.existsByProductAndMember(product, member);
 	}
 }

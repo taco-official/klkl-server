@@ -5,6 +5,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static taco.klkl.global.common.constants.TestConstants.TEST_UUID;
 
 import java.util.Arrays;
 import java.util.List;
@@ -14,7 +15,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -29,6 +32,7 @@ import taco.klkl.domain.comment.dto.response.CommentResponse;
 import taco.klkl.domain.comment.exception.CommentNotFoundException;
 import taco.klkl.domain.comment.exception.CommentProductNotMatchException;
 import taco.klkl.domain.comment.service.CommentServiceImpl;
+import taco.klkl.domain.member.domain.Member;
 import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.product.domain.Rating;
 import taco.klkl.domain.product.exception.ProductNotFoundException;
@@ -41,15 +45,24 @@ import taco.klkl.domain.region.domain.currency.Currency;
 import taco.klkl.domain.region.domain.currency.CurrencyType;
 import taco.klkl.domain.region.domain.region.Region;
 import taco.klkl.domain.region.domain.region.RegionType;
-import taco.klkl.domain.user.domain.User;
-import taco.klkl.domain.user.dto.request.UserCreateRequest;
+import taco.klkl.domain.token.service.TokenProvider;
+import taco.klkl.global.config.security.TestSecurityConfig;
 import taco.klkl.global.error.exception.ErrorCode;
+import taco.klkl.global.util.ResponseUtil;
 
 @WebMvcTest(CommentController.class)
+@Import(TestSecurityConfig.class)
+@WithMockUser(username = TEST_UUID, roles = "USER")
 public class CommentControllerTest {
 
 	@Autowired
 	private MockMvc mockMvc;
+
+	@MockBean
+	private TokenProvider tokenProvider;
+
+	@MockBean
+	private ResponseUtil responseUtil;
 
 	@MockBean
 	private CommentServiceImpl commentServiceImpl;
@@ -63,14 +76,7 @@ public class CommentControllerTest {
 	private final Long productId = 1L;
 	private final Long commentId = 1L;
 
-	private final UserCreateRequest requestDto = new UserCreateRequest(
-		"이상화",
-		"저는 이상화입니다."
-	);
-	private final User user = User.of(
-		requestDto.name(),
-		requestDto.description()
-	);
+	private final Member member = Member.ofUser("name", "0000", null, null);
 
 	private final Region region = Region.from(RegionType.SOUTHEAST_ASIA);
 
@@ -97,21 +103,21 @@ public class CommentControllerTest {
 		"address",
 		1000,
 		Rating.FIVE,
-		user,
+		member,
 		city,
 		subcategory,
 		currency
 	);
 
-	private final Comment comment1 = Comment.of(product, user, "개추 ^^");
-	private final Comment comment2 = Comment.of(product, user, "안녕하세요");
+	private final Comment comment1 = Comment.of(product, member, "개추 ^^");
+	private final Comment comment2 = Comment.of(product, member, "안녕하세요");
 
 	private final CommentCreateUpdateRequest commentCreateRequestDto = new CommentCreateUpdateRequest(
-		"개추 ^^"
+		"createdContent"
 	);
 
 	private final CommentCreateUpdateRequest commentUpdateRequestDto = new CommentCreateUpdateRequest(
-		"윤상정은 바보다, 반박시 님 말이 틀림."
+		"updatedContent"
 	);
 
 	@Test
@@ -154,7 +160,7 @@ public class CommentControllerTest {
 			.andExpect(status().isCreated())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
 			.andExpect(jsonPath("$.data.id", is(comment1.getId())))
-			.andExpect(jsonPath("$.data.user.id", is(comment1.getUser().getId())))
+			.andExpect(jsonPath("$.data.member.id", is(comment1.getMember().getId())))
 			.andExpect(jsonPath("$.data.content", is(comment1.getContent())));
 
 		verify(commentServiceImpl, times(1))
@@ -200,7 +206,7 @@ public class CommentControllerTest {
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
 			.andExpect(jsonPath("$.data.id", is(comment1.getId())))
-			.andExpect(jsonPath("$.data.user.id", is(comment1.getUser().getId())))
+			.andExpect(jsonPath("$.data.member.id", is(comment1.getMember().getId())))
 			.andExpect(jsonPath("$.data.content", is(comment1.getContent())));
 
 		verify(commentServiceImpl, times(1))

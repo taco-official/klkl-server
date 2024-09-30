@@ -12,14 +12,14 @@ import org.mockito.Mockito;
 import taco.klkl.domain.category.domain.subcategory.Subcategory;
 import taco.klkl.domain.like.exception.LikeCountBelowMinimumException;
 import taco.klkl.domain.like.exception.LikeCountOverMaximumException;
+import taco.klkl.domain.member.domain.Member;
 import taco.klkl.domain.region.domain.city.City;
 import taco.klkl.domain.region.domain.currency.Currency;
-import taco.klkl.domain.user.domain.User;
 import taco.klkl.global.common.constants.ProductConstants;
 
 class ProductTest {
 
-	private User mockUser;
+	private Member mockMember;
 	private City mockCity;
 	private Subcategory mockSubcategory;
 	private Currency mockCurrency;
@@ -28,7 +28,7 @@ class ProductTest {
 
 	@BeforeEach
 	public void beforeEach() {
-		mockUser = mock(User.class);
+		mockMember = mock(Member.class);
 		mockCity = mock(City.class);
 		mockSubcategory = mock(Subcategory.class);
 		mockCurrency = mock(Currency.class);
@@ -52,7 +52,7 @@ class ProductTest {
 			address,
 			price,
 			rating,
-			mockUser,
+			mockMember,
 			mockCity,
 			mockSubcategory,
 			mockCurrency
@@ -66,7 +66,7 @@ class ProductTest {
 		assertThat(product.getPrice()).isEqualTo(price);
 		assertThat(product.getLikeCount()).isEqualTo(ProductConstants.DEFAULT_LIKE_COUNT);
 		assertThat(product.getRating()).isEqualTo(rating);
-		assertThat(product.getUser()).isEqualTo(mockUser);
+		assertThat(product.getMember()).isEqualTo(mockMember);
 		assertThat(product.getCity()).isEqualTo(mockCity);
 		assertThat(product.getSubcategory()).isEqualTo(mockSubcategory);
 		assertThat(product.getCurrency()).isEqualTo(mockCurrency);
@@ -89,7 +89,7 @@ class ProductTest {
 			address,
 			price,
 			rating,
-			mockUser,
+			mockMember,
 			mockCity,
 			mockSubcategory,
 			mockCurrency
@@ -103,7 +103,7 @@ class ProductTest {
 		assertThat(product.getPrice()).isEqualTo(price);
 		assertThat(product.getLikeCount()).isEqualTo(ProductConstants.DEFAULT_LIKE_COUNT);
 		assertThat(product.getRating()).isEqualTo(rating);
-		assertThat(product.getUser()).isEqualTo(mockUser);
+		assertThat(product.getMember()).isEqualTo(mockMember);
 		assertThat(product.getCity()).isEqualTo(mockCity);
 		assertThat(product.getSubcategory()).isEqualTo(mockSubcategory);
 		assertThat(product.getCurrency()).isEqualTo(mockCurrency);
@@ -126,7 +126,7 @@ class ProductTest {
 			address,
 			price,
 			rating,
-			mockUser,
+			mockMember,
 			mockCity,
 			mockSubcategory,
 			mockCurrency
@@ -140,7 +140,7 @@ class ProductTest {
 		assertThat(product.getPrice()).isEqualTo(ProductConstants.DEFAULT_PRICE);
 		assertThat(product.getLikeCount()).isEqualTo(ProductConstants.DEFAULT_LIKE_COUNT);
 		assertThat(product.getRating()).isEqualTo(rating);
-		assertThat(product.getUser()).isEqualTo(mockUser);
+		assertThat(product.getMember()).isEqualTo(mockMember);
 		assertThat(product.getCity()).isEqualTo(mockCity);
 		assertThat(product.getSubcategory()).isEqualTo(mockSubcategory);
 		assertThat(product.getCurrency()).isEqualTo(mockCurrency);
@@ -165,7 +165,7 @@ class ProductTest {
 			originAddress,
 			originPrice,
 			originRating,
-			mockUser,
+			mockMember,
 			originCity,
 			originSubcategory,
 			originCurrency
@@ -208,12 +208,12 @@ class ProductTest {
 	public void testIncreaseLikeCount() {
 		// given
 		Product product = Product.of(
-			"mockUser",
+			"mockMember",
 			"Original Name",
 			"Original Description",
 			100,
 			Rating.FIVE,
-			mockUser,
+			mockMember,
 			mockCity,
 			mockSubcategory,
 			mockCurrency);
@@ -246,7 +246,7 @@ class ProductTest {
 			"Original address",
 			100,
 			Rating.FIVE,
-			mockUser,
+			mockMember,
 			mockCity,
 			mockSubcategory,
 			mockCurrency);

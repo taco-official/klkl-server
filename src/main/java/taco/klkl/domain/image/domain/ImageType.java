@@ -9,7 +9,7 @@ import taco.klkl.domain.image.exception.ImageTypeNotFoundException;
 @Getter
 @RequiredArgsConstructor
 public enum ImageType {
-	USER_IMAGE("user_image"),
+	MEMBER_IMAGE("member_image"),
 	PRODUCT_IMAGE("product_image"),
 	;
 
@@ -17,7 +17,7 @@ public enum ImageType {
 
 	public static ImageType from(final String value) throws ImageTypeNotFoundException {
 		return Arrays.stream(ImageType.values())
-			.filter(type -> type.getValue().equals(value))
+			.filter(image -> image.getValue().equals(value))
 			.findFirst()
 			.orElseThrow(ImageTypeNotFoundException::new);
 	}

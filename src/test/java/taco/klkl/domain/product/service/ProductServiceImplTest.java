@@ -39,6 +39,7 @@ import taco.klkl.domain.category.domain.tag.Tag;
 import taco.klkl.domain.category.dto.response.tag.TagResponse;
 import taco.klkl.domain.like.exception.LikeCountBelowMinimumException;
 import taco.klkl.domain.like.exception.LikeCountOverMaximumException;
+import taco.klkl.domain.member.domain.Member;
 import taco.klkl.domain.product.dao.ProductRepository;
 import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.product.domain.ProductTag;
@@ -61,13 +62,12 @@ import taco.klkl.domain.region.domain.currency.Currency;
 import taco.klkl.domain.region.domain.currency.CurrencyType;
 import taco.klkl.domain.region.domain.region.Region;
 import taco.klkl.domain.region.domain.region.RegionType;
-import taco.klkl.domain.user.domain.User;
 import taco.klkl.global.common.response.PagedResponse;
 import taco.klkl.global.util.CityUtil;
 import taco.klkl.global.util.CurrencyUtil;
+import taco.klkl.global.util.MemberUtil;
 import taco.klkl.global.util.SubcategoryUtil;
 import taco.klkl.global.util.TagUtil;
-import taco.klkl.global.util.UserUtil;
 
 class ProductServiceImplTest {
 
@@ -81,7 +81,7 @@ class ProductServiceImplTest {
 	private ProductRepository productRepository;
 
 	@Mock
-	private UserUtil userUtil;
+	private MemberUtil memberUtil;
 
 	@Mock
 	private TagUtil tagUtil;
@@ -96,11 +96,11 @@ class ProductServiceImplTest {
 	private CurrencyUtil currencyUtil;
 
 	private Product testProduct;
-	private User user;
+	private Member member;
 	private City city;
 	private Subcategory subcategory;
 	private Currency currency;
-	private ProductCreateUpdateRequest requestDto;
+	private ProductCreateUpdateRequest productCreateUpdateRequest;
 
 	private Product mockProduct;
 
@@ -108,7 +108,7 @@ class ProductServiceImplTest {
 	void setUp() {
 		MockitoAnnotations.openMocks(this);
 
-		user = User.of("testUser", "테스트입니다.");
+		member = Member.ofUser("name", "0000", null, null);
 
 		Region region = Region.from(RegionType.SOUTHEAST_ASIA);
 		currency = Currency.of(
@@ -137,13 +137,13 @@ class ProductServiceImplTest {
 			"address",
 			1000,
 			Rating.FIVE,
-			user,
+			member,
 			city,
 			subcategory,
 			currency
 		);
 
-		requestDto = new ProductCreateUpdateRequest(
+		productCreateUpdateRequest = new ProductCreateUpdateRequest(
 			"productName",
 			"productDescription",
 			"productAddress",
@@ -375,7 +375,7 @@ class ProductServiceImplTest {
 	@DisplayName("상품 생성 - 성공")
 	void testCreateProduct() {
 		// Given
-		when(userUtil.getCurrentUser()).thenReturn(user);
+		when(memberUtil.getCurrentMember()).thenReturn(member);
 		when(cityUtil.findCityEntityById(1L)).thenReturn(city);
 		when(subcategoryUtil.findSubcategoryEntityById(1L)).thenReturn(subcategory);
 		when(currencyUtil.findCurrencyEntityById(1L)).thenReturn(currency);
@@ -389,18 +389,18 @@ class ProductServiceImplTest {
 		});
 
 		// When
-		ProductDetailResponse result = productService.createProduct(requestDto);
+		ProductDetailResponse result = productService.createProduct(productCreateUpdateRequest);
 
 		// Then
 		assertThat(result.id()).isEqualTo(1L);
 		verify(productRepository).save(argThat(savedProduct -> {
 			assertThat(savedProduct.getId()).isEqualTo(1L);
-			assertThat(savedProduct.getName()).isEqualTo(requestDto.name());
-			assertThat(savedProduct.getDescription()).isEqualTo(requestDto.description());
-			assertThat(savedProduct.getAddress()).isEqualTo(requestDto.address());
-			assertThat(savedProduct.getPrice()).isEqualTo(requestDto.price());
-			assertThat(savedProduct.getRating().getValue()).isEqualTo(requestDto.rating());
-			assertThat(savedProduct.getUser()).isEqualTo(user);
+			assertThat(savedProduct.getName()).isEqualTo(productCreateUpdateRequest.name());
+			assertThat(savedProduct.getDescription()).isEqualTo(productCreateUpdateRequest.description());
+			assertThat(savedProduct.getAddress()).isEqualTo(productCreateUpdateRequest.address());
+			assertThat(savedProduct.getPrice()).isEqualTo(productCreateUpdateRequest.price());
+			assertThat(savedProduct.getRating().getValue()).isEqualTo(productCreateUpdateRequest.rating());
+			assertThat(savedProduct.getMember()).isEqualTo(member);
 			assertThat(savedProduct.getCity()).isEqualTo(city);
 			assertThat(savedProduct.getSubcategory()).isEqualTo(subcategory);
 			assertThat(savedProduct.getCurrency()).isEqualTo(currency);
@@ -413,13 +413,13 @@ class ProductServiceImplTest {
 	void testUpdateProduct() {
 		// Given
 		when(productRepository.findById(1L)).thenReturn(Optional.of(testProduct));
-		when(userUtil.getCurrentUser()).thenReturn(user);
+		when(memberUtil.getCurrentMember()).thenReturn(member);
 		when(cityUtil.findCityEntityById(1L)).thenReturn(city);
 		when(subcategoryUtil.findSubcategoryEntityById(1L)).thenReturn(subcategory);
 		when(currencyUtil.findCurrencyEntityById(1L)).thenReturn(currency);
 
 		// When
-		ProductDetailResponse result = productService.updateProduct(1L, requestDto);
+		ProductDetailResponse result = productService.updateProduct(1L, productCreateUpdateRequest);
 
 		// Then
 		assertThat(result.id()).isEqualTo(testProduct.getId());
@@ -433,7 +433,8 @@ class ProductServiceImplTest {
 		when(productRepository.findById(1L)).thenReturn(Optional.empty());
 
 		// When & Then
-		assertThrows(ProductNotFoundException.class, () -> productService.updateProduct(1L, requestDto));
+		assertThrows(ProductNotFoundException.class,
+			() -> productService.updateProduct(1L, productCreateUpdateRequest));
 		verify(productRepository).findById(1L);
 	}
 
@@ -442,7 +443,7 @@ class ProductServiceImplTest {
 	void testDeleteProduct() {
 		// Given
 		when(productRepository.findById(1L)).thenReturn(Optional.of(testProduct));
-		when(userUtil.getCurrentUser()).thenReturn(user);
+		when(memberUtil.getCurrentMember()).thenReturn(member);
 
 		// When
 		productService.deleteProduct(1L);

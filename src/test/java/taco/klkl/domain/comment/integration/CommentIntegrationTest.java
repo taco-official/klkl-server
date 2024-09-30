@@ -3,6 +3,7 @@ package taco.klkl.domain.comment.integration;
 import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static taco.klkl.global.common.constants.TestConstants.TEST_UUID;
 
 import java.util.List;
 
@@ -11,7 +12,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,18 +23,30 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import taco.klkl.domain.comment.dto.request.CommentCreateUpdateRequest;
 import taco.klkl.domain.comment.dto.response.CommentResponse;
-import taco.klkl.domain.comment.service.CommentServiceImpl;
+import taco.klkl.domain.comment.service.CommentService;
+import taco.klkl.domain.token.service.TokenProvider;
+import taco.klkl.global.config.security.TestSecurityConfig;
 import taco.klkl.global.error.exception.ErrorCode;
+import taco.klkl.global.util.ResponseUtil;
 
 @SpringBootTest
 @AutoConfigureMockMvc
 @Transactional
+@Import(TestSecurityConfig.class)
+@WithMockUser(username = TEST_UUID, roles = "USER")
 public class CommentIntegrationTest {
+
 	@Autowired
 	private MockMvc mockMvc;
 
+	@MockBean
+	private TokenProvider tokenProvider;
+
+	@MockBean
+	private ResponseUtil responseUtil;
+
 	@Autowired
-	private CommentServiceImpl commentServiceImpl;
+	private CommentService commentService;
 
 	@Autowired
 	private ObjectMapper objectMapper;
@@ -39,18 +55,18 @@ public class CommentIntegrationTest {
 	private final Long commentId = 500L;
 
 	private final CommentCreateUpdateRequest commentCreateRequestDto = new CommentCreateUpdateRequest(
-		"개추 ^^"
+		"createdContent"
 	);
 
 	private final CommentCreateUpdateRequest commentUpdateRequestDto = new CommentCreateUpdateRequest(
-		"윤상정은 바보다, 반박시 님 말이 틀림."
+		"updatedContent"
 	);
 
 	@Test
 	@DisplayName("상품에 있는 모든 댓글 반환 통합 테스트")
 	public void testGetComment() throws Exception {
 		//given
-		List<CommentResponse> commentResponses = commentServiceImpl.findCommentsByProductId(productId);
+		List<CommentResponse> commentResponses = commentService.findCommentsByProductId(productId);
 
 		//when & then
 		mockMvc.perform(get("/v1/products/{productId}/comments", productId)

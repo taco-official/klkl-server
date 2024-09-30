@@ -14,7 +14,7 @@ public record CommentNotificationResponse(
 ) {
 	public static CommentNotificationResponse from(final Comment comment) {
 		return new CommentNotificationResponse(
-			comment.getUser().getName(),
+			comment.getMember().getName(),
 			comment.getContent(),
 			comment.getCreatedAt()
 		);

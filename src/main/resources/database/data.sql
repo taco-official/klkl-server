@@ -1,8 +1,8 @@
-/* User */
-INSERT INTO klkl_user(user_id, name, description, created_at)
-VALUES (1, 'testUser', '테스트입니다.', now()),
-       (2, 'dummy', '덤덤댄스', now()),
-       (3, 'dumdummy', '덤더미댄스', now());
+/* Member */
+INSERT INTO member(id, uuid, name, tag, description, role, created_at)
+VALUES (101, '550e8400-e29b-41d4-a716-446655440000', 'test', '0001', '테스트입니다.', 'USER', now()),
+       (102, UUID(), 'dummy', '0002', '덤덤댄스', 'USER', now()),
+       (103, UUID(), 'dumdummy', '0003', '덤더미댄스', 'USER', now());
 
 /* Like */
 
@@ -133,18 +133,18 @@ VALUES
     (368, 315, 350);
 
 /* Product */
-INSERT INTO product(product_id, user_id, name, description, address, price, like_count, rating,
+INSERT INTO product(product_id, member_id, name, description, address, price, like_count, rating,
                     city_id, subcategory_id, currency_id, created_at)
-VALUES (101, 2, '곤약젤리', '탱글탱글 맛있는 곤약젤리', '신사이바시 메가돈키호테', 1000, 100, 5.0, 414, 311, 438, now()),
-       (102, 2, '여름 원피스', '시원하고 여름 휴양지 느낌의 원피스', '방콕 짜뚜짝 시장', 300, 333, 4.5, 425, 323, 441, now()),
-       (103, 3, '하오하오 봉지라면 핑크색', '새우맛이 나는 맛있는 라면', '롯데마트 나트랑', 15000, 500, 5.0, 429, 310, 442, now()),
-       (390, 1, '왕족발 보쌈 과자', '맛있는 왕족발 보쌈 과자', '상하이 장충동', 3000, 10, 3.0, 422, 311, 439, now());
+VALUES (101, 102, '곤약젤리', '탱글탱글 맛있는 곤약젤리', '신사이바시 메가돈키호테', 1000, 0, 5.0, 414, 311, 438, now()),
+       (102, 102, '여름 원피스', '시원하고 여름 휴양지 느낌의 원피스', '방콕 짜뚜짝 시장', 300, 333, 4.5, 425, 323, 441, now()),
+       (103, 103, '하오하오 봉지라면 핑크색', '새우맛이 나는 맛있는 라면', '롯데마트 나트랑', 15000, 500, 5.0, 429, 310, 442, now()),
+       (390, 101, '왕족발 보쌈 과자', '맛있는 왕족발 보쌈 과자', '상하이 장충동', 3000, 10, 3.0, 422, 311, 439, now());
 
 /* Comment */
-INSERT INTO comment(comment_id, product_id, user_id, content, created_at)
-VALUES (500, 101, 1, '이거 정말 맛있는데 표현할 방법이 읎네.', now()),
-       (501, 390, 2, '이거 정말 맛없는데 표현할 방법이 읎네.', now()),
-       (502, 390, 3, '이거 정말 좋은데 표현할 방법이 읎네.', now());
+INSERT INTO comment(comment_id, product_id, member_id, content, created_at)
+VALUES (500, 101, 101, '이거 정말 맛있는데 표현할 방법이 읎네.', now()),
+       (501, 390, 102, '이거 정말 맛없는데 표현할 방법이 읎네.', now()),
+       (502, 390, 103, '이거 정말 좋은데 표현할 방법이 읎네.', now());
 
 /* Notification */
 INSERT INTO notification(notification_id, is_read, created_at, comment_id)

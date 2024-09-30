@@ -20,7 +20,8 @@ import taco.klkl.infra.cloudfront.CloudFrontUrlGenerator;
 public class Image {
 
 	@Id
-	@Column(name = "image_id",
+	@Column(
+		name = "image_id",
 		nullable = false
 	)
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -83,10 +84,10 @@ public class Image {
 	public static Image of(
 		final ImageType imageType,
 		final Long targetId,
-		final String imageUuid,
+		final String imageKey,
 		final FileExtension fileExtension
 	) {
-		return new Image(imageType, targetId, imageUuid, fileExtension);
+		return new Image(imageType, targetId, imageKey, fileExtension);
 	}
 
 	public void markAsComplete() {

@@ -15,14 +15,14 @@ import jakarta.persistence.UniqueConstraint;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import taco.klkl.domain.member.domain.Member;
 import taco.klkl.domain.product.domain.Product;
-import taco.klkl.domain.user.domain.User;
 
 @Getter
-@Entity(name = "user_product_like")
+@Entity(name = "member_product_like")
 @Table(
 	uniqueConstraints = {
-		@UniqueConstraint(columnNames = {"product_id", "user_id"})
+		@UniqueConstraint(columnNames = {"product_id", "member_id"})
 	}
 )
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -47,10 +47,10 @@ public class Like {
 		optional = false
 	)
 	@JoinColumn(
-		name = "user_id",
+		name = "member_id",
 		nullable = false
 	)
-	private User user;
+	private Member member;
 
 	@Column(
 		name = "created_at",
@@ -58,13 +58,13 @@ public class Like {
 	)
 	private LocalDateTime createdAt;
 
-	private Like(final Product product, final User user) {
+	private Like(final Product product, final Member member) {
 		this.product = product;
-		this.user = user;
+		this.member = member;
 		this.createdAt = LocalDateTime.now();
 	}
 
-	public static Like of(final Product product, final User user) {
-		return new Like(product, user);
+	public static Like of(final Product product, final Member member) {
+		return new Like(product, member);
 	}
 }

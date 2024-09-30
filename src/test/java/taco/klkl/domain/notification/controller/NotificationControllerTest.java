@@ -14,6 +14,7 @@ import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.web.servlet.MockMvc;
 
 import taco.klkl.domain.category.domain.category.Category;
@@ -21,6 +22,7 @@ import taco.klkl.domain.category.domain.category.CategoryType;
 import taco.klkl.domain.category.domain.subcategory.Subcategory;
 import taco.klkl.domain.category.domain.subcategory.SubcategoryType;
 import taco.klkl.domain.comment.domain.Comment;
+import taco.klkl.domain.member.domain.Member;
 import taco.klkl.domain.notification.dao.NotificationRepository;
 import taco.klkl.domain.notification.domain.Notification;
 import taco.klkl.domain.notification.dto.response.NotificationResponse;
@@ -34,13 +36,25 @@ import taco.klkl.domain.region.domain.country.Country;
 import taco.klkl.domain.region.domain.country.CountryType;
 import taco.klkl.domain.region.domain.currency.Currency;
 import taco.klkl.domain.region.domain.region.Region;
-import taco.klkl.domain.user.domain.User;
+import taco.klkl.domain.token.service.TokenProvider;
+import taco.klkl.global.config.security.TestSecurityConfig;
+import taco.klkl.global.util.ResponseUtil;
 
 @WebMvcTest(NotificationController.class)
+@Import(TestSecurityConfig.class)
 class NotificationControllerTest {
 
 	@Autowired
 	MockMvc mockMvc;
+
+	@MockBean
+	private TokenProvider tokenProvider;
+
+	@MockBean
+	private ResponseUtil responseUtil;
+
+	@MockBean
+	NotificationService notificationService;
 
 	@Mock
 	Region region;
@@ -51,10 +65,7 @@ class NotificationControllerTest {
 	@Mock
 	private NotificationRepository notificationRepository;
 
-	@MockBean
-	NotificationService notificationService;
-
-	private final User user = User.of("testUser", "테스트입니다.");
+	private final Member member = Member.ofUser("name", "0000", null, null);
 	private final Country country = Country.of(CountryType.MALAYSIA, region, "wallpaper", currency);
 	private final City city = City.of(CityType.BORACAY, country);
 	private final Category category = Category.of(CategoryType.CLOTHES);
@@ -66,14 +77,14 @@ class NotificationControllerTest {
 		"address",
 		1000,
 		Rating.FIVE,
-		user,
+		member,
 		city,
 		subcategory,
 		currency
 	);
 
-	private final Comment comment1 = Comment.of(product, user, "content1");
-	private final Comment comment2 = Comment.of(product, user, "content2");
+	private final Comment comment1 = Comment.of(product, member, "content1");
+	private final Comment comment2 = Comment.of(product, member, "content2");
 	private Notification notification1;
 	private Notification notification2;
 

@@ -32,10 +32,10 @@ import taco.klkl.domain.comment.domain.Comment;
 import taco.klkl.domain.image.domain.Image;
 import taco.klkl.domain.like.exception.LikeCountBelowMinimumException;
 import taco.klkl.domain.like.exception.LikeCountOverMaximumException;
+import taco.klkl.domain.member.domain.Member;
 import taco.klkl.domain.product.converter.RatingConverter;
 import taco.klkl.domain.region.domain.city.City;
 import taco.klkl.domain.region.domain.currency.Currency;
-import taco.klkl.domain.user.domain.User;
 import taco.klkl.global.common.constants.DefaultConstants;
 import taco.klkl.global.common.constants.ProductConstants;
 
@@ -108,10 +108,10 @@ public class Product {
 		optional = false
 	)
 	@JoinColumn(
-		name = "user_id",
+		name = "member_id",
 		nullable = false
 	)
-	private User user;
+	private Member member;
 
 	@ManyToOne(
 		fetch = FetchType.LAZY,
@@ -180,12 +180,12 @@ public class Product {
 		final String address,
 		final Integer price,
 		final Rating rating,
-		final User user,
+		final Member member,
 		final City city,
 		final Subcategory subcategory,
 		final Currency currency
 	) {
-		return new Product(name, description, address, price, rating, user, city, subcategory, currency);
+		return new Product(name, description, address, price, rating, member, city, subcategory, currency);
 	}
 
 	public void update(
@@ -262,7 +262,7 @@ public class Product {
 		final String address,
 		final Integer price,
 		final Rating rating,
-		final User user,
+		final Member member,
 		final City city,
 		final Subcategory subcategory,
 		final Currency currency
@@ -272,7 +272,7 @@ public class Product {
 		this.address = address;
 		this.price = price;
 		this.rating = rating;
-		this.user = user;
+		this.member = member;
 		this.city = city;
 		this.subcategory = subcategory;
 		this.currency = currency;

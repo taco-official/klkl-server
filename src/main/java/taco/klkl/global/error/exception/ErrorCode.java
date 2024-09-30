@@ -17,8 +17,8 @@ public enum ErrorCode {
 	QUERY_PARAM_INVALID(HttpStatus.BAD_REQUEST, "올바르지 않은 쿼리 파라미터 값입니다."),
 	QUERY_PARAM_NOT_FOUND(HttpStatus.BAD_REQUEST, "쿼리 파라미터가 존재하지 않습니다."),
 
-	// User
-	USER_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 사용자입니다."),
+	// Member
+	MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 사용자입니다."),
 	GENDER_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 성별입니다."),
 	SELF_FOLLOW_NOT_ALLOWED(HttpStatus.BAD_REQUEST, "자기 자신을 팔로우할 수 없습니다."),
 
@@ -28,7 +28,7 @@ public enum ErrorCode {
 	SORT_CRITERIA_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 정렬 기준입니다."),
 	SORT_DIRECTION_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 정렬 방향입니다."),
 	INVALID_CITY_IDS(HttpStatus.BAD_REQUEST, "선택한 도시들은 동일한 국가에 속하지 않습니다."),
-	PRODUCT_USER_NOT_MATCH(HttpStatus.BAD_REQUEST, "다른 유저의 상품입니다."),
+	PRODUCT_MEMBER_NOT_MATCH(HttpStatus.BAD_REQUEST, "다른 유저의 상품입니다."),
 
 	// Like
 	LIKE_COUNT_OVER_MAXIMUM(HttpStatus.BAD_REQUEST, "상품의 좋아요수가 최대값입니다. 2147483647"),
@@ -36,7 +36,7 @@ public enum ErrorCode {
 
 	// Comment
 	COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 댓글입니다."),
-	COMMENT_USER_NOT_MATCH(HttpStatus.BAD_REQUEST, "다른 유저의 댓글입니다."),
+	COMMENT_MEMBER_NOT_MATCH(HttpStatus.BAD_REQUEST, "다른 유저의 댓글입니다."),
 	COMMENT_PRODUCT_NOT_MATCH(HttpStatus.BAD_REQUEST, "다른 상품에 있는 댓글입니다."),
 
 	// Region
@@ -69,6 +69,18 @@ public enum ErrorCode {
 	IMAGE_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 이미지입니다."),
 	IMAGE_UPLOAD_NOT_COMPLETE(HttpStatus.BAD_REQUEST, "이미지 업로드가 완료되지 않았습니다."),
 	IMAGE_URL_INVALID(HttpStatus.BAD_REQUEST, "유효하지 않은 이미지 url 형식입니다."),
+
+	// Token
+	TOKEN_INVALID(HttpStatus.UNAUTHORIZED, "유효하지 않은 토큰입니다."),
+	TOKEN_EXPIRED(HttpStatus.UNAUTHORIZED, "만료된 토큰입니다."),
+	TOKEN_GENERATION_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "토큰 생성 중 오류가 발생했습니다."),
+
+	// OAuth
+	REGISTRATION_ID_NOT_FOUND(HttpStatus.NOT_FOUND, "유효하지 않은 접속 ID 입니다."),
+
+	// Authentication
+	UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "인증되지 않은 사용자입니다."),
+	PERMISSION_DENIED(HttpStatus.FORBIDDEN, "권한이 거부되었습니다."),
 
 	// Sample
 	SAMPLE_ERROR(HttpStatus.BAD_REQUEST, "샘플 에러입니다."),

@@ -10,6 +10,7 @@ spring:
       - swagger
       - storage
       - oauth
+      - jwt
 
   application:
     name: klkl

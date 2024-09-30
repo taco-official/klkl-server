@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -21,12 +22,22 @@ import taco.klkl.domain.region.domain.currency.Currency;
 import taco.klkl.domain.region.domain.currency.CurrencyType;
 import taco.klkl.domain.region.dto.response.currency.CurrencyResponse;
 import taco.klkl.domain.region.service.currency.CurrencyService;
+import taco.klkl.domain.token.service.TokenProvider;
+import taco.klkl.global.config.security.TestSecurityConfig;
+import taco.klkl.global.util.ResponseUtil;
 
 @WebMvcTest(CurrencyController.class)
+@Import(TestSecurityConfig.class)
 public class CurrencyControllerTest {
 
 	@Autowired
-	CurrencyController currencyController;
+	private MockMvc mockMvc;
+
+	@MockBean
+	private TokenProvider tokenProvider;
+
+	@MockBean
+	private ResponseUtil responseUtil;
 
 	@MockBean
 	CurrencyService currencyService;
@@ -38,8 +49,6 @@ public class CurrencyControllerTest {
 	private final Currency currency2 = Currency.of(CurrencyType.THAI_BAHT);
 	private final CurrencyResponse currencyResponse1 = CurrencyResponse.from(currency1);
 	private final CurrencyResponse currencyResponse2 = CurrencyResponse.from(currency2);
-	@Autowired
-	private MockMvc mockMvc;
 
 	@Test
 	@DisplayName("모든 통화 목록 조회")
