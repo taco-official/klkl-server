@@ -11,14 +11,14 @@ import taco.klkl.domain.image.dto.response.PresignedUrlResponse;
 
 public interface ImageService {
 
-	PresignedUrlResponse createUserImageUploadUrl(final SingleImageUploadRequest uploadRequest);
+	PresignedUrlResponse createMemberImageUploadUrl(final SingleImageUploadRequest uploadRequest);
 
 	List<PresignedUrlResponse> createProductImageUploadUrls(
 		final Long productId,
 		final MultipleImagesUploadRequest uploadRequest
 	);
 
-	ImageResponse uploadCompleteUserImage(final SingleImageUpdateRequest updateRequest);
+	ImageResponse uploadCompleteMemberImage(final SingleImageUpdateRequest updateRequest);
 
 	List<ImageResponse> uploadCompleteProductImages(
 		final Long productId,

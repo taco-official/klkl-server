@@ -76,9 +76,9 @@ public class ProductControllerTest {
 		MemberDetailResponse memberDetailResponse = new MemberDetailResponse(
 			1L,
 			new ImageResponse(2L, "url"),
-			"userName",
-			"userTag",
-			"userDescription"
+			"name",
+			"tag",
+			"description"
 		);
 		CitySimpleResponse citySimpleResponse = new CitySimpleResponse(
 			1L,

@@ -36,10 +36,10 @@ public class ImageController {
 		summary = "회원 이미지 업로드 Presigned URL 생성",
 		description = "회원 이미지 업로드를 위한 Presigned URL를 생성합니다."
 	)
-	public PresignedUrlResponse createUserImageUploadUrl(
+	public PresignedUrlResponse createMemberImageUploadUrl(
 		@Valid @RequestBody final SingleImageUploadRequest request
 	) {
-		return imageService.createUserImageUploadUrl(request);
+		return imageService.createMemberImageUploadUrl(request);
 	}
 
 	@PostMapping("/v1/products/{productId}/upload-url")
@@ -60,10 +60,10 @@ public class ImageController {
 		summary = "회원 이미지 업로드 완료 처리",
 		description = "회원 이미지 업로드를 완료 처리합니다."
 	)
-	public ImageResponse uploadCompleteUserImage(
+	public ImageResponse uploadCompleteMemberImage(
 		@Valid @RequestBody final SingleImageUpdateRequest request
 	) {
-		return imageService.uploadCompleteUserImage(request);
+		return imageService.uploadCompleteMemberImage(request);
 	}
 
 	@PostMapping("/v1/products/{productId}/upload-complete")
