@@ -1,13 +1,14 @@
 package taco.klkl.global.config.security;
 
-import static org.springframework.http.HttpHeaders.AUTHORIZATION;
-
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Optional;
 
+import jakarta.servlet.http.Cookie;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
-import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -21,16 +22,19 @@ import taco.klkl.domain.token.exception.TokenExpiredException;
 import taco.klkl.domain.token.exception.TokenInvalidException;
 import taco.klkl.domain.token.service.TokenProvider;
 import taco.klkl.global.util.ResponseUtil;
-
+import taco.klkl.global.util.TokenUtil;
 
 @Component
 @RequiredArgsConstructor
 public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
-	private static final String TOKEN_PREFIX = "Bearer ";
+	private static final String ACCESS_TOKEN_COOKIE_NAME = "access_token";
 
 	private final TokenProvider tokenProvider;
 	private final ResponseUtil responseUtil;
+
+	@Value("${jwt.expiration.access}")
+	private int accessTokenExpiration;
 
 	@Override
 	protected void doFilterInternal(
@@ -40,13 +44,20 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 	) throws ServletException, IOException {
 		try {
 			String accessToken = resolveToken(request);
-			if (tokenProvider.validateToken(accessToken)) {
-				setAuthentication(accessToken);
-			} else {
-				String reissueAccessToken = tokenProvider.reissueAccessToken(accessToken);
-				if (StringUtils.hasText(reissueAccessToken)) {
-					setAuthentication(reissueAccessToken);
-					response.setHeader(AUTHORIZATION, TOKEN_PREFIX + reissueAccessToken);
+			if (StringUtils.hasText(accessToken)) {
+				if (tokenProvider.validateToken(accessToken)) {
+					setAuthentication(accessToken);
+				} else {
+					String reissueAccessToken = tokenProvider.reissueAccessToken(accessToken);
+					if (StringUtils.hasText(reissueAccessToken)) {
+						setAuthentication(reissueAccessToken);
+						TokenUtil.addTokenCookie(
+							response,
+							ACCESS_TOKEN_COOKIE_NAME,
+							reissueAccessToken,
+							accessTokenExpiration
+						);
+					}
 				}
 			}
 		} catch (TokenInvalidException | TokenExpiredException e) {
@@ -68,10 +79,11 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 	}
 
 	private String resolveToken(HttpServletRequest request) {
-		String token = request.getHeader(AUTHORIZATION);
-		if (ObjectUtils.isEmpty(token) || !token.startsWith(TOKEN_PREFIX)) {
-			return null;
-		}
-		return token.substring(TOKEN_PREFIX.length());
+		return Optional.ofNullable(request.getCookies())
+			.flatMap(cookies -> Arrays.stream(cookies)
+				.filter(cookie -> ACCESS_TOKEN_COOKIE_NAME.equals(cookie.getName()))
+				.findFirst()
+				.map(Cookie::getValue))
+			.orElse(null);
 	}
 }
