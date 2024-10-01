@@ -27,6 +27,7 @@ import taco.klkl.domain.category.service.category.CategoryService;
 import taco.klkl.domain.token.service.TokenProvider;
 import taco.klkl.global.config.security.TestSecurityConfig;
 import taco.klkl.global.util.ResponseUtil;
+import taco.klkl.global.util.TokenUtil;
 
 @WebMvcTest(CategoryController.class)
 @Import(TestSecurityConfig.class)
@@ -40,6 +41,9 @@ public class CategoryControllerTest {
 
 	@MockBean
 	private ResponseUtil responseUtil;
+
+	@MockBean
+	private TokenUtil tokenUtil;
 
 	@MockBean
 	private CategoryService categoryService;

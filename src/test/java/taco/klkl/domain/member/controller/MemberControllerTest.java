@@ -22,6 +22,7 @@ import taco.klkl.domain.token.service.TokenProvider;
 import taco.klkl.global.config.security.TestSecurityConfig;
 import taco.klkl.global.util.MemberUtil;
 import taco.klkl.global.util.ResponseUtil;
+import taco.klkl.global.util.TokenUtil;
 
 @WebMvcTest(MemberController.class)
 @Import(TestSecurityConfig.class)
@@ -35,6 +36,9 @@ class MemberControllerTest {
 
 	@MockBean
 	private ResponseUtil responseUtil;
+
+	@MockBean
+	private TokenUtil tokenUtil;
 
 	@MockBean
 	MemberService memberService;

@@ -24,6 +24,7 @@ import taco.klkl.domain.token.service.TokenProvider;
 import taco.klkl.global.config.security.TestSecurityConfig;
 import taco.klkl.global.error.exception.ErrorCode;
 import taco.klkl.global.util.ResponseUtil;
+import taco.klkl.global.util.TokenUtil;
 
 @WebMvcTest(LikeController.class)
 @Import(TestSecurityConfig.class)
@@ -37,6 +38,9 @@ class LikeControllerTest {
 
 	@MockBean
 	private ResponseUtil responseUtil;
+
+	@MockBean
+	private TokenUtil tokenUtil;
 
 	@MockBean
 	private LikeService likeService;
