@@ -1,10 +1,11 @@
 package taco.klkl.global.config.security;
 
+import static taco.klkl.global.common.constants.TokenConstants.ACCESS_TOKEN;
+
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -28,13 +29,9 @@ import taco.klkl.global.util.TokenUtil;
 @RequiredArgsConstructor
 public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
-	private static final String ACCESS_TOKEN_COOKIE_NAME = "access_token";
-
 	private final TokenProvider tokenProvider;
 	private final ResponseUtil responseUtil;
-
-	@Value("${jwt.expiration.access}")
-	private int accessTokenExpiration;
+	private final TokenUtil tokenUtil;
 
 	@Override
 	protected void doFilterInternal(
@@ -44,20 +41,13 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 	) throws ServletException, IOException {
 		try {
 			String accessToken = resolveToken(request);
-			if (StringUtils.hasText(accessToken)) {
-				if (tokenProvider.validateToken(accessToken)) {
-					setAuthentication(accessToken);
-				} else {
-					String reissueAccessToken = tokenProvider.reissueAccessToken(accessToken);
-					if (StringUtils.hasText(reissueAccessToken)) {
-						setAuthentication(reissueAccessToken);
-						TokenUtil.addTokenCookie(
-							response,
-							ACCESS_TOKEN_COOKIE_NAME,
-							reissueAccessToken,
-							accessTokenExpiration
-						);
-					}
+			if (tokenProvider.validateToken(accessToken)) {
+				setAuthentication(accessToken);
+			} else {
+				String reissueAccessToken = tokenProvider.reissueAccessToken(accessToken);
+				if (StringUtils.hasText(reissueAccessToken)) {
+					setAuthentication(reissueAccessToken);
+					tokenUtil.addAccessTokenCookie(response, reissueAccessToken);
 				}
 			}
 		} catch (TokenInvalidException | TokenExpiredException e) {
@@ -81,7 +71,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 	private String resolveToken(HttpServletRequest request) {
 		return Optional.ofNullable(request.getCookies())
 			.flatMap(cookies -> Arrays.stream(cookies)
-				.filter(cookie -> ACCESS_TOKEN_COOKIE_NAME.equals(cookie.getName()))
+				.filter(cookie -> ACCESS_TOKEN.equals(cookie.getName()))
 				.findFirst()
 				.map(Cookie::getValue))
 			.orElse(null);
