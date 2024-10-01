@@ -2,6 +2,8 @@ package taco.klkl.global.config.security;
 
 import static taco.klkl.domain.member.domain.Role.*;
 
+import java.util.Arrays;
+
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,6 +18,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.RegexRequestMatcher;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -46,8 +51,8 @@ public class SecurityConfig {
 			// disable csrf
 			.csrf(AbstractHttpConfigurer::disable)
 
-			// disable cors
-			.cors(AbstractHttpConfigurer::disable)
+			// configure cors
+			.cors(cors -> cors.configurationSource(corsConfigurationSource()))
 
 			// disable default authentication
 			.httpBasic(AbstractHttpConfigurer::disable)
@@ -78,7 +83,7 @@ public class SecurityConfig {
 						"/v3/api-docs/**"
 					).permitAll()
 					.requestMatchers("/error", "/favicon.ico").permitAll()
-					.requestMatchers(PathRequest.toH2Console()).permitAll()
+					.requestMatchers("/h2-console/**").permitAll()
 					.requestMatchers(HttpMethod.POST).hasAnyRole(USER.name(), ADMIN.name())
 					.requestMatchers(HttpMethod.PUT).hasAnyRole(USER.name(), ADMIN.name())
 					.requestMatchers(HttpMethod.DELETE).hasAnyRole(USER.name(), ADMIN.name())
@@ -128,5 +133,19 @@ public class SecurityConfig {
 			.addFilterBefore(tokenAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
 		return httpSecurity.build();
+	}
+
+	@Bean
+	public CorsConfigurationSource corsConfigurationSource() {
+		CorsConfiguration configuration = new CorsConfiguration();
+		configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
+		configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+		configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
+		configuration.setAllowCredentials(true);
+		configuration.setMaxAge(7200L);
+
+		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		source.registerCorsConfiguration("/**", configuration);
+		return source;
 	}
 }
