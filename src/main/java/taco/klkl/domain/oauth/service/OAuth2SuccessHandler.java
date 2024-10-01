@@ -32,10 +32,9 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
 		HttpServletResponse response,
 		Authentication authentication
 	) throws IOException, ServletException {
-
 		final String accessToken = tokenProvider.generateAccessToken(authentication);
 		tokenProvider.generateRefreshToken(authentication, accessToken);
-
 		TokenUtil.addTokenCookie(response, "access_token", accessToken, accessTokenExpiration);
+		response.sendRedirect(redirectUri);
 	}
 }
