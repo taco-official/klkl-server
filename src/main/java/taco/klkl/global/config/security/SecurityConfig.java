@@ -100,7 +100,7 @@ public class SecurityConfig {
 					.hasRole(USER.name())
 					.requestMatchers(
 						"/v1/login/**",
-						"/v1/oauth/**",
+						"/v1/oauth2/**",
 						"/v1/members/**",
 						"/v1/products/**",
 						"/v1/regions/**",
