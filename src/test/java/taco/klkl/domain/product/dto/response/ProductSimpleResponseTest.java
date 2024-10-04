@@ -95,7 +95,7 @@ class ProductSimpleResponseTest {
 	@DisplayName("Product 객체로부터 ProductSimpleResponse 생성 테스트")
 	void testFromProduct() {
 		// when
-		ProductSimpleResponse dto = ProductSimpleResponse.from(product);
+		ProductSimpleResponse dto = ProductSimpleResponse.from(product, false);
 
 		// then
 		assertThat(dto.id()).isEqualTo(product.getId());
@@ -121,7 +121,8 @@ class ProductSimpleResponseTest {
 			product.getRating().getValue(),
 			product.getCity().getCountry().getName(),
 			product.getSubcategory().getCategory().getName(),
-			tags
+			tags,
+			false
 		);
 
 		// then

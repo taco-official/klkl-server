@@ -115,7 +115,8 @@ public class ProductControllerTest {
 			Rating.FIVE.getValue(),
 			CountryType.THAILAND.getName(),
 			CategoryType.FOOD.getName(),
-			Set.of(tagSimpleResponse1, tagSimpleResponse2)
+			Set.of(tagSimpleResponse1, tagSimpleResponse2),
+			false
 		);
 		productDetailResponse = new ProductDetailResponse(
 			1L,
@@ -135,6 +136,7 @@ public class ProductControllerTest {
 			subcategorySimpleResponse,
 			currencyResponse,
 			Set.of(tagSimpleResponse1, tagSimpleResponse2),
+			false,
 			LocalDateTime.now()
 		);
 		productCreateUpdateRequest = new ProductCreateUpdateRequest(

@@ -68,7 +68,7 @@ class ProductDetailResponseTest {
 	@DisplayName("Product 객체로부터 ProductDetailResponse 생성 테스트")
 	void testFromProduct() {
 		// when
-		ProductDetailResponse dto = ProductDetailResponse.from(mockProduct);
+		ProductDetailResponse dto = ProductDetailResponse.from(mockProduct, false);
 
 		// then
 		assertThat(dto.id()).isEqualTo(mockProduct.getId());
@@ -88,7 +88,7 @@ class ProductDetailResponseTest {
 	@DisplayName("ProductDetailResponse 생성자 테스트")
 	void testConstructor() {
 		// when
-		ProductDetailResponse dto = ProductDetailResponse.from(mockProduct);
+		ProductDetailResponse dto = ProductDetailResponse.from(mockProduct, false);
 
 		// then
 		assertThat(dto.id()).isEqualTo(mockProduct.getId());
