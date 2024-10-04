@@ -41,6 +41,7 @@ public enum SecurityEndpoint {
 		new AntPathRequestMatcher("/v1/me/**"),
 		new AntPathRequestMatcher("/v1/likes/**"),
 		new AntPathRequestMatcher("/v1/notifications/**"),
+		new AntPathRequestMatcher("/v1/logout/**"),
 	}),
 	;
 
