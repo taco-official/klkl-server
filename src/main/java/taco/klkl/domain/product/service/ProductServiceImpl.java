@@ -56,6 +56,7 @@ import taco.klkl.global.common.response.PagedResponse;
 import taco.klkl.global.util.CityUtil;
 import taco.klkl.global.util.CurrencyUtil;
 import taco.klkl.global.util.MemberUtil;
+import taco.klkl.global.util.ProductUtil;
 import taco.klkl.global.util.SubcategoryUtil;
 import taco.klkl.global.util.TagUtil;
 
