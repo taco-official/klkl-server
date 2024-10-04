@@ -35,6 +35,7 @@ public class CommentServiceImpl implements CommentService {
 	private final MemberUtil memberUtil;
 	private final ProductUtil productUtil;
 
+	@Override
 	public List<CommentResponse> findCommentsByProductId(final Long productId) {
 		validateProductId(productId);
 		final List<Comment> comments = commentRepository.findByProductIdOrderByCreatedAtDesc(productId);
@@ -43,6 +44,7 @@ public class CommentServiceImpl implements CommentService {
 			.toList();
 	}
 
+	@Override
 	@Transactional
 	public CommentResponse createComment(
 		final Long productId,
@@ -56,6 +58,7 @@ public class CommentServiceImpl implements CommentService {
 		return CommentResponse.from(comment);
 	}
 
+	@Override
 	@Transactional
 	public CommentResponse updateComment(
 		final Long productId,
@@ -72,6 +75,7 @@ public class CommentServiceImpl implements CommentService {
 		return CommentResponse.from(comment);
 	}
 
+	@Override
 	@Transactional
 	public void deleteComment(
 		final Long productId,
