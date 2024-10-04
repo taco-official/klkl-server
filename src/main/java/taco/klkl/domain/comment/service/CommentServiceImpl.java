@@ -50,7 +50,9 @@ public class CommentServiceImpl implements CommentService {
 	) {
 		final Comment comment = createCommentEntity(productId, commentCreateRequestDto);
 		commentRepository.save(comment);
-		notificationService.createNotificationByComment(comment);
+		if (!isMyProduct(productId)) {
+			notificationService.createNotificationByComment(comment);
+		}
 		return CommentResponse.from(comment);
 	}
 
@@ -94,6 +96,12 @@ public class CommentServiceImpl implements CommentService {
 			member,
 			commentCreateUpdateRequest.content()
 		);
+	}
+
+	private boolean isMyProduct(final Long productId) {
+		final Member me = memberUtil.getCurrentMember();
+		final Product product = productUtil.findProductEntityById(productId);
+		return product.getMember().equals(me);
 	}
 
 	private void updateCommentEntity(
