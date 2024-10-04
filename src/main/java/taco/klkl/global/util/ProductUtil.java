@@ -32,6 +32,10 @@ public class ProductUtil {
 		return productRepository.findByMemberId(memberId, pageable);
 	}
 
+	public Page<Product> findProductsByMemberIds(final Set<Long> memberIds, final Pageable pageable) {
+		return productRepository.findByMemberIds(memberIds, pageable);
+	}
+
 	public void validateProductId(final Long id) {
 		final boolean existsById = productRepository.existsById(id);
 		if (!existsById) {

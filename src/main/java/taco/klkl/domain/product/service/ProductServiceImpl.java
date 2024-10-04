@@ -121,21 +121,6 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public PagedResponse<ProductSimpleResponse> findFollowingProducts(
-		final Pageable pageable,
-		final Set<Long> userIds
-	) {
-		final Member me = memberUtil.getCurrentMember();
-		final Pageable sortedPageable = createPageableSortedByCreatedAtDesc(pageable);
-		final Page<Product> followingProducts = productRepository.findProductsOfFollowedUsers(
-			me,
-			userIds,
-			sortedPageable
-		);
-		return PagedResponse.of(followingProducts, ProductSimpleResponse::from);
-	}
-
-	@Override
 	public ProductDetailResponse findProductById(final Long id) throws ProductNotFoundException {
 		final Product product = productRepository.findById(id)
 			.orElseThrow(ProductNotFoundException::new);

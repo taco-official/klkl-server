@@ -78,15 +78,6 @@ public class ProductController {
 		return productService.findProductsByPartialName(partialName, pageable, sortOptions);
 	}
 
-	@GetMapping("/following")
-	@Operation(summary = "내 팔로잉의 상품 목록 조회", description = "내 팔로잉 유저들의 상품 목록을 조회합니다.")
-	public PagedResponse<ProductSimpleResponse> getMyFollowingProducts(
-		@PageableDefault(size = ProductConstants.DEFAULT_PAGE_SIZE) final Pageable pageable,
-		@RequestParam(value = "member_id", required = false) final Set<Long> memberIds
-	) {
-		return productService.findFollowingProducts(pageable, memberIds);
-	}
-
 	@GetMapping("/{productId}")
 	@Operation(summary = "상품 상세 조회", description = "상품 상세 정보를 조회합니다.")
 	public ProductDetailResponse getProduct(

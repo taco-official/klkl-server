@@ -1,18 +1,18 @@
 package taco.klkl.domain.member.service;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import taco.klkl.domain.like.domain.Like;
 import taco.klkl.domain.member.dao.FollowRepository;
 import taco.klkl.domain.member.dao.MemberRepository;
 import taco.klkl.domain.member.domain.Follow;
@@ -27,8 +27,8 @@ import taco.klkl.domain.oauth.dto.response.OAuth2UserInfo;
 import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.product.dto.response.ProductSimpleResponse;
 import taco.klkl.global.common.response.PagedResponse;
-import taco.klkl.global.util.LikeUtil;
 import taco.klkl.global.util.MemberUtil;
+import taco.klkl.global.util.PageableUtil;
 import taco.klkl.global.util.ProductUtil;
 
 @Slf4j
@@ -43,7 +43,7 @@ public class MemberServiceImpl implements MemberService {
 
 	private final ProductUtil productUtil;
 	private final MemberUtil memberUtil;
-	private final LikeUtil likeUtil;
+	private final PageableUtil pageableUtil;
 
 	/**
 	 * 임시 나의 정보 조회
@@ -59,18 +59,9 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public PagedResponse<ProductSimpleResponse> getMemberProductsById(final Long id, final Pageable pageable) {
 		validateUser(id);
-		final Pageable sortedPageable = createPageableSortedByCreatedAtDesc(pageable);
+		final Pageable sortedPageable = pageableUtil.createPageableSortedByCreatedAtDesc(pageable);
 		final Page<Product> userProducts = productUtil.findProductsByMemberId(id, sortedPageable);
 		return PagedResponse.of(userProducts, ProductSimpleResponse::from);
-	}
-
-	@Override
-	public PagedResponse<ProductSimpleResponse> getMemberLikesById(final Long id, final Pageable pageable) {
-		validateUser(id);
-		final Pageable sortedPageable = createPageableSortedByCreatedAtDesc(pageable);
-		final Page<Like> likes = likeUtil.findLikesByMemberId(id, sortedPageable);
-		final Page<Product> likedProducts = likes.map(Like::getProduct);
-		return PagedResponse.of(likedProducts, ProductSimpleResponse::from);
 	}
 
 	@Override
@@ -80,6 +71,20 @@ public class MemberServiceImpl implements MemberService {
 			.map(Follow::getFollowing)
 			.map(MemberSimpleResponse::from)
 			.toList();
+	}
+
+	@Override
+	public PagedResponse<ProductSimpleResponse> getFollowingProducts(
+		final Pageable pageable,
+		final Set<Long> memberIds
+	) {
+		final Pageable sortedPageable = pageableUtil.createPageableSortedByCreatedAtDesc(pageable);
+		final Set<Long> followingIds = Optional.ofNullable(memberIds)
+			.orElseGet(() -> getFollowings().stream()
+				.map(MemberSimpleResponse::id)
+				.collect(Collectors.toSet()));
+		final Page<Product> followingProducts = productUtil.findProductsByMemberIds(followingIds, sortedPageable);
+		return PagedResponse.of(followingProducts, ProductSimpleResponse::from);
 	}
 
 	@Override
@@ -148,14 +153,6 @@ public class MemberServiceImpl implements MemberService {
 		final String description = updateRequest.description();
 
 		member.update(name, description);
-	}
-
-	private Pageable createPageableSortedByCreatedAtDesc(final Pageable pageable) {
-		return PageRequest.of(
-			pageable.getPageNumber(),
-			pageable.getPageSize(),
-			Sort.by(Sort.Direction.DESC, "createdAt")
-		);
 	}
 
 	private String generateUniqueTag(final String name) {

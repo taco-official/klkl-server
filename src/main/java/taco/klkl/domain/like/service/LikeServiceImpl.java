@@ -1,6 +1,8 @@
 package taco.klkl.domain.like.service;
 
 import org.springframework.context.annotation.Primary;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,8 +14,11 @@ import taco.klkl.domain.like.domain.Like;
 import taco.klkl.domain.like.dto.response.LikeResponse;
 import taco.klkl.domain.member.domain.Member;
 import taco.klkl.domain.product.domain.Product;
+import taco.klkl.domain.product.dto.response.ProductSimpleResponse;
 import taco.klkl.domain.product.service.ProductService;
+import taco.klkl.global.common.response.PagedResponse;
 import taco.klkl.global.util.MemberUtil;
+import taco.klkl.global.util.PageableUtil;
 import taco.klkl.global.util.ProductUtil;
 
 @Slf4j
@@ -29,16 +34,16 @@ public class LikeServiceImpl implements LikeService {
 
 	private final MemberUtil memberUtil;
 	private final ProductUtil productUtil;
+	private final PageableUtil pageableUtil;
 
 	@Override
 	@Transactional(readOnly = true)
-	public LikeResponse getLike(final Long productId) {
-		final Product product = findProductById(productId);
+	public PagedResponse<ProductSimpleResponse> getLikes(Pageable pageable) {
+		final Pageable sortedPageable = pageableUtil.createPageableSortedByCreatedAtDesc(pageable);
 		final Member member = memberUtil.getCurrentMember();
-		if (likeRepository.existsByProductAndMember(product, member)) {
-			return LikeResponse.of(true, product.getLikeCount());
-		}
-		return LikeResponse.of(false, product.getLikeCount());
+		final Page<Like> likes = likeRepository.findByMemberId(member.getId(), sortedPageable);
+		final Page<Product> likedProducts = likes.map(Like::getProduct);
+		return PagedResponse.of(likedProducts, ProductSimpleResponse::from);
 	}
 
 	@Override
