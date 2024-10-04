@@ -9,7 +9,6 @@ import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.product.dto.response.ProductSimpleResponse;
 import taco.klkl.global.common.response.PagedResponse;
 
-@Service
 public interface LikeService {
 
 	PagedResponse<ProductSimpleResponse> getLikes(final Pageable pageable);

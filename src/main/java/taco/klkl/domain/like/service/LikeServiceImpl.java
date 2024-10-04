@@ -18,7 +18,7 @@ import taco.klkl.domain.product.dto.response.ProductSimpleResponse;
 import taco.klkl.domain.product.service.ProductService;
 import taco.klkl.global.common.response.PagedResponse;
 import taco.klkl.global.util.MemberUtil;
-import taco.klkl.global.util.PageableUtil;
+import taco.klkl.global.util.PageUtil;
 import taco.klkl.global.util.ProductUtil;
 
 @Slf4j
@@ -34,16 +34,15 @@ public class LikeServiceImpl implements LikeService {
 
 	private final MemberUtil memberUtil;
 	private final ProductUtil productUtil;
-	private final PageableUtil pageableUtil;
 
 	@Override
 	@Transactional(readOnly = true)
-	public PagedResponse<ProductSimpleResponse> getLikes(Pageable pageable) {
-		final Pageable sortedPageable = pageableUtil.createPageableSortedByCreatedAtDesc(pageable);
+	public PagedResponse<ProductSimpleResponse> getLikes(final Pageable pageable) {
+		final Pageable sortedPageable = PageUtil.createPageableSortedByCreatedAtDesc(pageable);
 		final Member member = memberUtil.getCurrentMember();
 		final Page<Like> likes = likeRepository.findByMemberId(member.getId(), sortedPageable);
 		final Page<Product> likedProducts = likes.map(Like::getProduct);
-		return PagedResponse.of(likedProducts, ProductSimpleResponse::from);
+		return PagedResponse.of(likedProducts, productUtil::createProductSimpleResponse);
 	}
 
 	@Override

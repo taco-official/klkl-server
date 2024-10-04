@@ -1,4 +1,4 @@
-package taco.klkl.domain.member.domain;
+package taco.klkl.domain.member.domain.profile;
 
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;

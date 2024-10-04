@@ -7,15 +7,15 @@ public record MemberDetailResponse(
 	Long id,
 	ImageResponse image,
 	String name,
-	String tag,
+	String handle,
 	String description
 ) {
 	public static MemberDetailResponse from(final Member member) {
 		return new MemberDetailResponse(
 			member.getId(),
 			ImageResponse.from(member.getProfileImage()),
-			member.getName(),
-			member.getTag(),
+			member.getDisplayName(),
+			member.getHandle(),
 			member.getDescription()
 		);
 	}

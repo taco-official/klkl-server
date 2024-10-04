@@ -28,7 +28,7 @@ import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.product.dto.response.ProductSimpleResponse;
 import taco.klkl.global.common.response.PagedResponse;
 import taco.klkl.global.util.MemberUtil;
-import taco.klkl.global.util.PageableUtil;
+import taco.klkl.global.util.PageUtil;
 import taco.klkl.global.util.ProductUtil;
 
 @Slf4j
@@ -43,7 +43,6 @@ public class MemberServiceImpl implements MemberService {
 
 	private final ProductUtil productUtil;
 	private final MemberUtil memberUtil;
-	private final PageableUtil pageableUtil;
 
 	/**
 	 * 임시 나의 정보 조회
@@ -59,9 +58,9 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public PagedResponse<ProductSimpleResponse> getMemberProductsById(final Long id, final Pageable pageable) {
 		validateUser(id);
-		final Pageable sortedPageable = pageableUtil.createPageableSortedByCreatedAtDesc(pageable);
-		final Page<Product> userProducts = productUtil.findProductsByMemberId(id, sortedPageable);
-		return PagedResponse.of(userProducts, ProductSimpleResponse::from);
+		final Pageable sortedPageable = PageUtil.createPageableSortedByCreatedAtDesc(pageable);
+		final Page<Product> memberProducts = productUtil.findProductsByMemberId(id, sortedPageable);
+		return PagedResponse.of(memberProducts, productUtil::createProductSimpleResponse);
 	}
 
 	@Override
@@ -78,13 +77,14 @@ public class MemberServiceImpl implements MemberService {
 		final Pageable pageable,
 		final Set<Long> memberIds
 	) {
-		final Pageable sortedPageable = pageableUtil.createPageableSortedByCreatedAtDesc(pageable);
+		final Pageable sortedPageable = PageUtil.createPageableSortedByCreatedAtDesc(pageable);
 		final Set<Long> followingIds = Optional.ofNullable(memberIds)
+			.filter(ids -> !ids.isEmpty())
 			.orElseGet(() -> getFollowings().stream()
 				.map(MemberSimpleResponse::id)
 				.collect(Collectors.toSet()));
-		final Page<Product> followingProducts = productUtil.findProductsByMemberIds(followingIds, sortedPageable);
-		return PagedResponse.of(followingProducts, ProductSimpleResponse::from);
+		final Page<Product> followingProducts = productUtil.findProductsByMemberIdIn(followingIds, sortedPageable);
+		return PagedResponse.of(followingProducts, productUtil::createProductSimpleResponse);
 	}
 
 	@Override
@@ -140,8 +140,7 @@ public class MemberServiceImpl implements MemberService {
 
 		return memberRepository.findByProviderAndProviderId(provider, providerId)
 			.orElseGet(() -> {
-				final String tag = generateUniqueTag(name);
-				final Member newMember = Member.ofUser(name, tag, provider, providerId);
+				final Member newMember = Member.ofUser(name, provider, providerId);
 				memberRepository.save(newMember);
 				newMember.updateProfileImage(userInfo.imageUrl());
 				return newMember;
@@ -153,14 +152,6 @@ public class MemberServiceImpl implements MemberService {
 		final String description = updateRequest.description();
 
 		member.update(name, description);
-	}
-
-	private String generateUniqueTag(final String name) {
-		String tag;
-		do {
-			tag = MemberUtil.generateRandomTag();
-		} while (memberRepository.existsByNameAndTag(name, tag));
-		return tag;
 	}
 
 	private boolean isFollowPresent(final Member follower, final Member following) {

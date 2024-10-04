@@ -31,8 +31,11 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
 	@Override
 	protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
-		return Arrays.stream(SecurityEndpoint.PUBLIC.getMatchers())
-			.anyMatch(matcher -> matcher.matches(request));
+		if ("GET".equalsIgnoreCase(request.getMethod())) {
+			return Arrays.stream(SecurityEndpoint.PUBLIC.getMatchers())
+				.anyMatch(matcher -> matcher.matches(request));
+		}
+		return false;
 	}
 
 	@Override

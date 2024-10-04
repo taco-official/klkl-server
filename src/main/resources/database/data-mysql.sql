@@ -1,8 +1,8 @@
 /* Member */
-INSERT INTO member(id, uuid, name, tag, description, role, created_at)
-VALUES (101, UUID_TO_BIN('550e8400-e29b-41d4-a716-446655440000'), 'test', '0001', '테스트입니다.', 'USER', now()),
-       (102, UUID_TO_BIN(UUID()), 'dummy1', '0002', '더미1', 'USER', now()),
-       (103, UUID_TO_BIN(UUID()), 'dummy2', '0003', '더미2', 'USER', now());
+INSERT INTO member(id, uuid, handle, display_name, description, role, created_at)
+VALUES (101, UUID_TO_BIN('550e8400-e29b-41d4-a716-446655440000'), 'user_101', 'test', '테스트입니다.', 'USER', now()),
+       (102, UUID_TO_BIN(UUID()), 'user_102', 'dummy1', '더미1', 'USER', now()),
+       (103, UUID_TO_BIN(UUID()), 'user_103', 'dummy2', '더미2', 'USER', now());
 
 /* Like */
 

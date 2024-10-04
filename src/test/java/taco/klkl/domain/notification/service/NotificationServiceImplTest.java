@@ -76,7 +76,7 @@ public class NotificationServiceImplTest {
 
 	@BeforeEach
 	public void setUp() {
-		commentMember = Member.ofUser("name", "0000", null, null);
+		commentMember = Member.ofUser("name", null, null);
 
 		Region region = Region.from(RegionType.SOUTHEAST_ASIA);
 		Currency currency = Currency.of(

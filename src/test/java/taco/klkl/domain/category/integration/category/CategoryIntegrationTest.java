@@ -15,9 +15,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import jakarta.transaction.Transactional;
-import taco.klkl.domain.category.dto.response.category.CategoryResponse;
+import taco.klkl.domain.category.dto.response.category.CategoryDetailResponse;
 import taco.klkl.domain.category.service.category.CategoryService;
-import taco.klkl.global.error.exception.ErrorCode;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -34,21 +33,21 @@ class CategoryIntegrationTest {
 	@DisplayName("카테고리 목록 반환 API 통합 Test")
 	void testGetAllCategories() throws Exception {
 		// given
-		List<CategoryResponse> categoryResponse = categoryService.findAllCategories();
+		List<CategoryDetailResponse> categoryDetailResponse = categoryService.findAllCategories();
 
 		//then
 		mockMvc.perform(get("/v1/categories/hierarchy")
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
-			.andExpect(jsonPath("$.data", hasSize(categoryResponse.size())))
+			.andExpect(jsonPath("$.data", hasSize(categoryDetailResponse.size())))
 			.andExpect(jsonPath("$.isSuccess", is(true)))
 			.andExpect(jsonPath("$.data[0].subcategories",
-				hasSize(categoryResponse.get(0).subcategories().size())))
+				hasSize(categoryDetailResponse.get(0).subcategories().size())))
 			.andExpect(jsonPath("$.data[1].subcategories",
-				hasSize(categoryResponse.get(1).subcategories().size())))
+				hasSize(categoryDetailResponse.get(1).subcategories().size())))
 			.andExpect(jsonPath("$.data[2].subcategories",
-				hasSize(categoryResponse.get(2).subcategories().size())))
+				hasSize(categoryDetailResponse.get(2).subcategories().size())))
 			.andExpect(jsonPath("$.data[3].subcategories",
-				hasSize(categoryResponse.get(3).subcategories().size())));
+				hasSize(categoryDetailResponse.get(3).subcategories().size())));
 	}
 }

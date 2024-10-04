@@ -29,9 +29,6 @@ public class CityUtil {
 			.map(Country::getId)
 			.collect(Collectors.toSet());
 
-		if (countryIds.size() != 1) {
-			return false;
-		}
-		return true;
+		return countryIds.size() == 1;
 	}
 }

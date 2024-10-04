@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import lombok.RequiredArgsConstructor;
 import taco.klkl.domain.region.dao.country.CountryRepository;
 import taco.klkl.domain.region.domain.country.Country;
-import taco.klkl.domain.region.dto.response.city.CityResponse;
+import taco.klkl.domain.region.dto.response.city.CitySimpleResponse;
 import taco.klkl.domain.region.exception.country.CountryNotFoundException;
 
 @Component
@@ -23,10 +23,10 @@ public class CountryUtil {
 			.orElseThrow(CountryNotFoundException::new);
 	}
 
-	public static List<CityResponse> createCitiesByCountry(final Country country) {
+	public static List<CitySimpleResponse> createCitiesByCountry(final Country country) {
 		return Optional.ofNullable(country.getCities())
 			.map(cities -> cities.stream()
-				.map(CityResponse::from)
+				.map(CitySimpleResponse::from)
 				.toList())
 			.orElse(Collections.emptyList());
 	}

@@ -1,7 +1,7 @@
 package taco.klkl.domain.image.dto.response;
 
 import taco.klkl.domain.image.domain.Image;
-import taco.klkl.domain.member.domain.ProfileImage;
+import taco.klkl.domain.member.domain.profile.ProfileImage;
 
 public record ImageResponse(
 	Long id,
