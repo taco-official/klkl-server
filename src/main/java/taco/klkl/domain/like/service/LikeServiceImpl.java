@@ -43,7 +43,7 @@ public class LikeServiceImpl implements LikeService {
 		final Member member = memberUtil.getCurrentMember();
 		final Page<Like> likes = likeRepository.findByMemberId(member.getId(), sortedPageable);
 		final Page<Product> likedProducts = likes.map(Like::getProduct);
-		return PagedResponse.of(likedProducts, ProductSimpleResponse::from);
+		return PagedResponse.of(likedProducts, productUtil::createProductSimpleResponse);
 	}
 
 	@Override
