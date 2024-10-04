@@ -12,7 +12,7 @@ public record MemberSimpleResponse(
 		return new MemberSimpleResponse(
 			member.getId(),
 			ImageResponse.from(member.getProfileImage()),
-			member.getName()
+			member.getDisplayName()
 		);
 	}
 }
