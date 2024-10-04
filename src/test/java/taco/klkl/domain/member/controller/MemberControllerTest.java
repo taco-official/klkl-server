@@ -63,7 +63,7 @@ class MemberControllerTest {
 		when(memberService.getMemberById(any())).thenReturn(memberDetailResponse);
 
 		// when & then
-		mockMvc.perform(get("/v1/members/me")
+		mockMvc.perform(get("/v1/me")
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
