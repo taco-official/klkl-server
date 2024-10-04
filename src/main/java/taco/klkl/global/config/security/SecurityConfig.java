@@ -17,7 +17,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.util.matcher.RegexRequestMatcher;
+import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -78,39 +78,11 @@ public class SecurityConfig {
 			// request authentication & authorization
 			.authorizeHttpRequests(authorizeRequests ->
 				authorizeRequests
-					.requestMatchers("/", "/login/**").permitAll()
-					.requestMatchers(
-						"/swagger-ui/**",
-						"/swagger-ui.html",
-						"/api-docs/**",
-						"/v3/api-docs/**"
-					).permitAll()
-					.requestMatchers("/error", "/favicon.ico").permitAll()
-					.requestMatchers("/h2-console/**").permitAll()
 					.requestMatchers(HttpMethod.POST).hasAnyRole(USER.name(), ADMIN.name())
 					.requestMatchers(HttpMethod.PUT).hasAnyRole(USER.name(), ADMIN.name())
 					.requestMatchers(HttpMethod.DELETE).hasAnyRole(USER.name(), ADMIN.name())
-					.requestMatchers(
-						"/v1/members/me/**",
-						"/v1/products/following/**",
-						"/v1/notifications/**"
-					).hasRole(USER.name())
-					.requestMatchers(
-						RegexRequestMatcher.regexMatcher("/v1/products/\\d+/likes(/.*)?"))
-					.hasRole(USER.name())
-					.requestMatchers(
-						"/v1/login/**",
-						"/v1/oauth2/**",
-						"/v1/members/**",
-						"/v1/products/**",
-						"/v1/regions/**",
-						"/v1/countries/**",
-						"/v1/cities/**",
-						"/v1/currencies/**",
-						"/v1/categories/**",
-						"/v1/subcategories/**",
-						"/v1/search/**"
-					).permitAll()
+					.requestMatchers(getUserRoleEndpoints()).hasRole(USER.name())
+					.requestMatchers(getPublicEndpoints()).permitAll()
 					.anyRequest().authenticated()
 			)
 
@@ -136,6 +108,14 @@ public class SecurityConfig {
 			.addFilterBefore(tokenAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
 		return httpSecurity.build();
+	}
+
+	private RequestMatcher[] getPublicEndpoints() {
+		return SecurityEndpoint.PUBLIC.getMatchers();
+	}
+
+	private RequestMatcher[] getUserRoleEndpoints() {
+		return SecurityEndpoint.USER_ROLE.getMatchers();
 	}
 
 	@Bean
