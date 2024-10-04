@@ -38,14 +38,14 @@ public class LikeController {
 		return likeService.getLikes(pageable);
 	}
 
-	@PostMapping("/products/{productId}")
+	@PostMapping("/{productId}")
 	@ResponseStatus(HttpStatus.CREATED)
 	@Operation(summary = "좋아요 누르기", description = "상품에 좋아요를 누릅니다.")
 	public LikeResponse addLike(@PathVariable final Long productId) {
 		return likeService.createLike(productId);
 	}
 
-	@DeleteMapping("/products/{productId}")
+	@DeleteMapping("/{productId}")
 	@Operation(summary = "좋아요 취소", description = "상품에 누른 좋아요를 취소합니다.")
 	public LikeResponse removeLike(@PathVariable final Long productId) {
 		return likeService.deleteLike(productId);
