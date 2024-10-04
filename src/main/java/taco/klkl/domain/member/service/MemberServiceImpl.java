@@ -80,6 +80,7 @@ public class MemberServiceImpl implements MemberService {
 	) {
 		final Pageable sortedPageable = pageableUtil.createPageableSortedByCreatedAtDesc(pageable);
 		final Set<Long> followingIds = Optional.ofNullable(memberIds)
+			.filter(ids -> !ids.isEmpty())
 			.orElseGet(() -> getFollowings().stream()
 				.map(MemberSimpleResponse::id)
 				.collect(Collectors.toSet()));
