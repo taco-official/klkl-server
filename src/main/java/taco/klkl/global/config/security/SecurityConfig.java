@@ -38,6 +38,8 @@ public class SecurityConfig {
 	private final OAuth2SuccessHandler oAuth2SuccessHandler;
 	private final CustomAccessDeniedHandler accessDeniedHandler;
 	private final CustomAuthenticationEntryPoint authenticationEntryPoint;
+	private final CustomLogoutHandler customLogoutHandler;
+	private final CustomLogoutSuccessHandler customLogoutSuccessHandler;
 	private final TokenAuthenticationFilter tokenAuthenticationFilter;
 
 	@Value("${spring.application.uri}")
@@ -63,17 +65,16 @@ public class SecurityConfig {
 			// disable default login form
 			.formLogin(AbstractHttpConfigurer::disable)
 
-			// disable default logout
-			.logout(AbstractHttpConfigurer::disable)
-
 			// disable X-Frame-Options (enable h2-console)
 			.headers((headers) ->
 				headers.contentTypeOptions(contentTypeOptionsConfig ->
-					headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin)))
+					headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))
+			)
 
 			// disable session
 			.sessionManagement(sessionManagement ->
-				sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+				sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+			)
 
 			// request authentication & authorization
 			.authorizeHttpRequests(authorizeRequests ->
@@ -95,6 +96,14 @@ public class SecurityConfig {
 						.baseUri("/v1/oauth2/authorization"))
 					.redirectionEndpoint(redirection -> redirection
 						.baseUri("/v1/login/oauth2/code/*"))
+			)
+
+			// configure logout
+			.logout(logout -> logout
+				.logoutUrl("/v1/logout")
+				.addLogoutHandler(customLogoutHandler)
+				.logoutSuccessHandler(customLogoutSuccessHandler)
+				.permitAll()
 			)
 
 			// auth exception handling

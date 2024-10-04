@@ -9,4 +9,6 @@ public interface TokenService {
 	Token findByAccessTokenOrThrow(final String accessToken);
 
 	void updateToken(final String accessToken, final Token token);
+
+	void deleteToken(final String name);
 }
