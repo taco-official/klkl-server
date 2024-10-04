@@ -9,7 +9,6 @@ import taco.klkl.domain.category.dto.response.tag.TagSimpleResponse;
 import taco.klkl.domain.image.dto.response.ImageResponse;
 import taco.klkl.domain.member.dto.response.MemberDetailResponse;
 import taco.klkl.domain.product.domain.Product;
-import taco.klkl.domain.product.domain.ProductImage;
 import taco.klkl.domain.region.dto.response.city.CitySimpleResponse;
 import taco.klkl.domain.region.dto.response.currency.CurrencyResponse;
 import taco.klkl.global.util.ProductUtil;
@@ -20,25 +19,21 @@ public record ProductDetailResponse(
 	String name,
 	String description,
 	String address,
-	Integer price,
-	Integer likeCount,
-	Double rating,
+	int price,
+	int likeCount,
+	double rating,
 	MemberDetailResponse member,
 	CitySimpleResponse city,
 	SubcategorySimpleResponse subcategory,
 	CurrencyResponse currency,
 	Set<TagSimpleResponse> tags,
+	boolean isLiked,
 	LocalDateTime createdAt
 ) {
-	public static ProductDetailResponse from(final Product product) {
-		final List<ImageResponse> images = product.getImages().stream()
-			.map(ProductImage::getImage)
-			.map(ImageResponse::from)
-			.toList();
-
+	public static ProductDetailResponse from(final Product product, final boolean isLiked) {
 		return new ProductDetailResponse(
 			product.getId(),
-			images,
+			ProductUtil.generateImagesByProduct(product),
 			product.getName(),
 			product.getDescription(),
 			product.getAddress(),
@@ -50,6 +45,7 @@ public record ProductDetailResponse(
 			SubcategorySimpleResponse.from(product.getSubcategory()),
 			CurrencyResponse.from(product.getCurrency()),
 			ProductUtil.generateTagsByProduct(product),
+			isLiked,
 			product.getCreatedAt()
 		);
 	}

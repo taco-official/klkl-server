@@ -1,6 +1,7 @@
 package taco.klkl.global.util;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
@@ -12,11 +13,14 @@ import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
 import taco.klkl.domain.category.dto.response.tag.TagSimpleResponse;
+import taco.klkl.domain.image.dto.response.ImageResponse;
 import taco.klkl.domain.member.domain.Member;
 import taco.klkl.domain.member.exception.MemberNotFoundException;
 import taco.klkl.domain.product.dao.ProductRepository;
 import taco.klkl.domain.product.domain.Product;
+import taco.klkl.domain.product.domain.ProductImage;
 import taco.klkl.domain.product.domain.ProductTag;
+import taco.klkl.domain.product.dto.response.ProductDetailResponse;
 import taco.klkl.domain.product.dto.response.ProductSimpleResponse;
 import taco.klkl.domain.product.exception.ProductNotFoundException;
 
@@ -52,6 +56,16 @@ public class ProductUtil {
 		}
 	}
 
+	public ProductDetailResponse createProductDetailResponse(final Product product) {
+		try {
+			Member currentMember = memberUtil.getCurrentMember();
+			boolean isLiked = likeUtil.isLikedByProductAndMember(product, currentMember);
+			return ProductDetailResponse.from(product, isLiked);
+		} catch (MemberNotFoundException e) {
+			return ProductDetailResponse.from(product, false);
+		}
+	}
+
 	public void validateProductId(final Long id) {
 		final boolean existsById = productRepository.existsById(id);
 		if (!existsById) {
@@ -67,5 +81,12 @@ public class ProductUtil {
 				.map(TagSimpleResponse::from)
 				.collect(Collectors.toSet()))
 			.orElse(Collections.emptySet());
+	}
+
+	public static List<ImageResponse> generateImagesByProduct(final Product product) {
+		return product.getImages().stream()
+			.map(ProductImage::getImage)
+			.map(ImageResponse::from)
+			.toList();
 	}
 }

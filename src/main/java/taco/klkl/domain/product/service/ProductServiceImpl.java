@@ -126,7 +126,7 @@ public class ProductServiceImpl implements ProductService {
 	public ProductDetailResponse findProductById(final Long id) throws ProductNotFoundException {
 		final Product product = productRepository.findById(id)
 			.orElseThrow(ProductNotFoundException::new);
-		return ProductDetailResponse.from(product);
+		return productUtil.createProductDetailResponse(product);
 	}
 
 	@Override
@@ -138,7 +138,7 @@ public class ProductServiceImpl implements ProductService {
 			Set<Tag> tags = createTagsByTagIds(createRequest.tagIds());
 			product.addTags(tags);
 		}
-		return ProductDetailResponse.from(product);
+		return ProductDetailResponse.from(product, false);
 	}
 
 	@Override
@@ -164,7 +164,7 @@ public class ProductServiceImpl implements ProductService {
 		validateMyProduct(product);
 		updateProductEntity(product, updateRequest);
 		updateProductEntityTags(product, updateRequest.tagIds());
-		return ProductDetailResponse.from(product);
+		return productUtil.createProductDetailResponse(product);
 	}
 
 	@Override
