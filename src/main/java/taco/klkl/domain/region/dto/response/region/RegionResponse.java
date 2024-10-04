@@ -22,7 +22,7 @@ public record RegionResponse(
 		return new RegionResponse(
 			region.getId(),
 			region.getName(),
-			RegionUtil.createCountriesByRegion(region)
+			RegionUtil.generateCountriesByRegion(region)
 		);
 	}
 }

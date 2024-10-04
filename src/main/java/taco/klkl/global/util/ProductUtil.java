@@ -42,14 +42,14 @@ public class ProductUtil {
 		return productRepository.findByMemberId(memberId, pageable);
 	}
 
-	public Page<Product> findProductsByMemberIds(final Set<Long> memberIds, final Pageable pageable) {
+	public Page<Product> findProductsByMemberIdIn(final Set<Long> memberIds, final Pageable pageable) {
 		return productRepository.findByMemberIdIn(memberIds, pageable);
 	}
 
 	public ProductSimpleResponse createProductSimpleResponse(final Product product) {
 		try {
 			Member currentMember = memberUtil.getCurrentMember();
-			boolean isLiked = likeUtil.isLikedByProductAndMember(product, currentMember);
+			final boolean isLiked = likeUtil.isLikedByProductAndMember(product, currentMember);
 			return ProductSimpleResponse.from(product, isLiked);
 		} catch (MemberNotFoundException e) {
 			return ProductSimpleResponse.from(product, false);
@@ -59,7 +59,7 @@ public class ProductUtil {
 	public ProductDetailResponse createProductDetailResponse(final Product product) {
 		try {
 			Member currentMember = memberUtil.getCurrentMember();
-			boolean isLiked = likeUtil.isLikedByProductAndMember(product, currentMember);
+			final boolean isLiked = likeUtil.isLikedByProductAndMember(product, currentMember);
 			return ProductDetailResponse.from(product, isLiked);
 		} catch (MemberNotFoundException e) {
 			return ProductDetailResponse.from(product, false);

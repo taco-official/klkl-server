@@ -9,7 +9,7 @@ import taco.klkl.domain.region.dto.response.country.CountryDetailResponse;
 
 public class RegionUtil {
 
-	public static List<CountryDetailResponse> createCountriesByRegion(final Region region) {
+	public static List<CountryDetailResponse> generateCountriesByRegion(final Region region) {
 		return Optional.ofNullable(region.getCountries())
 			.map(regions -> regions.stream()
 				.map(CountryDetailResponse::from)
