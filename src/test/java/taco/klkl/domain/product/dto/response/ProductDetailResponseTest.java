@@ -36,7 +36,7 @@ class ProductDetailResponseTest {
 
 		mockMember = mock(Member.class);
 		when(mockMember.getId()).thenReturn(1L);
-		when(mockMember.getName()).thenReturn("Test Member");
+		when(mockMember.getDisplayName()).thenReturn("Test Member");
 
 		mockCity = mock(City.class);
 		when(mockCity.getId()).thenReturn(1L);

@@ -47,7 +47,7 @@ class ProductSimpleResponseTest {
 
 		mockMember = mock(Member.class);
 		when(mockMember.getId()).thenReturn(1L);
-		when(mockMember.getName()).thenReturn("Test Member");
+		when(mockMember.getDisplayName()).thenReturn("Test Member");
 
 		Region region = Region.from(RegionType.SOUTHEAST_ASIA);
 		currency = Currency.of(
