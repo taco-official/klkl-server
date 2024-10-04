@@ -39,7 +39,7 @@ public class ProductUtil {
 	}
 
 	public Page<Product> findProductsByMemberIds(final Set<Long> memberIds, final Pageable pageable) {
-		return productRepository.findByMemberIds(memberIds, pageable);
+		return productRepository.findByMemberIdIn(memberIds, pageable);
 	}
 
 	public ProductSimpleResponse createProductSimpleResponse(final Product product) {
