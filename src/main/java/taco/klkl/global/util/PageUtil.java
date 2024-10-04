@@ -6,9 +6,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
 @Component
-public class PageableUtil {
+public class PageUtil {
 
-	public Pageable createPageableSortedByCreatedAtDesc(final Pageable pageable) {
+	public static Pageable createPageableSortedByCreatedAtDesc(final Pageable pageable) {
 		return PageRequest.of(
 			pageable.getPageNumber(),
 			pageable.getPageSize(),

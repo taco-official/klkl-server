@@ -28,7 +28,7 @@ import taco.klkl.domain.product.domain.Product;
 import taco.klkl.domain.product.dto.response.ProductSimpleResponse;
 import taco.klkl.global.common.response.PagedResponse;
 import taco.klkl.global.util.MemberUtil;
-import taco.klkl.global.util.PageableUtil;
+import taco.klkl.global.util.PageUtil;
 import taco.klkl.global.util.ProductUtil;
 
 @Slf4j
@@ -43,7 +43,6 @@ public class MemberServiceImpl implements MemberService {
 
 	private final ProductUtil productUtil;
 	private final MemberUtil memberUtil;
-	private final PageableUtil pageableUtil;
 
 	/**
 	 * 임시 나의 정보 조회
@@ -59,7 +58,7 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public PagedResponse<ProductSimpleResponse> getMemberProductsById(final Long id, final Pageable pageable) {
 		validateUser(id);
-		final Pageable sortedPageable = pageableUtil.createPageableSortedByCreatedAtDesc(pageable);
+		final Pageable sortedPageable = PageUtil.createPageableSortedByCreatedAtDesc(pageable);
 		final Page<Product> userProducts = productUtil.findProductsByMemberId(id, sortedPageable);
 		return PagedResponse.of(userProducts, productUtil::createProductSimpleResponse);
 	}
@@ -78,7 +77,7 @@ public class MemberServiceImpl implements MemberService {
 		final Pageable pageable,
 		final Set<Long> memberIds
 	) {
-		final Pageable sortedPageable = pageableUtil.createPageableSortedByCreatedAtDesc(pageable);
+		final Pageable sortedPageable = PageUtil.createPageableSortedByCreatedAtDesc(pageable);
 		final Set<Long> followingIds = Optional.ofNullable(memberIds)
 			.filter(ids -> !ids.isEmpty())
 			.orElseGet(() -> getFollowings().stream()
