@@ -31,7 +31,7 @@ public class LikeController {
 	private final LikeService likeService;
 
 	@GetMapping
-	@Operation(summary = "종아요 목록 조회", description = "좋아요를 누른 상품 목록을 조회합니다.")
+	@Operation(summary = "좋아요 목록 조회", description = "좋아요를 누른 상품 목록을 조회합니다.")
 	public PagedResponse<ProductSimpleResponse> getMyLikes(
 		@PageableDefault(size = ProductConstants.DEFAULT_PAGE_SIZE) Pageable pageable
 	) {
