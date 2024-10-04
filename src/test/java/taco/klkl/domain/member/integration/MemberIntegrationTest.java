@@ -56,7 +56,7 @@ public class MemberIntegrationTest {
 		MemberDetailResponse memberResponse = memberService.getMemberById(me.getId());
 
 		// then
-		mockMvc.perform(get("/v1/members/me"))
+		mockMvc.perform(get("/v1/me"))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
 			.andExpect(jsonPath("$.data.id", is(memberResponse.id().intValue())))

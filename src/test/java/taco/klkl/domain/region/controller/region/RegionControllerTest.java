@@ -25,6 +25,7 @@ import taco.klkl.domain.region.service.region.RegionService;
 import taco.klkl.domain.token.service.TokenProvider;
 import taco.klkl.global.config.security.TestSecurityConfig;
 import taco.klkl.global.util.ResponseUtil;
+import taco.klkl.global.util.TokenUtil;
 
 @WebMvcTest(RegionController.class)
 @Import(TestSecurityConfig.class)
@@ -38,6 +39,9 @@ class RegionControllerTest {
 
 	@MockBean
 	private ResponseUtil responseUtil;
+
+	@MockBean
+	private TokenUtil tokenUtil;
 
 	@MockBean
 	RegionService regionService;

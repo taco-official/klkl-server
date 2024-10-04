@@ -28,7 +28,7 @@ public class MemberUtil {
 		final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		final UUID uuid = getCurrentMemberUuid(authentication.getName());
 		return memberRepository.findByUuid(uuid)
-				.orElseThrow(MemberNotFoundException::new);
+			.orElseThrow(MemberNotFoundException::new);
 	}
 
 	private UUID getCurrentMemberUuid(final String authName) {

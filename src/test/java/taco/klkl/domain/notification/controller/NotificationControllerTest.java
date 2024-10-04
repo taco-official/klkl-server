@@ -39,6 +39,7 @@ import taco.klkl.domain.region.domain.region.Region;
 import taco.klkl.domain.token.service.TokenProvider;
 import taco.klkl.global.config.security.TestSecurityConfig;
 import taco.klkl.global.util.ResponseUtil;
+import taco.klkl.global.util.TokenUtil;
 
 @WebMvcTest(NotificationController.class)
 @Import(TestSecurityConfig.class)
@@ -52,6 +53,9 @@ class NotificationControllerTest {
 
 	@MockBean
 	private ResponseUtil responseUtil;
+
+	@MockBean
+	private TokenUtil tokenUtil;
 
 	@MockBean
 	NotificationService notificationService;

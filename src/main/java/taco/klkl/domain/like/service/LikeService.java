@@ -1,15 +1,18 @@
 package taco.klkl.domain.like.service;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import taco.klkl.domain.like.dto.response.LikeResponse;
 import taco.klkl.domain.member.domain.Member;
 import taco.klkl.domain.product.domain.Product;
+import taco.klkl.domain.product.dto.response.ProductSimpleResponse;
+import taco.klkl.global.common.response.PagedResponse;
 
 @Service
 public interface LikeService {
 
-	LikeResponse getLike(final Long productId);
+	PagedResponse<ProductSimpleResponse> getLikes(final Pageable pageable);
 
 	/**
 	 * 상품에 좋아요를 누르는 경우

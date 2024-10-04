@@ -22,6 +22,7 @@ import taco.klkl.domain.token.service.TokenProvider;
 import taco.klkl.global.config.security.TestSecurityConfig;
 import taco.klkl.global.util.MemberUtil;
 import taco.klkl.global.util.ResponseUtil;
+import taco.klkl.global.util.TokenUtil;
 
 @WebMvcTest(MemberController.class)
 @Import(TestSecurityConfig.class)
@@ -35,6 +36,9 @@ class MemberControllerTest {
 
 	@MockBean
 	private ResponseUtil responseUtil;
+
+	@MockBean
+	private TokenUtil tokenUtil;
 
 	@MockBean
 	MemberService memberService;
@@ -59,7 +63,7 @@ class MemberControllerTest {
 		when(memberService.getMemberById(any())).thenReturn(memberDetailResponse);
 
 		// when & then
-		mockMvc.perform(get("/v1/members/me")
+		mockMvc.perform(get("/v1/me")
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))

@@ -24,6 +24,7 @@ import taco.klkl.domain.token.service.TokenProvider;
 import taco.klkl.global.config.security.TestSecurityConfig;
 import taco.klkl.global.error.exception.ErrorCode;
 import taco.klkl.global.util.ResponseUtil;
+import taco.klkl.global.util.TokenUtil;
 
 @WebMvcTest(LikeController.class)
 @Import(TestSecurityConfig.class)
@@ -37,6 +38,9 @@ class LikeControllerTest {
 
 	@MockBean
 	private ResponseUtil responseUtil;
+
+	@MockBean
+	private TokenUtil tokenUtil;
 
 	@MockBean
 	private LikeService likeService;
@@ -58,7 +62,7 @@ class LikeControllerTest {
 		when(likeService.createLike(productId)).thenReturn(likeResponse);
 
 		// when & then
-		mockMvc.perform(post("/v1/products/{productId}/likes", productId))
+		mockMvc.perform(post("/v1/likes/products/{productId}", productId))
 			.andExpect(status().isCreated())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
 			.andExpect(jsonPath("$.data.isLiked", is(true)))
@@ -76,7 +80,7 @@ class LikeControllerTest {
 		when(likeService.deleteLike(productId)).thenReturn(likeResponse);
 
 		// when & then
-		mockMvc.perform(delete("/v1/products/{productId}/likes", productId))
+		mockMvc.perform(delete("/v1/likes/products/{productId}", productId))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.isSuccess", is(true)))
 			.andExpect(jsonPath("$.data.isLiked", is(false)))
@@ -94,7 +98,7 @@ class LikeControllerTest {
 		doThrow(exception).when(likeService).createLike(productId);
 
 		// when & then
-		mockMvc.perform(post("/v1/products/{productId}/likes", productId))
+		mockMvc.perform(post("/v1/likes/products/{productId}", productId))
 			.andExpect(status().isBadRequest())
 			.andExpect(jsonPath("$.isSuccess", is(false)))
 			.andExpect(jsonPath("$.status", is(ErrorCode.LIKE_COUNT_OVER_MAXIMUM.getHttpStatus().value())))
@@ -112,7 +116,7 @@ class LikeControllerTest {
 		doThrow(exception).when(likeService).deleteLike(productId);
 
 		// when & then
-		mockMvc.perform(delete("/v1/products/{productId}/likes", productId))
+		mockMvc.perform(delete("/v1/likes/products/{productId}", productId))
 			.andExpect(status().isBadRequest())
 			.andExpect(jsonPath("$.isSuccess", is(false)))
 			.andExpect(jsonPath("$.status", is(ErrorCode.LIKE_COUNT_BELOW_MINIMUM.getHttpStatus().value())))

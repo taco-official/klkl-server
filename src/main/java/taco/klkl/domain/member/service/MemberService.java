@@ -1,6 +1,7 @@
 package taco.klkl.domain.member.service;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -21,11 +22,11 @@ public interface MemberService {
 
 	PagedResponse<ProductSimpleResponse> getMemberProductsById(final Long id, final Pageable pageable);
 
-	PagedResponse<ProductSimpleResponse> getMemberLikesById(final Long id, final Pageable pageable);
-
 	List<MemberSimpleResponse> getFollowings();
 
 	FollowResponse getFollowingStatus(final Long followingId);
+
+	PagedResponse<ProductSimpleResponse> getFollowingProducts(final Pageable pageable, final Set<Long> memberIds);
 
 	FollowResponse createFollow(final Long followingId);
 

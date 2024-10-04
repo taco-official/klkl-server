@@ -1,18 +1,20 @@
 package taco.klkl.global.config.security;
 
-import static org.springframework.http.HttpHeaders.AUTHORIZATION;
+import static taco.klkl.global.common.constants.TokenConstants.ACCESS_TOKEN;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Optional;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
-import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -21,16 +23,21 @@ import taco.klkl.domain.token.exception.TokenExpiredException;
 import taco.klkl.domain.token.exception.TokenInvalidException;
 import taco.klkl.domain.token.service.TokenProvider;
 import taco.klkl.global.util.ResponseUtil;
-
+import taco.klkl.global.util.TokenUtil;
 
 @Component
 @RequiredArgsConstructor
 public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
-	private static final String TOKEN_PREFIX = "Bearer ";
-
 	private final TokenProvider tokenProvider;
 	private final ResponseUtil responseUtil;
+	private final TokenUtil tokenUtil;
+
+	@Override
+	protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+		return Arrays.stream(SecurityEndpoint.PUBLIC.getMatchers())
+			.anyMatch(matcher -> matcher.matches(request));
+	}
 
 	@Override
 	protected void doFilterInternal(
@@ -46,7 +53,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 				String reissueAccessToken = tokenProvider.reissueAccessToken(accessToken);
 				if (StringUtils.hasText(reissueAccessToken)) {
 					setAuthentication(reissueAccessToken);
-					response.setHeader(AUTHORIZATION, TOKEN_PREFIX + reissueAccessToken);
+					tokenUtil.addAccessTokenCookie(response, reissueAccessToken);
 				}
 			}
 		} catch (TokenInvalidException | TokenExpiredException e) {
@@ -68,10 +75,11 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 	}
 
 	private String resolveToken(HttpServletRequest request) {
-		String token = request.getHeader(AUTHORIZATION);
-		if (ObjectUtils.isEmpty(token) || !token.startsWith(TOKEN_PREFIX)) {
-			return null;
-		}
-		return token.substring(TOKEN_PREFIX.length());
+		return Optional.ofNullable(request.getCookies())
+			.flatMap(cookies -> Arrays.stream(cookies)
+				.filter(cookie -> ACCESS_TOKEN.equals(cookie.getName()))
+				.findFirst()
+				.map(Cookie::getValue))
+			.orElse(null);
 	}
 }
