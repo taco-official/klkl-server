@@ -1,7 +1,5 @@
 package taco.klkl.domain.product.service;
 
-import java.util.Set;
-
 import org.springframework.data.domain.Pageable;
 
 import taco.klkl.domain.product.domain.Product;
@@ -26,8 +24,6 @@ public interface ProductService {
 		final Pageable pageable,
 		final ProductSortOptions sortOptions
 	);
-
-	PagedResponse<ProductSimpleResponse> findFollowingProducts(final Pageable pageable, final Set<Long> userIds);
 
 	ProductDetailResponse findProductById(final Long id) throws ProductNotFoundException;
 

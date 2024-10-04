@@ -25,6 +25,7 @@ import taco.klkl.domain.region.service.currency.CurrencyService;
 import taco.klkl.domain.token.service.TokenProvider;
 import taco.klkl.global.config.security.TestSecurityConfig;
 import taco.klkl.global.util.ResponseUtil;
+import taco.klkl.global.util.TokenUtil;
 
 @WebMvcTest(CurrencyController.class)
 @Import(TestSecurityConfig.class)
@@ -38,6 +39,9 @@ public class CurrencyControllerTest {
 
 	@MockBean
 	private ResponseUtil responseUtil;
+
+	@MockBean
+	private TokenUtil tokenUtil;
 
 	@MockBean
 	CurrencyService currencyService;

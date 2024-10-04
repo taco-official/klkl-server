@@ -2,7 +2,9 @@ package taco.klkl.global.config.security;
 
 import static taco.klkl.domain.member.domain.Role.*;
 
-import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -15,7 +17,10 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.util.matcher.RegexRequestMatcher;
+import org.springframework.security.web.util.matcher.RequestMatcher;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,6 +40,9 @@ public class SecurityConfig {
 	private final CustomAuthenticationEntryPoint authenticationEntryPoint;
 	private final TokenAuthenticationFilter tokenAuthenticationFilter;
 
+	@Value("${spring.application.uri}")
+	private String applicationUri;
+
 	@Bean
 	public BCryptPasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
@@ -46,8 +54,8 @@ public class SecurityConfig {
 			// disable csrf
 			.csrf(AbstractHttpConfigurer::disable)
 
-			// disable cors
-			.cors(AbstractHttpConfigurer::disable)
+			// configure cors
+			.cors(cors -> cors.configurationSource(corsConfigurationSource()))
 
 			// disable default authentication
 			.httpBasic(AbstractHttpConfigurer::disable)
@@ -70,39 +78,11 @@ public class SecurityConfig {
 			// request authentication & authorization
 			.authorizeHttpRequests(authorizeRequests ->
 				authorizeRequests
-					.requestMatchers("/", "/login/**").permitAll()
-					.requestMatchers(
-						"/swagger-ui/**",
-						"/swagger-ui.html",
-						"/api-docs/**",
-						"/v3/api-docs/**"
-					).permitAll()
-					.requestMatchers("/error", "/favicon.ico").permitAll()
-					.requestMatchers(PathRequest.toH2Console()).permitAll()
 					.requestMatchers(HttpMethod.POST).hasAnyRole(USER.name(), ADMIN.name())
 					.requestMatchers(HttpMethod.PUT).hasAnyRole(USER.name(), ADMIN.name())
 					.requestMatchers(HttpMethod.DELETE).hasAnyRole(USER.name(), ADMIN.name())
-					.requestMatchers(
-						"/v1/members/me/**",
-						"/v1/products/following/**",
-						"/v1/notifications/**"
-					).hasRole(USER.name())
-					.requestMatchers(
-						RegexRequestMatcher.regexMatcher("/v1/products/\\d+/likes(/.*)?"))
-					.hasRole(USER.name())
-					.requestMatchers(
-						"/v1/login/**",
-						"/v1/oauth/**",
-						"/v1/members/**",
-						"/v1/products/**",
-						"/v1/regions/**",
-						"/v1/countries/**",
-						"/v1/cities/**",
-						"/v1/currencies/**",
-						"/v1/categories/**",
-						"/v1/subcategories/**",
-						"/v1/search/**"
-					).permitAll()
+					.requestMatchers(getUserRoleEndpoints()).hasRole(USER.name())
+					.requestMatchers(getPublicEndpoints()).permitAll()
 					.anyRequest().authenticated()
 			)
 
@@ -128,5 +108,27 @@ public class SecurityConfig {
 			.addFilterBefore(tokenAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
 		return httpSecurity.build();
+	}
+
+	private RequestMatcher[] getPublicEndpoints() {
+		return SecurityEndpoint.PUBLIC.getMatchers();
+	}
+
+	private RequestMatcher[] getUserRoleEndpoints() {
+		return SecurityEndpoint.USER_ROLE.getMatchers();
+	}
+
+	@Bean
+	public CorsConfigurationSource corsConfigurationSource() {
+		CorsConfiguration configuration = new CorsConfiguration();
+		configuration.setAllowedOrigins(List.of(applicationUri));
+		configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+		configuration.setAllowedHeaders(List.of("*"));
+		configuration.setAllowCredentials(true);
+		configuration.setMaxAge(7200L);
+
+		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		source.registerCorsConfiguration("/**", configuration);
+		return source;
 	}
 }

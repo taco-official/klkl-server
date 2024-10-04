@@ -46,7 +46,7 @@ public class LikeIntegrationTest {
 	@DisplayName("좋아요 POST 테스트")
 	void testPostLike() throws Exception {
 		// when & then
-		mockMvc.perform(post("/v1/products/{productId}/likes", productId))
+		mockMvc.perform(post("/v1/likes/products/{productId}", productId))
 			.andExpect(status().isCreated())
 			.andExpect(jsonPath("$.data.isLiked", is(true)))
 			.andExpect(jsonPath("$.data.likeCount", is(1)));
@@ -56,7 +56,7 @@ public class LikeIntegrationTest {
 	@DisplayName("좋아요 DELETE 테스트")
 	void testDeleteLike() throws Exception {
 		// when & then
-		mockMvc.perform(delete("/v1/products/{productId}/likes", productId))
+		mockMvc.perform(delete("/v1/likes/products/{productId}", productId))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.data.isLiked", is(false)))
 			.andExpect(jsonPath("$.data.likeCount", is(0)));
@@ -66,12 +66,12 @@ public class LikeIntegrationTest {
 	@DisplayName("여러번 좋아요 POST 테스트")
 	void testPostLikeMultiple() throws Exception {
 		// when & then
-		mockMvc.perform(post("/v1/products/{productId}/likes", productId))
+		mockMvc.perform(post("/v1/likes/products/{productId}", productId))
 			.andExpect(status().isCreated())
 			.andExpect(jsonPath("$.data.isLiked", is(true)))
 			.andExpect(jsonPath("$.data.likeCount", is(1)));
 
-		mockMvc.perform(post("/v1/products/{productId}/likes", productId))
+		mockMvc.perform(post("/v1/likes/products/{productId}", productId))
 			.andExpect(status().isCreated())
 			.andExpect(jsonPath("$.data.isLiked", is(true)))
 			.andExpect(jsonPath("$.data.likeCount", is(1)));
@@ -81,12 +81,12 @@ public class LikeIntegrationTest {
 	@DisplayName("여러번 좋아요 DELETE 테스트")
 	void testDeleteLikeMultiple() throws Exception {
 		// when & then
-		mockMvc.perform(delete("/v1/products/{productId}/likes", productId))
+		mockMvc.perform(delete("/v1/likes/products/{productId}", productId))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.data.isLiked", is(false)))
 			.andExpect(jsonPath("$.data.likeCount", is(0)));
 
-		mockMvc.perform(delete("/v1/products/{productId}/likes", productId))
+		mockMvc.perform(delete("/v1/likes/products/{productId}", productId))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.data.isLiked", is(false)))
 			.andExpect(jsonPath("$.data.likeCount", is(0)));

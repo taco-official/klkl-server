@@ -3,7 +3,6 @@ package taco.klkl.global.util;
 import java.util.Random;
 import java.util.UUID;
 
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;

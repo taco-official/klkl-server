@@ -38,6 +38,10 @@ public class ProductUtil {
 		return productRepository.findByMemberId(memberId, pageable);
 	}
 
+	public Page<Product> findProductsByMemberIds(final Set<Long> memberIds, final Pageable pageable) {
+		return productRepository.findByMemberIds(memberIds, pageable);
+	}
+
 	public ProductSimpleResponse createProductSimpleResponse(final Product product) {
 		try {
 			Member currentMember = memberUtil.getCurrentMember();

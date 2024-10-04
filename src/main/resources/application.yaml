@@ -14,3 +14,4 @@ spring:
 
   application:
     name: klkl
+    uri: ${APP_URL}
