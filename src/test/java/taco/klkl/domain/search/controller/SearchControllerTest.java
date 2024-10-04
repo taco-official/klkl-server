@@ -19,15 +19,15 @@ import taco.klkl.domain.category.domain.category.Category;
 import taco.klkl.domain.category.domain.category.CategoryType;
 import taco.klkl.domain.category.domain.subcategory.Subcategory;
 import taco.klkl.domain.category.domain.subcategory.SubcategoryType;
-import taco.klkl.domain.category.dto.response.category.CategoryResponse;
-import taco.klkl.domain.category.dto.response.subcategory.SubcategoryResponse;
+import taco.klkl.domain.category.dto.response.category.CategorySimpleResponse;
+import taco.klkl.domain.category.dto.response.subcategory.SubcategorySimpleResponse;
 import taco.klkl.domain.region.domain.city.City;
 import taco.klkl.domain.region.domain.city.CityType;
 import taco.klkl.domain.region.domain.country.Country;
 import taco.klkl.domain.region.domain.country.CountryType;
 import taco.klkl.domain.region.domain.currency.Currency;
 import taco.klkl.domain.region.domain.region.Region;
-import taco.klkl.domain.region.dto.response.city.CityResponse;
+import taco.klkl.domain.region.dto.response.city.CitySimpleResponse;
 import taco.klkl.domain.region.dto.response.country.CountrySimpleResponse;
 import taco.klkl.domain.search.dto.response.SearchResponse;
 import taco.klkl.domain.search.service.SearchService;
@@ -73,9 +73,9 @@ public class SearchControllerTest {
 		// Mock 데이터 생성
 		mockResponse = SearchResponse.of(
 			Collections.singletonList(CountrySimpleResponse.from(country)),
-			Collections.singletonList(CityResponse.from(city)),
-			Collections.singletonList(CategoryResponse.from(category)),
-			Collections.singletonList(SubcategoryResponse.from(subcategory))
+			Collections.singletonList(CitySimpleResponse.from(city)),
+			Collections.singletonList(CategorySimpleResponse.from(category)),
+			Collections.singletonList(SubcategorySimpleResponse.from(subcategory))
 		);
 	}
 

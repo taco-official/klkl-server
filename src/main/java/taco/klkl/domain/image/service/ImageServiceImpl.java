@@ -54,7 +54,7 @@ public class ImageServiceImpl implements ImageService {
 
 	@Override
 	@Transactional
-	public PresignedUrlResponse createUserImageUploadUrl(final SingleImageUploadRequest uploadRequest) {
+	public PresignedUrlResponse createMemberImageUploadUrl(final SingleImageUploadRequest uploadRequest) {
 		final Member currentMember = memberUtil.getCurrentMember();
 		final FileExtension fileExtension = FileExtension.from(uploadRequest.fileExtension());
 		return createImageUploadUrl(ImageType.MEMBER_IMAGE, currentMember.getId(), fileExtension);
@@ -74,7 +74,7 @@ public class ImageServiceImpl implements ImageService {
 
 	@Override
 	@Transactional
-	public ImageResponse uploadCompleteUserImage(
+	public ImageResponse uploadCompleteMemberImage(
 		final SingleImageUpdateRequest updateRequest
 	) {
 		final Member currentMember = memberUtil.getCurrentMember();

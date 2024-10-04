@@ -17,7 +17,7 @@ import taco.klkl.domain.region.dao.city.CityRepository;
 import taco.klkl.domain.region.domain.city.City;
 import taco.klkl.domain.region.domain.city.CityType;
 import taco.klkl.domain.region.domain.country.Country;
-import taco.klkl.domain.region.dto.response.city.CityResponse;
+import taco.klkl.domain.region.dto.response.city.CitySimpleResponse;
 
 @ExtendWith(MockitoExtension.class)
 public class CityServiceImplTest {
@@ -40,15 +40,15 @@ public class CityServiceImplTest {
 		// given
 		String partialName = "foo";
 		List<City> cities = Arrays.asList(city1, city2);
-		CityResponse city1ResponseDto = CityResponse.from(city1);
-		CityResponse city2ResponseDto = CityResponse.from(city2);
+		CitySimpleResponse city1ResponseDto = CitySimpleResponse.from(city1);
+		CitySimpleResponse city2ResponseDto = CitySimpleResponse.from(city2);
 		when(cityRepository.findAllByNameContaining(partialName)).thenReturn(cities);
 
 		// when
-		List<CityResponse> cityResponseList = cityService.findAllCitiesByPartialString(partialName);
+		List<CitySimpleResponse> citySimpleResponseList = cityService.findAllCitiesByPartialString(partialName);
 
 		// then
-		assertThat(cityResponseList).hasSize(2);
-		assertThat(cityResponseList).containsExactly(city1ResponseDto, city2ResponseDto);
+		assertThat(citySimpleResponseList).hasSize(2);
+		assertThat(citySimpleResponseList).containsExactly(city1ResponseDto, city2ResponseDto);
 	}
 }

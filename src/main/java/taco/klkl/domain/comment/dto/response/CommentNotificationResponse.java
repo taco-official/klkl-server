@@ -2,19 +2,16 @@ package taco.klkl.domain.comment.dto.response;
 
 import java.time.LocalDateTime;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 import taco.klkl.domain.comment.domain.Comment;
-import taco.klkl.global.common.constants.DefaultConstants;
 
 public record CommentNotificationResponse(
-	String userName,
+	String name,
 	String content,
-	@JsonFormat(pattern = DefaultConstants.DEFAULT_DATETIME_FORMAT) LocalDateTime createdAt
+	LocalDateTime createdAt
 ) {
 	public static CommentNotificationResponse from(final Comment comment) {
 		return new CommentNotificationResponse(
-			comment.getMember().getName(),
+			comment.getMember().getDisplayName(),
 			comment.getContent(),
 			comment.getCreatedAt()
 		);

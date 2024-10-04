@@ -13,9 +13,10 @@ public class TokenUtil {
 	public void addAccessTokenCookie(HttpServletResponse response, String accessToken) {
 		Cookie cookie = new Cookie(ACCESS_TOKEN, accessToken);
 		cookie.setHttpOnly(true);
-		cookie.setSecure(false); // TODO: HTTPS 사용 시 활성화
+		cookie.setSecure(true);
 		cookie.setPath("/");
 		cookie.setMaxAge(3600);
+		cookie.setAttribute("SameSite", "Strict");
 		response.addCookie(cookie);
 	}
 }

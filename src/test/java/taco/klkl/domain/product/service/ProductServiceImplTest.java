@@ -36,7 +36,7 @@ import taco.klkl.domain.category.domain.subcategory.Subcategory;
 import taco.klkl.domain.category.domain.subcategory.SubcategoryType;
 import taco.klkl.domain.category.domain.tag.QTag;
 import taco.klkl.domain.category.domain.tag.Tag;
-import taco.klkl.domain.category.dto.response.tag.TagResponse;
+import taco.klkl.domain.category.dto.response.tag.TagSimpleResponse;
 import taco.klkl.domain.like.exception.LikeCountBelowMinimumException;
 import taco.klkl.domain.like.exception.LikeCountOverMaximumException;
 import taco.klkl.domain.member.domain.Member;
@@ -65,7 +65,9 @@ import taco.klkl.domain.region.domain.region.RegionType;
 import taco.klkl.global.common.response.PagedResponse;
 import taco.klkl.global.util.CityUtil;
 import taco.klkl.global.util.CurrencyUtil;
+import taco.klkl.global.util.LikeUtil;
 import taco.klkl.global.util.MemberUtil;
+import taco.klkl.global.util.ProductUtil;
 import taco.klkl.global.util.SubcategoryUtil;
 import taco.klkl.global.util.TagUtil;
 
@@ -95,6 +97,12 @@ class ProductServiceImplTest {
 	@Mock
 	private CurrencyUtil currencyUtil;
 
+	@Mock
+	private ProductUtil productUtil;
+
+	@Mock
+	private LikeUtil likeUtil;
+
 	private Product testProduct;
 	private Member member;
 	private City city;
@@ -108,7 +116,7 @@ class ProductServiceImplTest {
 	void setUp() {
 		MockitoAnnotations.openMocks(this);
 
-		member = Member.ofUser("name", "0000", null, null);
+		member = Member.ofUser("name", null, null);
 
 		Region region = Region.from(RegionType.SOUTHEAST_ASIA);
 		currency = Currency.of(
@@ -211,12 +219,21 @@ class ProductServiceImplTest {
 		when(subcategoryUtil.findSubcategoryEntityById(anyLong())).thenReturn(mockSubcategory);
 		when(tagUtil.findTagEntityById(anyLong())).thenReturn(mockTag);
 
+		// Mocking productUtil behavior
+		Member currentMember = mock(Member.class);
+		when(memberUtil.getCurrentMember()).thenReturn(currentMember);
+		when(likeUtil.isLikedByProductAndMember(testProduct, currentMember)).thenReturn(true);
+
+		ProductSimpleResponse expectedSimpleResponse = ProductSimpleResponse.from(testProduct, true);
+		when(productUtil.createProductSimpleResponse(testProduct)).thenReturn(expectedSimpleResponse);
+
 		// When
 		PagedResponse<ProductSimpleResponse> result = productService
 			.findProductsByFilterOptionsAndSortOptions(pageable, filterOptions, sortOptions);
 
 		// Then
 		assertThat(result.content()).hasSize(1);
+		assertThat(result.content().get(0)).isEqualTo(expectedSimpleResponse);
 		assertThat(result.content().get(0).id()).isEqualTo(testProduct.getId());
 		assertThat(result.totalElements()).isEqualTo(1);
 		assertThat(result.totalPages()).isEqualTo(1);
@@ -244,6 +261,9 @@ class ProductServiceImplTest {
 		verify(cityUtil).isCitiesMappedToSameCountry(cityIds);
 		verify(tagUtil, times(2)).findTagEntityById(anyLong());
 		verify(subcategoryUtil, times(3)).findSubcategoryEntityById(anyLong());
+
+		// Verify that productUtil.createProductSimpleResponse was called
+		verify(productUtil).createProductSimpleResponse(testProduct);
 	}
 
 	@Test
@@ -292,12 +312,21 @@ class ProductServiceImplTest {
 		// Mocking sorting behavior
 		when(productQuery.orderBy(any(OrderSpecifier.class))).thenReturn(productQuery);
 
+		// Mocking productUtil behavior
+		Member currentMember = mock(Member.class);
+		when(memberUtil.getCurrentMember()).thenReturn(currentMember);
+		when(likeUtil.isLikedByProductAndMember(testProduct, currentMember)).thenReturn(true);
+
+		ProductSimpleResponse expectedSimpleResponse = ProductSimpleResponse.from(testProduct, true);
+		when(productUtil.createProductSimpleResponse(testProduct)).thenReturn(expectedSimpleResponse);
+
 		// When
 		PagedResponse<ProductSimpleResponse> result = productService
 			.findProductsByPartialName("name", pageable, sortOptions);
 
 		// Then
 		assertThat(result.content()).hasSize(1);
+		assertThat(result.content().get(0)).isEqualTo(expectedSimpleResponse);
 		assertThat(result.content().get(0).id()).isEqualTo(testProduct.getId());
 		assertThat(result.totalElements()).isEqualTo(1);
 		assertThat(result.totalPages()).isEqualTo(1);
@@ -314,6 +343,7 @@ class ProductServiceImplTest {
 		verify(productQuery).limit(pageable.getPageSize());
 		verify(productQuery).orderBy(any(OrderSpecifier.class));
 		verify(productQuery).fetch();
+		verify(productUtil).createProductSimpleResponse(testProduct);
 	}
 
 	@Test
@@ -322,6 +352,13 @@ class ProductServiceImplTest {
 		// Given
 		Long productId = 1L;
 		when(productRepository.findById(productId)).thenReturn(Optional.of(testProduct));
+
+		Member currentMember = mock(Member.class);
+		when(memberUtil.getCurrentMember()).thenReturn(currentMember);
+		when(likeUtil.isLikedByProductAndMember(testProduct, currentMember)).thenReturn(true);
+
+		ProductDetailResponse expectedResponse = ProductDetailResponse.from(testProduct, true);
+		when(productUtil.createProductDetailResponse(testProduct)).thenReturn(expectedResponse);
 
 		// When
 		ProductDetailResponse result = productService.findProductById(productId);
@@ -340,7 +377,7 @@ class ProductServiceImplTest {
 			assertThat(result.tags()).isNotNull();
 			assertThat(result.tags()).hasSize(testProduct.getProductTags().size());
 			Set<Long> resultTagIds = result.tags().stream()
-				.map(TagResponse::id)
+				.map(TagSimpleResponse::id)
 				.collect(Collectors.toSet());
 
 			Set<Long> testProductTagIds = testProduct.getProductTags().stream()
@@ -358,6 +395,7 @@ class ProductServiceImplTest {
 		assertThat(result.subcategory().id()).isEqualTo(testProduct.getSubcategory().getId());
 		assertThat(result.currency().id()).isEqualTo(testProduct.getCurrency().getId());
 		verify(productRepository).findById(productId);
+		verify(productUtil).createProductDetailResponse(testProduct);
 	}
 
 	@Test
@@ -418,12 +456,32 @@ class ProductServiceImplTest {
 		when(subcategoryUtil.findSubcategoryEntityById(1L)).thenReturn(subcategory);
 		when(currencyUtil.findCurrencyEntityById(1L)).thenReturn(currency);
 
+		Member currentMember = testProduct.getMember();
+		when(memberUtil.getCurrentMember()).thenReturn(currentMember);
+
+		when(cityUtil.findCityEntityById(1L)).thenReturn(city);
+		when(subcategoryUtil.findSubcategoryEntityById(1L)).thenReturn(subcategory);
+		when(currencyUtil.findCurrencyEntityById(1L)).thenReturn(currency);
+
+		when(likeUtil.isLikedByProductAndMember(testProduct, currentMember)).thenReturn(false);
+
+		ProductDetailResponse expectedResponse = ProductDetailResponse.from(testProduct, false);
+		when(productUtil.createProductDetailResponse(testProduct)).thenReturn(expectedResponse);
+
 		// When
 		ProductDetailResponse result = productService.updateProduct(1L, productCreateUpdateRequest);
 
 		// Then
+		assertThat(result).isEqualTo(expectedResponse);
 		assertThat(result.id()).isEqualTo(testProduct.getId());
 		verify(productRepository).findById(1L);
+		verify(productUtil).createProductDetailResponse(testProduct);
+
+		assertThat(testProduct.getName()).isEqualTo(productCreateUpdateRequest.name());
+		assertThat(testProduct.getDescription()).isEqualTo(productCreateUpdateRequest.description());
+		assertThat(testProduct.getAddress()).isEqualTo(productCreateUpdateRequest.address());
+		assertThat(testProduct.getPrice()).isEqualTo(productCreateUpdateRequest.price());
+		assertThat(testProduct.getRating().getValue()).isEqualTo(productCreateUpdateRequest.rating());
 	}
 
 	@Test

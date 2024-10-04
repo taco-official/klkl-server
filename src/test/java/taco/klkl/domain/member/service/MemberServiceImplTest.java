@@ -39,7 +39,7 @@ class MemberServiceImplTest {
 
 		Member member = mock(Member.class);
 		when(member.getId()).thenReturn(1L);
-		when(member.getName()).thenReturn("testUser");
+		when(member.getDisplayName()).thenReturn("testUser");
 		when(member.getDescription()).thenReturn("테스트입니다.");
 		when(memberRepository.findById(1L)).thenReturn(Optional.of(member));
 
@@ -48,7 +48,7 @@ class MemberServiceImplTest {
 
 		// then
 		assertThat(userDto.id()).isEqualTo(member.getId());
-		assertThat(userDto.name()).isEqualTo(member.getName());
+		assertThat(userDto.name()).isEqualTo(member.getDisplayName());
 		assertThat(userDto.description()).isEqualTo(member.getDescription());
 	}
 }

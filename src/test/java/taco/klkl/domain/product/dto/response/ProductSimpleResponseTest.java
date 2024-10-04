@@ -17,7 +17,7 @@ import taco.klkl.domain.category.domain.subcategory.Subcategory;
 import taco.klkl.domain.category.domain.subcategory.SubcategoryType;
 import taco.klkl.domain.category.domain.tag.Tag;
 import taco.klkl.domain.category.domain.tag.TagType;
-import taco.klkl.domain.category.dto.response.tag.TagResponse;
+import taco.klkl.domain.category.dto.response.tag.TagSimpleResponse;
 import taco.klkl.domain.image.dto.response.ImageResponse;
 import taco.klkl.domain.member.domain.Member;
 import taco.klkl.domain.product.domain.Product;
@@ -47,7 +47,7 @@ class ProductSimpleResponseTest {
 
 		mockMember = mock(Member.class);
 		when(mockMember.getId()).thenReturn(1L);
-		when(mockMember.getName()).thenReturn("Test Member");
+		when(mockMember.getDisplayName()).thenReturn("Test Member");
 
 		Region region = Region.from(RegionType.SOUTHEAST_ASIA);
 		currency = Currency.of(
@@ -95,7 +95,7 @@ class ProductSimpleResponseTest {
 	@DisplayName("Product 객체로부터 ProductSimpleResponse 생성 테스트")
 	void testFromProduct() {
 		// when
-		ProductSimpleResponse dto = ProductSimpleResponse.from(product);
+		ProductSimpleResponse dto = ProductSimpleResponse.from(product, false);
 
 		// then
 		assertThat(dto.id()).isEqualTo(product.getId());
@@ -110,7 +110,7 @@ class ProductSimpleResponseTest {
 	@DisplayName("생성자를 통해 ProductSimpleResponse 생성 테스트")
 	void testConstructor() {
 		// given
-		Set<TagResponse> tags = ProductUtil.generateTagsByProduct(product);
+		Set<TagSimpleResponse> tags = ProductUtil.generateTagsByProduct(product);
 
 		// when
 		ProductSimpleResponse dto = new ProductSimpleResponse(
@@ -121,7 +121,8 @@ class ProductSimpleResponseTest {
 			product.getRating().getValue(),
 			product.getCity().getCountry().getName(),
 			product.getSubcategory().getCategory().getName(),
-			tags
+			tags,
+			false
 		);
 
 		// then

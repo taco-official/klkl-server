@@ -11,7 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import taco.klkl.domain.category.dao.subcategory.SubcategoryRepository;
 import taco.klkl.domain.category.domain.subcategory.Subcategory;
 import taco.klkl.domain.category.dto.response.subcategory.SubcategoryHierarchyResponse;
-import taco.klkl.domain.category.dto.response.subcategory.SubcategoryResponse;
+import taco.klkl.domain.category.dto.response.subcategory.SubcategorySimpleResponse;
 import taco.klkl.domain.category.exception.subcategory.SubcategoryNotFoundException;
 
 @Slf4j
@@ -24,13 +24,13 @@ public class SubcategoryServiceImpl implements SubcategoryService {
 	private final SubcategoryRepository subcategoryRepository;
 
 	@Override
-	public List<SubcategoryResponse> findAllSubcategoriesByPartialString(final String partialString) {
+	public List<SubcategorySimpleResponse> findAllSubcategoriesByPartialString(final String partialString) {
 		if (partialString == null || partialString.isEmpty()) {
 			return List.of();
 		}
 		final List<Subcategory> subcategories = subcategoryRepository.findAllByNameContaining(partialString);
 		return subcategories.stream()
-			.map(SubcategoryResponse::from)
+			.map(SubcategorySimpleResponse::from)
 			.toList();
 	}
 

@@ -21,8 +21,8 @@ import taco.klkl.domain.category.domain.category.Category;
 import taco.klkl.domain.category.domain.category.CategoryType;
 import taco.klkl.domain.category.domain.subcategory.Subcategory;
 import taco.klkl.domain.category.domain.subcategory.SubcategoryType;
-import taco.klkl.domain.category.dto.response.category.CategoryResponse;
-import taco.klkl.domain.category.dto.response.subcategory.SubcategoryResponse;
+import taco.klkl.domain.category.dto.response.category.CategoryDetailResponse;
+import taco.klkl.domain.category.dto.response.subcategory.SubcategoryDetailResponse;
 import taco.klkl.domain.category.service.category.CategoryService;
 import taco.klkl.domain.token.service.TokenProvider;
 import taco.klkl.global.config.security.TestSecurityConfig;
@@ -58,17 +58,17 @@ public class CategoryControllerTest {
 	@DisplayName("카테고리 컨트롤러 GlobalResponse로 Wrapping되어 나오는지 Test")
 	public void testGetAllCategories() throws Exception {
 		// given
-		List<CategoryResponse> categoryResponse = Arrays.asList(
-			new CategoryResponse(1L, "Category1", subcategories.stream()
-				.map(SubcategoryResponse::from)
+		List<CategoryDetailResponse> categoryDetailResponse = Arrays.asList(
+			new CategoryDetailResponse(1L, "Category1", subcategories.stream()
+				.map(SubcategoryDetailResponse::from)
 				.toList()),
-			new CategoryResponse(2L, "Category2", subcategories2.stream()
-				.map(SubcategoryResponse::from)
+			new CategoryDetailResponse(2L, "Category2", subcategories2.stream()
+				.map(SubcategoryDetailResponse::from)
 				.toList())
 		);
 
 		// when
-		when(categoryService.findAllCategories()).thenReturn(categoryResponse);
+		when(categoryService.findAllCategories()).thenReturn(categoryDetailResponse);
 
 		// then
 		mockMvc.perform(get("/v1/categories/hierarchy")

@@ -56,6 +56,7 @@ import taco.klkl.global.common.response.PagedResponse;
 import taco.klkl.global.util.CityUtil;
 import taco.klkl.global.util.CurrencyUtil;
 import taco.klkl.global.util.MemberUtil;
+import taco.klkl.global.util.ProductUtil;
 import taco.klkl.global.util.SubcategoryUtil;
 import taco.klkl.global.util.TagUtil;
 
@@ -74,6 +75,7 @@ public class ProductServiceImpl implements ProductService {
 	private final SubcategoryUtil subcategoryUtil;
 	private final CityUtil cityUtil;
 	private final CurrencyUtil currencyUtil;
+	private final ProductUtil productUtil;
 
 	@Override
 	public PagedResponse<ProductSimpleResponse> findProductsByFilterOptionsAndSortOptions(
@@ -88,7 +90,7 @@ public class ProductServiceImpl implements ProductService {
 		final List<Product> products = fetchProducts(baseQuery, pageable, sortOptions);
 		final Page<Product> productPage = new PageImpl<>(products, pageable, total);
 
-		return PagedResponse.of(productPage, ProductSimpleResponse::from);
+		return PagedResponse.of(productPage, productUtil::createProductSimpleResponse);
 	}
 
 	@Override
@@ -117,14 +119,14 @@ public class ProductServiceImpl implements ProductService {
 		final List<Product> products = fetchProducts(baseQuery, pageable, sortOptions);
 		final Page<Product> productPage = new PageImpl<>(products, pageable, total);
 
-		return PagedResponse.of(productPage, ProductSimpleResponse::from);
+		return PagedResponse.of(productPage, productUtil::createProductSimpleResponse);
 	}
 
 	@Override
 	public ProductDetailResponse findProductById(final Long id) throws ProductNotFoundException {
 		final Product product = productRepository.findById(id)
 			.orElseThrow(ProductNotFoundException::new);
-		return ProductDetailResponse.from(product);
+		return productUtil.createProductDetailResponse(product);
 	}
 
 	@Override
@@ -136,7 +138,7 @@ public class ProductServiceImpl implements ProductService {
 			Set<Tag> tags = createTagsByTagIds(createRequest.tagIds());
 			product.addTags(tags);
 		}
-		return ProductDetailResponse.from(product);
+		return ProductDetailResponse.from(product, false);
 	}
 
 	@Override
@@ -162,7 +164,7 @@ public class ProductServiceImpl implements ProductService {
 		validateMyProduct(product);
 		updateProductEntity(product, updateRequest);
 		updateProductEntityTags(product, updateRequest.tagIds());
-		return ProductDetailResponse.from(product);
+		return productUtil.createProductDetailResponse(product);
 	}
 
 	@Override

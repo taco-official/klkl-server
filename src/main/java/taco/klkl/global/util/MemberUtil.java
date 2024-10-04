@@ -31,15 +31,15 @@ public class MemberUtil {
 			.orElseThrow(MemberNotFoundException::new);
 	}
 
+	public static String generateRandomTag() {
+		return String.format("%04d", new Random().nextInt(10000));
+	}
+
 	private UUID getCurrentMemberUuid(final String authName) {
 		try {
 			return UUID.fromString(authName);
 		} catch (IllegalArgumentException e) {
 			throw new MemberNotFoundException();
 		}
-	}
-
-	public static String generateRandomTag() {
-		return String.format("%04d", new Random().nextInt(10000));
 	}
 }

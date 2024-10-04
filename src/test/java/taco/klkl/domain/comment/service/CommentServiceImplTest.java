@@ -46,7 +46,7 @@ public class CommentServiceImplTest {
 	@InjectMocks
 	private CommentServiceImpl commentServiceImpl;
 
-	private final Member member = Member.ofUser("name", "0000", null, null);
+	private final Member member = Member.ofUser("name", null, null);
 
 	private final Product product = mock(Product.class);
 
@@ -93,6 +93,8 @@ public class CommentServiceImplTest {
 
 		when(memberUtil.getCurrentMember()).thenReturn(member);
 		when(commentRepository.save(any(Comment.class))).thenReturn(comment);
+		when(productUtil.findProductEntityById(productId)).thenReturn(product);
+		when(product.getMember()).thenReturn(member);
 
 		//when
 		CommentResponse result = commentServiceImpl.createComment(productId, commentCreateRequestDto);
