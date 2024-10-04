@@ -39,6 +39,7 @@ public enum SecurityEndpoint {
 	}),
 	USER_ROLE(new RequestMatcher[]{
 		new AntPathRequestMatcher("/v1/me/**"),
+		new AntPathRequestMatcher("/v1/likes/**"),
 		new AntPathRequestMatcher("/v1/notifications/**"),
 	}),
 	;

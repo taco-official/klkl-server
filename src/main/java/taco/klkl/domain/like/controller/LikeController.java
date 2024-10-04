@@ -23,7 +23,7 @@ import taco.klkl.global.common.response.PagedResponse;
 
 @Slf4j
 @RestController
-@RequestMapping("/v1/me/likes")
+@RequestMapping("/v1/likes")
 @RequiredArgsConstructor
 @Tag(name = "3. 좋아요", description = "좋아요 관련 API")
 public class LikeController {
