@@ -38,7 +38,14 @@ public class TokenServiceImpl implements TokenService {
 	}
 
 	@Override
+	@Transactional
 	public void updateToken(final String accessToken, final Token token) {
 		token.update(token.getRefreshToken(), accessToken);
+	}
+
+	@Override
+	@Transactional
+	public void deleteToken(final String name) {
+		tokenRepository.deleteByName(name);
 	}
 }

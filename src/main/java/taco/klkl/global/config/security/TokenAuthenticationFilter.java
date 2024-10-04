@@ -1,10 +1,7 @@
 package taco.klkl.global.config.security;
 
-import static taco.klkl.global.common.constants.TokenConstants.ACCESS_TOKEN;
-
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Optional;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -14,7 +11,6 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -46,7 +42,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 		FilterChain filterChain
 	) throws ServletException, IOException {
 		try {
-			String accessToken = resolveToken(request);
+			String accessToken = tokenUtil.resolveToken(request);
 			if (tokenProvider.validateToken(accessToken)) {
 				setAuthentication(accessToken);
 			} else {
@@ -69,17 +65,8 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 		filterChain.doFilter(request, response);
 	}
 
-	private void setAuthentication(String accessToken) {
+	private void setAuthentication(final String accessToken) {
 		Authentication authentication = tokenProvider.getAuthentication(accessToken);
 		SecurityContextHolder.getContext().setAuthentication(authentication);
-	}
-
-	private String resolveToken(HttpServletRequest request) {
-		return Optional.ofNullable(request.getCookies())
-			.flatMap(cookies -> Arrays.stream(cookies)
-				.filter(cookie -> ACCESS_TOKEN.equals(cookie.getName()))
-				.findFirst()
-				.map(Cookie::getValue))
-			.orElse(null);
 	}
 }
