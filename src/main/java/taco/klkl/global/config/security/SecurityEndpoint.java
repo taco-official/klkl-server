@@ -1,10 +1,14 @@
 package taco.klkl.global.config.security;
 
+import java.util.Arrays;
+
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+
 
 @Getter
 @RequiredArgsConstructor
@@ -28,7 +32,6 @@ public enum SecurityEndpoint {
 		new AntPathRequestMatcher("/v1/login/**"),
 		new AntPathRequestMatcher("/v1/oauth2/**"),
 		new AntPathRequestMatcher("/v1/members/**"),
-		new AntPathRequestMatcher("/v1/products/**"),
 		new AntPathRequestMatcher("/v1/regions/**"),
 		new AntPathRequestMatcher("/v1/countries/**"),
 		new AntPathRequestMatcher("/v1/cities/**"),
@@ -43,7 +46,20 @@ public enum SecurityEndpoint {
 		new AntPathRequestMatcher("/v1/notifications/**"),
 		new AntPathRequestMatcher("/v1/logout/**"),
 	}),
+	BOTH(new RequestMatcher[]{
+		new AntPathRequestMatcher("/v1/products/**"),
+	}),
 	;
 
 	private final RequestMatcher[] matchers;
+
+	public static boolean isBothEndpoint(HttpServletRequest request) {
+		return Arrays.stream(BOTH.getMatchers())
+			.anyMatch(matcher -> matcher.matches(request));
+	}
+
+	public static boolean isPublicEndpoint(HttpServletRequest request) {
+		return Arrays.stream(PUBLIC.getMatchers())
+			.anyMatch(matcher -> matcher.matches(request));
+	}
 }
