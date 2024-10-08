@@ -4,10 +4,10 @@ spring:
   profiles:
     group:
       test: "test, h2"
-      local: "local, h2"
-      dev: "dev, mysql"
+      local: "local, h2, swagger"
+      dev: "dev, mysql, swagger"
+      prod: "prod, mysql"
     include:
-      - swagger
       - storage
       - oauth
       - jwt
