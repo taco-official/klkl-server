@@ -14,8 +14,8 @@ spring:
     defer-datasource-initialization: true
   sql:
     init:
-      data-locations: classpath:database/data-mysql.sql
       mode: always
+      data-locations: classpath:sql/data-dev.sql
 
 logging:
   level:

@@ -14,8 +14,8 @@ spring:
     defer-datasource-initialization: true
   sql:
     init:
-      data-locations: classpath:database/data-h2.sql
       mode: always
+      data-locations: classpath:sql/data-local.sql
       platform: h2
 
 logging:
