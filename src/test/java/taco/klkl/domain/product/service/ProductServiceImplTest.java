@@ -425,6 +425,9 @@ class ProductServiceImplTest {
 			ReflectionTestUtils.setField(savedProduct, "id", 1L);
 			return savedProduct;
 		});
+		ProductDetailResponse mockResponse = mock(ProductDetailResponse.class);
+		when(mockResponse.id()).thenReturn(1L);
+		when(productUtil.createProductDetailResponse(any(Product.class))).thenReturn(mockResponse);
 
 		// When
 		ProductDetailResponse result = productService.createProduct(productCreateUpdateRequest);
