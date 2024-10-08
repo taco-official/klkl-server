@@ -18,6 +18,6 @@ public class CloudFrontUrlGenerator {
 	}
 
 	public static String generateUrlByFileName(final String fileName) {
-		return "https://" + cloudFrontDomain + "/" + fileName;
+		return cloudFrontDomain + "/" + fileName;
 	}
 }
