@@ -3,20 +3,28 @@ spring:
     activate:
       on-profile: "local"
   jpa:
+    hibernate:
+      ddl-auto: create
     properties:
       hibernate:
         show_sql: true
         format_sql: true
-
-api:
-  main-url: ${LOCAL_URL}
+      jdbc:
+        time_zone: ${TZ}
+    defer-datasource-initialization: true
+  sql:
+    init:
+      data-locations: classpath:database/data-h2.sql
+      mode: always
+      platform: h2
 
 logging:
   level:
     root: INFO
-    org.springframework.web: DEBUG
+    taco.klkl: DEBUG
+    org.springframework: DEBUG
     org.hibernate.SQL: DEBUG
-    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    org.hibernate.type.descriptor.sql: TRACE
 
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
