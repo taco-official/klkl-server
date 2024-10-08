@@ -138,7 +138,7 @@ public class ProductServiceImpl implements ProductService {
 			Set<Tag> tags = createTagsByTagIds(createRequest.tagIds());
 			product.addTags(tags);
 		}
-		return ProductDetailResponse.from(product, false);
+		return productUtil.createProductDetailResponse(product);
 	}
 
 	@Override
