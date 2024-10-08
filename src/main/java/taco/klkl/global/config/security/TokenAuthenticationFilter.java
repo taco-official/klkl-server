@@ -1,7 +1,6 @@
 package taco.klkl.global.config.security;
 
 import java.io.IOException;
-import java.util.Arrays;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,6 +17,7 @@ import taco.klkl.domain.auth.exception.UnauthorizedException;
 import taco.klkl.domain.token.exception.TokenExpiredException;
 import taco.klkl.domain.token.exception.TokenInvalidException;
 import taco.klkl.domain.token.service.TokenProvider;
+import taco.klkl.global.error.exception.CustomException;
 import taco.klkl.global.util.ResponseUtil;
 import taco.klkl.global.util.TokenUtil;
 
@@ -32,8 +32,8 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 	@Override
 	protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
 		if ("GET".equalsIgnoreCase(request.getMethod())) {
-			return Arrays.stream(SecurityEndpoint.PUBLIC.getMatchers())
-				.anyMatch(matcher -> matcher.matches(request));
+			return SecurityEndpoint.isPublicEndpoint(request)
+				&& !SecurityEndpoint.isBothEndpoint(request);
 		}
 		return false;
 	}
@@ -44,24 +44,28 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 		HttpServletResponse response,
 		FilterChain filterChain
 	) throws ServletException, IOException {
+		final String accessToken = tokenUtil.resolveToken(request);
+
+		if (accessToken == null && SecurityEndpoint.isBothEndpoint(request)) {
+			proceedWithoutAuthentication(request, response, filterChain);
+			return;
+		}
+
 		try {
-			String accessToken = tokenUtil.resolveToken(request);
 			if (tokenProvider.validateToken(accessToken)) {
 				setAuthentication(accessToken);
 			} else {
-				String reissueAccessToken = tokenProvider.reissueAccessToken(accessToken);
+				final String reissueAccessToken = tokenProvider.reissueAccessToken(accessToken);
 				if (StringUtils.hasText(reissueAccessToken)) {
 					setAuthentication(reissueAccessToken);
 					tokenUtil.addAccessTokenCookie(response, reissueAccessToken);
 				}
 			}
 		} catch (TokenInvalidException | TokenExpiredException e) {
-			SecurityContextHolder.clearContext();
-			responseUtil.sendErrorResponse(response, e);
+			handleTokenException(request, response, filterChain, e);
 			return;
 		} catch (Exception e) {
-			SecurityContextHolder.clearContext();
-			responseUtil.sendErrorResponse(response, new UnauthorizedException());
+			handleTokenException(request, response, filterChain, new UnauthorizedException());
 			return;
 		}
 
@@ -71,5 +75,27 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 	private void setAuthentication(final String accessToken) {
 		Authentication authentication = tokenProvider.getAuthentication(accessToken);
 		SecurityContextHolder.getContext().setAuthentication(authentication);
+	}
+
+	private void handleTokenException(
+		HttpServletRequest request,
+		HttpServletResponse response,
+		FilterChain filterChain,
+		CustomException ex
+	) throws IOException, ServletException {
+		SecurityContextHolder.clearContext();
+		if (SecurityEndpoint.isBothEndpoint(request)) {
+			proceedWithoutAuthentication(request, response, filterChain);
+		} else {
+			responseUtil.sendErrorResponse(response, ex);
+		}
+	}
+
+	private void proceedWithoutAuthentication(
+		HttpServletRequest request,
+		HttpServletResponse response,
+		FilterChain filterChain
+	) throws IOException, ServletException {
+		filterChain.doFilter(request, response);
 	}
 }
