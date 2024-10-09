@@ -18,7 +18,7 @@ compile:
 
 build:
 	@make clean
-	@./gradlew build
+	@./gradlew build -x test
 
 test:
 	@./gradlew test
