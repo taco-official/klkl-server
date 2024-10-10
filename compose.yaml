@@ -12,7 +12,7 @@ services:
         condition: service_healthy
     restart: always
     networks:
-      - dev-net
+      - klkl-net
 
   klkl_db:
     image: mysql:8.0
@@ -22,7 +22,7 @@ services:
     env_file:
       - .env
     volumes:
-      - mysql_data:/var/lib/mysql
+      - mysql-data:/var/lib/mysql
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "--password=${MYSQL_ROOT_PASSWORD}"]
       interval: 10s
@@ -30,11 +30,11 @@ services:
       retries: 5
     restart: always
     networks:
-      - dev-net
+      - klkl-net
 
 networks:
-  dev-net:
+  klkl-net:
     driver: bridge
 
 volumes:
-  mysql_data:
+  mysql-data:
