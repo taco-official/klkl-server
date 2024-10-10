@@ -21,9 +21,13 @@ services:
     container_name: "klkl-db"
     env_file:
       - .env
+    volumes:
+      - mysql_data:/var/lib/mysql
     healthcheck:
-      interval: 5s
-      test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "--password=${MYSQL_ROOT_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     restart: always
     networks:
       - dev-net
@@ -31,3 +35,6 @@ services:
 networks:
   dev-net:
     driver: bridge
+
+volumes:
+  mysql_data:
