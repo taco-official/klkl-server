@@ -16,6 +16,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,6 +35,7 @@ import taco.klkl.global.util.ResponseUtil;
 @Transactional
 @Import(TestSecurityConfig.class)
 @WithMockUser(username = TEST_UUID, roles = "USER")
+@ActiveProfiles("test")
 public class CommentIntegrationTest {
 
 	@Autowired
