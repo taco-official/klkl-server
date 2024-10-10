@@ -1,7 +1,6 @@
 services:
   spring:
     image: ${DOCKER_USERNAME}/${DOCKER_IMAGE_NAME}:latest
-    build: .
     ports:
       - "8080:8080"
     container_name: "klkl-server"
