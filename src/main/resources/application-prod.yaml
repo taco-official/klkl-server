@@ -19,9 +19,12 @@ spring:
 
 logging:
   level:
-    root: ERROR
-    taco.klkl: WARN
-    org.springframework: ERROR
-    org.hibernate: OFF
+    root: INFO
+    taco.klkl: DEBUG
+    org.springframework: INFO
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql: DEBUG
+
   pattern:
-    console: "%d{yyyy-MM-dd HH:mm:ss} %-5level %logger{36} - %msg%n"
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
