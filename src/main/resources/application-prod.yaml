@@ -19,12 +19,9 @@ spring:
 
 logging:
   level:
-    root: WARN
-    taco.klkl: INFO
-    org.springframework: WARN
-    org.hibernate.SQL: INFO
-    org.hibernate.type.descriptor.sql: INFO
-
+    root: ERROR
+    taco.klkl: WARN
+    org.springframework: ERROR
+    org.hibernate: OFF
   pattern:
-    console: "%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"
-    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+    console: "%d{yyyy-MM-dd HH:mm:ss} %-5level %logger{36} - %msg%n"
