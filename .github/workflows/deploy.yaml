@@ -64,7 +64,7 @@ jobs:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_KEY }}
-          source: "compose.yaml,.env,Makefile"
+          source: "compose.yaml,.env"
           target: "~"
 
       - name: Deploy to EC2
@@ -77,4 +77,6 @@ jobs:
             cd ~
             sudo docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_IMAGE_NAME }}:latest
-            sudo make re
+            sudo docker compose down
+            sudo docker system prune -af --volumes
+            sudo docker compose up --build -d
