@@ -46,12 +46,10 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 		final boolean isGetRequest = "GET".equalsIgnoreCase(request.getMethod());
 
 		if (!StringUtils.hasText(accessToken)) {
-			if (isBothEndpoint || isGetRequest) {
-				filterChain.doFilter(request, response);
+			if (isGetRequest && isBothEndpoint) {
+				proceedWithoutAuthentication(request, response, filterChain);
 				return;
 			}
-			handleTokenException(request, response, filterChain, new UnauthorizedException());
-			return;
 		}
 
 		try {
@@ -65,17 +63,9 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 				}
 			}
 		} catch (TokenInvalidException | TokenExpiredException e) {
-			if (isBothEndpoint || isGetRequest) {
-				filterChain.doFilter(request, response);
-				return;
-			}
 			handleTokenException(request, response, filterChain, e);
 			return;
 		} catch (Exception e) {
-			if (isBothEndpoint || isGetRequest) {
-				filterChain.doFilter(request, response);
-				return;
-			}
 			handleTokenException(request, response, filterChain, new UnauthorizedException());
 			return;
 		}
@@ -95,7 +85,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 		CustomException ex
 	) throws IOException, ServletException {
 		SecurityContextHolder.clearContext();
-		if (SecurityEndpoint.isBothEndpoint(request)) {
+		if ("GET".equalsIgnoreCase(request.getMethod()) && SecurityEndpoint.isBothEndpoint(request)) {
 			proceedWithoutAuthentication(request, response, filterChain);
 		} else {
 			responseUtil.sendErrorResponse(response, ex);
