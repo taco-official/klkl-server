@@ -79,12 +79,12 @@ public class SecurityConfig {
 			// request authentication & authorization
 			.authorizeHttpRequests(authorizeRequests ->
 				authorizeRequests
-					.requestMatchers(getPublicEndpoints()).permitAll()
-					.requestMatchers(getBothEndpoints()).permitAll()
-					.requestMatchers(getUserRoleEndpoints()).hasRole(USER.name())
 					.requestMatchers(HttpMethod.POST).hasAnyRole(USER.name(), ADMIN.name())
 					.requestMatchers(HttpMethod.PUT).hasAnyRole(USER.name(), ADMIN.name())
 					.requestMatchers(HttpMethod.DELETE).hasAnyRole(USER.name(), ADMIN.name())
+					.requestMatchers(getUserRoleEndpoints()).hasRole(USER.name())
+					.requestMatchers(getBothEndpoints()).permitAll()
+					.requestMatchers(getPublicEndpoints()).permitAll()
 					.anyRequest().authenticated()
 			)
 
