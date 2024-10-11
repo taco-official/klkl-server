@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 public enum SecurityEndpoint {
 	PUBLIC(new RequestMatcher[]{
 		new AntPathRequestMatcher("/"),
+		new AntPathRequestMatcher("/static/**"),
 		new AntPathRequestMatcher("/login/**"),
 		new AntPathRequestMatcher("/error"),
 		new AntPathRequestMatcher("/favicon.ico"),
