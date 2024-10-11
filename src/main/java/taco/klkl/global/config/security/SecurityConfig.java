@@ -79,6 +79,7 @@ public class SecurityConfig {
 			// request authentication & authorization
 			.authorizeHttpRequests(authorizeRequests ->
 				authorizeRequests
+					.requestMatchers(HttpMethod.GET, "/").permitAll()
 					.requestMatchers(HttpMethod.POST).hasAnyRole(USER.name(), ADMIN.name())
 					.requestMatchers(HttpMethod.PUT).hasAnyRole(USER.name(), ADMIN.name())
 					.requestMatchers(HttpMethod.DELETE).hasAnyRole(USER.name(), ADMIN.name())

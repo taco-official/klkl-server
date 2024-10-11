@@ -71,7 +71,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 	}
 
 	private void setAuthentication(final String accessToken) {
-		if (StringUtils.hasText(accessToken)) {
+		if (!StringUtils.hasText(accessToken)) {
 			throw new TokenInvalidException();
 		}
 		Authentication authentication = tokenProvider.getAuthentication(accessToken);
