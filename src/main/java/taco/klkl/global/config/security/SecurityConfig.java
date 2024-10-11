@@ -84,6 +84,7 @@ public class SecurityConfig {
 					.requestMatchers(HttpMethod.DELETE).hasAnyRole(USER.name(), ADMIN.name())
 					.requestMatchers(getUserRoleEndpoints()).hasRole(USER.name())
 					.requestMatchers(getPublicEndpoints()).permitAll()
+					.requestMatchers(getBothEndpoints()).permitAll()
 					.anyRequest().authenticated()
 			)
 
@@ -125,6 +126,10 @@ public class SecurityConfig {
 
 	private RequestMatcher[] getUserRoleEndpoints() {
 		return SecurityEndpoint.USER_ROLE.getMatchers();
+	}
+
+	private RequestMatcher[] getBothEndpoints() {
+		return SecurityEndpoint.BOTH.getMatchers();
 	}
 
 	@Bean
