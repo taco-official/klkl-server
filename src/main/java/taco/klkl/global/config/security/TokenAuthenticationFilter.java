@@ -69,7 +69,12 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 		filterChain.doFilter(request, response);
 	}
 
-	private void processBothEndpoint(String accessToken, HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+	private void processBothEndpoint(
+		String accessToken,
+		HttpServletRequest request,
+		HttpServletResponse response,
+		FilterChain filterChain
+	) throws ServletException, IOException {
 		if (StringUtils.hasText(accessToken)) {
 			try {
 				validateAndSetAuthentication(accessToken, response);
@@ -80,7 +85,10 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 		filterChain.doFilter(request, response);
 	}
 
-	private void validateAndSetAuthentication(String accessToken, HttpServletResponse response) throws TokenInvalidException, TokenExpiredException {
+	private void validateAndSetAuthentication(
+		String accessToken,
+		HttpServletResponse response
+	) throws TokenInvalidException, TokenExpiredException {
 		if (tokenProvider.validateToken(accessToken)) {
 			setAuthentication(accessToken);
 		} else {
