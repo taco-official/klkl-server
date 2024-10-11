@@ -1,7 +1,6 @@
 package taco.klkl.global.config.security;
 
 import java.util.Arrays;
-import java.util.stream.Stream;
 
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
@@ -9,7 +8,6 @@ import org.springframework.security.web.util.matcher.RequestMatcher;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-
 
 @Getter
 @RequiredArgsConstructor
@@ -54,12 +52,6 @@ public enum SecurityEndpoint {
 	;
 
 	private final RequestMatcher[] matchers;
-
-	public String[] getPatterns() {
-		return Stream.of(matchers)
-				.map(matcher -> ((AntPathRequestMatcher) matcher).getPattern())
-				.toArray(String[]::new);
-	}
 
 	public static boolean isBothEndpoint(HttpServletRequest request) {
 		return Arrays.stream(BOTH.getMatchers())

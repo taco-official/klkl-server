@@ -43,21 +43,15 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 		FilterChain filterChain
 	) throws ServletException, IOException {
 		final String accessToken = tokenUtil.resolveToken(request);
-		final boolean isBothEndpoint = SecurityEndpoint.isBothEndpoint(request);
-		final boolean isGetRequest = HttpMethod.GET.matches(request.getMethod());
-
-		if (isGetRequest && isBothEndpoint) {
-			processBothEndpoint(accessToken, request, response, filterChain);
-			return;
-		}
-
-		if (!StringUtils.hasText(accessToken)) {
-			handleTokenException(request, response, filterChain, new UnauthorizedException());
-			return;
-		}
 
 		try {
-			validateAndSetAuthentication(accessToken, response);
+			if (tokenProvider.validateToken(accessToken)) {
+				setAuthentication(accessToken);
+			} else {
+				final String reissueAccessToken = tokenProvider.reissueAccessToken(accessToken);
+				setAuthentication(reissueAccessToken);
+				tokenUtil.addAccessTokenCookie(response, reissueAccessToken);
+			}
 		} catch (TokenInvalidException | TokenExpiredException e) {
 			handleTokenException(request, response, filterChain, e);
 			return;
@@ -69,40 +63,10 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 		filterChain.doFilter(request, response);
 	}
 
-	private void processBothEndpoint(
-		String accessToken,
-		HttpServletRequest request,
-		HttpServletResponse response,
-		FilterChain filterChain
-	) throws ServletException, IOException {
-		if (StringUtils.hasText(accessToken)) {
-			try {
-				validateAndSetAuthentication(accessToken, response);
-			} catch (Exception e) {
-				// For BOTH endpoints, we proceed even if token is invalid
-			}
-		}
-		filterChain.doFilter(request, response);
-	}
-
-	private void validateAndSetAuthentication(
-		String accessToken,
-		HttpServletResponse response
-	) throws TokenInvalidException, TokenExpiredException {
-		if (tokenProvider.validateToken(accessToken)) {
-			setAuthentication(accessToken);
-		} else {
-			final String reissueAccessToken = tokenProvider.reissueAccessToken(accessToken);
-			if (StringUtils.hasText(reissueAccessToken)) {
-				setAuthentication(reissueAccessToken);
-				tokenUtil.addAccessTokenCookie(response, reissueAccessToken);
-			} else {
-				throw new TokenInvalidException();
-			}
-		}
-	}
-
 	private void setAuthentication(final String accessToken) {
+		if (StringUtils.hasText(accessToken)) {
+			throw new TokenInvalidException();
+		}
 		Authentication authentication = tokenProvider.getAuthentication(accessToken);
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 	}
@@ -113,7 +77,19 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 		FilterChain filterChain,
 		CustomException ex
 	) throws IOException, ServletException {
+		if (HttpMethod.GET.matches(request.getMethod()) && SecurityEndpoint.isBothEndpoint(request)) {
+			proceedWithoutAuthentication(request, response, filterChain);
+			return;
+		}
 		SecurityContextHolder.clearContext();
 		responseUtil.sendErrorResponse(response, ex);
+	}
+
+	private void proceedWithoutAuthentication(
+		HttpServletRequest request,
+		HttpServletResponse response,
+		FilterChain filterChain
+	) throws IOException, ServletException {
+		filterChain.doFilter(request, response);
 	}
 }
