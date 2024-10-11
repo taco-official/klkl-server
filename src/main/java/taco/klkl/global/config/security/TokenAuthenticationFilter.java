@@ -31,11 +31,8 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
 	@Override
 	protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
-		if ("GET".equalsIgnoreCase(request.getMethod())) {
-			return SecurityEndpoint.isPublicEndpoint(request)
-				&& !SecurityEndpoint.isBothEndpoint(request);
-		}
-		return false;
+		return "GET".equalsIgnoreCase(request.getMethod())
+			&& SecurityEndpoint.isPublicEndpoint(request);
 	}
 
 	@Override
@@ -45,9 +42,15 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 		FilterChain filterChain
 	) throws ServletException, IOException {
 		final String accessToken = tokenUtil.resolveToken(request);
+		final boolean isBothEndpoint = SecurityEndpoint.isBothEndpoint(request);
+		final boolean isGetRequest = "GET".equalsIgnoreCase(request.getMethod());
 
-		if (accessToken == null && SecurityEndpoint.isBothEndpoint(request)) {
-			proceedWithoutAuthentication(request, response, filterChain);
+		if (!StringUtils.hasText(accessToken)) {
+			if (isBothEndpoint || isGetRequest) {
+				filterChain.doFilter(request, response);
+				return;
+			}
+			handleTokenException(request, response, filterChain, new UnauthorizedException());
 			return;
 		}
 
@@ -62,9 +65,17 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 				}
 			}
 		} catch (TokenInvalidException | TokenExpiredException e) {
+			if (isBothEndpoint || isGetRequest) {
+				filterChain.doFilter(request, response);
+				return;
+			}
 			handleTokenException(request, response, filterChain, e);
 			return;
 		} catch (Exception e) {
+			if (isBothEndpoint || isGetRequest) {
+				filterChain.doFilter(request, response);
+				return;
+			}
 			handleTokenException(request, response, filterChain, new UnauthorizedException());
 			return;
 		}
