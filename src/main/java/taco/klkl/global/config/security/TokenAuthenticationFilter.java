@@ -44,6 +44,13 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 	) throws ServletException, IOException {
 		final String accessToken = tokenUtil.resolveToken(request);
 
+		if (!StringUtils.hasText(accessToken)) {
+			if (HttpMethod.GET.matches(request.getMethod()) && SecurityEndpoint.isBothEndpoint(request)) {
+				proceedWithoutAuthentication(request, response, filterChain);
+				return;
+			}
+		}
+
 		try {
 			if (tokenProvider.validateToken(accessToken)) {
 				setAuthentication(accessToken);
@@ -77,10 +84,6 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 		FilterChain filterChain,
 		CustomException ex
 	) throws IOException, ServletException {
-		if (HttpMethod.GET.matches(request.getMethod()) && SecurityEndpoint.isBothEndpoint(request)) {
-			proceedWithoutAuthentication(request, response, filterChain);
-			return;
-		}
 		SecurityContextHolder.clearContext();
 		responseUtil.sendErrorResponse(response, ex);
 	}
