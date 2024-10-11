@@ -79,12 +79,12 @@ public class SecurityConfig {
 			// request authentication & authorization
 			.authorizeHttpRequests(authorizeRequests ->
 				authorizeRequests
-					.requestMatchers(getPublicEndpoints()).permitAll()
-					.requestMatchers(getBothEndpoints()).permitAll()
-					.requestMatchers(getUserRoleEndpoints()).hasRole(USER.name())
 					.requestMatchers(HttpMethod.POST).hasAnyRole(USER.name(), ADMIN.name())
 					.requestMatchers(HttpMethod.PUT).hasAnyRole(USER.name(), ADMIN.name())
 					.requestMatchers(HttpMethod.DELETE).hasAnyRole(USER.name(), ADMIN.name())
+					.requestMatchers(HttpMethod.GET, getUserRoleEndpoints()).hasRole(USER.name())
+					.requestMatchers(HttpMethod.GET, getBothEndpoints()).permitAll()
+					.requestMatchers(HttpMethod.GET, getPublicEndpoints()).permitAll()
 					.anyRequest().authenticated()
 			)
 
@@ -120,16 +120,16 @@ public class SecurityConfig {
 		return httpSecurity.build();
 	}
 
-	private RequestMatcher[] getPublicEndpoints() {
-		return SecurityEndpoint.PUBLIC.getMatchers();
+	private String[] getPublicEndpoints() {
+		return SecurityEndpoint.PUBLIC.getPatterns();
 	}
 
-	private RequestMatcher[] getUserRoleEndpoints() {
-		return SecurityEndpoint.USER_ROLE.getMatchers();
+	private String[] getUserRoleEndpoints() {
+		return SecurityEndpoint.USER_ROLE.getPatterns();
 	}
 
-	private RequestMatcher[] getBothEndpoints() {
-		return SecurityEndpoint.BOTH.getMatchers();
+	private String[] getBothEndpoints() {
+		return SecurityEndpoint.BOTH.getPatterns();
 	}
 
 	@Bean
