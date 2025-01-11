@@ -113,7 +113,7 @@ public class TokenProvider {
 
 	public boolean validateToken(final String token) {
 		if (!StringUtils.hasText(token)) {
-			return false;
+			throw new TokenInvalidException();
 		}
 		try {
 			Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token);

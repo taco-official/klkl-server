@@ -23,6 +23,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -51,6 +52,7 @@ import taco.klkl.global.util.TokenUtil;
 @WebMvcTest(ProductController.class)
 @Import(TestSecurityConfig.class)
 @WithMockUser(username = TEST_UUID, roles = "USER")
+@ActiveProfiles("test")
 public class ProductControllerTest {
 
 	@Autowired

@@ -1,7 +1,6 @@
-version: "3"
 services:
   spring:
-    build: .
+    image: ${DOCKER_USERNAME}/${DOCKER_IMAGE_NAME}:latest
     ports:
       - "8080:8080"
     container_name: "klkl-server"
@@ -12,7 +11,7 @@ services:
         condition: service_healthy
     restart: always
     networks:
-      - dev-net
+      - klkl-net
 
   klkl_db:
     image: mysql:8.0
@@ -21,13 +20,20 @@ services:
     container_name: "klkl-db"
     env_file:
       - .env
+    volumes:
+      - mysql-data:/var/lib/mysql
     healthcheck:
-      interval: 5s
-      test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "--password=${MYSQL_ROOT_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     restart: always
     networks:
-      - dev-net
+      - klkl-net
 
 networks:
-  dev-net:
+  klkl-net:
     driver: bridge
+
+volumes:
+  mysql-data:

@@ -2,31 +2,16 @@ spring:
   config:
     activate:
       on-profile: "h2"
-  jpa:
-    show-sql: true
-    database-platform: org.hibernate.dialect.H2Dialect
-    hibernate:
-      ddl-auto: create
-    defer-datasource-initialization: true
-    properties:
-      hibernate:
-        show_sql: true
-        format_sql: true
-      jdbc:
-        time_zone: ${TZ}
   datasource:
     driver-class-name: org.h2.Driver
     url: jdbc:h2:mem:klkldb;MODE=MySQL
     username: sa
     password:
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
   h2:
     console:
       enabled: true
       path: /h2-console
       settings:
         web-allow-others: true
-  sql:
-    init:
-      data-locations: classpath:database/data-h2.sql
-      mode: always
-      platform: h2

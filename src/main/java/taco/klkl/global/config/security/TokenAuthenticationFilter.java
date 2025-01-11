@@ -2,6 +2,7 @@ package taco.klkl.global.config.security;
 
 import java.io.IOException;
 
+import org.springframework.http.HttpMethod;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -31,11 +32,8 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
 	@Override
 	protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
-		if ("GET".equalsIgnoreCase(request.getMethod())) {
-			return SecurityEndpoint.isPublicEndpoint(request)
-				&& !SecurityEndpoint.isBothEndpoint(request);
-		}
-		return false;
+		return HttpMethod.GET.matches(request.getMethod())
+			&& SecurityEndpoint.isPublicEndpoint(request);
 	}
 
 	@Override
@@ -46,9 +44,11 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 	) throws ServletException, IOException {
 		final String accessToken = tokenUtil.resolveToken(request);
 
-		if (accessToken == null && SecurityEndpoint.isBothEndpoint(request)) {
-			proceedWithoutAuthentication(request, response, filterChain);
-			return;
+		if (!StringUtils.hasText(accessToken)) {
+			if (HttpMethod.GET.matches(request.getMethod()) && SecurityEndpoint.isBothEndpoint(request)) {
+				proceedWithoutAuthentication(request, response, filterChain);
+				return;
+			}
 		}
 
 		try {
@@ -56,10 +56,8 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 				setAuthentication(accessToken);
 			} else {
 				final String reissueAccessToken = tokenProvider.reissueAccessToken(accessToken);
-				if (StringUtils.hasText(reissueAccessToken)) {
-					setAuthentication(reissueAccessToken);
-					tokenUtil.addAccessTokenCookie(response, reissueAccessToken);
-				}
+				setAuthentication(reissueAccessToken);
+				tokenUtil.addAccessTokenCookie(response, reissueAccessToken);
 			}
 		} catch (TokenInvalidException | TokenExpiredException e) {
 			handleTokenException(request, response, filterChain, e);
@@ -73,6 +71,9 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 	}
 
 	private void setAuthentication(final String accessToken) {
+		if (!StringUtils.hasText(accessToken)) {
+			throw new TokenInvalidException();
+		}
 		Authentication authentication = tokenProvider.getAuthentication(accessToken);
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 	}
@@ -84,11 +85,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 		CustomException ex
 	) throws IOException, ServletException {
 		SecurityContextHolder.clearContext();
-		if (SecurityEndpoint.isBothEndpoint(request)) {
-			proceedWithoutAuthentication(request, response, filterChain);
-		} else {
-			responseUtil.sendErrorResponse(response, ex);
-		}
+		responseUtil.sendErrorResponse(response, ex);
 	}
 
 	private void proceedWithoutAuthentication(

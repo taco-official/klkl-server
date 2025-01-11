@@ -9,7 +9,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-
 @Getter
 @RequiredArgsConstructor
 public enum SecurityEndpoint {
@@ -18,6 +17,9 @@ public enum SecurityEndpoint {
 		new AntPathRequestMatcher("/login/**"),
 		new AntPathRequestMatcher("/error"),
 		new AntPathRequestMatcher("/favicon.ico"),
+
+		// health check
+		new AntPathRequestMatcher("/health"),
 
 		// swagger
 		new AntPathRequestMatcher("/swagger-ui/**"),
