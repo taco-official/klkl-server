@@ -42,9 +42,6 @@ public class SecurityConfig {
 	private final CustomLogoutSuccessHandler customLogoutSuccessHandler;
 	private final TokenAuthenticationFilter tokenAuthenticationFilter;
 
-	@Value("${spring.application.uri}")
-	private String applicationUri;
-
 	@Bean
 	public BCryptPasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
@@ -135,7 +132,7 @@ public class SecurityConfig {
 	@Bean
 	public CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration configuration = new CorsConfiguration();
-		configuration.setAllowedOrigins(List.of(applicationUri));
+		configuration.setAllowedOrigins(List.of("https://klkl.kr", "https://www.klkl.kr"));
 		configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
 		configuration.setAllowedHeaders(List.of("*"));
 		configuration.setAllowCredentials(true);
