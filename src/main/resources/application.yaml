@@ -1,0 +1,17 @@
+spring:
+  config:
+    import: optional:file:.env[.properties]
+  profiles:
+    group:
+      test: "test, h2"
+      local: "local, h2, swagger"
+      dev: "dev, mysql, swagger"
+      prod: "prod, mysql"
+    include:
+      - storage
+      - oauth
+      - jwt
+
+  application:
+    name: klkl
+    uri: ${APP_URL}

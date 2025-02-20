@@ -1,0 +1,17 @@
+spring:
+  config:
+    activate:
+      on-profile: "h2"
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:klkldb;MODE=MySQL
+    username: sa
+    password:
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+      settings:
+        web-allow-others: true

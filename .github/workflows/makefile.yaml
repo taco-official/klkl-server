@@ -38,6 +38,12 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
+      - name: Create .env file
+        run: |
+          touch ./env
+          echo "${{ secrets.ENV }}" > ./.env
+        shell: bash
+
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v3
         with:

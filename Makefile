@@ -6,6 +6,10 @@ up:
 	@make build
 	docker compose up --build -d
 
+upi:
+	@make build
+	docker compose up --build
+
 down:
 	docker compose down
 
@@ -14,7 +18,7 @@ compile:
 
 build:
 	@make clean
-	@./gradlew build
+	@./gradlew build -x test
 
 test:
 	@./gradlew test

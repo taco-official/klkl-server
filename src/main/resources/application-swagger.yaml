@@ -1,0 +1,15 @@
+spring:
+  config:
+    activate:
+      on-profile: "swagger"
+springdoc:
+  swagger-ui:
+    tags-sorter: alpha
+    operations-sorter: method
+    path: /swagger-ui
+    doc-expansion: none
+    urls-primary-name: KLKL API DOCS
+  api-docs:
+    path: /api-docs
+  paths-to-match:
+    - /v1/**
