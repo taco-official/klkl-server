@@ -19,11 +19,9 @@ spring:
 
 logging:
   level:
-    root: INFO
+    root: WARN
     taco.klkl: DEBUG
-    org.springframework: INFO
     org.hibernate.SQL: DEBUG
-    org.hibernate.type.descriptor.sql: DEBUG
 
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
