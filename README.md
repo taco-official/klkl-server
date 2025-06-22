@@ -76,6 +76,6 @@ KLKL에서 당신만의 여행을 완성해보세요 🌏
 
 ## 🧑🏻‍💻 Developers
 
-| ![](https://avatars.githubusercontent.com/u/81293930?v=4) | ![](https://avatars.githubusercontent.com/u/77483110?v=4) | ![](https://avatars.githubusercontent.com/u/108666158?v=4) | ![](https://avatars.githubusercontent.com/u/108860070?v=4) |
+| ![](https://avatars.githubusercontent.com/u/81293930?v=4) | ![](https://avatars.githubusercontent.com/u/77483110?v=4) | ![](https://avatars.githubusercontent.com/u/108666158?v=4) |
 | :--: | :--: | :--: | :--: |
-| [함윤주](https://github.com/ohhamma) | [이상화](https://github.com/idealflower-k) | [최영민](https://github.com/min3m) | [이지훈](https://github.com/42jeelee) |
+| [함윤주](https://github.com/ohhamma) | [이상화](https://github.com/idealflower-k) | [최영민](https://github.com/min3m) |
