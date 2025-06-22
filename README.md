@@ -46,7 +46,7 @@ KLKL에서 당신만의 여행을 완성해보세요 🌏
 - **GitHub Actions**를 활용한 CI/CD 파이프라인 구축
 - 테스트 자동화를 위한 **TDD 기반 개발**
 - 협업을 위한 **Jira 칸반보드** 및 **Notion 문서화**
-  </br></br>
+</br></br>
 
 ## ⚒️ Tech Stack
 
